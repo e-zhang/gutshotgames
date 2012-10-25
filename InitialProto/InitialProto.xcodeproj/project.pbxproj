@@ -28,6 +28,7 @@
 		E7B1C8A81638D9FB009AD50A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7B1C8781638D9FB009AD50A /* Foundation.framework */; };
 		E7B1C8B01638D9FB009AD50A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7B1C8AE1638D9FB009AD50A /* InfoPlist.strings */; };
 		E7B1C8B31638D9FB009AD50A /* InitialProtoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B1C8B21638D9FB009AD50A /* InitialProtoTests.m */; };
+		E7B1C8BE1638DADD009AD50A /* Monster.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B1C8BD1638DADD009AD50A /* Monster.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		E7B1C8AF1638D9FB009AD50A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E7B1C8B11638D9FB009AD50A /* InitialProtoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InitialProtoTests.h; sourceTree = "<group>"; };
 		E7B1C8B21638D9FB009AD50A /* InitialProtoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InitialProtoTests.m; sourceTree = "<group>"; };
+		E7B1C8BC1638DADD009AD50A /* Monster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Monster.h; path = InitialProto/src/Monster.h; sourceTree = "<group>"; };
+		E7B1C8BD1638DADD009AD50A /* Monster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Monster.m; path = InitialProto/src/Monster.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,8 @@
 		E7B1C8671638D9FB009AD50A = {
 			isa = PBXGroup;
 			children = (
+				E7B1C8BC1638DADD009AD50A /* Monster.h */,
+				E7B1C8BD1638DADD009AD50A /* Monster.m */,
 				E7B1C8801638D9FB009AD50A /* InitialProto */,
 				E7B1C8AB1638D9FB009AD50A /* InitialProtoTests */,
 				E7B1C8751638D9FB009AD50A /* Frameworks */,
@@ -294,6 +299,7 @@
 				E7B1C8871638D9FB009AD50A /* main.m in Sources */,
 				E7B1C88B1638D9FB009AD50A /* GSGAppDelegate.m in Sources */,
 				E7B1C89E1638D9FB009AD50A /* GSGViewController.m in Sources */,
+				E7B1C8BE1638DADD009AD50A /* Monster.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
