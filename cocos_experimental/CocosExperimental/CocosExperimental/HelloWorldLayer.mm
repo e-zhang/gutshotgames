@@ -46,7 +46,7 @@ enum {
 
 -(id) init
 {
-	
+	//Add stuff here
 }
 
 -(void) dealloc
