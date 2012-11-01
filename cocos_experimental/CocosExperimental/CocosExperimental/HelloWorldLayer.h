@@ -19,13 +19,16 @@
 //Box2D is optimized for objects of 1x1 metre therefore it makes sense
 //to define the ratio so that your most common object type is 1x1 metre.
 #define PTM_RATIO 32
+#define WORLD_TO_SCREEN(x) x/PTM_RATIO
 
 // HelloWorldLayer
 @interface HelloWorldLayer : CCLayer
 {
 	CCTexture2D *spriteTexture_;	// weak ref
-	b2World* world;					// strong ref
+	b2World* _world;					// strong ref
 	GLESDebugDraw *m_debugDraw;		// strong ref
+    b2Body* _body;
+    CCSprite* _ball;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
