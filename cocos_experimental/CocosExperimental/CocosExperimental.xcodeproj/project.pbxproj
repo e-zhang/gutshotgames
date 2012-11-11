@@ -1421,6 +1421,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CocosExperimental/Prefix.pch;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "\"CocosExperimental/libs/kazmath/include\"";
 				INFOPLIST_FILE = CocosExperimental/Resources/Info.plist;
 				OTHER_LDFLAGS = (
@@ -1440,6 +1441,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CocosExperimental/Prefix.pch;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "\"CocosExperimental/libs/kazmath/include\"";
 				INFOPLIST_FILE = CocosExperimental/Resources/Info.plist;
 				OTHER_LDFLAGS = (
@@ -1472,6 +1474,7 @@
 				E7B1CB551640A5DB009AD50A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -14,6 +14,8 @@
 #import "AppDelegate.h"
 
 #import "PhysicsSprite.h"
+#import "CCTouchDispatcher.h"
+
 
 
 enum {
@@ -59,7 +61,7 @@ enum {
     [self addChild:_ball];
     
     // Create a world
-    b2Vec2 gravity = b2Vec2(1.0f, -1.0f);
+    b2Vec2 gravity = b2Vec2(0.0f, 0.0f);
     _world = new b2World(gravity);
     
     // Create edges around the entire screen
@@ -97,6 +99,9 @@ enum {
     ballShapeDef.restitution = 0.8f;
     _body->CreateFixture(&ballShapeDef);
     
+    self.isTouchEnabled = YES;
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+    
     [self schedule:@selector(tick:)];
     
     return self;
@@ -116,18 +121,26 @@ enum {
 	[super dealloc];
 }
 
+
+-(void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
+    CGPoint location = [touch locationInView: [touch view]];
+    CGPoint convertedLocation = [[CCDirector sharedDirector]convertToGL:location];
+    
+    [_ball stopAllActions];
+    [_ball runAction:[CCMoveTo actionWithDuration:1 position:convertedLocation]];
+}
+
 - (void)tick:(ccTime) dt {
     
     _world->Step(dt, 10, 10);
-    for(b2Body *b = _world->GetBodyList(); b; b=b->GetNext()) {
-        if (b->GetUserData() != NULL) {
-            CCSprite *ballData = (CCSprite *)b->GetUserData();
-            ballData.position = ccp(b->GetPosition().x * PTM_RATIO,
-                                    b->GetPosition().y * PTM_RATIO);
-            ballData.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
-            
-        }
-    }
+    
+
+}
+
+-(BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+{
+	
+	return YES;
 }
 
 
