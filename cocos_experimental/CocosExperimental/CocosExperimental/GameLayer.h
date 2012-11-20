@@ -1,5 +1,5 @@
 //
-//  HelloWorldLayer.h
+//  GameLayer.h
 //  CocosExperimental
 //
 //  Created by Eric Zhang on 10/30/12.
@@ -13,6 +13,7 @@
 #import "cocos2d.h"
 #import "Box2D.h"
 #import "GLES-Render.h"
+#include "Player.h"
 
 //Pixel to metres ratio. Box2D uses metres as the unit for measurement.
 //This ratio defines how many pixels correspond to 1 Box2D "metre"
@@ -21,17 +22,19 @@
 #define PTM_RATIO 32
 #define WORLD_TO_SCREEN(x) x/PTM_RATIO
 
-// HelloWorldLayer
-@interface HelloWorldLayer : CCLayer
+
+// GameLayer
+@interface GameLayer : CCLayer
 {
 	CCTexture2D *spriteTexture_;	// weak ref
 	b2World* _world;					// strong ref
+    GutShotGames::Characters::Player* _myPlayer;
 	GLESDebugDraw *m_debugDraw;		// strong ref
-    b2Body* _body;
-    CCSprite* _ball;
+    b2MouseJoint* _mouseJoint;
+    b2Body* _groundBody;
 }
 
-// returns a CCScene that contains the HelloWorldLayer as the only child
+// returns a CCScene that contains the GameLayer as the only child
 +(CCScene *) scene;
 
 @end
