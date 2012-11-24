@@ -182,7 +182,7 @@
 		E7B1CB4B1640A5DB009AD50A /* GLES-Render.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B1CB4A1640A5DB009AD50A /* GLES-Render.mm */; };
 		E7B1CB4E1640A5DB009AD50A /* PhysicsSprite.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B1CB4D1640A5DB009AD50A /* PhysicsSprite.mm */; };
 		E7B1CB501640A5DB009AD50A /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B1CB4F1640A5DB009AD50A /* blocks.png */; };
-		E7FCF0201651E16D00B9BAE7 /* Player.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7FCF01E1651E16D00B9BAE7 /* Player.mm */; };
+		E7FCF0201651E16D00B9BAE7 /* GamePlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7FCF01E1651E16D00B9BAE7 /* GamePlayer.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -549,8 +549,8 @@
 		E7B1CB4C1640A5DB009AD50A /* PhysicsSprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhysicsSprite.h; sourceTree = "<group>"; };
 		E7B1CB4D1640A5DB009AD50A /* PhysicsSprite.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PhysicsSprite.mm; sourceTree = "<group>"; };
 		E7B1CB4F1640A5DB009AD50A /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
-		E7FCF01E1651E16D00B9BAE7 /* Player.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Player.mm; path = characters/Player.mm; sourceTree = "<group>"; };
-		E7FCF01F1651E16D00B9BAE7 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = characters/Player.h; sourceTree = "<group>"; };
+		E7FCF01E1651E16D00B9BAE7 /* GamePlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GamePlayer.mm; path = characters/GamePlayer.mm; sourceTree = "<group>"; };
+		E7FCF01F1651E16D00B9BAE7 /* GamePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GamePlayer.h; path = characters/GamePlayer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -578,8 +578,8 @@
 			children = (
 				E7590D491655E02E0068EF6E /* PlayerContactListener.h */,
 				E7590D4A1655E02E0068EF6E /* PlayerContactListener.mm */,
-				E7FCF01E1651E16D00B9BAE7 /* Player.mm */,
-				E7FCF01F1651E16D00B9BAE7 /* Player.h */,
+				E7FCF01E1651E16D00B9BAE7 /* GamePlayer.mm */,
+				E7FCF01F1651E16D00B9BAE7 /* GamePlayer.h */,
 			);
 			name = characters;
 			sourceTree = "<group>";
@@ -1385,7 +1385,7 @@
 				E7B1CB481640A5DB009AD50A /* IntroLayer.mm in Sources */,
 				E7B1CB4B1640A5DB009AD50A /* GLES-Render.mm in Sources */,
 				E7B1CB4E1640A5DB009AD50A /* PhysicsSprite.mm in Sources */,
-				E7FCF0201651E16D00B9BAE7 /* Player.mm in Sources */,
+				E7FCF0201651E16D00B9BAE7 /* GamePlayer.mm in Sources */,
 				E7590D4B1655E02E0068EF6E /* PlayerContactListener.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,7 +13,7 @@
 #import "cocos2d.h"
 #import "Box2D.h"
 #import "GLES-Render.h"
-#include "Player.h"
+#import "GamePlayer.h"
 
 //Pixel to metres ratio. Box2D uses metres as the unit for measurement.
 //This ratio defines how many pixels correspond to 1 Box2D "metre"
@@ -28,7 +28,7 @@
 {
 	CCTexture2D *spriteTexture_;	// weak ref
 	b2World* _world;					// strong ref
-    GutShotGames::Characters::Player* _myPlayer;
+    GamePlayer* _myPlayer;
 	GLESDebugDraw *m_debugDraw;		// strong ref
     b2MouseJoint* _mouseJoint;
     b2Body* _groundBody;

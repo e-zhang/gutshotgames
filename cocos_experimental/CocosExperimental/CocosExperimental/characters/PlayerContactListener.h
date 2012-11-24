@@ -24,6 +24,13 @@ namespace Characters {
         void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
         void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
         
+    private:
+        
+        static float COLLISION_THRESHOLD;
+        static float DIFF_SCALAR;
+        
+        float GetEnergy(b2Body* body);
+        
     };
     
 }

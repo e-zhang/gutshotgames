@@ -9,6 +9,7 @@
 // Import the interfaces
 #import "GameLayer.h"
 #import "Box2D.h"
+#import "PlayerContactListener.h"
 
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
@@ -17,7 +18,6 @@
 #import "CCTouchDispatcher.h"
 
 using namespace GutShotGames;
-
 
 enum {
 	kTagParentNode = 1,
@@ -59,19 +59,21 @@ enum {
     // Create a world
     b2Vec2 gravity = b2Vec2(0.0f, 0.0f);
     _world = new b2World(gravity);
+    _world->SetContactListener(new Characters::PlayerContactListener());
     
     // Create sprite and add it to the layer
-    _myPlayer = new GutShotGames::Characters::Player(_world, winSize, 1.0);
-    [self addChild: _myPlayer->GetSprite()];
-    auto autoPlayer = new GutShotGames::Characters::Player(_world, winSize, 5.0);
-    [self addChild: autoPlayer->GetSprite()];
-    [autoPlayer->GetSprite() runAction:[CCRepeatForever actionWithAction:
-                    [CCSequence actions:
-                     [CCMoveTo actionWithDuration:1.0 position:ccp(300,100)],
-                     [CCMoveTo actionWithDuration:1.0 position:ccp(200,200)],
-                     [CCMoveTo actionWithDuration:1.0 position:ccp(100,100)],
-                     nil]]];
+    _myPlayer = (GamePlayer *)[[GamePlayer alloc] initWithWorld:_world
+                                    WinSize:winSize
+                                     RelativeSize:1.0];
     
+    [self addChild: _myPlayer];
+    
+    GamePlayer* autoPlayer = [[GamePlayer alloc] initWithWorld:_world
+                                                 WinSize:winSize
+                                                 RelativeSize:5.0];
+                            
+    [self addChild: autoPlayer];
+                              
     
     // Create edges around the entire screen
     b2BodyDef groundBodyDef;
@@ -108,8 +110,8 @@ enum {
 	delete m_debugDraw;
 	m_debugDraw = NULL;
     
-    delete _myPlayer;
-    _myPlayer = NULL;
+    [_myPlayer release];
+    _myPlayer = nil;
 	
 	[super dealloc];
 }
@@ -117,7 +119,7 @@ enum {
 
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (_mouseJoint != NULL) return;
+    if (_mouseJoint != NULL || [_myPlayer IsStunned]) return;
     
     UITouch *myTouch = [touches anyObject];
     CGPoint location = [myTouch locationInView:[myTouch view]];
@@ -126,20 +128,20 @@ enum {
     
     b2MouseJointDef md;
     md.bodyA = _groundBody;
-    md.bodyB = _myPlayer->GetBody();
+    md.bodyB = [_myPlayer Body];
     md.collideConnected = true;
-    md.target = _myPlayer->GetPosition();
-    md.maxForce = 1000.0f * _myPlayer->GetBody()->GetMass();
+    md.target = [_myPlayer GetPosition];
+    md.maxForce = 500.0f * [_myPlayer Body]->GetMass();
     
     _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
     _mouseJoint->SetTarget(locationWorld);
-    _myPlayer->GetBody()->SetAwake(true);
+    [_myPlayer Body]->SetAwake(true);
     
 }
 
 -(void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (_mouseJoint == NULL) return;
+    if (_mouseJoint == NULL || [_myPlayer IsStunned]) return;
     
     UITouch *myTouch = [touches anyObject];
     CGPoint location = [myTouch locationInView:[myTouch view]];
@@ -170,10 +172,10 @@ enum {
     _world->Step(dt, 10, 10);
     for(b2Body *b = _world->GetBodyList(); b; b=b->GetNext()) {
         if (b->GetUserData() != NULL) {
-            Characters::Player *player = (Characters::Player*)b->     GetUserData();
+            GamePlayer *player = (GamePlayer *)b->GetUserData();
             
-            player->UpdatePosition();
-            player->UpdateRotation();
+            [player UpdatePosition];
+            [player UpdateRotation];
             
         }
     }
