@@ -58,6 +58,8 @@ enum
         
         _isStunned = false;
         _stunChance = 250;
+        _spinTorque = 10.0f;
+        
     }
     
     return self;
@@ -91,8 +93,9 @@ enum
 {
     if (!_isStunned)
     {
+        _playerBody->ApplyTorque(_spinTorque);
         [[self getChildByTag:SPRITE_TAG]
-            setRotation:-1.0*CC_RADIANS_TO_DEGREES(_playerBody->GetAngle())];
+               setRotation:-1.0*CC_RADIANS_TO_DEGREES(_playerBody->GetAngle())];
     }
 
 }

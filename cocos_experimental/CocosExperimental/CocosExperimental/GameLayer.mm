@@ -129,9 +129,10 @@ enum {
     b2MouseJointDef md;
     md.bodyA = _groundBody;
     md.bodyB = [_myPlayer Body];
+    
     md.collideConnected = true;
     md.target = [_myPlayer GetPosition];
-    md.maxForce = 500.0f * [_myPlayer Body]->GetMass();
+    md.maxForce = 1.0f * [_myPlayer Body]->GetMass();
     
     _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
     _mouseJoint->SetTarget(locationWorld);
