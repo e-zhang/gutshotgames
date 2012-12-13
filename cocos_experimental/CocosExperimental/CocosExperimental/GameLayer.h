@@ -32,6 +32,7 @@
 	GLESDebugDraw *m_debugDraw;		// strong ref
     b2MouseJoint* _mouseJoint;
     b2Body* _groundBody;
+    float _timeStep;
 }
 
 // returns a CCScene that contains the GameLayer as the only child

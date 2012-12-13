@@ -28,6 +28,7 @@ namespace Characters {
         
         static float COLLISION_THRESHOLD;
         static float DIFF_SCALAR;
+        static float DIFF_RANGE;
         
         float GetEnergy(b2Body* body);
         

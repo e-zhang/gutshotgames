@@ -8,14 +8,15 @@
 #import "GamePlayer.h"
 #import "GameLayer.h"
 
-#define DEFAULT_DENSITY 10.0f
-#define DEFAULT_FRICTION 1.0f
+#define DEFAULT_DENSITY 1.0f
+#define DEFAULT_FRICTION 0.1f
 #define DEFAULT_RESTITUTION 0.01f
 
-enum
-{
-    SPRITE_TAG=1,
-};
+#define MAX_LINEAR_VELOCITY 10.0f
+#define MAX_ANGULAR_VELOCITY 1.0f
+#define STUN_CHANCE 5.0f
+#define MAX_FORCE 1.0f
+#define MAX_TORQUE 100.0f
 
 
 @implementation GamePlayer : CCNode
@@ -28,23 +29,26 @@ enum
 {
     if (self = [super init])
     {
-        CCSprite* playerSprite = [CCSprite spriteWithFile:@"Icon-Small-50.png"
+        PhysicsSprite* playerSprite = [PhysicsSprite spriteWithFile:@"Icon-Small-50.png"
                                            rect:CGRectMake(0, 0, 52, 52)];
         
-        [playerSprite setPosition:ccp(WORLD_TO_SCREEN(winSize.width/(2*relativeSize)),
-                                      WORLD_TO_SCREEN(winSize.height/(2*relativeSize)))];
-        [self addChild:playerSprite z:0 tag:SPRITE_TAG];
+        [playerSprite setPosition:ccp(WORLD_TO_SCREEN(winSize.width/(2*relativeSize/5)),
+                                      WORLD_TO_SCREEN(winSize.height/(2*relativeSize/5)))];
+        [self addChild:playerSprite];
         
         // Create ball body and shape
         b2BodyDef ballBodyDef;
         ballBodyDef.type = b2_dynamicBody;
-        ballBodyDef.linearDamping = 1.0f;
-        ballBodyDef.angularDamping = 0.01f;
+        ballBodyDef.linearDamping = DEFAULT_FRICTION * relativeSize;
+        ballBodyDef.angularDamping = 0;
         ballBodyDef.position.Set(WORLD_TO_SCREEN(winSize.width/(2*relativeSize)),
                                  WORLD_TO_SCREEN(winSize.height/(2*relativeSize)));
+        ballBodyDef.fixedRotation = false;
         ballBodyDef.userData = self;
         
         _playerBody = world->CreateBody(&ballBodyDef);
+        [playerSprite setPhysicsBody:_playerBody];
+        
         b2CircleShape circle;
         circle.m_radius = 26.0/PTM_RATIO;
         b2FixtureDef ballShapeDef;
@@ -52,14 +56,22 @@ enum
         
         //default properties
         ballShapeDef.density = DEFAULT_DENSITY*relativeSize;
-        ballShapeDef.friction = 1.0f*relativeSize;
-        ballShapeDef.restitution = 0.1f*relativeSize;
+        ballShapeDef.friction = DEFAULT_FRICTION*relativeSize;
+        ballShapeDef.restitution = DEFAULT_RESTITUTION*relativeSize;
         _playerFixture = _playerBody->CreateFixture(&ballShapeDef);
         
         _isStunned = false;
-        _stunChance = 250;
-        _spinTorque = 10.0f;
+        _stunChance = STUN_CHANCE;
+        _maxLinearVelocity = MAX_LINEAR_VELOCITY;
+        _maxAngularVelocity = MAX_ANGULAR_VELOCITY;
+        _torque = MAX_TORQUE;
         
+        
+        NSTimer* spinTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                              target:self
+                              selector:@selector(OnSpin:)
+                              userInfo:nil
+                              repeats:YES];
     }
     
     return self;
@@ -74,38 +86,52 @@ enum
     [super dealloc];
 }
 
+-(void) OnSpin:(NSTimer *)timer
+{
+    if (_isStunned) return;
+    
+    float speed = _playerBody->GetAngularVelocity();
+   
+    float torque = _torque;
+    
+    if (speed > _maxAngularVelocity)
+    {
+         torque = _maxAngularVelocity /(1/60.0f);
+    }
+    
+     _playerBody->ApplyTorque(torque);
+}
+
+-(void) MoveToTouchLocation:(b2Vec2*)location TimeStep:(float)dt
+{
+    *location -= _playerBody->GetWorldCenter();
+    
+    float speed = _playerBody->GetLinearVelocity().Length();
+    float force = (_maxLinearVelocity - speed) / dt;
+    
+    if (speed > _maxLinearVelocity)
+    {
+        force = _maxLinearVelocity / dt;
+    }
+
+    
+    location->Normalize();
+    *location *= force;
+    
+    _playerBody->ApplyForceToCenter(*location);
+}
+
 
 -(b2Vec2) GetPosition
 {
     return _playerBody->GetPosition();
 }
 
-
--(void) UpdatePosition
-{
-    [[self getChildByTag:SPRITE_TAG]
-        setPosition:ccp(_playerBody->GetPosition().x * PTM_RATIO,
-                        _playerBody->GetPosition().y * PTM_RATIO)];
-}
-
-
--(void) UpdateRotation
-{
-    if (!_isStunned)
-    {
-        _playerBody->ApplyTorque(_spinTorque);
-        [[self getChildByTag:SPRITE_TAG]
-               setRotation:-1.0*CC_RADIANS_TO_DEGREES(_playerBody->GetAngle())];
-    }
-
-}
-
-
 -(void) SetStunFromEnergy:(float)energy
 {
     if (_isStunned || _stunTimer != nil) return;
     
-    u_int32_t isStun = arc4random() % (u_int32_t)energy;
+    u_int32_t isStun = arc4random() % ((u_int32_t)energy+1);
     if (isStun > _stunChance)
     {
         _isStunned =  YES;
@@ -125,6 +151,7 @@ enum
                               selector:@selector(OnStunTimeout:)
                               userInfo:nil
                               repeats:NO];
+        _playerBody->SetFixedRotation(true);
     }
 }
 
@@ -133,6 +160,7 @@ enum
 {
     _isStunned = NO;
     _stunTimer = nil;
+    _playerBody->SetFixedRotation(false);
 }
 
 @end

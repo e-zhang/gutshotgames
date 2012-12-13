@@ -13,9 +13,10 @@
 namespace GutShotGames {
 namespace Characters {
     
-    float PlayerContactListener::COLLISION_THRESHOLD = 65.0;
-    float PlayerContactListener::DIFF_SCALAR = 0.1;
-
+    float PlayerContactListener::COLLISION_THRESHOLD = 12.5;
+    float PlayerContactListener::DIFF_SCALAR = 1.0;
+    float PlayerContactListener::DIFF_RANGE = 5.0;
+    
     void PlayerContactListener::BeginContact(b2Contact* contact)
     {
         // handle contacts
@@ -59,20 +60,21 @@ namespace Characters {
             float energyA = GetEnergy([actorA Body]);
             float energyB = GetEnergy([actorB Body]);
             
-            float energyDiff = (energyA - energyB)*DIFF_SCALAR;
+            float energy = ((energyA + energyB)/2.0)*DIFF_SCALAR;
+            float energyDiff = energyA - energyB;
             
-            if ( energyDiff > 0)
+            if (energyDiff > DIFF_RANGE)
             {
-                [actorB SetStunFromEnergy:energyDiff];
+                [actorB SetStunFromEnergy:energy];
             }
-            else if (energyDiff < 0)
+            else if (energyDiff < -1.0*DIFF_RANGE)
             {
-                [actorA SetStunFromEnergy:(-1.0*energyDiff)];
+                [actorA SetStunFromEnergy:(energy)];
             }
             else
             {
-                [actorA SetStunFromEnergy:energyA];
-                [actorB SetStunFromEnergy:energyB];
+                [actorA SetStunFromEnergy:energy];
+                [actorB SetStunFromEnergy:energy];
             }
         }
         
@@ -82,7 +84,11 @@ namespace Characters {
     float PlayerContactListener::GetEnergy(b2Body* body)
     {
         // (1/2)mv^2
-        return 0.5*body->GetMass()*body->GetLinearVelocity().LengthSquared();
+        float linearKE = 0.5*body->GetMass()*body->GetLinearVelocity().LengthSquared();
+        
+        float angularKE = 0.5*body->GetInertia()*body->GetAngularVelocity()*body->GetAngularVelocity();
+        
+        return linearKE + angularKE;
     }
     
 }

@@ -117,39 +117,32 @@ enum {
 }
 
 
-- (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    if (_mouseJoint != NULL || [_myPlayer IsStunned]) return;
+- (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if ([_myPlayer IsStunned]) return;
     
     UITouch *myTouch = [touches anyObject];
     CGPoint location = [myTouch locationInView:[myTouch view]];
     location = [[CCDirector sharedDirector] convertToGL:location];
     b2Vec2 locationWorld = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     
-    b2MouseJointDef md;
-    md.bodyA = _groundBody;
-    md.bodyB = [_myPlayer Body];
     
-    md.collideConnected = true;
-    md.target = [_myPlayer GetPosition];
-    md.maxForce = 1.0f * [_myPlayer Body]->GetMass();
-    
-    _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
-    _mouseJoint->SetTarget(locationWorld);
+    [_myPlayer MoveToTouchLocation:&locationWorld TimeStep:_timeStep];
     [_myPlayer Body]->SetAwake(true);
     
 }
 
 -(void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (_mouseJoint == NULL || [_myPlayer IsStunned]) return;
+    if ([_myPlayer IsStunned]) return;
     
     UITouch *myTouch = [touches anyObject];
     CGPoint location = [myTouch locationInView:[myTouch view]];
     location = [[CCDirector sharedDirector] convertToGL:location];
     b2Vec2 locationWorld = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     
-    _mouseJoint->SetTarget(locationWorld);
+    [_myPlayer MoveToTouchLocation:&locationWorld TimeStep:_timeStep];
+    
 }
 
 -(void)ccTouchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -170,13 +163,13 @@ enum {
 
 - (void)tick:(ccTime) dt {
     
+    _timeStep = dt;
     _world->Step(dt, 10, 10);
     for(b2Body *b = _world->GetBodyList(); b; b=b->GetNext()) {
         if (b->GetUserData() != NULL) {
             GamePlayer *player = (GamePlayer *)b->GetUserData();
-            
-            [player UpdatePosition];
-            [player UpdateRotation];
+            //[player UpdatePosition];
+            //[player UpdateRotation];
             
         }
     }

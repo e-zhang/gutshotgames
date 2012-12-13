@@ -12,6 +12,7 @@
 #include <iostream>
 #include "Box2d.h"
 #include "cocos2d.h"
+#import "PhysicsSprite.h"
 
 @interface GamePlayer : CCNode
 {
@@ -23,7 +24,11 @@
     u_int32_t _stunChance;
     NSTimer* _stunTimer;
     
-    float _spinTorque;
+    float _maxLinearVelocity;
+    float _maxAngularVelocity;
+    
+    float _linearForce;
+    float _torque;
     
 }
 
@@ -35,8 +40,8 @@
 
 -(b2Vec2) GetPosition;
 
--(void) UpdatePosition;
--(void) UpdateRotation;
+-(void) OnSpin:(NSTimer *)timer;
+-(void) MoveToTouchLocation:(b2Vec2*)location TimeStep:(float)dt;
 
 -(void) SetStunFromEnergy:(float)energy;
 -(void) BeginStun;
