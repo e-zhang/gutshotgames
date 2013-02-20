@@ -9,7 +9,8 @@
 
 typedef enum
 {
-    
+   
+    GetPoints = 0,
     Defend = 1,
     Attack = 2,
     SuperAttack = 3

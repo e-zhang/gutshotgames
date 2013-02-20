@@ -11,8 +11,15 @@
 typedef struct
 {
     
-    int SenderId;
     int TargetId;
     MoveType Move;
+   
+} Move;
+
+typedef struct
+{
     
-} PlayerMove;
+    int SenderId;
+    Move SenderMove;
+    
+} MoveMessage;

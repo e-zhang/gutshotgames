@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MoveType.h"
+#import "Moves.h"
 
 @interface Character : NSObject
 {
@@ -19,4 +19,7 @@
     MoveType _nextMove;
     
 }
+
+-(void) UpdateNextMove:(Move) move;
+
 @end

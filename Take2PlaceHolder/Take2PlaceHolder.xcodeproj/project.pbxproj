@@ -185,7 +185,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E755766916D4620C00AC82C5 /* PlayerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerMove.h; path = Models/PlayerMove.h; sourceTree = "<group>"; };
+		E755766916D4620C00AC82C5 /* Moves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Moves.h; path = Models/Moves.h; sourceTree = "<group>"; };
 		E791B59F16D45A0300479567 /* Take2PlaceHolder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Take2PlaceHolder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E791B5A216D45A0300479567 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E791B5A416D45A0300479567 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1162,7 +1162,7 @@
 				E791B7D516D45AC100479567 /* Character.h */,
 				E791B7D616D45AC100479567 /* Character.m */,
 				E791B7D916D45BF400479567 /* MoveType.h */,
-				E755766916D4620C00AC82C5 /* PlayerMove.h */,
+				E755766916D4620C00AC82C5 /* Moves.h */,
 			);
 			name = Models;
 			sourceTree = "<group>";
