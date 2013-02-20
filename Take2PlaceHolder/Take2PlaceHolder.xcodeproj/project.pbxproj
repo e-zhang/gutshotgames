@@ -185,6 +185,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E755766916D4620C00AC82C5 /* PlayerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerMove.h; path = Models/PlayerMove.h; sourceTree = "<group>"; };
 		E791B59F16D45A0300479567 /* Take2PlaceHolder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Take2PlaceHolder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E791B5A216D45A0300479567 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E791B5A416D45A0300479567 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -548,7 +549,7 @@
 		E791B7CE16D45A0600479567 /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
 		E791B7D516D45AC100479567 /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Character.h; path = Models/Character.h; sourceTree = "<group>"; };
 		E791B7D616D45AC100479567 /* Character.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Character.m; path = Models/Character.m; sourceTree = "<group>"; };
-		E791B7D916D45BF400479567 /* MovesEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MovesEnum.h; path = Models/MovesEnum.h; sourceTree = "<group>"; };
+		E791B7D916D45BF400479567 /* MoveType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoveType.h; path = Models/MoveType.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -571,6 +572,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E755766A16D462E800AC82C5 /* Communication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Communication;
+			sourceTree = "<group>";
+		};
 		E791B59616D45A0300479567 = {
 			isa = PBXGroup;
 			children = (
@@ -607,6 +615,7 @@
 		E791B5B416D45A0400479567 /* Take2PlaceHolder */ = {
 			isa = PBXGroup;
 			children = (
+				E755766A16D462E800AC82C5 /* Communication */,
 				E791B7D816D45B0800479567 /* Models */,
 				E791B7BF16D45A0600479567 /* AppDelegate.h */,
 				E791B7C016D45A0600479567 /* AppDelegate.mm */,
@@ -1152,7 +1161,8 @@
 			children = (
 				E791B7D516D45AC100479567 /* Character.h */,
 				E791B7D616D45AC100479567 /* Character.m */,
-				E791B7D916D45BF400479567 /* MovesEnum.h */,
+				E791B7D916D45BF400479567 /* MoveType.h */,
+				E755766916D4620C00AC82C5 /* PlayerMove.h */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1488,6 +1498,7 @@
 				E791B7D416D45A0600479567 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
