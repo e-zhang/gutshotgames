@@ -16,7 +16,9 @@
 #define MAX_ANGULAR_VELOCITY 1.0f
 #define STUN_CHANCE 5.0f
 #define MAX_FORCE 1.0f
-#define MAX_TORQUE 100.0f
+#define MAX_TORQUE 30.0f
+
+#define SPIN_INTERVAL 1.5f
 
 
 @implementation GamePlayer : CCNode
@@ -67,7 +69,7 @@
         _torque = MAX_TORQUE;
         
         
-        NSTimer* spinTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+        NSTimer* spinTimer = [NSTimer scheduledTimerWithTimeInterval:SPIN_INTERVAL
                               target:self
                               selector:@selector(OnSpin:)
                               userInfo:nil
@@ -151,6 +153,7 @@
                               selector:@selector(OnStunTimeout:)
                               userInfo:nil
                               repeats:NO];
+        _playerBody->SetAngularDamping(DEFAULT_FRICTION*100.0f);
         _playerBody->SetFixedRotation(true);
     }
 }
@@ -160,6 +163,7 @@
 {
     _isStunned = NO;
     _stunTimer = nil;
+    _playerBody->SetAngularDamping(0);
     _playerBody->SetFixedRotation(false);
 }
 

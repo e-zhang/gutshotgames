@@ -61,24 +61,10 @@ namespace Characters {
             float energyB = GetEnergy([actorB Body]);
             
             float energy = ((energyA + energyB)/2.0)*DIFF_SCALAR;
-            float energyDiff = energyA - energyB;
             
-            if (energyDiff > DIFF_RANGE)
-            {
-                [actorB SetStunFromEnergy:energy];
-            }
-            else if (energyDiff < -1.0*DIFF_RANGE)
-            {
-                [actorA SetStunFromEnergy:(energy)];
-            }
-            else
-            {
-                [actorA SetStunFromEnergy:energy];
-                [actorB SetStunFromEnergy:energy];
-            }
+            [actorA SetStunFromEnergy:energy];
+            [actorB SetStunFromEnergy:energy];
         }
-        
-        
     }
     
     float PlayerContactListener::GetEnergy(b2Body* body)

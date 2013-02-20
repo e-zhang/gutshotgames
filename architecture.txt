@@ -1,0 +1,59 @@
+Initialization:
+
+	At game start, each player should send a "registration" message to each opponent.
+This would be the time to sync up each client's version of the game. Thus each app
+will collect all the players by their id and build a dictionary to each character by 
+their id. 
+
+-------------------------------------------------------------------------------------------
+
+Player/Character class:
+
+class Player
+{
+	int _points;
+	int _life;
+	MoveEnum _currentMove;
+	int _targetPlayerId;
+}
+
+Player class keeps track of points/life and the next move. 
+
+During the round simulation, each players move is evaluated and their points/life are
+adjusted appropriately. 
+
+------------------------------------------------------------------------------------------
+
+Move/Round representation:
+
+	struct
+	{
+		int senderId;
+		int targetId;
+		MoveEnum selectedMove;
+	} PlayerMove;
+
+	senderId keys which user initiated the move ( allows for replaying on each client of the game )
+	targetId keys which user to direct the move ( -1 for no target, defensive move )
+	selectedMove is an enum index from the following enum:
+	
+	enum MoveEnum
+	{
+		Get 5 points = 0;
+		Defend = 1;
+		Attack = 2;
+		SuperAttack = 3;
+	}
+
+----------------------------------------------------------------------------------------------------
+
+Updates:
+
+Between rounds, once a user has selected a move, that move is passed to each of the other players.
+
+At the same time, the client is waiting for network messages from the other players. Each time an 
+update is received, the sender player class will be updated for their move, and target (if applicable).
+
+Once all updates are received, loop through the players and evaluate their current move. 
+
+ 
