@@ -34,7 +34,7 @@
 	[glView setMultipleTouchEnabled:YES];
 
 	director_ = (CCDirectorIOS*) [CCDirector sharedDirector];
-	
+    
 	director_.wantsFullScreenLayout = YES;
 	
 	// Display FSP and SPF

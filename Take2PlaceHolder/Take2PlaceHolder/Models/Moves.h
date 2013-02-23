@@ -11,15 +11,17 @@
 typedef struct
 {
     
-    int TargetId;
-    MoveType Move;
+    NSString* TargetId;
+    MoveType Type;
    
 } Move;
 
 typedef struct
 {
     
-    int SenderId;
+    NSString* SenderId;
     Move SenderMove;
     
 } MoveMessage;
+
+static Move DEFAULT_MOVE = {.TargetId = nil, .Type = MOVECOUNT};
