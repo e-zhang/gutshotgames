@@ -26,7 +26,7 @@ enum {
 -(void) createMenu;
 -(void) createPlayers;
 -(void) createGameLog;
--(void) onSubmitMove:(Move) move;
+-(void) onSubmitMove:(Move*) move;
 -(void) simulateRound;
 @end
 
@@ -66,6 +66,21 @@ enum {
         
 		//Set up sprite
         [self createGameLog];
+        
+        _gameServer = [[ServerDAO alloc] init];
+        
+        NSString* gameName = @"test_game";
+        
+        // _isGameOver = ![_gameServer JoinGame:gameName] || ![_gameServer GetNextRound:_myCharacter];
+        _isGameOver = ![_gameServer CreateNewGame:gameName withHost:_myCharacter] ;
+        
+        if(!_isGameOver)
+        {
+            _gameLog.text = [_gameLog.text stringByAppendingString:[NSString stringWithFormat:@"\n Starting a new game with id: %@",  gameName]];
+            [_gameServer setDelegate:self];
+            [_gameServer GetNextRound:_myCharacter];
+        }
+        
 		
 	}
 	return self;
@@ -78,6 +93,8 @@ enum {
 	
 	delete m_debugDraw;
 	m_debugDraw = NULL;
+    
+    [_gameServer release];
     
     [_charactersMap release];
 	
@@ -129,7 +146,7 @@ enum {
     for (int i = 0; i < MOVECOUNT; ++i)
     {
         NSString* move = MoveStrings[i];
-        Move nextMove = {.TargetId = @"ComputerPlayer", .Type = (MoveType)i};
+        Move* nextMove = [[Move alloc] initWithTarget:@"ComputerPlayer" withType:(MoveType) i];
         CCMenuItemLabel* moveLabel = [CCMenuItemFont itemWithString:move block:^(id sender){
             [self onSubmitMove:nextMove];
         }];
@@ -145,14 +162,19 @@ enum {
 	[self addChild: menu z:-1];	
 }
 
--(void) onSubmitMove:(Move)move
+-(void) onSubmitMove:(Move*)move
 {
     Character* myChar = [_charactersMap valueForKey:_myCharacter];
     if(![myChar UpdateNextMove:move]) return;
+    [_gameServer SubmitMove:move forPlayer:_myCharacter];
     
     Character* compChar = [_charactersMap valueForKey:@"ComputerPlayer"];
-    [compChar RandomizeNextMove:_myCharacter];
-    
+    Move* compMove = [compChar RandomizeNextMove:_myCharacter];
+    [_gameServer SubmitMove:compMove forPlayer:@"ComputerPlayer"];
+}
+
+-(void) OnRoundComplete
+{
     [self simulateRound];
 }
 
@@ -218,10 +240,13 @@ enum {
             [gameUpdates appendString:[NSString stringWithFormat:@"%@ has been killed\n", c.Id]];
             [_charactersMap removeObjectForKey:c.Id];
         }
+        
+        [_gameServer GetNextRound:_myCharacter];
     }
     
     _gameLog.text = [_gameLog.text stringByAppendingString:gameUpdates];
     [_gameLog scrollRangeToVisible:[_gameLog selectedRange]];
+    
 }
 
 -(void) initPhysics

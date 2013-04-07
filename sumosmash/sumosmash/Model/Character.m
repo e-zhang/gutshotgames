@@ -10,7 +10,7 @@
 
 @implementation Character
 
-@synthesize Id = _id, NextMove = _nextMove, Display = _characterDisplay;
+@synthesize NextMove = _nextMove, Display = _characterDisplay, name = _id;
 
 -(id) initWithId:(NSString *)playerId
 {
@@ -21,8 +21,8 @@
     _lifeUpdate = 0;
     _pointsUpdate = 0;
     
-    _characterDisplay= [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%@: Lives-%d Points-%d", _id, _life, _points]
-                                          fontName:@"Arial" fontSize:21.0];
+    [self setUserDisplay];
+    
     return self;
 }
 
@@ -38,9 +38,30 @@
     return self;
 }
 
--(void) setDisplayLocation:(CGPoint)loc
+-(UIImage*) getUserPic:(NSString *)fbId
 {
-    [_characterDisplay setPosition:loc];
+    NSString *path = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",
+                      fbId];
+    NSURL *url = [NSURL URLWithString:path];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    _characterPic = [[UIImage alloc]initWithData:data];
+    
+    return _characterPic;
+}
+
+-(void) setUserDisplay
+{
+    _characterDisplay = [[UILabel alloc] init];
+    _characterDisplay.textColor = [UIColor darkGrayColor];
+    _characterDisplay.backgroundColor = [UIColor clearColor];
+    _characterDisplay.text =[NSString stringWithFormat:@"%@: Lives-%d Points-%d", _id, _life, _points];
+    
+    _characterDisplay.font = [UIFont fontWithName:@"GillSans" size:14.0f];
+}
+
+-(BOOL) hasNextMove;
+{
+    return _nextMove == [Move GetDefaultMove];
 }
 
 -(BOOL) UpdateNextMove:(Move*)nextMove
@@ -108,9 +129,9 @@
     _pointsUpdate = 0;
     _lifeUpdate = 0;
     
-    _characterDisplay.string = [NSString stringWithFormat: @"%@: Lives-%d Points-%d", _id, _life, _points];
+    _nextMove = [Move GetDefaultMove];
     
-    return [NSString stringWithFormat:@" %@ used move: %@ \n" , self.Id, MoveStrings[self.NextMove.Type]];
+    return [NSString stringWithFormat:@" %@ used move: %@ \n" , _id, MoveStrings[self.NextMove.Type]];
 }
 
 @end

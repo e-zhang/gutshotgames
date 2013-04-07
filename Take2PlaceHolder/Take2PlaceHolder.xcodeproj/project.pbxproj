@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E70FCAB016E824C700D08E9B /* ServerDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = E70FCAAF16E824C700D08E9B /* ServerDAO.m */; };
+		E70FCAB216E847DA00D08E9B /* CouchCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70FCAB116E847DA00D08E9B /* CouchCocoa.framework */; };
+		E70FCAB316E847E700D08E9B /* CouchCocoa.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = E70FCAB116E847DA00D08E9B /* CouchCocoa.framework */; };
+		E70FCAB616EBF0B800D08E9B /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = E70FCAB516EBF0B800D08E9B /* Game.m */; };
+		E72CEC7D16ED2BEC005A502A /* Move.m in Sources */ = {isa = PBXBuildFile; fileRef = E72CEC7C16ED2BEC005A502A /* Move.m */; };
 		E791B5A316D45A0300479567 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E791B5A216D45A0300479567 /* QuartzCore.framework */; };
 		E791B5A516D45A0300479567 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E791B5A416D45A0300479567 /* OpenGLES.framework */; };
 		E791B5A716D45A0300479567 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E791B5A616D45A0300479567 /* OpenAL.framework */; };
@@ -184,8 +189,28 @@
 		E791B7D716D45AC100479567 /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = E791B7D616D45AC100479567 /* Character.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		E70FCA8D16E81B5E00D08E9B /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E70FCAB316E847E700D08E9B /* CouchCocoa.framework in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		E755766916D4620C00AC82C5 /* Moves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Moves.h; path = Models/Moves.h; sourceTree = "<group>"; };
+		E70FCAAE16E824C700D08E9B /* ServerDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerDAO.h; path = Communication/ServerDAO.h; sourceTree = "<group>"; };
+		E70FCAAF16E824C700D08E9B /* ServerDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerDAO.m; path = Communication/ServerDAO.m; sourceTree = "<group>"; };
+		E70FCAB116E847DA00D08E9B /* CouchCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CouchCocoa.framework; path = Take2PlaceHolder/CouchCocoa.framework; sourceTree = "<group>"; };
+		E70FCAB416EBF0B800D08E9B /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = Models/Game.h; sourceTree = "<group>"; };
+		E70FCAB516EBF0B800D08E9B /* Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Game.m; path = Models/Game.m; sourceTree = "<group>"; };
+		E72CEC7C16ED2BEC005A502A /* Move.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Move.m; path = Models/Move.m; sourceTree = "<group>"; };
+		E755766916D4620C00AC82C5 /* Move.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Move.h; path = Models/Move.h; sourceTree = "<group>"; };
 		E791B59F16D45A0300479567 /* Take2PlaceHolder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Take2PlaceHolder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E791B5A216D45A0300479567 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E791B5A416D45A0300479567 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -566,6 +591,7 @@
 				E791B5AF16D45A0400479567 /* Foundation.framework in Frameworks */,
 				E791B5B116D45A0400479567 /* CoreGraphics.framework in Frameworks */,
 				E791B5B316D45A0400479567 /* GameKit.framework in Frameworks */,
+				E70FCAB216E847DA00D08E9B /* CouchCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,6 +601,8 @@
 		E755766A16D462E800AC82C5 /* Communication */ = {
 			isa = PBXGroup;
 			children = (
+				E70FCAAE16E824C700D08E9B /* ServerDAO.h */,
+				E70FCAAF16E824C700D08E9B /* ServerDAO.m */,
 			);
 			name = Communication;
 			sourceTree = "<group>";
@@ -599,6 +627,7 @@
 		E791B5A116D45A0300479567 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E70FCAB116E847DA00D08E9B /* CouchCocoa.framework */,
 				E791B5A216D45A0300479567 /* QuartzCore.framework */,
 				E791B5A416D45A0300479567 /* OpenGLES.framework */,
 				E791B5A616D45A0300479567 /* OpenAL.framework */,
@@ -1162,7 +1191,10 @@
 				E791B7D516D45AC100479567 /* Character.h */,
 				E791B7D616D45AC100479567 /* Character.m */,
 				E791B7D916D45BF400479567 /* MoveType.h */,
-				E755766916D4620C00AC82C5 /* Moves.h */,
+				E755766916D4620C00AC82C5 /* Move.h */,
+				E72CEC7C16ED2BEC005A502A /* Move.m */,
+				E70FCAB416EBF0B800D08E9B /* Game.h */,
+				E70FCAB516EBF0B800D08E9B /* Game.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1177,6 +1209,7 @@
 				E791B59B16D45A0300479567 /* Sources */,
 				E791B59C16D45A0300479567 /* Frameworks */,
 				E791B59D16D45A0300479567 /* Resources */,
+				E70FCA8D16E81B5E00D08E9B /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -1393,6 +1426,9 @@
 				E791B7CA16D45A0600479567 /* GLES-Render.mm in Sources */,
 				E791B7CD16D45A0600479567 /* PhysicsSprite.mm in Sources */,
 				E791B7D716D45AC100479567 /* Character.m in Sources */,
+				E70FCAB016E824C700D08E9B /* ServerDAO.m in Sources */,
+				E70FCAB616EBF0B800D08E9B /* Game.m in Sources */,
+				E72CEC7D16ED2BEC005A502A /* Move.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1444,6 +1480,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/CouchCocoa-fclawtmxvkzvsiekmmfuwvekfvpk/Build/Products/Debug-ios-universal\"",
+					"\"$(SRCROOT)/Take2PlaceHolder\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Take2PlaceHolder/Prefix.pch;
@@ -1464,6 +1506,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/CouchCocoa-fclawtmxvkzvsiekmmfuwvekfvpk/Build/Products/Debug-ios-universal\"",
+					"\"$(SRCROOT)/Take2PlaceHolder\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Take2PlaceHolder/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Take2PlaceHolder/libs/kazmath/include\"";

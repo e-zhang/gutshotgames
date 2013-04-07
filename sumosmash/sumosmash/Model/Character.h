@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "Move.h"
-#import "cocos2d.h"
 
 #define REBATE_POINTS 2;
 
@@ -23,15 +22,17 @@
     int _lifeUpdate;
     
     Move* _nextMove;
-    
-    CCLabelTTF* _characterDisplay;
-    
+   
+    UILabel* _characterDisplay;
+    UIImage* _characterPic;
 }
 
 -(id) initWithId:(NSString*) playerId;
--(void) setDisplayLocation:(CGPoint) loc;
+-(UIImage*) getUserPic:(NSString*) fbId;
+-(void) setUserDisplay;
 
 -(BOOL) UpdateNextMove:(Move*) nextMove;
+-(BOOL) hasNextMove;
 -(BOOL) IsValidMove:(Move*) move;
 -(Move*) RandomizeNextMove:(NSString*) target;
 
@@ -41,9 +42,9 @@
 -(void) OnRebate;;
 -(NSString*) CommitUpdates;
 
-@property (readonly, nonatomic) NSString* Id;
 @property (readonly, nonatomic) Move* NextMove;
-@property (readonly, nonatomic) CCLabelTTF* Display;
+@property (readonly, nonatomic) UILabel* Display;
+@property (readonly, nonatomic) NSString* name;
 
 @end
 
