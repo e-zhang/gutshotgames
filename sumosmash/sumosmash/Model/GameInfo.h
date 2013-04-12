@@ -7,7 +7,6 @@
 //
 
 #import <CouchCocoa/CouchCocoa.h>
-#import "GameRequest.h"
 #import "Move.h"
 
 @protocol GameUpdateDelegate <NSObject>
@@ -49,6 +48,5 @@
                                                   withSimultaneousAttackers:(NSMutableArray**)simAttackers
                                                   withAttackers:(NSMutableArray**)attackers;
 
-- (void) couchDocumentChanged:(CouchDocument *)doc;
 
 @end

@@ -10,7 +10,6 @@
 #include "DBDefs.h"
 
 #import <CouchCocoa/CouchCocoa.h>
-#import <CouchCocoa/CouchEmbeddedServer.h>
 #import "Character.h"
 
 #define INITIAL_PLAYER_HEIGHT 80

@@ -7,7 +7,7 @@
 //
 
 #import "TDPuller.h"
-#import <TouchDB/TDDatabase.h>
+#import <TouchDB/TD_Database.h>
 
 
 /** Replicator that pushes to a remote CouchDB. */
@@ -19,6 +19,8 @@
     BOOL _uploading;
     NSMutableArray* _uploaderQueue;
     BOOL _dontSendMultipart;
+    NSMutableIndexSet* _pendingSequences;
+    SequenceNumber _maxPendingSequence;
 }
 
 @property BOOL createTarget;

@@ -16,6 +16,7 @@ typedef enum {
     kTDStatusNotModified    = 304,
     
     kTDStatusBadRequest     = 400,
+    kTDStatusUnauthorized   = 401,
     kTDStatusForbidden      = 403,
     kTDStatusNotFound       = 404,
     kTDStatusNotAcceptable  = 406,
@@ -48,3 +49,4 @@ static inline bool TDStatusIsError(TDStatus status) {return status >= 300;}
 int TDStatusToHTTPStatus( TDStatus status, NSString** outMessage );
 
 NSError* TDStatusToNSError( TDStatus status, NSURL* url );
+NSError* TDStatusToNSErrorWithInfo( TDStatus status, NSURL* url, NSDictionary* extraInfo );

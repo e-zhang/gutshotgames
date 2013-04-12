@@ -50,7 +50,8 @@
 		E72AF8D91713967100BC1E04 /* sumosmash-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8C11713967000BC1E04 /* sumosmash-Info.plist */; };
 		E72AFA071713977D00BC1E04 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72AFA031713975B00BC1E04 /* FacebookSDK.framework */; };
 		E72AFA31171399E300BC1E04 /* TouchDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72AFA30171399E300BC1E04 /* TouchDB.framework */; };
-		E72AFA3317139A3A00BC1E04 /* CouchCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72AFA3217139A3A00BC1E04 /* CouchCocoa.framework */; };
+		E72AFA361714DFD600BC1E04 /* GameInvitations.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AFA351714DFD600BC1E04 /* GameInvitations.m */; };
+		E72AFA3817164F7D00BC1E04 /* CouchCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72AFA3717164F7D00BC1E04 /* CouchCocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -161,7 +162,9 @@
 		E72AFA2B1713989600BC1E04 /* FBWebDialogs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBWebDialogs.h; sourceTree = "<group>"; };
 		E72AFA2C1713989600BC1E04 /* NSError+FBError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+FBError.h"; sourceTree = "<group>"; };
 		E72AFA30171399E300BC1E04 /* TouchDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TouchDB.framework; sourceTree = "<group>"; };
-		E72AFA3217139A3A00BC1E04 /* CouchCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchCocoa.framework; sourceTree = "<group>"; };
+		E72AFA341714DFD600BC1E04 /* GameInvitations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInvitations.h; sourceTree = "<group>"; };
+		E72AFA351714DFD600BC1E04 /* GameInvitations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInvitations.m; sourceTree = "<group>"; };
+		E72AFA3717164F7D00BC1E04 /* CouchCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchCocoa.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,7 +173,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				58B9C59316EC5B0300891C19 /* CFNetwork.framework in Frameworks */,
-				E72AFA3317139A3A00BC1E04 /* CouchCocoa.framework in Frameworks */,
 				E72AFA31171399E300BC1E04 /* TouchDB.framework in Frameworks */,
 				E72AFA071713977D00BC1E04 /* FacebookSDK.framework in Frameworks */,
 				58B9C5A316EC5E5000891C19 /* AdSupport.framework in Frameworks */,
@@ -190,6 +192,7 @@
 				58B9C58316EC5A2000891C19 /* libxml2.dylib in Frameworks */,
 				58B9C58116EC59F100891C19 /* libsqlite3.dylib in Frameworks */,
 				58B9C50116EC535B00891C19 /* UIKit.framework in Frameworks */,
+				E72AFA3817164F7D00BC1E04 /* CouchCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,8 +219,8 @@
 		58B9C4FF16EC535B00891C19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E72AFA3717164F7D00BC1E04 /* CouchCocoa.framework */,
 				E72AFA30171399E300BC1E04 /* TouchDB.framework */,
-				E72AFA3217139A3A00BC1E04 /* CouchCocoa.framework */,
 				E72AFA081713989600BC1E04 /* DeprecatedHeaders */,
 				E72AFA031713975B00BC1E04 /* FacebookSDK.framework */,
 				58B9C5A216EC5E5000891C19 /* AdSupport.framework */,
@@ -246,8 +249,8 @@
 		E72AF89A1713967000BC1E04 /* sumosmash */ = {
 			isa = PBXGroup;
 			children = (
-				E72AF8DB1713969000BC1E04 /* Views */,
 				E72AF8DA1713967500BC1E04 /* Supporting Files */,
+				E72AF8DB1713969000BC1E04 /* Views */,
 				E72AF89B1713967000BC1E04 /* AppDelegate.h */,
 				E72AF89C1713967000BC1E04 /* AppDelegate.m */,
 				E72AF8A01713967000BC1E04 /* Communication */,
@@ -280,6 +283,8 @@
 				E72AF8BE1713967000BC1E04 /* MoveType.h */,
 				E72AF8BF1713967000BC1E04 /* UserAccount.h */,
 				E72AF8C01713967000BC1E04 /* UserAccount.m */,
+				E72AFA341714DFD600BC1E04 /* GameInvitations.h */,
+				E72AFA351714DFD600BC1E04 /* GameInvitations.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -448,6 +453,7 @@
 				E72AF8D61713967100BC1E04 /* GameRequest.m in Sources */,
 				E72AF8D71713967100BC1E04 /* Move.m in Sources */,
 				E72AF8D81713967100BC1E04 /* UserAccount.m in Sources */,
+				E72AFA361714DFD600BC1E04 /* GameInvitations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

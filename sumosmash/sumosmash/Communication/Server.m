@@ -12,7 +12,7 @@
 
 @implementation Server
 
-@synthesize user=_user;
+@synthesize user=_user, gameInvitations=_gameInvitations;
 
 NSString* const SERVER_HOST = @"sumowars.cloudant.com";
 const int SERVER_PORT = 443;
@@ -20,8 +20,8 @@ const int SERVER_PORT = 443;
 -(id) init
 {
     NSURLCredential* cred;
-    cred = [NSURLCredential credentialWithUser: @"belfingsomplainkstralien"
-                                      password: @"PgH7p07645rW7HALQaClDaNf"
+    cred = [NSURLCredential credentialWithUser: @"sumowars"//@"belfingsomplainkstralien"
+                                      password: @"sumowars123"//@"PgH7p07645rW7HALQaClDaNf"
                                    persistence: NSURLCredentialPersistencePermanent];
     NSURLProtectionSpace* space;
     space = [[NSURLProtectionSpace alloc] initWithHost: SERVER_HOST
@@ -33,14 +33,19 @@ const int SERVER_PORT = 443;
     [[NSURLCredentialStorage sharedCredentialStorage] setDefaultCredential: cred
                                                         forProtectionSpace: space];
     
-    NSURL* serverURL = [NSURL URLWithString: [NSString stringWithFormat:@"https://%@", SERVER_HOST]];
+    NSURL* serverURL = [NSURL URLWithString: [NSString stringWithFormat:@"https://%@:%@@%@",@"sumowars", @"sumowars123", SERVER_HOST]];
     
+    NSError* error;
     CouchServer* remoteServer = [[CouchServer alloc] initWithURL: serverURL];
     [remoteServer setCredential:cred];
     
     _serverProfiles = [remoteServer databaseNamed: DB_PROFILES];
-    _docUpdate = [remoteServer databaseNamed: DB_UPDATES];
+    _gameInvites = [remoteServer databaseNamed: DB_UPDATES];
     _games = [remoteServer databaseNamed: DB_GAMES];
+    [_games ensureCreated:&error];
+   
+    _games.tracksChanges = YES;
+    
     
     CouchTouchDBServer* localServer = [CouchTouchDBServer sharedInstance];
     
@@ -48,7 +53,6 @@ const int SERVER_PORT = 443;
     _invites = [localServer databaseNamed: @"invites"];
     _localGames = [localServer databaseNamed: @"localgames"];
     
-    NSError* error;
     if (![_localInfo ensureCreated: &error] &&
         ![_invites ensureCreated: &error] &&
         ![_localGames ensureCreated: &error]) { NSLog(@"creation");}
@@ -72,18 +76,20 @@ const int SERVER_PORT = 443;
     return [UserAccount modelForDocument:[_serverProfiles documentWithID:uuid]];
 }
 
--(NSArray*) GetInvitationList
+-(void) getInvitations
 {
-    NSMutableArray* gameinvitelist = [[NSMutableArray alloc] init];
+    _gameInvitations = [[NSMutableArray alloc] init];
     
-    CouchQuery* query = [_invites getAllDocuments];
-    for (CouchQueryRow* row in query.rows)
+    _userInvitations = [GameInvitations modelForDocument:
+                    [_gameInvites documentWithID:self.user.userid]];
+    
+    for (NSDictionary* request in _userInvitations.gameRequests)
     {
-        NSLog(@"row-%@",row.documentProperties);
-        [gameinvitelist addObject:[GameInfo modelForDocument:row.document]];
+        NSLog(@"request-%@",request);
+        GameInfo* game = [GameInfo modelForDocument:
+                          [_games documentWithID:[request objectForKey:@"game_id"]]];
+        [_gameInvitations addObject:game];
     }
-    
-    return gameinvitelist;
 }
 
 -(GameInfo*) createNewGame:(NSString *)gameName
@@ -100,7 +106,7 @@ const int SERVER_PORT = 443;
 
 -(CouchQuery*) getUserUpdates:(NSDictionary*)playerAccounts
 {
-    return [_docUpdate getDocumentsWithIDs:[playerAccounts allKeys]];
+    return [_gameInvites getDocumentsWithIDs:[playerAccounts allKeys]];
 }
 
 @end

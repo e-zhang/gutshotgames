@@ -66,6 +66,7 @@
 
 - (void) submitMove:(Move *)move forPlayer:(NSString *)player
 {
+    NSLog(@"currentRound is %@", [self.currentRound stringValue]);
     NSError* error = nil;
     
     do
@@ -172,7 +173,14 @@
             [_delegate onRoundComplete];
         }
     }
+
+    
 }
+
+-(void) didLoadFromDocument
+{
+   
+ }
 
 
 @end

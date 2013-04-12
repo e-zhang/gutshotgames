@@ -12,10 +12,10 @@
 #import <unistd.h>
 #import "MBProgressHUD.h"
 
-#import <CouchCocoa/CouchEmbeddedServer.h>
 #import <QuartzCore/QuartzCore.h>
 
 #import "GameInfo.h"
+#import "GameInvitations.h"
 #include "DBDefs.h"
 
 @interface MainView ()
@@ -427,20 +427,18 @@
     [_createaccountcenter setHidden:YES];
     [_gameinvitations setHidden:NO];
 
-    NSArray* gameInvites = [_gameServer GetInvitationList];
-    int x=0;
-    for (GameInfo* game in gameInvites)
+    for (int gameIdx=0; gameIdx < [_gameServer.gameInvitations count]; ++gameIdx)
     {
+        GameInfo* game = [_gameServer.gameInvitations objectAtIndex:gameIdx];
         UIButton *web = [[UIButton alloc] init];
-        web.tag = x;
-        web.frame = CGRectMake(15,15+(x*50),450,30);
+        web.tag = gameIdx;
+        web.frame = CGRectMake(15,15+(gameIdx*50),450,30);
         [web setTitle:game.gameName forState:UIControlStateNormal];
         [web setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [web addTarget:self action:@selector(gotogame:) forControlEvents:UIControlEventTouchUpInside];
         web.backgroundColor = [UIColor clearColor];
         
         [_gameinvitations addSubview:web];
-        ++x;
     }
 }
 
@@ -450,7 +448,7 @@
     hud.labelText = @"Loading";
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        GameInfo* game = [[_gameServer GetInvitationList] objectAtIndex:sender.tag];
+        GameInfo* game = [_gameServer.gameInvitations objectAtIndex:sender.tag];
         [game joinGame:_gameServer.user.userid];
         self.gamewindow = [[GameWindow alloc] initWithNibName:@"GameWindow" bundle:nil gameInfo:game myid:_myid];
         //self.gamewindow.delegate = self;
@@ -766,36 +764,29 @@
     request.hostuserid = _gameServer.user.userid;
     request.hostfbid= _gameServer.user.fb_id;
     request.hostname= _gameServer.user.username;
+    NSDictionary* requestDoc = [request getRequest];
     
-    RESTOperation* op24 = [gameRequest putProperties:[request getRequest]];
+    RESTOperation* op24 = [gameRequest putProperties:requestDoc];
     if (![op24 wait]){}
     
     for (CouchQueryRow* row in [_gameServer getUserUpdates:players].rows) {
         
-        CouchDocument* doc = row.document;
-        NSMutableDictionary *newdoc = [row.documentProperties mutableCopy];
+        GameInvitations* invites = [GameInvitations modelForDocument:row.document];
         
-        [newdoc setObject:@"1" forKey:@"update"];
-        
-        
-        if (![row.documentProperties objectForKey:@"gamerequests"])
+        if (invites.gameRequests)
         {
-            NSMutableDictionary *existingRequests = [[row.documentProperties objectForKey:@"gamerequests"] mutableCopy];
+            NSMutableArray* existingRequests = [invites.gameRequests mutableCopy];
             
-            [existingRequests setObject:gameRequest.properties forKey:gameId];
+            [existingRequests addObject:requestDoc];
             
-            [newdoc setObject:existingRequests forKey:@"gamerequests"];
+            invites.gameRequests = existingRequests;
         }
         else
         {
-            NSDictionary *newRequest = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        gameRequest.properties, gameId,
-                                        nil];
-            
-            [newdoc setObject:newRequest forKey:@"gamerequests"];
+            invites.gameRequests = [NSArray arrayWithObject:requestDoc];
         }
         
-        RESTOperation* op2 = [doc putProperties:newdoc];
+        RESTOperation* op2 = [invites save];
         if (![op2 wait]){}
     }
     

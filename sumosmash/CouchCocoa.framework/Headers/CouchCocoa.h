@@ -26,6 +26,7 @@
 
 #import "CouchTouchDBServer.h"
 #import "CouchTouchDBDatabase.h"
+#import "CouchDesignDocument_Embedded.h"
 
 
 /** @mainpage About CouchCocoa

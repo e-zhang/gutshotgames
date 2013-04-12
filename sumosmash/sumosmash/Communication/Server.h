@@ -10,13 +10,14 @@
 #import <CouchCocoa/CouchCocoa.h>
 #import "UserAccount.h"
 #import "GameInfo.h"
+#import "GameInvitations.h"
 
 
 @interface Server : NSObject
 {
     // CouchDB global
     CouchDatabase* _serverProfiles;
-    CouchDatabase* _docUpdate;
+    CouchDatabase* _gameInvites;
     CouchDatabase* _games;
     
     // TouchDB local
@@ -25,16 +26,21 @@
     CouchDatabase* _localGames;
     
     UserAccount* _user;
+    GameInvitations* _userInvitations;
+    NSMutableArray* _gameInvitations;
+    
+    CouchReplication* _pull;
 }
 
 @property (nonatomic, readonly) UserAccount* user;
+@property (nonatomic, readonly) NSArray* gameInvitations;
 
 -(id) init;
 
 -(void) initUser;
 
 -(UserAccount*) GetUser:(NSString*) uuid;
--(NSArray*) GetInvitationList;
+-(void) getInvitations;
 
 -(GameInfo*) createNewGame:(NSString*) gameName;
 -(CouchDocument*) createNewGameRequest:(NSString*) gameId;
