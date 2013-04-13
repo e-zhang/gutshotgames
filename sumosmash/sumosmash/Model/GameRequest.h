@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 gutshotgames. All rights reserved.
 //
 
+const static NSString* GAME_ID = @"game_id";
 
 @interface GameRequest : NSObject
 
@@ -15,5 +16,6 @@
 @property (nonatomic) NSString* hostname;
 
 -(NSDictionary*) getRequest;
+-(id) initWithProperties:(NSDictionary*)properties;
 
 @end

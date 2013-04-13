@@ -12,7 +12,7 @@
 
 @implementation Server
 
-@synthesize user=_user, gameInvitations=_gameInvitations;
+@synthesize user=_user, gameInvitations=_userInvitations;
 
 NSString* const SERVER_HOST = @"sumowars.cloudant.com";
 const int SERVER_PORT = 443;
@@ -42,8 +42,10 @@ const int SERVER_PORT = 443;
     _serverProfiles = [remoteServer databaseNamed: DB_PROFILES];
     _gameInvites = [remoteServer databaseNamed: DB_UPDATES];
     _games = [remoteServer databaseNamed: DB_GAMES];
-    [_games ensureCreated:&error];
+    _chat = [remoteServer databaseNamed:DB_CHAT];
    
+    _chat.tracksChanges = YES;
+    _gameInvites.tracksChanges = YES;
     _games.tracksChanges = YES;
     
     
@@ -68,7 +70,9 @@ const int SERVER_PORT = 443;
     
     NSLog(@"whereyouat-%@",sup.properties);
     _user = [UserAccount modelForDocument:sup];
- 
+    
+    _userInvitations = [GameInvitations modelForDocument:
+                        [_gameInvites documentWithID:self.user.userid]];
 }
 
 -(UserAccount*) GetUser:(NSString *)uuid
@@ -76,26 +80,32 @@ const int SERVER_PORT = 443;
     return [UserAccount modelForDocument:[_serverProfiles documentWithID:uuid]];
 }
 
--(void) getInvitations
+-(GameInfo*) getGameFromRequest:(GameRequest*) request
 {
-    _gameInvitations = [[NSMutableArray alloc] init];
+    NSLog(@"request-%@",request);
+    GameInfo* game = [GameInfo modelForDocument:
+                      [_games documentWithID:request.game_id]];
     
-    _userInvitations = [GameInvitations modelForDocument:
-                    [_gameInvites documentWithID:self.user.userid]];
+    GameChat* chat = [GameChat modelForDocument:[_chat documentWithID:request.game_id]];
     
-    for (NSDictionary* request in _userInvitations.gameRequests)
-    {
-        NSLog(@"request-%@",request);
-        GameInfo* game = [GameInfo modelForDocument:
-                          [_games documentWithID:[request objectForKey:@"game_id"]]];
-        [_gameInvitations addObject:game];
-    }
+    [game setGameChat:chat];
+    
+    return game;
 }
 
 -(GameInfo*) createNewGame:(NSString *)gameName
 {
-    CouchDocument* game = [_games documentWithID:gameName];
-    return [GameInfo modelForDocument:game];
+    GameInfo* game = [GameInfo modelForDocument:[_games documentWithID:gameName]];
+    GameChat* chat = [GameChat modelForDocument:[_chat documentWithID:gameName]];
+    NSArray* welcome = [NSArray arrayWithObjects:@"sumosmash",
+                                                [NSString stringWithFormat:@"Welcome to game: %@", gameName],
+                                                nil];
+    chat.chatHistory = [NSArray arrayWithObject:welcome];
+    
+    [[chat save] wait];
+    
+    [game setGameChat:chat];
+    return game;
 }
 
 -(CouchDocument*) createNewGameRequest:(NSString*) gameId

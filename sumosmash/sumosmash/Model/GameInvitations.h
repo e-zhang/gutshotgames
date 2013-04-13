@@ -10,8 +10,20 @@
 
 #import "GameRequest.h"
 
+@protocol InvitationUpdateDelegate <NSObject>
+
+-(void) onInviteReceived:(NSArray*) invites;
+
+@end
+
 @interface GameInvitations : CouchModel<CouchDocumentModel>
+{
+    id<InvitationUpdateDelegate> _delegate;
+}
 
 @property (nonatomic) NSArray* gameRequests;
+
+- (void) setDelegate:(id) delegate;
+- (void) releaseDelegate;
 
 @end

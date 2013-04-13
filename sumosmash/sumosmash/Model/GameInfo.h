@@ -8,6 +8,7 @@
 
 #import <CouchCocoa/CouchCocoa.h>
 #import "Move.h"
+#import "GameChat.h"
 
 @protocol GameUpdateDelegate <NSObject>
 
@@ -21,6 +22,8 @@
 {
     id<GameUpdateDelegate> _delegate;
     BOOL _isOver;
+    
+    GameChat* _gameChat;
 }
 
 @property (nonatomic) NSString* gameName;
@@ -34,10 +37,15 @@
 
 @property (nonatomic) NSString* hostId;
 
+@property (readonly, nonatomic) GameChat* gameChat;
+
 - (void) setDelegate:(id<GameUpdateDelegate>) delegate;
 
 - (BOOL) isGameOver;
 - (void) setGameOver:(BOOL) over;
+- (void) setGameChat:(GameChat *)gameChat;
+
+- (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
 
 - (void) joinGame:(NSString*) userId;
 - (void) getNextRound:(NSString*) playerId;

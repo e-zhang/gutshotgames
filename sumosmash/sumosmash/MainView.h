@@ -13,7 +13,12 @@
 #import "Facebook.h"
 
 
-@interface MainView : UIViewController<datadelegate, FBFriendPickerDelegate, UINavigationControllerDelegate, UISearchBarDelegate, UITextFieldDelegate>{
+@interface MainView : UIViewController<datadelegate,
+                                       FBFriendPickerDelegate,
+                                       UINavigationControllerDelegate,
+                                       UISearchBarDelegate,
+                                       UITextFieldDelegate,
+                                       InvitationUpdateDelegate>{
     UIView *user;
     UITextField *player1;
     Server* _gameServer;
@@ -52,6 +57,7 @@
 
 - (NSDictionary*) getPlayer:(NSString*) username;
 - (NSDictionary*) getPlayerAccounts;
+- (UIButton*) createGameButton:(NSDictionary*) invite atIndex:(int) idx;
 - (void) SaveAccountInfo:(NSDictionary<FBGraphUser>*)fbUser;
 - (void) sendRequests:(NSString*) gameId toPlayers:(NSDictionary*)players;
 

@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 gutshotgames. All rights reserved.
 //
 
-//NOTE - ASLIVEQUERY is producing a castIf warning. Look into that.
 
 #import "MainView.h"
 #import <unistd.h>
@@ -19,13 +18,6 @@
 #include "DBDefs.h"
 
 @interface MainView ()
-
-@property (nonatomic, strong) NSMutableDictionary *gameinvitelist;
-
-@property(nonatomic, strong)NSString *myid;
-
-@property(nonatomic, strong)CouchLiveQuery *liveq;
-
 
 @property (nonatomic, strong)createaccount *createaccount;
 @property (nonatomic, strong)GameWindow *gamewindow;
@@ -93,10 +85,6 @@
     
     _cab.hidden = userType == NONE ? YES : NO;
     
-    _myid = userId;
-
-    [NSTimer scheduledTimerWithTimeInterval: 30.0 target: self selector:@selector(checkforaccountupdates:) userInfo: nil repeats:YES];
-
     _players = [[NSMutableArray alloc] init];
     [_gameinvitations setContentSize:CGSizeMake(450,1400)];
 }
@@ -107,63 +95,6 @@
         return YES;
     
     return NO;
-}
-
--(void)checkforaccountupdates:(NSTimer *)timer {
-//    
-//        NSArray *updates = [NSArray arrayWithObject:_myid];
-//        CouchQuery* allDocs = [self.serverupdate getDocumentsWithIDs:updates];
-//        
-//        CouchQueryEnumerator* newRows = allDocs.rowsIfChanged;
-//        if (newRows != nil) {
-//            for (CouchQueryRow* row in newRows) {
-//                
-//                CouchDocument *doc = row.document;
-//                
-//                if ([[row.documentProperties objectForKey:@"update"] intValue]>0){
-//                    
-//                    NSMutableDictionary *newdoc = [row.documentProperties mutableCopy];
-//                    
-//                    if (![[row.documentProperties objectForKey:@"gamerequests"]isEqual:@""]){
-//                        NSMutableDictionary *docContent = [[row.documentProperties objectForKey:@"gamerequests"] mutableCopy];
-//                        NSDictionary *irupdates = [row.documentProperties objectForKey:@"gamerequests"];
-//                        for (NSString* key in irupdates) {
-//                            NSLog(@"key-%@",key);
-//                            NSDictionary *stuff = [irupdates objectForKey:key];
-//                            NSLog(@"stiff-%@",stuff);
-//                            
-//                            CouchDocument *nd = [_invites documentWithID:key];
-//                            
-//                            RESTOperation* operation = [nd putProperties:stuff];
-//                            [operation onCompletion: ^{
-//                                if (operation.isSuccessful){}
-//                                else{}
-//                            }];
-//                            
-//                            [docContent removeObjectForKey:key];
-//
-//                        }
-//                        
-//                        [newdoc setObject:docContent forKey:@"gamerequests"];
-//                        
-//                }
-//                    
-//                    [newdoc setObject:@"0" forKey:@"update"];
-//                    
-//                    RESTOperation* operation = [doc putProperties:newdoc];
-//                    [operation onCompletion: ^{
-//                        if (![operation wait])
-//                            NSLog(@"%@ fdsafdsafdsa", [operation.error localizedDescription]);
-//                    }];
-//                    [operation start];
-//                    
-//                }
-//            }
-//            
-//        }
-//        else{
-//            NSLog(@"nothing new");
-//        }
 }
 
 
@@ -426,19 +357,12 @@
     [_centerviewarea setHidden:YES];
     [_createaccountcenter setHidden:YES];
     [_gameinvitations setHidden:NO];
+    [_gameServer.gameInvitations setDelegate:self];
 
-    for (int gameIdx=0; gameIdx < [_gameServer.gameInvitations count]; ++gameIdx)
+    for (int gameIdx=0; gameIdx < [_gameServer.gameInvitations.gameRequests count]; ++gameIdx)
     {
-        GameInfo* game = [_gameServer.gameInvitations objectAtIndex:gameIdx];
-        UIButton *web = [[UIButton alloc] init];
-        web.tag = gameIdx;
-        web.frame = CGRectMake(15,15+(gameIdx*50),450,30);
-        [web setTitle:game.gameName forState:UIControlStateNormal];
-        [web setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [web addTarget:self action:@selector(gotogame:) forControlEvents:UIControlEventTouchUpInside];
-        web.backgroundColor = [UIColor clearColor];
-        
-        [_gameinvitations addSubview:web];
+        NSDictionary* request = [_gameServer.gameInvitations.gameRequests objectAtIndex:gameIdx];
+        [_gameinvitations addSubview:[self createGameButton:request atIndex:gameIdx]];
     }
 }
 
@@ -448,9 +372,9 @@
     hud.labelText = @"Loading";
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        GameInfo* game = [_gameServer.gameInvitations objectAtIndex:sender.tag];
+        GameInfo* game = [_gameServer.gameInvitations.gameRequests objectAtIndex:sender.tag];
         [game joinGame:_gameServer.user.userid];
-        self.gamewindow = [[GameWindow alloc] initWithNibName:@"GameWindow" bundle:nil gameInfo:game myid:_myid];
+        self.gamewindow = [[GameWindow alloc] initWithNibName:@"GameWindow" bundle:nil gameInfo:game myid:_gameServer.user.userid];
         //self.gamewindow.delegate = self;
         
         [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
@@ -466,6 +390,8 @@
 - (IBAction)creategame:(id)sender {
     _createaccountcenter.hidden = YES;
     _centerviewarea.hidden = NO;
+    _gameinvitations.hidden = YES;
+    [_gameServer.gameInvitations releaseDelegate];
 }
 
 - (IBAction)addplayer:(UIButton *)sender {
@@ -529,11 +455,11 @@
 }
 
 - (IBAction)createaccount:(id)sender {
-   
     
     _createaccountcenter.hidden = NO;
     _centerviewarea.hidden = YES;
     _gameinvitations.hidden = YES;
+    [_gameServer.gameInvitations releaseDelegate];
 }
 
 
@@ -817,7 +743,8 @@
     
     [newg joinGame:_gameServer.user.userid];
     
-    self.gamewindow = [[GameWindow alloc] initWithNibName:@"GameWindow" bundle:nil gameInfo:newg myid:_myid];
+    self.gamewindow = [[GameWindow alloc] initWithNibName:@"GameWindow" bundle:nil
+                                                 gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;
     
     [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
@@ -833,6 +760,30 @@
   //  [self presentViewController:self.gamewindow animated:YES completion:nil];
 }
 
+
+-(void) onInviteReceived:(NSArray *)invites
+{
+    for(int i = [_gameinvitations.subviews count]; i < [invites count]; ++i)
+    {
+        NSDictionary* request = [invites objectAtIndex:i];
+        [_gameinvitations addSubview:[self createGameButton:request atIndex:i]];
+    }
+}
+
+- (UIButton*) createGameButton:(NSDictionary *)invite atIndex:(int)idx
+{
+    GameRequest* request = [[GameRequest alloc] initWithProperties:invite];
+    GameInfo* game = [_gameServer getGameForRequest: request];
+    UIButton *web = [[UIButton alloc] init];
+    web.tag = idx;
+    web.frame = CGRectMake(15,15+(idx*50),450,30);
+    [web setTitle:game.gameName forState:UIControlStateNormal];
+    [web setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [web addTarget:self action:@selector(gotogame:) forControlEvents:UIControlEventTouchUpInside];
+    web.backgroundColor = [UIColor clearColor];
+    
+    return web;
+}
 
 - (void)viewDidUnload {
     [self setCenterviewarea:nil];

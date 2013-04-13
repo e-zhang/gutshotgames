@@ -10,6 +10,7 @@
 #include "DBDefs.h"
 
 #import <CouchCocoa/CouchCocoa.h>
+#import <QuartzCore/QuartzCore.h>
 #import "Character.h"
 
 #define INITIAL_PLAYER_HEIGHT 80
@@ -189,8 +190,6 @@
         _game.startDate = [dateFormat stringFromDate:now];
         [_game getNextRound:_myPlayerId];
     }
-    
-    NSLog(@"my id is %@ and host id is %@", _myPlayerId, _game.hostId);
 
     return YES;
 }
@@ -200,13 +199,20 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _game = game;
+        [_game.gameChat setDelegate:self];
         _targetPicker.hidden = NO;
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         _deadCharacters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         
+        [_messageText setFrame:CGRectMake(50, 220, 200, 100)];
+        
+        _chatTable.layer.borderWidth = 5;
+        _chatTable.layer.cornerRadius = 8;
+        _chatTable.layer.borderColor = [[UIColor blackColor] CGColor];
+        
         _myPlayerId = myid;
-        _status = [[UILabel alloc]init];
+        // _status = [[UILabel alloc]init];
      /*   if([[gamedata.properties objectForKey:@"player1"]isEqualToString:myid]){
             UIButton *startgame = [UIButton buttonWithType:UIButtonTypeCustom];
             [startgame setFrame:CGRectMake(170,80,100,50)];
@@ -220,6 +226,7 @@
         
         _gameStarted = 0;
         [self initPlayers];
+        _myPlayerName = ((Character*)[_characters objectForKey:_myPlayerId]).name;
         
         if(_gameStarted == [_game.players count])
         {
@@ -352,16 +359,48 @@
 
 }
 
+
+- (IBAction) sendMessage:(id)sender
+{
+    NSString* message = [NSString stringWithFormat:@"%@: %@", _myPlayerName, _messageText.text];
+    
+    [_game sendChat:message fromUser:_myPlayerName];
+    
+    NSArray* paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_game.gameChat.chatHistory count]-1
+                                                                 inSection:0]];
+    [_chatTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationLeft];
+    
+    _messageText.text = @"";
+}
+
+- (void) onChatUpdate:(int)count
+{
+    int numRows = [_chatTable numberOfRowsInSection:0];
+    NSMutableArray* paths = [[NSMutableArray alloc] initWithCapacity:count-numRows];
+    
+    for(int i = numRows; i < count; ++i)
+    {
+        [paths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+    }
+    
+    [_chatTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationLeft];
+}
+
+
 - (void)viewDidUnload {
     [self setStatus:nil];
     [self setMovearea:nil];
-    [self setPlayerattack:nil];
     [self setScrolldata:nil];
     [self setSmbutton:nil];
     [self setTargetPicker:nil];
+    [self setSendMessage:nil];
+    [self setSendMessage:nil];
+    [self setChatTable:nil];
+    [self setMessageText:nil];
     [super viewDidUnload];
 }
 
+// UIPickerDelegates
 - (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView
 {
     return 1;
@@ -375,5 +414,55 @@
     Character* c = [_characters objectForKey:[[_characters allKeys] objectAtIndex:row]];
     return c.name;
 }
+
+
+//UITableViewDelegates
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"ChatCellIdentifier";
+    
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+        cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
+        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
+    }
+    
+    NSDateFormatter* format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"yyyy-mm-dd: hh:mm:ss"];
+    NSString* time = [format stringFromDate:[NSDate date]];
+    NSArray* chat = [_game.gameChat.chatHistory objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"[%@] %@:",
+                           time, [chat objectAtIndex:0]];
+    
+    cell.detailTextLabel.text = [chat objectAtIndex:1];
+    
+	return cell;
+    
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return [_game.gameChat.chatHistory count];
+}
+
+//-(NSInteger)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+////    CGSize cellSize = [cell.textLabel.text
+////                       sizeWithFont:[UIFont systemFontOfSize:11]
+////                       constrainedToSize:CGSizeMake(280.0f, 100.0f)
+////                       lineBreakMode:UILineBreakModeWordWrap];
+//    
+//    return 20;
+//}
 
 @end

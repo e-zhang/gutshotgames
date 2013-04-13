@@ -18,4 +18,6 @@ const static NSString* DB_PROFILES = @"profiles";
 const static NSString* DB_UPDATES = @"updates";
 const static NSString* DB_GAMES = @"games";
 
+const static NSString* DB_CHAT = @"chat";
+
 #endif

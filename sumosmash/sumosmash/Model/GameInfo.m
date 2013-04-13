@@ -15,6 +15,8 @@
 @dynamic gameName, gameData, startDate,
          timeInterval, players, hostId, currentRound;
 
+@synthesize gameChat=_gameChat;
+
 // todo: probably keep a mutable copy of the rounds and stuff on hand to set
 // the dynamic properties to, so we dont incur the cost of the copy each time
 
@@ -26,6 +28,11 @@
 - (void) setGameOver:(BOOL)over
 {
     _isOver = over;
+}
+
+- (void) setGameChat:(GameChat *)gameChat
+{
+    _gameChat = gameChat;
 }
 
 - (BOOL) isGameOver
@@ -71,7 +78,6 @@
     
     do
     {
-        
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         [currentRound setObject:[move getMove] forKey:player];
         
@@ -79,6 +85,7 @@
         [data setObject:currentRound atIndexedSubscript:[self.currentRound intValue]];
         
         self.gameData = data;
+        
         [[self save] wait:&error];
         
     } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
@@ -139,6 +146,17 @@
     
 }
 
+- (void) sendChat:(NSString *)chat fromUser:(NSString *)name
+{
+    NSMutableArray* history = [self.gameChat.chatHistory mutableCopy];
+    [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
+    
+    self.gameChat.chatHistory = history;
+    
+    [[_gameChat save] wait];
+    
+}
+
 - (void) couchDocumentChanged:(CouchDocument *)doc
 {
     if (self.document != doc)
@@ -177,10 +195,6 @@
     
 }
 
--(void) didLoadFromDocument
-{
-   
- }
 
 
 @end

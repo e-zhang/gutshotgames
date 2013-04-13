@@ -19,6 +19,7 @@
     CouchDatabase* _serverProfiles;
     CouchDatabase* _gameInvites;
     CouchDatabase* _games;
+    CouchDatabase* _chat;
     
     // TouchDB local
     CouchDatabase* _localInfo;
@@ -27,20 +28,18 @@
     
     UserAccount* _user;
     GameInvitations* _userInvitations;
-    NSMutableArray* _gameInvitations;
     
-    CouchReplication* _pull;
 }
 
 @property (nonatomic, readonly) UserAccount* user;
-@property (nonatomic, readonly) NSArray* gameInvitations;
+@property (nonatomic, readonly) GameInvitations* gameInvitations;
 
 -(id) init;
 
 -(void) initUser;
 
 -(UserAccount*) GetUser:(NSString*) uuid;
--(void) getInvitations;
+-(GameInfo*) getGameForRequest:(GameRequest*) request;
 
 -(GameInfo*) createNewGame:(NSString*) gameName;
 -(CouchDocument*) createNewGameRequest:(NSString*) gameId;
