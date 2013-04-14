@@ -16,6 +16,9 @@
 #define INITIAL_PLAYER_HEIGHT 80
 #define PLAYER_HEIGHT 60
 
+#define HEADER_TAG 0
+#define MESSAGE_TAG 1
+
 @interface GameWindow ()
 
 @end
@@ -421,26 +424,42 @@
     
     static NSString *CellIdentifier = @"ChatCellIdentifier";
     
+    UILabel *header, *message;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
-        cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-        cell.detailTextLabel.numberOfLines = 0;
-        cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
-        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-        cell.textLabel.numberOfLines = 0;
-        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:10.0];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:CellIdentifier];
+        
+        header = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 120.0, 45.0)];
+        header.tag = HEADER_TAG;
+        header.font = [UIFont systemFontOfSize:11.0];
+        header.textAlignment = UITextAlignmentRight;
+        header.textColor = [UIColor blueColor];
+        header.numberOfLines = 2;
+        [cell.contentView addSubview:header];
+        
+        message = [[UILabel alloc] initWithFrame:CGRectMake(140.0, 0.0, 250.0, 45.0)];
+        message.tag = MESSAGE_TAG;
+        message.font = [UIFont systemFontOfSize:10.0];
+        message.textAlignment = UITextAlignmentLeft;
+        message.textColor = [UIColor blackColor];
+        message.numberOfLines = 0;
+        [cell.contentView addSubview:message];
+    } else {
+        header = (UILabel *) [cell.contentView viewWithTag:HEADER_TAG];
+        message = (UILabel *) [cell.contentView viewWithTag:MESSAGE_TAG];
     }
     
+        
     NSDateFormatter* format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"yyyy-mm-dd: hh:mm:ss"];
+    [format setDateFormat:@"yyyy-MM-dd: hh:mm:ss"];
     NSString* time = [format stringFromDate:[NSDate date]];
     NSArray* chat = [_game.gameChat.chatHistory objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"[%@] %@:",
+    header.text = [NSString stringWithFormat:@"[%@] %@:",
                            time, [chat objectAtIndex:0]];
     
-    cell.detailTextLabel.text = [chat objectAtIndex:1];
+    message.text = [chat objectAtIndex:1];
     
 	return cell;
     
