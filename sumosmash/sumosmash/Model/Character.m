@@ -52,7 +52,7 @@
 -(void) setUserDisplay
 {
     _characterDisplay = [[UILabel alloc] init];
-    _characterDisplay.textColor = [UIColor darkGrayColor];
+    _characterDisplay.textColor = [UIColor whiteColor];
     _characterDisplay.backgroundColor = [UIColor clearColor];
     _characterDisplay.text =[NSString stringWithFormat:@"%@: Lives-%d Points-%d", _id, _life, _points];
     

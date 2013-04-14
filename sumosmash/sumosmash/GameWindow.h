@@ -14,7 +14,8 @@
                                          UIPickerViewDelegate,
                                          UIPickerViewDataSource,
                                          UITableViewDelegate,
-                                         UITableViewDataSource>
+                                         UITableViewDataSource,
+                                         UITextViewDelegate>
 {
     GameInfo* _game;
     NSString* _myPlayerId;
@@ -23,12 +24,13 @@
     UILabel *countdownLabel;
     NSMutableDictionary* _characters;
     NSMutableDictionary* _deadCharacters;
+    
 }
 
 @property (strong, nonatomic) IBOutlet UILabel *status;
 @property (strong, nonatomic) IBOutlet UIView *movearea;
 @property (strong, nonatomic) IBOutlet UIPickerView *targetPicker;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrolldata;
+@property (strong, nonatomic) IBOutlet UIView *gamezone;
 @property (strong, nonatomic) IBOutlet UIButton *smbutton;
 @property (strong, nonatomic) IBOutlet UITableView *chatTable;
 @property (strong, nonatomic) IBOutlet UITextView *messageText;

@@ -23,7 +23,10 @@
 
 @end
 
+NSString * const messageWatermark = @"Send a message...";
+
 @implementation GameWindow
+
 
 /*
 - (void)countdownUpdateMethod:(NSTimer*)theTimer {
@@ -157,14 +160,15 @@
                                            INITIAL_PLAYER_HEIGHT + i*PLAYER_HEIGHT,
                                            50,
                                            50);
-            [self.view addSubview:myImageView];
+            [_gamezone addSubview:myImageView];
         }
         
         UILabel* label1 = character.Display;
         label1.frame = CGRectMake(10,
                                   INITIAL_PLAYER_HEIGHT + i*PLAYER_HEIGHT,
-                                  50,
+                                  100,
                                   50);
+        [label1 sizeToFit];
         
         if(![player objectForKey:DB_CONNECTED])
         {
@@ -174,7 +178,7 @@
         {
             _gameStarted++;
         }
-        [self.view addSubview:label1];
+        [_gamezone addSubview:label1];
        
         [_characters setObject:character forKey:[player objectForKey:DB_USER_ID]];
     }
@@ -201,6 +205,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [self.view addSubview:_gamezone];
+        
         _game = game;
         [_game.gameChat setDelegate:self];
         _targetPicker.hidden = NO;
@@ -208,9 +214,13 @@
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         _deadCharacters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         
-        [_messageText setFrame:CGRectMake(50, 220, 200, 100)];
+        _messageText.layer.borderWidth = 2;
+        _messageText.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+        _messageText.text = messageWatermark;
+        _messageText.textColor = [UIColor grayColor];
+        _messageText.font = [UIFont italicSystemFontOfSize:10.0f];
         
-        _chatTable.layer.borderWidth = 5;
+        _chatTable.layer.borderWidth = 2;
         _chatTable.layer.cornerRadius = 8;
         _chatTable.layer.borderColor = [[UIColor blackColor] CGColor];
         
@@ -251,6 +261,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 
     //[NSTimer scheduledTimerWithTimeInterval: 10.0 target: self selector:@selector(checkforgameupdates:) userInfo: nil repeats:YES];
 
@@ -373,7 +384,9 @@
                                                                  inSection:0]];
     [_chatTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationLeft];
     
-    _messageText.text = @"";
+    _messageText.text = messageWatermark;
+    _messageText.textColor = [UIColor grayColor];
+    _messageText.font = [UIFont italicSystemFontOfSize:10.0f];
 }
 
 - (void) onChatUpdate:(int)count
@@ -393,7 +406,6 @@
 - (void)viewDidUnload {
     [self setStatus:nil];
     [self setMovearea:nil];
-    [self setScrolldata:nil];
     [self setSmbutton:nil];
     [self setTargetPicker:nil];
     [self setSendMessage:nil];
@@ -473,15 +485,27 @@
 	return [_game.gameChat.chatHistory count];
 }
 
-//-(NSInteger)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-////    CGSize cellSize = [cell.textLabel.text
-////                       sizeWithFont:[UIFont systemFontOfSize:11]
-////                       constrainedToSize:CGSizeMake(280.0f, 100.0f)
-////                       lineBreakMode:UILineBreakModeWordWrap];
-//    
-//    return 20;
-//}
+// UITextViewDelegates
+
+- (void) textViewDidBeginEditing:(UITextView *)textView
+{
+    if([_messageText.text isEqual:messageWatermark])
+    {
+        _messageText.text = @"";
+        _messageText.textColor = [UIColor blackColor];
+        _messageText.font = [UIFont systemFontOfSize:11.0f];
+    }
+}
+
+- (void) textViewDidEndEditing:(UITextView *)textView
+{
+    if([_messageText.text isEqual:@""])
+    {
+        _messageText.text = messageWatermark;
+        _messageText.textColor = [UIColor grayColor];
+        _messageText.font = [UIFont italicSystemFontOfSize:10.0f];
+    }
+}
+
 
 @end

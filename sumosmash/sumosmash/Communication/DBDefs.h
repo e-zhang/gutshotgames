@@ -9,15 +9,15 @@
 #ifndef DBDEFS_H_
 #define DBDEFS_H_
 
-const static NSString* DB_USER_ID = @"playerId";
-const static NSString* DB_FB_ID = @"fb_id";
-const static NSString* DB_USER_NAME = @"name";
-const static NSString* DB_CONNECTED = @"connected";
+static NSString * const DB_USER_ID = @"playerId";
+static NSString * const DB_FB_ID = @"fb_id";
+static NSString * const DB_USER_NAME = @"name";
+static NSString * const DB_CONNECTED = @"connected";
 
-const static NSString* DB_PROFILES = @"profiles";
-const static NSString* DB_UPDATES = @"updates";
-const static NSString* DB_GAMES = @"games";
+static NSString * const DB_PROFILES = @"profiles";
+static NSString * const DB_UPDATES = @"updates";
+static NSString * const DB_GAMES = @"games";
 
-const static NSString* DB_CHAT = @"chat";
+static NSString * const DB_CHAT = @"chat";
 
 #endif
