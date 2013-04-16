@@ -23,7 +23,7 @@
 
 @property (nonatomic) NSArray* gameRequests;
 
-- (void) setDelegate:(id) delegate;
+- (void) setDelegate:(id<InvitationUpdateDelegate>) delegate;
 - (void) releaseDelegate;
 
 @end

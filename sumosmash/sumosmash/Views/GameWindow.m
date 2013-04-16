@@ -150,7 +150,7 @@ NSString * const messageWatermark = @"Send a message...";
     {
         NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
         
-        Character* character = [[Character alloc] initWithId:[player objectForKey:@"name"]];
+        Character* character = [[Character alloc] initWithId:[player objectForKey:DB_USER_NAME]];
         
         if([player objectForKey:@"fb_id"])
         {
@@ -376,9 +376,9 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (IBAction) sendMessage:(id)sender
 {
-    NSString* message = [NSString stringWithFormat:@"%@: %@", _myPlayerName, _messageText.text];
+    NSLog(@"%@, %@", _messageText.text, _myPlayerName);
     
-    [_game sendChat:message fromUser:_myPlayerName];
+    [_game sendChat:_messageText.text fromUser:_myPlayerName];
     
     NSArray* paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_game.gameChat.chatHistory count]-1
                                                                  inSection:0]];
@@ -467,6 +467,8 @@ NSString * const messageWatermark = @"Send a message...";
     [format setDateFormat:@"yyyy-MM-dd: hh:mm:ss"];
     NSString* time = [format stringFromDate:[NSDate date]];
     NSArray* chat = [_game.gameChat.chatHistory objectAtIndex:indexPath.row];
+    NSLog( @"history is %@", _game.gameChat.chatHistory);
+    NSLog( @"chat is %d - %@", indexPath.row, chat);
     
     header.text = [NSString stringWithFormat:@"[%@] %@:",
                            time, [chat objectAtIndex:0]];

@@ -43,7 +43,7 @@
 
 -(GameInfo*) createNewGame:(NSString*) gameName;
 -(CouchDocument*) createNewGameRequest:(NSString*) gameId;
--(CouchQuery*) getUserUpdates:(NSDictionary*)playerAccounts;
+-(GameInvitations*) getUserUpdate:(NSString*)player;
 
 
 @end

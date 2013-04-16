@@ -148,10 +148,12 @@
 
 - (void) sendChat:(NSString *)chat fromUser:(NSString *)name
 {
-    NSMutableArray* history = [self.gameChat.chatHistory mutableCopy];
+    NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
     [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
     
     self.gameChat.chatHistory = history;
+    NSLog( @"history is %@", _gameChat.chatHistory);
+    NSLog( @"chat is %@", history);
     
     [[_gameChat save] wait];
     

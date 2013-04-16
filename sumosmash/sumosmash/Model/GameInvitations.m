@@ -12,7 +12,7 @@
 
 @dynamic gameRequests;
 
--(void) setDelegate:(id)delegate
+-(void) setDelegate:(id<InvitationUpdateDelegate>)delegate
 {
     _delegate = delegate;
 }

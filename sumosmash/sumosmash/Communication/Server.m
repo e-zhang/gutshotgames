@@ -114,9 +114,9 @@ const int SERVER_PORT = 443;
     return request;
 }
 
--(CouchQuery*) getUserUpdates:(NSDictionary*)playerAccounts
+-(GameInvitations*) getUserUpdate:(NSString*)player
 {
-    return [_gameInvites getDocumentsWithIDs:[playerAccounts allKeys]];
+    return [GameInvitations modelForDocument:[_gameInvites documentWithID:player]];
 }
 
 @end

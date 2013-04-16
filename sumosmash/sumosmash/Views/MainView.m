@@ -83,7 +83,7 @@
         }
     }
     
-    _cab.hidden = userType == NONE ? YES : NO;
+    _cab.hidden = userType == NONE ? NO : YES;
     
     _players = [[NSMutableArray alloc] init];
     [_gameinvitations setContentSize:CGSizeMake(450,1400)];
@@ -695,9 +695,9 @@
     RESTOperation* op24 = [gameRequest putProperties:requestDoc];
     if (![op24 wait]){}
     
-    for (CouchQueryRow* row in [_gameServer getUserUpdates:players].rows) {
+    for (NSString* player in [players allKeys]) {
         
-        GameInvitations* invites = [GameInvitations modelForDocument:row.document];
+        GameInvitations* invites = [_gameServer getUserUpdate:player];
         
         if (invites.gameRequests)
         {

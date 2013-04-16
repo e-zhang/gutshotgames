@@ -27,7 +27,7 @@
         NSData *data = [NSData dataWithContentsOfURL:url];
         
         *userPic = [NSData dataWithData:data];
-        *username = [NSString stringWithString:self.fb_id];
+        *username = [NSString stringWithString:self.fb_name];
         
         return FACEBOOK;
     }
@@ -46,9 +46,9 @@
     NSMutableDictionary* userAccount = [[NSMutableDictionary alloc] init];
     
     if(self.fb_name){
-        [userAccount setObject:self.fb_name forKey:DB_USER_ID];
+        [userAccount setObject:self.fb_name forKey:DB_USER_NAME];
         [userAccount setObject:self.fb_id forKey:DB_FB_ID];
-        [userAccount setObject:self.userid forKey:DB_USER_NAME];
+        [userAccount setObject:self.userid forKey:DB_USER_ID];
     }
     else{
         [userAccount setObject:self.username forKey:DB_USER_NAME];

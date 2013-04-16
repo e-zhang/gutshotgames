@@ -30,18 +30,11 @@
 		E72AF8C51713967000BC1E04 /* button-50.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E72AF89E1713967000BC1E04 /* button-50.mp3 */; };
 		E72AF8C61713967000BC1E04 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = E72AF89F1713967000BC1E04 /* close.png */; };
 		E72AF8C71713967000BC1E04 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8A31713967000BC1E04 /* Server.m */; };
-		E72AF8C81713967000BC1E04 /* createaccount.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8A51713967000BC1E04 /* createaccount.m */; };
-		E72AF8C91713967000BC1E04 /* createaccount~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8A61713967000BC1E04 /* createaccount~ipad.xib */; };
 		E72AF8CA1713967000BC1E04 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8A71713967000BC1E04 /* Default-568h@2x.png */; };
 		E72AF8CB1713967000BC1E04 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8A81713967000BC1E04 /* Default.png */; };
 		E72AF8CC1713967000BC1E04 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8A91713967000BC1E04 /* Default@2x.png */; };
 		E72AF8CD1713967000BC1E04 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8AA1713967000BC1E04 /* InfoPlist.strings */; };
-		E72AF8CE1713967100BC1E04 /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8AD1713967000BC1E04 /* GameWindow.m */; };
-		E72AF8CF1713967100BC1E04 /* GameWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8AE1713967000BC1E04 /* GameWindow.xib */; };
 		E72AF8D01713967100BC1E04 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8AF1713967000BC1E04 /* main.m */; };
-		E72AF8D11713967100BC1E04 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8B11713967000BC1E04 /* MainView.m */; };
-		E72AF8D21713967100BC1E04 /* MainView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E72AF8B21713967000BC1E04 /* MainView~ipad.xib */; };
-		E72AF8D31713967100BC1E04 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8B41713967000BC1E04 /* MBProgressHUD.m */; };
 		E72AF8D41713967100BC1E04 /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8B71713967000BC1E04 /* Character.m */; };
 		E72AF8D51713967100BC1E04 /* GameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8B91713967000BC1E04 /* GameInfo.m */; };
 		E72AF8D61713967100BC1E04 /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF8BB1713967000BC1E04 /* GameRequest.m */; };
@@ -53,6 +46,11 @@
 		E72AFA361714DFD600BC1E04 /* GameInvitations.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AFA351714DFD600BC1E04 /* GameInvitations.m */; };
 		E72AFA3817164F7D00BC1E04 /* CouchCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72AFA3717164F7D00BC1E04 /* CouchCocoa.framework */; };
 		E72AFA3B1719F5BC00BC1E04 /* GameChat.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AFA3A1719F5BC00BC1E04 /* GameChat.m */; };
+		E79D7B5E171CD937007972E0 /* MoveMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B5D171CD937007972E0 /* MoveMenu.m */; };
+		E79D7B63171CE09E007972E0 /* createaccount.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B5F171CE09E007972E0 /* createaccount.m */; };
+		E79D7B64171CE09E007972E0 /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B60171CE09E007972E0 /* GameWindow.m */; };
+		E79D7B65171CE09E007972E0 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B61171CE09E007972E0 /* MainView.m */; };
+		E79D7B66171CE09E007972E0 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B62171CE09E007972E0 /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -96,22 +94,11 @@
 		E72AF8A11713967000BC1E04 /* DBDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBDefs.h; sourceTree = "<group>"; };
 		E72AF8A21713967000BC1E04 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		E72AF8A31713967000BC1E04 /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
-		E72AF8A41713967000BC1E04 /* createaccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = createaccount.h; sourceTree = "<group>"; };
-		E72AF8A51713967000BC1E04 /* createaccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = createaccount.m; sourceTree = "<group>"; };
-		E72AF8A61713967000BC1E04 /* createaccount~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "createaccount~ipad.xib"; sourceTree = "<group>"; };
 		E72AF8A71713967000BC1E04 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		E72AF8A81713967000BC1E04 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E72AF8A91713967000BC1E04 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		E72AF8AB1713967000BC1E04 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E72AF8AC1713967000BC1E04 /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
-		E72AF8AD1713967000BC1E04 /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
-		E72AF8AE1713967000BC1E04 /* GameWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameWindow.xib; sourceTree = "<group>"; };
 		E72AF8AF1713967000BC1E04 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E72AF8B01713967000BC1E04 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
-		E72AF8B11713967000BC1E04 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
-		E72AF8B21713967000BC1E04 /* MainView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MainView~ipad.xib"; sourceTree = "<group>"; };
-		E72AF8B31713967000BC1E04 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		E72AF8B41713967000BC1E04 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		E72AF8B61713967000BC1E04 /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Character.h; sourceTree = "<group>"; };
 		E72AF8B71713967000BC1E04 /* Character.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Character.m; sourceTree = "<group>"; };
 		E72AF8B81713967000BC1E04 /* GameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInfo.h; sourceTree = "<group>"; };
@@ -168,6 +155,19 @@
 		E72AFA3717164F7D00BC1E04 /* CouchCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchCocoa.framework; sourceTree = "<group>"; };
 		E72AFA391719F5BB00BC1E04 /* GameChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameChat.h; sourceTree = "<group>"; };
 		E72AFA3A1719F5BC00BC1E04 /* GameChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameChat.m; sourceTree = "<group>"; };
+		E79D7B50171CD8BF007972E0 /* createaccount.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = createaccount.h; path = Views/createaccount.h; sourceTree = "<group>"; };
+		E79D7B52171CD8BF007972E0 /* createaccount~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file; name = "createaccount~ipad.xib"; path = "Views/createaccount~ipad.xib"; sourceTree = "<group>"; };
+		E79D7B53171CD8BF007972E0 /* GameWindow.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = GameWindow.h; path = Views/GameWindow.h; sourceTree = "<group>"; };
+		E79D7B55171CD8BF007972E0 /* GameWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file; name = GameWindow.xib; path = Views/GameWindow.xib; sourceTree = "<group>"; };
+		E79D7B56171CD8BF007972E0 /* MainView.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = MainView.h; path = Views/MainView.h; sourceTree = "<group>"; };
+		E79D7B58171CD8BF007972E0 /* MainView~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file; name = "MainView~ipad.xib"; path = "Views/MainView~ipad.xib"; sourceTree = "<group>"; };
+		E79D7B59171CD8BF007972E0 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = MBProgressHUD.h; path = Views/MBProgressHUD.h; sourceTree = "<group>"; };
+		E79D7B5C171CD937007972E0 /* MoveMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoveMenu.h; path = Controls/MoveMenu.h; sourceTree = "<group>"; };
+		E79D7B5D171CD937007972E0 /* MoveMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoveMenu.m; path = Controls/MoveMenu.m; sourceTree = "<group>"; };
+		E79D7B5F171CE09E007972E0 /* createaccount.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = createaccount.m; path = Views/createaccount.m; sourceTree = "<group>"; };
+		E79D7B60171CE09E007972E0 /* GameWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GameWindow.m; path = Views/GameWindow.m; sourceTree = "<group>"; };
+		E79D7B61171CE09E007972E0 /* MainView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MainView.m; path = Views/MainView.m; sourceTree = "<group>"; };
+		E79D7B62171CE09E007972E0 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Views/MBProgressHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,10 +252,9 @@
 		E72AF89A1713967000BC1E04 /* sumosmash */ = {
 			isa = PBXGroup;
 			children = (
+				E79D7B4D171CD85C007972E0 /* Controls */,
 				E72AF8DA1713967500BC1E04 /* Supporting Files */,
 				E72AF8DB1713969000BC1E04 /* Views */,
-				E72AF89B1713967000BC1E04 /* AppDelegate.h */,
-				E72AF89C1713967000BC1E04 /* AppDelegate.m */,
 				E72AF8A01713967000BC1E04 /* Communication */,
 				E72AF8B51713967000BC1E04 /* Model */,
 			);
@@ -297,6 +296,8 @@
 		E72AF8DA1713967500BC1E04 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E72AF89B1713967000BC1E04 /* AppDelegate.h */,
+				E72AF89C1713967000BC1E04 /* AppDelegate.m */,
 				E72AF8AF1713967000BC1E04 /* main.m */,
 				E72AF8C11713967000BC1E04 /* sumosmash-Info.plist */,
 				E72AF8C21713967000BC1E04 /* sumosmash-Prefix.pch */,
@@ -314,17 +315,17 @@
 		E72AF8DB1713969000BC1E04 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E72AF8B31713967000BC1E04 /* MBProgressHUD.h */,
-				E72AF8B41713967000BC1E04 /* MBProgressHUD.m */,
-				E72AF8A41713967000BC1E04 /* createaccount.h */,
-				E72AF8A51713967000BC1E04 /* createaccount.m */,
-				E72AF8A61713967000BC1E04 /* createaccount~ipad.xib */,
-				E72AF8AC1713967000BC1E04 /* GameWindow.h */,
-				E72AF8AD1713967000BC1E04 /* GameWindow.m */,
-				E72AF8AE1713967000BC1E04 /* GameWindow.xib */,
-				E72AF8B01713967000BC1E04 /* MainView.h */,
-				E72AF8B11713967000BC1E04 /* MainView.m */,
-				E72AF8B21713967000BC1E04 /* MainView~ipad.xib */,
+				E79D7B50171CD8BF007972E0 /* createaccount.h */,
+				E79D7B5F171CE09E007972E0 /* createaccount.m */,
+				E79D7B52171CD8BF007972E0 /* createaccount~ipad.xib */,
+				E79D7B53171CD8BF007972E0 /* GameWindow.h */,
+				E79D7B60171CE09E007972E0 /* GameWindow.m */,
+				E79D7B55171CD8BF007972E0 /* GameWindow.xib */,
+				E79D7B56171CD8BF007972E0 /* MainView.h */,
+				E79D7B61171CE09E007972E0 /* MainView.m */,
+				E79D7B58171CD8BF007972E0 /* MainView~ipad.xib */,
+				E79D7B59171CD8BF007972E0 /* MBProgressHUD.h */,
+				E79D7B62171CE09E007972E0 /* MBProgressHUD.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -371,6 +372,15 @@
 			);
 			name = DeprecatedHeaders;
 			path = FacebookSDK.framework/Versions/A/DeprecatedHeaders;
+			sourceTree = "<group>";
+		};
+		E79D7B4D171CD85C007972E0 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				E79D7B5C171CD937007972E0 /* MoveMenu.h */,
+				E79D7B5D171CD937007972E0 /* MoveMenu.m */,
+			);
+			name = Controls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -428,13 +438,10 @@
 				E72AF8C41713967000BC1E04 /* back.mp3 in Resources */,
 				E72AF8C51713967000BC1E04 /* button-50.mp3 in Resources */,
 				E72AF8C61713967000BC1E04 /* close.png in Resources */,
-				E72AF8C91713967000BC1E04 /* createaccount~ipad.xib in Resources */,
 				E72AF8CA1713967000BC1E04 /* Default-568h@2x.png in Resources */,
 				E72AF8CB1713967000BC1E04 /* Default.png in Resources */,
 				E72AF8CC1713967000BC1E04 /* Default@2x.png in Resources */,
 				E72AF8CD1713967000BC1E04 /* InfoPlist.strings in Resources */,
-				E72AF8CF1713967100BC1E04 /* GameWindow.xib in Resources */,
-				E72AF8D21713967100BC1E04 /* MainView~ipad.xib in Resources */,
 				E72AF8D91713967100BC1E04 /* sumosmash-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -446,13 +453,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E79D7B63171CE09E007972E0 /* createaccount.m in Sources */,
+				E79D7B64171CE09E007972E0 /* GameWindow.m in Sources */,
+				E79D7B65171CE09E007972E0 /* MainView.m in Sources */,
+				E79D7B66171CE09E007972E0 /* MBProgressHUD.m in Sources */,
 				E72AF8C31713967000BC1E04 /* AppDelegate.m in Sources */,
 				E72AF8C71713967000BC1E04 /* Server.m in Sources */,
-				E72AF8C81713967000BC1E04 /* createaccount.m in Sources */,
-				E72AF8CE1713967100BC1E04 /* GameWindow.m in Sources */,
 				E72AF8D01713967100BC1E04 /* main.m in Sources */,
-				E72AF8D11713967100BC1E04 /* MainView.m in Sources */,
-				E72AF8D31713967100BC1E04 /* MBProgressHUD.m in Sources */,
 				E72AF8D41713967100BC1E04 /* Character.m in Sources */,
 				E72AF8D51713967100BC1E04 /* GameInfo.m in Sources */,
 				E72AF8D61713967100BC1E04 /* GameRequest.m in Sources */,
@@ -460,6 +467,7 @@
 				E72AF8D81713967100BC1E04 /* UserAccount.m in Sources */,
 				E72AFA361714DFD600BC1E04 /* GameInvitations.m in Sources */,
 				E72AFA3B1719F5BC00BC1E04 /* GameChat.m in Sources */,
+				E79D7B5E171CD937007972E0 /* MoveMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
