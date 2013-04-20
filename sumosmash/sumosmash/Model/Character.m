@@ -10,54 +10,29 @@
 
 @implementation Character
 
-@synthesize NextMove = _nextMove, Display = _characterDisplay, name = _id;
+@synthesize NextMove = _nextMove, Name = _name, Id = _id,
+            IsConnected = _isConnected;
 
--(id) initWithId:(NSString *)playerId
+-(id) initWithId:(NSString *)playerId andName:(NSString *)name
 {
     _id = playerId;
+    _name = name;
+    _isConnected = NO;
     
     _life = 5;
     _points = 5;
     _lifeUpdate = 0;
     _pointsUpdate = 0;
     
-    [self setUserDisplay];
-    
     return self;
 }
 
--(id) initWithId:(NSString *) playerId withLife:(int) life withPoints:(int) points
+
+-(NSString*) getStats
 {
-    _id = playerId;
-    
-    _life = life;
-    _points = points;
-    _lifeUpdate = 0;
-    _pointsUpdate = 0;
-    
-    return self;
+    return [NSString stringWithFormat:@"%@: Lives-%d Points-%d", _name, _life, _points];
 }
 
--(UIImage*) getUserPic:(NSString *)fbId
-{
-    NSString *path = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",
-                      fbId];
-    NSURL *url = [NSURL URLWithString:path];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    _characterPic = [[UIImage alloc]initWithData:data];
-    
-    return _characterPic;
-}
-
--(void) setUserDisplay
-{
-    _characterDisplay = [[UILabel alloc] init];
-    _characterDisplay.textColor = [UIColor whiteColor];
-    _characterDisplay.backgroundColor = [UIColor clearColor];
-    _characterDisplay.text =[NSString stringWithFormat:@"%@: Lives-%d Points-%d", _id, _life, _points];
-    
-    _characterDisplay.font = [UIFont fontWithName:@"GillSans" size:14.0f];
-}
 
 -(BOOL) hasNextMove;
 {

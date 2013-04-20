@@ -7,20 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MoveType.h"
+#import "Move.h"
 
-@protocol MoveMenuProtocol <NSObject>
+@protocol MoveMenuDelegate<NSObject>
 
-- (void) selectedItemChanged:(MoveType) move;
+- (void) selectedItemChanged:(Move*) move;
 
 @end
 
 @interface MoveMenu : UIControl
 {
-    id<MoveMenuProtocol> _delegate;
+    id<MoveMenuDelegate> _delegate;
+    NSString* _target;
+    BOOL _isSelf;
+    UIButton* _selectedMove;
     UIView* _container;
 }
 
-- (id) initWithFrame:(CGRect)frame andDelegate:(id<MoveMenuProtocol>)delegate forPlayer:(NSString*)playerId isSelf:(BOOL)isSelf;
+- (id) initWithFrame:(CGRect)frame andDelegate:(id<MoveMenuDelegate>)delegate forPlayer:(NSString*)playerId isSelf:(BOOL)isSelf;
 
 @end

@@ -14,6 +14,9 @@
 @interface Character : NSObject
 {
     NSString* _id;
+    NSString* _name;
+    
+    BOOL _isConnected;
     
     int _points;
     int _life;
@@ -22,14 +25,11 @@
     int _lifeUpdate;
     
     Move* _nextMove;
-   
-    UILabel* _characterDisplay;
-    UIImage* _characterPic;
 }
 
--(id) initWithId:(NSString*) playerId;
--(UIImage*) getUserPic:(NSString*) fbId;
--(void) setUserDisplay;
+-(id) initWithId:(NSString*) playerId andName:(NSString*)name;
+
+- (NSString*) getStats;
 
 -(BOOL) UpdateNextMove:(Move*) nextMove;
 -(BOOL) hasNextMove;
@@ -43,8 +43,9 @@
 -(NSString*) CommitUpdates;
 
 @property (readonly, nonatomic) Move* NextMove;
-@property (readonly, nonatomic) UILabel* Display;
-@property (readonly, nonatomic) NSString* name;
+@property (readonly, nonatomic) NSString* Name;
+@property (readonly, nonatomic) NSString* Id;
+@property (nonatomic) BOOL IsConnected;
 
 @end
 

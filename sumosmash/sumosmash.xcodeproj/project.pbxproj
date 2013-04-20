@@ -51,6 +51,8 @@
 		E79D7B64171CE09E007972E0 /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B60171CE09E007972E0 /* GameWindow.m */; };
 		E79D7B65171CE09E007972E0 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B61171CE09E007972E0 /* MainView.m */; };
 		E79D7B66171CE09E007972E0 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B62171CE09E007972E0 /* MBProgressHUD.m */; };
+		E79D7B6C171F7AD6007972E0 /* CharacterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B6B171F7AD6007972E0 /* CharacterViewController.m */; };
+		E79D7B6F1723312F007972E0 /* GameWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B6E1723312F007972E0 /* GameWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -158,7 +160,6 @@
 		E79D7B50171CD8BF007972E0 /* createaccount.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = createaccount.h; path = Views/createaccount.h; sourceTree = "<group>"; };
 		E79D7B52171CD8BF007972E0 /* createaccount~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file; name = "createaccount~ipad.xib"; path = "Views/createaccount~ipad.xib"; sourceTree = "<group>"; };
 		E79D7B53171CD8BF007972E0 /* GameWindow.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = GameWindow.h; path = Views/GameWindow.h; sourceTree = "<group>"; };
-		E79D7B55171CD8BF007972E0 /* GameWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file; name = GameWindow.xib; path = Views/GameWindow.xib; sourceTree = "<group>"; };
 		E79D7B56171CD8BF007972E0 /* MainView.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = MainView.h; path = Views/MainView.h; sourceTree = "<group>"; };
 		E79D7B58171CD8BF007972E0 /* MainView~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file; name = "MainView~ipad.xib"; path = "Views/MainView~ipad.xib"; sourceTree = "<group>"; };
 		E79D7B59171CD8BF007972E0 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = MBProgressHUD.h; path = Views/MBProgressHUD.h; sourceTree = "<group>"; };
@@ -168,6 +169,9 @@
 		E79D7B60171CE09E007972E0 /* GameWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GameWindow.m; path = Views/GameWindow.m; sourceTree = "<group>"; };
 		E79D7B61171CE09E007972E0 /* MainView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MainView.m; path = Views/MainView.m; sourceTree = "<group>"; };
 		E79D7B62171CE09E007972E0 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Views/MBProgressHUD.m; sourceTree = "<group>"; };
+		E79D7B6A171F7AD6007972E0 /* CharacterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharacterViewController.h; path = Views/CharacterViewController.h; sourceTree = "<group>"; };
+		E79D7B6B171F7AD6007972E0 /* CharacterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CharacterViewController.m; path = Views/CharacterViewController.m; sourceTree = "<group>"; };
+		E79D7B6E1723312F007972E0 /* GameWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GameWindow.xib; path = Views/GameWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,12 +324,14 @@
 				E79D7B52171CD8BF007972E0 /* createaccount~ipad.xib */,
 				E79D7B53171CD8BF007972E0 /* GameWindow.h */,
 				E79D7B60171CE09E007972E0 /* GameWindow.m */,
-				E79D7B55171CD8BF007972E0 /* GameWindow.xib */,
+				E79D7B6E1723312F007972E0 /* GameWindow.xib */,
 				E79D7B56171CD8BF007972E0 /* MainView.h */,
 				E79D7B61171CE09E007972E0 /* MainView.m */,
 				E79D7B58171CD8BF007972E0 /* MainView~ipad.xib */,
 				E79D7B59171CD8BF007972E0 /* MBProgressHUD.h */,
 				E79D7B62171CE09E007972E0 /* MBProgressHUD.m */,
+				E79D7B6A171F7AD6007972E0 /* CharacterViewController.h */,
+				E79D7B6B171F7AD6007972E0 /* CharacterViewController.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -443,6 +449,7 @@
 				E72AF8CC1713967000BC1E04 /* Default@2x.png in Resources */,
 				E72AF8CD1713967000BC1E04 /* InfoPlist.strings in Resources */,
 				E72AF8D91713967100BC1E04 /* sumosmash-Info.plist in Resources */,
+				E79D7B6F1723312F007972E0 /* GameWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +475,7 @@
 				E72AFA361714DFD600BC1E04 /* GameInvitations.m in Sources */,
 				E72AFA3B1719F5BC00BC1E04 /* GameChat.m in Sources */,
 				E79D7B5E171CD937007972E0 /* MoveMenu.m in Sources */,
+				E79D7B6C171F7AD6007972E0 /* CharacterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

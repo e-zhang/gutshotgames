@@ -12,6 +12,8 @@
 #import <CouchCocoa/CouchCocoa.h>
 #import <QuartzCore/QuartzCore.h>
 #import "Character.h"
+#import "CharacterViewController.h"
+#import "MoveMenu.h"
 
 #define INITIAL_PLAYER_HEIGHT 80
 #define PLAYER_HEIGHT 60
@@ -21,9 +23,11 @@
 
 @interface GameWindow ()
 
+
 @end
 
 NSString * const messageWatermark = @"Send a message...";
+
 
 @implementation GameWindow
 
@@ -63,84 +67,10 @@ NSString * const messageWatermark = @"Send a message...";
 }*/
 
 
-- (IBAction)moveselected:(UIButton *)sender {
-    NSLog(@"1234");
-    [sender setSelected:YES];
-    
-    for(UIButton *a in [_movearea subviews]){
-        if (a!=sender){
-            [a setSelected:NO];
-        }
-    }
-}
-
 - (IBAction)returntap:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (MoveType) getSelectedMove
-{
-    MoveType move = MOVECOUNT;
-    
-    for (UIButton* button in [_movearea subviews])
-    {
-        if([button isSelected])
-        {
-            move = (MoveType) button.tag;
-            break;
-        }
-    }
-    
-    return move;
-}
-
-- (void) sendAlert:(NSString*) msg
-{
-    UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
-                                                      message: msg
-                                                     delegate:self
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-    
-    [myAlert1 show];
-}
-
-- (IBAction)submitmove:(id)sender
-{
-    if(_gameStarted < [_game.players count])
-    {
-        [self sendAlert:@"Game hasn't started yet."];
-        return;
-    }
-   
-    MoveType move = [self getSelectedMove];
-    if(move == MOVECOUNT)
-    {
-        [self sendAlert:@"You have to select a move."];
-        return;
-    }
-   
-    NSString* targetPlayer = [[_characters allKeys] objectAtIndex:[_targetPicker selectedRowInComponent:0]];
-    
-    if(![_characters objectForKey:targetPlayer])
-    {
-        [self sendAlert:@"The target player you selected does not exist." ];
-        return;
-    }
-    
-    Move* moveToSubmit = [[Move alloc] initWithTarget:targetPlayer withType:move];
-    
-    Character* myChar = [_characters objectForKey:_myPlayerId];
-    if(![myChar UpdateNextMove:moveToSubmit])
-    {
-        [self sendAlert:@"The move you selected is invalid"];
-        return;
-    }
-   
-    [_game submitMove:moveToSubmit forPlayer:_myPlayerId];
-    
-}
 
 - (void) initPlayers
 {
@@ -150,37 +80,34 @@ NSString * const messageWatermark = @"Send a message...";
     {
         NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
         
-        Character* character = [[Character alloc] initWithId:[player objectForKey:DB_USER_NAME]];
-        
-        if([player objectForKey:@"fb_id"])
+        CharacterViewController* character = [[CharacterViewController alloc] initWithId: [player objectForKey:DB_USER_ID]
+                                                                                    name:[player objectForKey:DB_USER_NAME]
+                                                                                  selfId:_myPlayerId
+                                                                            onMoveTarget:self onMoveSelect:@selector(submitMove:)];
+        NSString* fbid = [player objectForKey:DB_FB_ID];
+        if(fbid)
         {
-            UIImageView *myImageView = [[UIImageView alloc] init];
-            myImageView.image = [character getUserPic:[player objectForKey:@"fb_id"]];
-            myImageView.frame = CGRectMake(10,
-                                           INITIAL_PLAYER_HEIGHT + i*PLAYER_HEIGHT,
-                                           50,
-                                           50);
-            [_gamezone addSubview:myImageView];
+            NSString *path = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",
+                              fbid];
+            
+            [character setUserPic:path];
+            
         }
         
-        UILabel* label1 = character.Display;
-        label1.frame = CGRectMake(10,
-                                  INITIAL_PLAYER_HEIGHT + i*PLAYER_HEIGHT,
-                                  100,
-                                  50);
-        [label1 sizeToFit];
-        
-        if(![player objectForKey:DB_CONNECTED])
+              
+        if([player objectForKey:DB_CONNECTED])
         {
-            label1.textColor = [UIColor redColor];
-        }
-        else
-        {
+            character.Char.isConnected = YES;
             _gameStarted++;
         }
-        [_gamezone addSubview:label1];
-       
-        [_characters setObject:character forKey:[player objectForKey:DB_USER_ID]];
+        
+        [self addChildViewController:character];
+        character.view.frame =  CGRectMake(10,
+                                           INITIAL_PLAYER_HEIGHT + i*PLAYER_HEIGHT,
+                                           75,
+                                           75);
+        [_gamezone addSubview:character.view];
+        [_characters setObject:character.Char forKey:character.Char.Id];
     }
 
 }
@@ -209,7 +136,6 @@ NSString * const messageWatermark = @"Send a message...";
         
         _game = game;
         [_game.gameChat setDelegate:self];
-        _targetPicker.hidden = NO;
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         _deadCharacters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
@@ -239,7 +165,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         _gameStarted = 0;
         [self initPlayers];
-        _myPlayerName = ((Character*)[_characters objectForKey:_myPlayerId]).name;
+        _myPlayerName = ((Character*)[_characters objectForKey:_myPlayerId]).Name;
         
         if(_gameStarted == [_game.players count])
         {
@@ -273,7 +199,12 @@ NSString * const messageWatermark = @"Send a message...";
     // Dispose of any resources that can be recreated.
 }
 
-- (void) onMoveSubmitted:(Move *)move byPlayer:(NSString *)playerId
+- (void) submitMove:(Move *)move
+{
+    [_game submitMove:move forPlayer:_myPlayerId];
+}
+
+- (void) onMoveSubmitted:(Move *)move byPlayer:playerId
 {
     Character* player = [_characters objectForKey:playerId];
     
@@ -287,11 +218,11 @@ NSString * const messageWatermark = @"Send a message...";
 {
     Character* joiner = [_characters objectForKey:playerId];
     
-    if([joiner.Display.textColor isEqual:[UIColor redColor]])
+    if(!joiner.IsConnected)
     {
         // not connected, newly joined
         _gameStarted++;
-        joiner.Display.textColor = [UIColor blackColor];
+        joiner.IsConnected = YES;
     }
 }
 
@@ -348,7 +279,7 @@ NSString * const messageWatermark = @"Send a message...";
         {
             if([deadChars containsObject:c]) continue;
             
-            NSLog(@"Game Over...\n Winner is %@", c.name);
+            NSLog(@"Game Over...\n Winner is %@", c.Name);
             break;
         }
     }
@@ -357,16 +288,16 @@ NSString * const messageWatermark = @"Send a message...";
         NSLog(@"Game Over...\n Draw between ");
         for(Character* c in deadChars)
         {
-            NSLog(@"%@", c.name);
+            NSLog(@"%@", c.Name);
         }
     }
     else
     {
         for(Character* c in deadChars)
         {
-            NSLog(@"%@ has been killed\n", c.name);
-            [_characters removeObjectForKey:c.name];
-            [_deadCharacters setObject:c forKey:c.name];
+            NSLog(@"%@ has been killed\n", c.Name);
+            [_characters removeObjectForKey:c.Name];
+            [_deadCharacters setObject:c forKey:c.Name];
         }
         
     }
@@ -405,9 +336,9 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (void)viewDidUnload {
     [self setStatus:nil];
-    [self setMovearea:nil];
-    [self setSmbutton:nil];
-    [self setTargetPicker:nil];
+//    [self setMovearea:nil];
+//    [self setSmbutton:nil];
+//    [self setTargetPicker:nil];
     [self setSendMessage:nil];
     [self setSendMessage:nil];
     [self setChatTable:nil];
@@ -415,20 +346,6 @@ NSString * const messageWatermark = @"Send a message...";
     [super viewDidUnload];
 }
 
-// UIPickerDelegates
-- (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView
-{
-    return 1;
-}
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [_characters count];
-}
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    Character* c = [_characters objectForKey:[[_characters allKeys] objectAtIndex:row]];
-    return c.name;
-}
 
 
 //UITableViewDelegates
