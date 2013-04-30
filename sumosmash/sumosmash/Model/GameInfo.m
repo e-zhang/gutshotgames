@@ -87,6 +87,11 @@
         [[self save] wait:&error];
         
     } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
+    
+    if ([[self.gameData objectAtIndex:[self.currentRound intValue]] count] == [self.players count])
+    {
+        [_delegate onRoundComplete];
+    }
 }
 
 - (void) simulateRound:(NSDictionary *)characters withDefenders:(NSMutableArray *__autoreleasing *)defenders
@@ -165,7 +170,7 @@
         return;
     }
     
-    if(!self.startDate)
+    if(!self.startDate || self.currentRound < 0)
     {
         for(NSString* playerId in self.players)
         {

@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "MainView.h"
+#import "MenuView.h"
 
 @implementation AppDelegate
 
@@ -20,7 +20,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    MainView *controller = [[MainView alloc] init];
+    MenuView *controller = [[MenuView alloc] init];
     
     self.navController = [[UINavigationController alloc] initWithRootViewController:controller];
     self.navController.navigationBar.hidden = YES;

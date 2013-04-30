@@ -19,6 +19,10 @@
         _delegate = delegate;
         _target = playerId;
         _isSelf = isSelf;
+        
+        self.userInteractionEnabled = YES;
+        
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -35,14 +39,16 @@
         // 4
         if(_isSelf && (i == ATTACK || i == SUPERATTACK)) continue;
         if(!_isSelf && (i == GETPOINTS || i == DEFEND)) continue;
-        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 150, 25)];
+        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 75, 25)];
         im.backgroundColor = [UIColor lightGrayColor];
         [im setTitle:MoveStrings[i] forState:UIControlStateNormal];
-        [im.titleLabel.font fontWithSize:9.0];
-        im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
+        im.titleLabel.font = [UIFont systemFontOfSize:11.0];
+        [im.titleLabel adjustsFontSizeToFitWidth];
+        im.titleLabel.numberOfLines = 2;
+        im.layer.anchorPoint = CGPointMake(1.0f, 1.0f);
         // 5
         im.layer.position = CGPointMake(_container.bounds.size.width/2.0,
-                                        _container.bounds.size.height/2.0);
+                                        _container.bounds.size.height/2.0 + (MOVECOUNT/2-i)*20);
         im.transform = CGAffineTransformMakeRotation(angleSize * i);
         im.tag = i;
         // 6
