@@ -45,10 +45,10 @@
         im.titleLabel.font = [UIFont systemFontOfSize:11.0];
         [im.titleLabel adjustsFontSizeToFitWidth];
         im.titleLabel.numberOfLines = 2;
-        im.layer.anchorPoint = CGPointMake(1.0f, 1.0f);
+        im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
         // 5
         im.layer.position = CGPointMake(_container.bounds.size.width/2.0,
-                                        _container.bounds.size.height/2.0 + (MOVECOUNT/2-i)*20);
+                                        _container.bounds.size.height/2.0 + (MOVECOUNT/2-i)*10);
         im.transform = CGAffineTransformMakeRotation(angleSize * i);
         im.tag = i;
         // 6
