@@ -15,7 +15,7 @@
 #import "CharacterViewController.h"
 #import "MoveMenu.h"
 
-#define INITIAL_PLAYER_HEIGHT 20
+#define INITIAL_PLAYER_HEIGHT 100
 #define PLAYER_HEIGHT 80
 
 #define HEADER_TAG 0
@@ -103,7 +103,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         [self addChildViewController:character];
         character.view.frame =  CGRectMake(10,
-                                           INITIAL_PLAYER_HEIGHT,
+                                           self.view.frame.size.height - INITIAL_PLAYER_HEIGHT,
                                            75 + i * PLAYER_HEIGHT + 10,
                                            75);
         [_gamezone addSubview:character.view];
