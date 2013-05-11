@@ -12,11 +12,12 @@
 #import <CouchCocoa/CouchCocoa.h>
 #import <QuartzCore/QuartzCore.h>
 #import "Character.h"
-#import "CharacterViewController.h"
 #import "MoveMenu.h"
 
-#define INITIAL_PLAYER_HEIGHT 100
-#define PLAYER_HEIGHT 80
+#define PLAYER_HEIGHT 150
+#define PLAYER_WIDTH 100
+
+#define ARENA_RADIUS 80
 
 #define HEADER_TAG 0
 #define MESSAGE_TAG 1
@@ -76,6 +77,9 @@ NSString * const messageWatermark = @"Send a message...";
 {
     NSLog(@"players-%@",_game.players);
     NSArray* players = [_game.players allKeys];
+    
+    CGFloat angleSize = 2*M_PI/[_game.players count];
+    
     for (int i = 0; i < [players count]; ++i)
     {
         NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
@@ -83,7 +87,7 @@ NSString * const messageWatermark = @"Send a message...";
         CharacterViewController* character = [[CharacterViewController alloc] initWithId: [player objectForKey:DB_USER_ID]
                                                                                     name:[player objectForKey:DB_USER_NAME]
                                                                                   selfId:_myPlayerId
-                                                                            onMoveTarget:self onMoveSelect:@selector(submitMove:)];
+                                                                                delegate:self];
         NSString* fbid = [player objectForKey:DB_FB_ID];
         if(fbid)
         {
@@ -95,17 +99,21 @@ NSString * const messageWatermark = @"Send a message...";
         }
         
               
-        if([player objectForKey:DB_CONNECTED])
+        if([[player objectForKey:DB_CONNECTED] intValue])
         {
             character.Char.isConnected = YES;
             _gameStarted++;
         }
         
         [self addChildViewController:character];
-        character.view.frame =  CGRectMake(10,
-                                           self.view.frame.size.height - INITIAL_PLAYER_HEIGHT,
-                                           75 + i * PLAYER_HEIGHT + 10,
-                                           75);
+        
+        double x = cos(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.width/2 - 50;
+        double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 100;
+        character.view.frame =  CGRectMake(x,
+                                           y,
+                                           PLAYER_WIDTH,
+                                           PLAYER_HEIGHT);
+        
         [_gamezone addSubview:character.view];
         [_characters setObject:character.Char forKey:character.Char.Id];
     }
@@ -124,6 +132,8 @@ NSString * const messageWatermark = @"Send a message...";
         _game.startDate = [dateFormat stringFromDate:now];
         [_game getNextRound:_myPlayerId];
     }
+    
+    _gameInfo.text = @"Game starting....";
 
     return YES;
 }
@@ -135,6 +145,14 @@ NSString * const messageWatermark = @"Send a message...";
         [self.view addSubview:_gamezone];
         _game = game;
         [_game.gameChat setDelegate:self];
+        [_game setDelegate:self];
+        _status = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 200, 30)];
+        _status.font = [UIFont systemFontOfSize:14.0];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 200, 200, 100)];
+        _gameInfo.editable = NO;
+        _gameInfo.scrollEnabled = YES;
+        _gameInfo.font = [UIFont systemFontOfSize:9.0];
+        
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         _deadCharacters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
@@ -148,6 +166,7 @@ NSString * const messageWatermark = @"Send a message...";
         _chatTable.layer.borderWidth = 2;
         _chatTable.layer.cornerRadius = 8;
         _chatTable.layer.borderColor = [[UIColor blackColor] CGColor];
+        _chatTable.separatorStyle = UITableViewCellSeparatorStyleNone;
         
         _myPlayerId = myid;
         // _status = [[UILabel alloc]init];
@@ -169,8 +188,15 @@ NSString * const messageWatermark = @"Send a message...";
         if(_gameStarted == [_game.players count])
         {
             [self startGame];
+            _status.text = @"Round: 0";
+        }
+        else
+        {
+            _status.text = @"Waiting for players...";
         }
         
+        [_gamezone addSubview:_status];
+        [_gamezone addSubview:_gameInfo];
     }
     return self;
 }
@@ -198,19 +224,41 @@ NSString * const messageWatermark = @"Send a message...";
     // Dispose of any resources that can be recreated.
 }
 
-- (void) submitMove:(Move *)move
+- (BOOL) onMoveSelect:(Move *)move
 {
-    [_game submitMove:move forPlayer:_myPlayerId];
+    if(_gameStarted == [_characters count])
+    {
+        if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:move])
+        {
+            UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
+                                                              message:@"Move you selected is not valid"
+                                                             delegate:self
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+            
+            [myAlert1 show];
+            return NO;
+        }
+        [_game submitMove:move forPlayer:_myPlayerId];
+        
+        return YES;
+    }
+    return NO;
+}
+
+-(void) onPressSelect:(NSString *)playerId
+{
+    for(Character* c in [_characters allValues])
+    {
+        c.IsTarget = [c.Id isEqual:playerId];
+    }
 }
 
 - (void) onMoveSubmitted:(Move *)move byPlayer:playerId
 {
     Character* player = [_characters objectForKey:playerId];
     
-    if(![player hasNextMove])
-    {
-        [player UpdateNextMove:move];
-    }
+    [player UpdateNextMove:move];
 }
 
 - (void) onPlayerJoined:(NSString *)playerId
@@ -227,6 +275,7 @@ NSString * const messageWatermark = @"Send a message...";
     if(_gameStarted == [_game.players count])
     {
         [self startGame];
+        _status.text = @"Round: 1";
     }
 }
 
@@ -234,6 +283,11 @@ NSString * const messageWatermark = @"Send a message...";
 {
     if ([_game isGameOver]) return;
     
+    for( Character* c in [_characters allValues])
+    {
+        _gameInfo.text = [NSString stringWithFormat:@"%@\n%@", _gameInfo.text,
+                          [NSString stringWithFormat:@"%@ used move: %@", c.Name, MoveStrings[c.NextMove.Type]]];
+    }
     //simulate attacks
     NSMutableArray* defends = [[NSMutableArray alloc] init];
     NSMutableArray* points = [[NSMutableArray alloc] init];
@@ -252,14 +306,17 @@ NSString * const messageWatermark = @"Send a message...";
     // animate simultaneous attacks
     
     // animate normal attacks
-    
-    
         
     [self commitRound];
     
     if(![_game isGameOver])
     {
+        _status.text = [NSString stringWithFormat:@"Round: %d", [_game.currentRound intValue]+1];
         [_game getNextRound:_myPlayerId];
+    }
+    else
+    {
+        _status.text = @"Game Over";
     }
 }
 
@@ -311,8 +368,6 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (void) sendMessage
 {
-    NSLog(@"%@, %@", _messageText.text, _myPlayerName);
-    
     [_game sendChat:_messageText.text fromUser:_myPlayerName];
     
     NSArray* paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_game.gameChat.chatHistory count]-1
@@ -339,10 +394,7 @@ NSString * const messageWatermark = @"Send a message...";
 
 
 - (void)viewDidUnload {
-    [self setStatus:nil];
-//    [self setMovearea:nil];
-//    [self setSmbutton:nil];
-//    [self setTargetPicker:nil];
+    [self setGamezone:nil];
     [self setChatTable:nil];
     [self setMessageText:nil];
     [super viewDidUnload];
@@ -361,20 +413,20 @@ NSString * const messageWatermark = @"Send a message...";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
         
-        header = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 120.0, 45.0)];
+        header = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
         header.tag = HEADER_TAG;
-        header.font = [UIFont systemFontOfSize:11.0];
+        header.font = [UIFont systemFontOfSize:7.0];
         header.textAlignment = UITextAlignmentRight;
         header.textColor = [UIColor blueColor];
         header.numberOfLines = 2;
         [cell.contentView addSubview:header];
         
-        message = [[UILabel alloc] initWithFrame:CGRectMake(140.0, 0.0, 250.0, 45.0)];
+        message = [[UILabel alloc] initWithFrame:CGRectMake(45.0, 0.0, 150.0, 40.0)];
         message.tag = MESSAGE_TAG;
-        message.font = [UIFont systemFontOfSize:10.0];
+        message.font = [UIFont systemFontOfSize:7.0];
         message.textAlignment = UITextAlignmentLeft;
         message.textColor = [UIColor blackColor];
-        message.numberOfLines = 0;
+        message.numberOfLines = 2;
         [cell.contentView addSubview:message];
     } else {
         header = (UILabel *) [cell.contentView viewWithTag:HEADER_TAG];
@@ -383,13 +435,11 @@ NSString * const messageWatermark = @"Send a message...";
     
         
     NSDateFormatter* format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"yyyy-MM-dd: hh:mm:ss"];
+    [format setDateFormat:@"hh:mm"];
     NSString* time = [format stringFromDate:[NSDate date]];
     NSArray* chat = [_game.gameChat.chatHistory objectAtIndex:indexPath.row];
-    NSLog( @"history is %@", _game.gameChat.chatHistory);
-    NSLog( @"chat is %d - %@", indexPath.row, chat);
     
-    header.text = [NSString stringWithFormat:@"[%@] %@:",
+    header.text = [NSString stringWithFormat:@"[%@] \n%@:",
                            time, [chat objectAtIndex:0]];
     
     message.text = [chat objectAtIndex:1];

@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MoveMenu.h"
 
+#define MENU_RADIUS 20
 
 @implementation MoveMenu
 
@@ -39,19 +40,21 @@
         // 4
         if(_isSelf && (i == ATTACK || i == SUPERATTACK)) continue;
         if(!_isSelf && (i == GETPOINTS || i == DEFEND)) continue;
-        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 75, 25)];
+        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 25)];
         im.backgroundColor = [UIColor lightGrayColor];
         [im setTitle:MoveStrings[i] forState:UIControlStateNormal];
-        im.titleLabel.font = [UIFont systemFontOfSize:11.0];
+        im.titleLabel.font = [UIFont systemFontOfSize:10.0];
         [im.titleLabel adjustsFontSizeToFitWidth];
         im.titleLabel.numberOfLines = 2;
         im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
         // 5
-        im.layer.position = CGPointMake(_container.bounds.size.width/2.0,
-                                        _container.bounds.size.height/2.0 + (MOVECOUNT/2-i)*10);
+        double x = cos(M_PI + angleSize*i)*MENU_RADIUS + _container.bounds.size.width/2.0;
+        double y = sin(M_PI + angleSize*i)*MENU_RADIUS + _container.bounds.size.height - 20;
+        im.layer.position = CGPointMake(x, y);
         im.transform = CGAffineTransformMakeRotation(angleSize * i);
         im.tag = i;
         // 6
+        im.userInteractionEnabled = YES;
         [im addTarget:self action:@selector(moveSelected:) forControlEvents:UIControlEventTouchUpInside];
         [_container addSubview:im];
     }
@@ -63,17 +66,28 @@
 
 - (void) moveSelected:(UIButton*) sender
 {
-    if(![sender isEqual:_selectedMove])
+    Move* move = [[Move alloc] initWithTarget:_target withType:(MoveType) sender.tag];
+    
+    if(![_delegate selectedItemChanged:move]) return;
+    
+    if(_selectedMove)
     {
         [_selectedMove setSelected:NO];
-        _selectedMove = sender;
+        _selectedMove.backgroundColor = [UIColor lightGrayColor];
     }
+    _selectedMove = sender;
    
-    Move* move = [[Move alloc] initWithTarget:_target withType:(MoveType) _selectedMove.tag];
 
     [_selectedMove setSelected:YES];
+    _selectedMove.backgroundColor = [UIColor blueColor];
 
-    [_delegate selectedItemChanged:move];
+}
+
+-(void) clearMove
+{
+    [_selectedMove setSelected:NO];
+    _selectedMove.backgroundColor = [UIColor lightGrayColor];
+    _selectedMove = nil;
 }
 
 

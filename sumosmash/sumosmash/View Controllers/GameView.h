@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "GameInfo.h"
+#import "CharacterViewController.h"
 
 @interface GameView : UIViewController<GameUpdateDelegate,
                                          ChatUpdateDelegate,
+                                         CharacterDelegate,
                                          UITableViewDelegate,
                                          UITableViewDataSource,
                                          UITextFieldDelegate>
@@ -23,10 +25,11 @@
     NSMutableDictionary* _characters;
     NSMutableDictionary* _deadCharacters;
     
+    UILabel* _status;
+    UITextView* _gameInfo;
+    
 }
 
-@property (strong, nonatomic) IBOutlet UILabel *status;
-//@property (strong, nonatomic) IBOutlet UIView *movearea;
 @property (strong, nonatomic) IBOutlet UIImageView *gamezone;
 //@property (strong, nonatomic) IBOutlet UIButton *smbutton;
 @property (strong, nonatomic) IBOutlet UITableView *chatTable;

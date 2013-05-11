@@ -25,15 +25,21 @@
         UICollectionViewFlowLayout* layout = [[UICollectionViewFlowLayout alloc] init];
         [layout setItemSize:CGSizeMake(75, 75)];
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        self.view = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.view.tag = INVITATIONS_TAG;
+        UICollectionView* collection = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
+        collection.backgroundColor = [UIColor clearColor];
+        collection.tag = INVITATIONS_TAG;
         
         _selector = selector;
         _target = target;
         
         _invites = invites;
+        NSLog(@"%d", [_invites.gameRequests count]);
+        collection.dataSource = self;
+        [collection registerClass:[UICollectionViewCell class]
+                                   forCellWithReuseIdentifier:@"game_cell"];
         [invites setDelegate:self];
+        [collection reloadData];
+        self.view = collection;
     }
     
     return self;
@@ -93,20 +99,30 @@
 }
 // 0
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"invite_cell" forIndexPath:indexPath];
+    UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"game_cell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
-    UIButton* web = (UIButton*)[[cell.contentView subviews] objectAtIndex:0];
-    if(!web)
+    UIButton* web;
+    if([[cell.contentView subviews] count] == 0)
     {
         UIButton *web = [[UIButton alloc] init];
         web.tag = indexPath.row;
-        web.frame = CGRectMake(0,0,50,50);
-        [web setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        web.frame = CGRectMake(0,0,75,75);
+        cell.layer.borderColor = [[UIColor blackColor] CGColor];
+        cell.layer.borderWidth = 1.5;
+        [web setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         web.titleLabel.font = [UIFont systemFontOfSize:11.0];
+        web.titleLabel.numberOfLines = 2;
+        [web setTitle:[[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:GAME_ID] forState:UIControlStateNormal];
         [web addTarget:self action:@selector(gotogame:) forControlEvents:UIControlEventTouchUpInside];
         web.backgroundColor = [UIColor clearColor];
         
         [cell.contentView addSubview:web];
+    }
+    else
+    {
+        web = (UIButton*)[[cell.contentView subviews] objectAtIndex:0];
+        [web setTitle:[[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:GAME_ID] forState:UIControlStateNormal];
+        web.tag = indexPath.row;
     }
     
     GameRequest* game = [[GameRequest alloc] initWithProperties:

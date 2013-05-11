@@ -20,9 +20,9 @@ typedef enum
 } MoveType;
 
 
-static NSString* MoveStrings[] = {@"Get Points", @"Defend", @"Attack", @"Super Attack"};
+static NSString* MoveStrings[] = {@"Get Points", @"Defend", @"Attack", @"Super Attack", @"NO MOVE"};
 
 // to compare against current points for available moves
-static int MovePointValues[] = {-5, 0, 1, 3};
+static int MovePointValues[] = {-5, 0, 1, 3, 0};
 
-static int MoveDamageValues[] = {0, 0, -1, -2};
+static int MoveDamageValues[] = {0, 0, -1, -2, 0};

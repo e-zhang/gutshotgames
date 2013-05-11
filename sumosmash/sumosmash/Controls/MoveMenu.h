@@ -11,7 +11,7 @@
 
 @protocol MoveMenuDelegate<NSObject>
 
-- (void) selectedItemChanged:(Move*) move;
+- (BOOL) selectedItemChanged:(Move*) move;
 
 @end
 
@@ -25,5 +25,9 @@
 }
 
 - (id) initWithFrame:(CGRect)frame andDelegate:(id<MoveMenuDelegate>)delegate forPlayer:(NSString*)playerId isSelf:(BOOL)isSelf;
+
+- (void) moveSelected:(UIButton*)sender;
+
+- (void) clearMove;
 
 @end

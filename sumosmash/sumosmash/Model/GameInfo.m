@@ -47,12 +47,19 @@
     {
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
-        [player setObject:[NSNumber numberWithBool:true] forKey:DB_CONNECTED];
+        NSLog(@"connected: %@", [player objectForKey:DB_CONNECTED]);
+        
+        [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
+        [joinedPlayers setObject:player forKey:userId];
+        self.players = joinedPlayers;
         [[self save] wait:&error];
         
     } while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
              error.code == 409);
     
+    NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
+    NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
+    NSLog(@"connected %@", [player objectForKey:DB_CONNECTED]);
 }
 
 -(void) getNextRound:(NSString *)playerId
@@ -170,7 +177,7 @@
         return;
     }
     
-    if(!self.startDate || self.currentRound < 0)
+    if([self.currentRound intValue] < 0)
     {
         for(NSString* playerId in self.players)
         {
@@ -181,8 +188,10 @@
             }
         }
     }
-    else if (self.currentRound >= 0)
+    else if ([self.currentRound intValue] >= 0)
     {
+        NSLog(@"%d, %d", [self.gameData count], [self.currentRound intValue]);
+        NSLog(@"%@", self.gameData);
         NSDictionary* currentRound = [self.gameData objectAtIndex:[self.currentRound intValue]];
         
         for(NSString* playerId in currentRound)

@@ -10,6 +10,11 @@
 #import "Character.h"
 #import "MoveMenu.h"
 
+@protocol CharacterDelegate<NSObject>
+-(BOOL) onMoveSelect:(Move*) move;
+-(void) onPressSelect:(NSString*) playerId;
+@end
+
 @interface CharacterViewController : UIViewController<MoveMenuDelegate>
 {
     Character* _character;
@@ -20,14 +25,13 @@
     BOOL _isShowingMenu;
     BOOL _isSelf;
     
-    SEL _submitMoveSelector;
-    id _submitMoveTarget;
+    id<CharacterDelegate> _delegate;
     
     UIViewController* _menuController;
 }
 
 - (id) initWithId:(NSString*) targetId name:(NSString*)name selfId:(NSString*)selfId
-       onMoveTarget:(id)target onMoveSelect:(SEL)selector;
+     delegate:(id<CharacterDelegate>)target;
 - (void) setUserPic:(NSString*) path;
 
 

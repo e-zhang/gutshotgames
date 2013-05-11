@@ -184,7 +184,9 @@
         [session openWithBehavior:FBSessionLoginBehaviorUseSystemAccountIfPresent
                 completionHandler:
          ^(FBSession *session, FBSessionState state, NSError *error) {
-             [self openfb1];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [self openfb1];
+             });
          }];
     }
     
@@ -352,8 +354,6 @@
 
 - (IBAction)showInvitations:(id)sender {
    
-    if(_selectedMenu.tag == 3) return;
-    
     [[_selectedMenu subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
     
@@ -585,7 +585,7 @@
     
     RESTOperation* op24 = [gameRequest putProperties:requestDoc];
     if (![op24 wait]){}
-    
+
     for (NSString* player in [players allKeys]) {
         
         GameInvitations* invites = [_gameServer getUserUpdate:player];

@@ -18,8 +18,7 @@
 
 @synthesize Display = _display, Char = _character;
 
-- (id) initWithId:(NSString *)playerId name:(NSString*)name selfId:(NSString*)selfId
-       onMoveTarget:(id)target onMoveSelect:(SEL)selector
+- (id) initWithId:(NSString *)playerId name:(NSString*)name selfId:(NSString*)selfId delegate:(id<CharacterDelegate>)target
 {
     if([super init])
     {
@@ -30,14 +29,18 @@
         _characterDisplay.backgroundColor = [UIColor clearColor];
         _characterDisplay.text = [_character getStats];
         
-        _characterDisplay.font = [UIFont fontWithName:@"GillSans" size:14.0f];
+        _characterDisplay.font = [UIFont fontWithName:@"GillSans" size:12.0f];
         _characterDisplay.textColor = [UIColor redColor];
+        _characterDisplay.numberOfLines = 2;
         _isSelf= [playerId isEqual:selfId];
-        _submitMoveSelector = selector;
-        _submitMoveTarget = target;
+        _delegate = target;
         
+        self.view = [[UIView alloc] init];
         
         [_character addObserver:self forKeyPath:@"IsConnected" options:NSKeyValueObservingOptionNew context:nil];
+        [_character addObserver:self forKeyPath:@"IsTarget" options:NSKeyValueObservingOptionNew context:nil];
+        [_character addObserver:self forKeyPath:@"Life" options:NSKeyValueObservingOptionNew context:nil];
+        [_character addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
     }
     
     return self;
@@ -49,16 +52,16 @@
     NSData *data = [NSData dataWithContentsOfURL:url];
     _characterPic = [[UIImage alloc]initWithData:data];
     
-    UIImageView *myImageView = [[UIImageView alloc] init];
+    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 100, 35, 35)];
     myImageView.userInteractionEnabled = YES;
     myImageView.image = _characterPic;
-    [myImageView addSubview:_characterDisplay];
-    _characterDisplay.frame = CGRectMake(0,-25,200,50);
-   
-    self.view = myImageView;
     
+    [self.view addSubview: myImageView];
+    [self.view addSubview:_characterDisplay];
+    _characterDisplay.frame = CGRectMake(0, 75,200,30);
+   
     _menuController = [[UIViewController alloc] init];
-    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,-75,150,150) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
+    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,75,75) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
     
     [self addChildViewController:_menuController];
     
@@ -74,31 +77,20 @@
     if(![_menuController.view superview])
     {
         [self.view addSubview:_menuController.view];
+        self.view.userInteractionEnabled = YES;
+        [_delegate onPressSelect:_character.Id];
     }
     else
     {
         [_menuController.view removeFromSuperview];
     }
     
-
 }
 
 // MoveMenuDelegates
-- (void) selectedItemChanged:(Move *)move
+- (BOOL) selectedItemChanged:(Move *)move
 {
-    if(![_character UpdateNextMove:move])
-    {
-        UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
-                                                          message:@"Move you selected is not valid"
-                                                         delegate:self
-                                                cancelButtonTitle:@"OK"
-                                                otherButtonTitles:nil];
-        
-        [myAlert1 show];
-        return;
-    }
-    
-    [_submitMoveTarget performSelector:_submitMoveSelector withObject:move];
+    return [_delegate onMoveSelect:move];
 }
 
 - (void)viewDidLoad
@@ -120,8 +112,23 @@
 {
     if([keyPath isEqual:@"IsConnected"])
     {
-        _characterDisplay.textColor = [change objectForKey:NSKeyValueChangeNewKey] ?
+        _characterDisplay.textColor = [[change objectForKey:NSKeyValueChangeNewKey] boolValue] ?
                                       [UIColor blackColor] : [UIColor redColor];
+    }
+    
+    if([keyPath isEqual:@"IsTarget"])
+    {
+        BOOL value =[[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        if(!value && [_menuController.view superview])
+        {
+            [((MoveMenu*)_menuController.view) clearMove];
+            [_menuController.view removeFromSuperview];
+        }
+    }
+    
+    if([keyPath isEqual:@"Life"] || [keyPath isEqual:@"Points"])
+    {
+        _characterDisplay.text = [_character getStats];
     }
 }
 

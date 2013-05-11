@@ -17,6 +17,7 @@
     NSString* _name;
     
     BOOL _isConnected;
+    BOOL _isTarget;
     
     int _points;
     int _life;
@@ -45,7 +46,10 @@
 @property (readonly, nonatomic) Move* NextMove;
 @property (readonly, nonatomic) NSString* Name;
 @property (readonly, nonatomic) NSString* Id;
+@property (readonly, nonatomic) int Life;
+@property (readonly, nonatomic) int Points;
 @property (nonatomic) BOOL IsConnected;
+@property (nonatomic) BOOL IsTarget;
 
 @end
 

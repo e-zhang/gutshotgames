@@ -11,12 +11,13 @@
 @implementation Character
 
 @synthesize NextMove = _nextMove, Name = _name, Id = _id,
-            IsConnected = _isConnected;
+            IsConnected = _isConnected, IsTarget=_isTarget, Life=_life, Points = _points;
 
 -(id) initWithId:(NSString *)playerId andName:(NSString *)name
 {
     _id = playerId;
     _name = name;
+    _isTarget = NO;
     _isConnected = NO;
     
     _life = 5;
@@ -30,7 +31,7 @@
 
 -(NSString*) getStats
 {
-    return [NSString stringWithFormat:@"%@: Lives-%d Points-%d", _name, _life, _points];
+    return [NSString stringWithFormat:@"%@:\n Lives: %d Points: %d", _name, _life, _points];
 }
 
 
@@ -98,15 +99,20 @@
 
 -(NSString*) CommitUpdates
 {
+    [self willChangeValueForKey:@"Points"];
     _points -=  _pointsUpdate < 0 ? 0 : MovePointValues[_nextMove.Type] - _pointsUpdate;
+    [self didChangeValueForKey:@"Points"];
+    [self willChangeValueForKey:@"Life"];
     _life += _lifeUpdate;
+    [self didChangeValueForKey:@"Life"];
     
+    NSString* move = [NSString stringWithFormat:@" %@ used move: %@ \n" , _id, MoveStrings[self.NextMove.Type]];
+    
+    _nextMove = [Move GetDefaultMove];
     _pointsUpdate = 0;
     _lifeUpdate = 0;
     
-    _nextMove = [Move GetDefaultMove];
-    
-    return [NSString stringWithFormat:@" %@ used move: %@ \n" , _id, MoveStrings[self.NextMove.Type]];
+    return move;
 }
 
 @end
