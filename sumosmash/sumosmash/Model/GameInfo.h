@@ -22,6 +22,7 @@
 {
     id<GameUpdateDelegate> _delegate;
     BOOL _isOver;
+    int _gameRound;
     
     GameChat* _gameChat;
 }
@@ -39,6 +40,7 @@
 
 @property (readonly, nonatomic) GameChat* gameChat;
 
+-(void) initializeGame;
 - (void) setDelegate:(id<GameUpdateDelegate>) delegate;
 
 - (BOOL) isGameOver;
@@ -48,7 +50,7 @@
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
 
 - (void) joinGame:(NSString*) userId;
-- (void) getNextRound:(NSString*) playerId;
+- (int) getNextRound:(NSString*) playerId;
 - (void) submitMove:(Move*) move forPlayer:(NSString*)player;
 
 - (void) simulateRound:(NSDictionary*) characters withDefenders:(NSMutableArray**)defenders

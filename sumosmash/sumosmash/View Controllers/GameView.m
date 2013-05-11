@@ -130,7 +130,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         NSDate *now = [NSDate date]; // Grab current time
         _game.startDate = [dateFormat stringFromDate:now];
-        [_game getNextRound:_myPlayerId];
+        _status.text = [NSString stringWithFormat:@"Round: %d",[_game getNextRound:_myPlayerId]];
     }
     
     _gameInfo.text = @"Game starting....";
@@ -144,14 +144,28 @@ NSString * const messageWatermark = @"Send a message...";
     if (self) {
         [self.view addSubview:_gamezone];
         _game = game;
+        [_game initializeGame];
         [_game.gameChat setDelegate:self];
         [_game setDelegate:self];
-        _status = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 200, 30)];
+        
+        _selectedMove = [Move GetDefaultMove];
+        
+        _status = [[UILabel alloc] initWithFrame:CGRectMake(90, 0, 200, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
         _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 200, 200, 100)];
         _gameInfo.editable = NO;
         _gameInfo.scrollEnabled = YES;
         _gameInfo.font = [UIFont systemFontOfSize:9.0];
+        
+        UIButton* submit = [[UIButton alloc] initWithFrame:CGRectMake(90, 30, 70, 25)];
+        [submit setTitle:@"Submit Move" forState:UIControlStateNormal];
+        [submit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        submit.titleLabel.font = [UIFont systemFontOfSize:10.0];
+        submit.backgroundColor = [UIColor lightGrayColor];
+        submit.layer.borderColor = [[UIColor blackColor] CGColor];
+        submit.layer.borderWidth = 1.5;
+        submit.showsTouchWhenHighlighted = YES;
+        [submit addTarget:self action:@selector(submitMove:) forControlEvents:UIControlEventTouchUpInside];
         
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
@@ -184,19 +198,16 @@ NSString * const messageWatermark = @"Send a message...";
         _gameStarted = 0;
         [self initPlayers];
         _myPlayerName = ((Character*)[_characters objectForKey:_myPlayerId]).Name;
+        _status.text = @"Waiting for players...";
         
         if(_gameStarted == [_game.players count])
         {
             [self startGame];
-            _status.text = @"Round: 0";
-        }
-        else
-        {
-            _status.text = @"Waiting for players...";
         }
         
         [_gamezone addSubview:_status];
         [_gamezone addSubview:_gameInfo];
+        [_gamezone addSubview:submit];
     }
     return self;
 }
@@ -224,23 +235,29 @@ NSString * const messageWatermark = @"Send a message...";
     // Dispose of any resources that can be recreated.
 }
 
+-(void) submitMove:(UIButton*) sender
+{
+    if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:_selectedMove])
+    {
+        UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
+                                                          message:@"Invalid move selected to submit"
+                                                         delegate:self
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        
+        [myAlert1 show];
+        return;
+    }
+    [_game submitMove:_selectedMove forPlayer:_myPlayerId];
+    Character* c = [_characters objectForKey:_selectedMove.TargetId];
+    c.IsTarget = NO;
+}
+
 - (BOOL) onMoveSelect:(Move *)move
 {
     if(_gameStarted == [_characters count])
     {
-        if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:move])
-        {
-            UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
-                                                              message:@"Move you selected is not valid"
-                                                             delegate:self
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:nil];
-            
-            [myAlert1 show];
-            return NO;
-        }
-        [_game submitMove:move forPlayer:_myPlayerId];
-        
+        _selectedMove = move;
         return YES;
     }
     return NO;
@@ -275,7 +292,6 @@ NSString * const messageWatermark = @"Send a message...";
     if(_gameStarted == [_game.players count])
     {
         [self startGame];
-        _status.text = @"Round: 1";
     }
 }
 
@@ -311,8 +327,7 @@ NSString * const messageWatermark = @"Send a message...";
     
     if(![_game isGameOver])
     {
-        _status.text = [NSString stringWithFormat:@"Round: %d", [_game.currentRound intValue]+1];
-        [_game getNextRound:_myPlayerId];
+        _status.text = [NSString stringWithFormat:@"Round: %d", [_game getNextRound:_myPlayerId]];
     }
     else
     {

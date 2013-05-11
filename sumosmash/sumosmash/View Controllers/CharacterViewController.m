@@ -65,12 +65,12 @@
     
     [self addChildViewController:_menuController];
     
-    UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc]
+    UITapGestureRecognizer* longPress = [[UITapGestureRecognizer alloc]
                                                initWithTarget:self action:@selector(selectTarget:)];
     [self.view addGestureRecognizer:longPress];
 }
 
-- (void) selectTarget:(UILongPressGestureRecognizer *)recognizer
+- (void) selectTarget:(UITapGestureRecognizer *)recognizer
 {
     if(recognizer.state != UIGestureRecognizerStateEnded) return;
     

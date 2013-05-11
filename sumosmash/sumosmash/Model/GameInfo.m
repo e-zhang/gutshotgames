@@ -20,6 +20,12 @@
 // todo: probably keep a mutable copy of the rounds and stuff on hand to set
 // the dynamic properties to, so we dont incur the cost of the copy each time
 
+-(void) initializeGame
+{
+    _isOver = NO;
+    _gameRound = -1;
+}
+
 - (void) setDelegate:(id<GameUpdateDelegate>)delegate
 {
     _delegate = delegate;
@@ -47,8 +53,6 @@
     {
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
-        NSLog(@"connected: %@", [player objectForKey:DB_CONNECTED]);
-        
         [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
         [joinedPlayers setObject:player forKey:userId];
         self.players = joinedPlayers;
@@ -57,25 +61,24 @@
     } while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
              error.code == 409);
     
-    NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
-    NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
-    NSLog(@"connected %@", [player objectForKey:DB_CONNECTED]);
 }
 
--(void) getNextRound:(NSString *)playerId
+-(int) getNextRound:(NSString *)playerId
 {
-    if(![playerId isEqual:self.hostId]) return;
-    
-    self.currentRound = [NSNumber numberWithInt:[self.currentRound intValue] + 1];
-    NSMutableArray* rounds = [self.gameData mutableCopy];
-    [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
-    self.gameData = rounds;
-    
-    NSError* error;
-    if(![[self save] wait:&error])
+    if([playerId isEqual:self.hostId])
     {
-        NSLog(@"Could not get next round with error %@", [error localizedDescription]);
+        NSError* error = nil;
+        do
+        {
+            self.currentRound = [NSNumber numberWithInt:[self.currentRound intValue] + 1];
+            NSMutableArray* rounds = [self.gameData mutableCopy];
+            [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
+            self.gameData = rounds;
+        }while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
+                error.code == 409);
     }
+
+    return ++_gameRound;
 }
 
 - (void) submitMove:(Move *)move forPlayer:(NSString *)player
@@ -188,7 +191,7 @@
             }
         }
     }
-    else if ([self.currentRound intValue] >= 0)
+    else if ([self.currentRound intValue] >= 0 && _gameRound == [self.currentRound intValue])
     {
         NSLog(@"%d, %d", [self.gameData count], [self.currentRound intValue]);
         NSLog(@"%@", self.gameData);
@@ -205,8 +208,6 @@
             [_delegate onRoundComplete];
         }
     }
-
-    
 }
 
 

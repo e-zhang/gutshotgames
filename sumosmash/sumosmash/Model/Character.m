@@ -51,7 +51,7 @@
 
 -(BOOL) IsValidMove:(Move*) move
 {
-    BOOL isValid = YES;
+    BOOL isValid = move.Type != MOVECOUNT;
     if (move.Type == ATTACK || move.Type == SUPERATTACK)
     {
         isValid &= move.TargetId != nil;

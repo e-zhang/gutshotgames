@@ -28,6 +28,8 @@
     UILabel* _status;
     UITextView* _gameInfo;
     
+    Move* _selectedMove;
+    
 }
 
 @property (strong, nonatomic) IBOutlet UIImageView *gamezone;
@@ -45,7 +47,5 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil gameInfo:(GameInfo*)game myid:(NSString *) myid;
 - (void) initPlayers;
 - (BOOL) startGame;
-
-- (void) submitMove:(Move*)move;
 
 @end
