@@ -185,7 +185,7 @@
                 completionHandler:
          ^(FBSession *session, FBSessionState state, NSError *error) {
              dispatch_async(dispatch_get_main_queue(), ^{
-                 [self openfb1];
+                 [self openfb];
              });
          }];
     }
@@ -195,6 +195,7 @@
     }
 }
 -(void)openfb1{
+    [self dismissModalViewControllerAnimated:NO];
     if (nil == self.facebook) {
         self.facebook = [[Facebook alloc]
                          initWithAppId:FBSession.activeSession.appID
