@@ -191,10 +191,9 @@
             }
         }
     }
-    else if ([self.currentRound intValue] >= 0 && _gameRound == [self.currentRound intValue])
+    else if ([self.currentRound intValue] >= 0)
     {
-        NSLog(@"%d, %d", [self.gameData count], [self.currentRound intValue]);
-        NSLog(@"%@", self.gameData);
+        NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
         NSDictionary* currentRound = [self.gameData objectAtIndex:[self.currentRound intValue]];
         
         for(NSString* playerId in currentRound)
@@ -203,11 +202,14 @@
             [_delegate onMoveSubmitted:move byPlayer:playerId];
         }
         
-        if ([currentRound count] == [self.players count])
+        NSLog(@"current round is: %@, game round is %d", self.currentRound, _gameRound);
+        if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
         {
             [_delegate onRoundComplete];
         }
     }
+
+    
 }
 
 
