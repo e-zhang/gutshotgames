@@ -84,7 +84,12 @@
             [self.view addSubview:label1];
             break;
         }
-        case NONE: break;
+        case NONE:
+        {
+            UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(85, self.view.frame.size.height-40, 150, 40)];
+            [login setTitle:@"Log In" forState:UIControlStateNormal];
+            break;
+        }
     }
 
 //    _cab.hidden = userType == NONE ? NO : YES;

@@ -74,7 +74,7 @@ const int SERVER_PORT = 443;
     _userInvitations = [GameInvitations modelForDocument:
                         [_gameInvites documentWithID:self.user.userid]];
     
-    if(!_userInvitations.gameRequests)
+    if(_userInvitations && !_userInvitations.gameRequests)
     {
         _userInvitations.gameRequests = [[NSArray alloc] init];
         [[_userInvitations save] wait];

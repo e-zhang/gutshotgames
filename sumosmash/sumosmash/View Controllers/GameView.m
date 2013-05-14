@@ -130,9 +130,9 @@ NSString * const messageWatermark = @"Send a message...";
         
         NSDate *now = [NSDate date]; // Grab current time
         _game.startDate = [dateFormat stringFromDate:now];
-        _status.text = [NSString stringWithFormat:@"Round: %d",[_game getNextRound:_myPlayerId]];
     }
     
+    _status.text = [NSString stringWithFormat:@"Round: %d",[_game getNextRound:_myPlayerId]];
     _gameInfo.text = @"Game starting....";
 
     return YES;
