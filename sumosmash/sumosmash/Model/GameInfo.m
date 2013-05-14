@@ -98,7 +98,8 @@
         
     } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
     
-    if ([[self.gameData objectAtIndex:[self.currentRound intValue]] count] == [self.players count])
+    if ([[self.gameData objectAtIndex:[self.currentRound intValue]] count] == [self.players count]
+        && [self.currentRound intValue] == _gameRound)
     {
         [_delegate onRoundComplete];
     }

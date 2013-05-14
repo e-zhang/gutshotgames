@@ -61,7 +61,7 @@
     _characterDisplay.frame = CGRectMake(0, 75,200,30);
    
     _menuController = [[UIViewController alloc] init];
-    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,75,75) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
+    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,25,75,75) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
     
     [self addChildViewController:_menuController];
     

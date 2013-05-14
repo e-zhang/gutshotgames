@@ -17,7 +17,7 @@
 #define PLAYER_HEIGHT 150
 #define PLAYER_WIDTH 100
 
-#define ARENA_RADIUS 80
+#define ARENA_RADIUS 60
 
 #define HEADER_TAG 0
 #define MESSAGE_TAG 1
@@ -99,7 +99,7 @@ NSString * const messageWatermark = @"Send a message...";
         }
         
               
-        if([[player objectForKey:DB_CONNECTED] intValue])
+        if([[player objectForKey:DB_CONNECTED] boolValue])
         {
             character.Char.isConnected = YES;
             _gameStarted++;
@@ -152,7 +152,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         _status = [[UILabel alloc] initWithFrame:CGRectMake(90, 0, 200, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
-        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 200, 200, 100)];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 300, 200, 100)];
         _gameInfo.editable = NO;
         _gameInfo.scrollEnabled = YES;
         _gameInfo.font = [UIFont systemFontOfSize:9.0];
