@@ -193,10 +193,12 @@
             }
         }
     }
-    else if ([self.currentRound intValue] >= 0)
+    else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
         NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
         NSDictionary* currentRound = [self.gameData objectAtIndex:[self.currentRound intValue]];
+    
+        if(!currentRound) return;
         
         for(NSString* playerId in currentRound)
         {
