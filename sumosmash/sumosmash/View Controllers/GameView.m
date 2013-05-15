@@ -285,14 +285,14 @@ NSString * const messageWatermark = @"Send a message...";
     if(!joiner.IsConnected)
     {
         // not connected, newly joined
-        _gameStarted++;
         joiner.IsConnected = YES;
+        
+        if(++_gameStarted == [_game.players count])
+        {
+            [self startGame];
+        }
     }
-    
-    if(_gameStarted == [_game.players count])
-    {
-        [self startGame];
-    }
+
 }
 
 - (void) onRoundComplete

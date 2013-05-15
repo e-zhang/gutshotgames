@@ -74,6 +74,7 @@
             NSMutableArray* rounds = [self.gameData mutableCopy];
             [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
             self.gameData = rounds;
+            [[self save] wait:&error];
         }while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
                 error.code == 409);
     }
