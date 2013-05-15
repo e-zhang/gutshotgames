@@ -51,8 +51,7 @@
     NSError* error = nil;
     do
     {
-        [[self.document resolveConflictingRevisions:self.document.getConflictingRevisions
-                                       withRevision:self.document.currentRevision] wait];
+        if(error) [[self.document GET] wait];
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
         [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
@@ -72,8 +71,7 @@
         NSError* error = nil;
         do
         {
-            [[self.document resolveConflictingRevisions:self.document.getConflictingRevisions
-                                          withRevision:self.document.currentRevision] wait];
+            if(error) [[self.document GET] wait];
             self.currentRound = [NSNumber numberWithInt:[self.currentRound intValue] + 1];
             NSMutableArray* rounds = [self.gameData mutableCopy];
             [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
@@ -91,8 +89,7 @@
     NSError* error = nil;
     do
     {
-        [[self.document resolveConflictingRevisions:self.document.getConflictingRevisions
-                                      withRevision:self.document.currentRevision] wait];
+        if(error) [[self.document GET] wait];
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         [currentRound setObject:[move getMove] forKey:player];
         
@@ -169,15 +166,16 @@
 
 - (void) sendChat:(NSString *)chat fromUser:(NSString *)name
 {
-    NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
-    [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
-    
-    self.gameChat.chatHistory = history;
-    NSLog( @"history is %@", _gameChat.chatHistory);
-    NSLog( @"chat is %@", history);
-    
-    [[_gameChat save] wait];
-    
+    NSError* error = nil;
+    do {
+        if(error) [[self.document GET] wait];
+        NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
+        [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
+        
+        self.gameChat.chatHistory = history;
+        
+        [[_gameChat save] wait:&error];
+    } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
 }
 
 - (void) couchDocumentChanged:(CouchDocument *)doc

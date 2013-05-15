@@ -19,8 +19,8 @@
 
 #define ARENA_RADIUS 60
 
-#define HEADER_TAG 0
-#define MESSAGE_TAG 1
+#define HEADER_TAG 9
+#define MESSAGE_TAG 8
 
 @interface GameView ()
 
