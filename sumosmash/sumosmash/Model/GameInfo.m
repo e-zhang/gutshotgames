@@ -51,7 +51,8 @@
     NSError* error = nil;
     do
     {
-        [self.document resolveConflictingRevisions:self.document.getConflictingRevisions withRevision:self.document.currentRevision];
+        [[self.document resolveConflictingRevisions:self.document.getConflictingRevisions
+                                       withRevision:self.document.currentRevision] wait];
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
         [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
@@ -71,7 +72,8 @@
         NSError* error = nil;
         do
         {
-            [self.document resolveConflictingRevisions:self.document.getConflictingRevisions withRevision:self.document.currentRevision];
+            [[self.document resolveConflictingRevisions:self.document.getConflictingRevisions
+                                          withRevision:self.document.currentRevision] wait];
             self.currentRound = [NSNumber numberWithInt:[self.currentRound intValue] + 1];
             NSMutableArray* rounds = [self.gameData mutableCopy];
             [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
@@ -89,7 +91,8 @@
     NSError* error = nil;
     do
     {
-        [self.document resolveConflictingRevisions:self.document.getConflictingRevisions withRevision:self.document.currentRevision];
+        [[self.document resolveConflictingRevisions:self.document.getConflictingRevisions
+                                      withRevision:self.document.currentRevision] wait];
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         [currentRound setObject:[move getMove] forKey:player];
         
