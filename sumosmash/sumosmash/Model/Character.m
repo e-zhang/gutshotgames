@@ -81,12 +81,12 @@
     return _life <= 0;
 }
 
--(BOOL) OnAttack:(MoveType) move
+-(BOOL) OnAttack:(MoveType) move by:(NSString *)attacker
 {
     _pointsUpdate = _nextMove.Type == GETPOINTS ? -1 : 0;
-    if(!(move == SUPERATTACK && _nextMove.Type == SUPERATTACK))
+    if(!(move == SUPERATTACK && _nextMove.Type == SUPERATTACK && _nextMove.TargetId == attacker))
     {
-        _lifeUpdate = MoveDamageValues[move] + (_nextMove.Type == DEFEND);
+        _lifeUpdate += MoveDamageValues[move] + (_nextMove.Type == DEFEND);
     }
     
     return _pointsUpdate < 0;

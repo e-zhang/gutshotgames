@@ -39,7 +39,7 @@
 
 -(BOOL) IsDead;
 
--(BOOL) OnAttack:(MoveType) move;
+-(BOOL) OnAttack:(MoveType) move by:(NSString*)attacker;
 -(void) OnRebate;;
 -(NSString*) CommitUpdates;
 

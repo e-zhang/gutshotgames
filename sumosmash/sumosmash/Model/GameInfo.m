@@ -120,7 +120,7 @@
             case SUPERATTACK:
             {
                 Character* target = [characters objectForKey:c.NextMove.TargetId];
-                if ([target OnAttack:c.NextMove.Type])
+                if ([target OnAttack:c.NextMove.Type by:c.Id])
                 {
                     [c OnRebate];
                 }
