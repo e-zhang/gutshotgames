@@ -186,7 +186,7 @@
         for(NSString* playerId in self.players)
         {
             NSDictionary* player = [self.players objectForKey:playerId];
-            if([player objectForKey:DB_CONNECTED])
+            if([[player objectForKey:DB_CONNECTED] boolValue])
             {
                 [_delegate onPlayerJoined:playerId];
             }
@@ -203,9 +203,9 @@
             [_delegate onMoveSubmitted:move byPlayer:playerId];
         }
         
-        NSLog(@"current round is: %@, game round is %d", self.currentRound, _gameRound);
         if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
         {
+            NSLog(@"current round is: %@, game round is %d", self.currentRound, _gameRound);
             [_delegate onRoundComplete];
         }
     }
