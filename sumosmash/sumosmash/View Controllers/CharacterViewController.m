@@ -52,22 +52,22 @@
     NSData *data = [NSData dataWithContentsOfURL:url];
     _characterPic = [[UIImage alloc]initWithData:data];
     
-    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 100, 35, 35)];
+    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 70, 35, 35)];
     myImageView.userInteractionEnabled = YES;
     myImageView.image = _characterPic;
     
     [self.view addSubview: myImageView];
     [self.view addSubview:_characterDisplay];
-    _characterDisplay.frame = CGRectMake(0, 75,200,30);
+    _characterDisplay.frame = CGRectMake(0, 60,200,30);
    
     _menuController = [[UIViewController alloc] init];
-    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,25,75,75) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
+    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,75,75) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
     
     [self addChildViewController:_menuController];
     
     UITapGestureRecognizer* longPress = [[UITapGestureRecognizer alloc]
                                                initWithTarget:self action:@selector(selectTarget:)];
-    [self.view addGestureRecognizer:longPress];
+    [myImageView addGestureRecognizer:longPress];
 }
 
 - (void) selectTarget:(UITapGestureRecognizer *)recognizer

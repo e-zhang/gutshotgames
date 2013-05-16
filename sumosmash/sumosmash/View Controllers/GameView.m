@@ -14,10 +14,10 @@
 #import "Character.h"
 #import "MoveMenu.h"
 
-#define PLAYER_HEIGHT 150
+#define PLAYER_HEIGHT 120
 #define PLAYER_WIDTH 100
 
-#define ARENA_RADIUS 60
+#define ARENA_RADIUS 80
 
 #define HEADER_TAG 9
 #define MESSAGE_TAG 8
@@ -108,7 +108,7 @@ NSString * const messageWatermark = @"Send a message...";
         [self addChildViewController:character];
         
         double x = cos(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.width/2 - 50;
-        double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 100;
+        double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 60;
         character.view.frame =  CGRectMake(x,
                                            y,
                                            PLAYER_WIDTH,
@@ -150,9 +150,9 @@ NSString * const messageWatermark = @"Send a message...";
         
         _selectedMove = [Move GetDefaultMove];
         
-        _status = [[UILabel alloc] initWithFrame:CGRectMake(90, 0, 200, 30)];
+        _status = [[UILabel alloc] initWithFrame:CGRectMake(90, 0, 75, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
-        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 300, 200, 100)];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 250, 200, 100)];
         _gameInfo.editable = NO;
         _gameInfo.scrollEnabled = YES;
         _gameInfo.font = [UIFont systemFontOfSize:9.0];
