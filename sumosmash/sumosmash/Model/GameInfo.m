@@ -66,22 +66,25 @@
 
 -(int) getNextRound:(NSString *)playerId
 {
+    ++_gameRound;
     if([playerId isEqual:self.hostId])
     {
         NSError* error = nil;
         do
         {
             if(error) [[self.document GET] wait];
-            self.currentRound = [NSNumber numberWithInt:[self.currentRound intValue] + 1];
+            self.currentRound = [NSNumber numberWithInt:_gameRound /*[self.currentRound intValue] + 1*/];
             NSMutableArray* rounds = [self.gameData mutableCopy];
             [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
             self.gameData = rounds;
             [[self save] wait:&error];
+            NSLog(@"nextround: %@", error);
+            NSLog(@"%@", [error description]);
         }while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
                 error.code == 409);
     }
 
-    return ++_gameRound;
+    return _gameRound;
 }
 
 - (void) submitMove:(Move *)move forPlayer:(NSString *)player
@@ -89,7 +92,11 @@
     NSError* error = nil;
     do
     {
-        if(error) [[self.document GET] wait];
+        if(error != nil)
+        {
+            NSDictionary* content = self.document.properties;
+            [[self.document putProperties:content] wait];
+        }//[[self.document GET] wait];
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         [currentRound setObject:[move getMove] forKey:player];
         
@@ -100,7 +107,7 @@
         
         [[self save] wait:&error];
         
-    } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
+    } while([error.domain isEqual:@"CouchDB"] && error.code == 409);
     
     if ([[self.gameData objectAtIndex:[self.currentRound intValue]] count] == [self.players count]
         && [self.currentRound intValue] == _gameRound)
@@ -168,7 +175,11 @@
 {
     NSError* error = nil;
     do {
-        if(error) [[self.document GET] wait];
+        if(error != nil)
+        {
+            NSDictionary* content = _gameChat.document.properties;
+            [[_gameChat.document putProperties:content] wait];
+        }
         NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
         [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
         
