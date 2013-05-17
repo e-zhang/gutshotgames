@@ -92,14 +92,11 @@
         if(error) [[self.document GET] wait];
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         [currentRound setObject:[move getMove] forKey:player];
-        
         NSMutableArray* data = [self.gameData mutableCopy];
         [data setObject:currentRound atIndexedSubscript:[self.currentRound intValue]];
         
         self.gameData = data;
-        
         [[self save] wait:&error];
-        
     } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
     
     if ([[self.gameData objectAtIndex:[self.currentRound intValue]] count] == [self.players count]
@@ -171,7 +168,7 @@
         if(error) [[self.document GET] wait];
         NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
         [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
-        
+
         self.gameChat.chatHistory = history;
         
         [[_gameChat save] wait:&error];
