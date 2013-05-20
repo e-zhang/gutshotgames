@@ -178,7 +178,7 @@
         }
         NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
         [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
-        
+
         self.gameChat.chatHistory = history;
         
         [[_gameChat save] wait:&error];
