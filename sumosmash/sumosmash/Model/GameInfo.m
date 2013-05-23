@@ -160,10 +160,7 @@
         [seenPlayers addObject:playerId];
     }
     
-    for(Character* c in [characters allValues])
-    {
-        NSLog(@"%@",[c CommitUpdates]);
-    }
+
     
 }
 

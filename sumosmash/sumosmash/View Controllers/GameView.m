@@ -725,6 +725,11 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (void) commitRound
 {
+    for(Character* c in [_characters allValues])
+    {
+        NSLog(@"%@",[c CommitUpdates]);
+    }
+    
     //commit round updates
     NSMutableArray* deadChars = [[NSMutableArray alloc] init];
     for(Character* c in [_characters allValues])
