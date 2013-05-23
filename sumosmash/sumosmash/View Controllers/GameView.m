@@ -14,6 +14,8 @@
 #import "Character.h"
 #import "MoveMenu.h"
 
+#define degreesToRadians(x) (M_PI * x / 180.0)
+
 #define PLAYER_HEIGHT 120
 #define PLAYER_WIDTH 100
 
@@ -21,6 +23,34 @@
 
 #define HEADER_TAG 9
 #define MESSAGE_TAG 8
+
+typedef enum{
+    twplayer1x = 200,
+    twplayer1y = 50,
+    twrota = 160,
+    twplayer2x = 500,
+    twplayer2y = 50,
+    twrotb = 0
+} twoplayergame;
+
+typedef enum{
+    thplayer1x = 200,
+    thplayer1y = 125,
+    throta = -34,
+    thplayer2x = 550,
+    thplayer2y = 50,
+    throtb = -70,
+    thplayer3x = 550,
+    thplayer3y = 400,
+    throtc = 70,
+} threeplayergame;
+
+typedef enum{
+    foplayer1x = 200,
+    foplayer1y = 50,
+    foplayer2x = 500,
+    foplayer2y = 50,
+} fourplayergame;
 
 @interface GameView ()
 
@@ -116,6 +146,25 @@ NSString * const messageWatermark = @"Send a message...";
         
         [_gamezone addSubview:character.view];
         [_characters setObject:character.Char forKey:character.Char.Id];
+        
+        //animationzone
+        UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+        if (i+1 % 2 && i!=0){
+            one.frame = CGRectMake(450,50,75,75);
+        }
+        else{
+            one.frame = CGRectMake(50,50,75,75);
+            one.transform = CGAffineTransformRotate(one.transform, degreesToRadians(180));
+        }
+        one.tag = i+1;
+        one.animationImages = [NSArray arrayWithObjects:
+                               [UIImage imageNamed:@"sumo standing.png"],
+                               [UIImage imageNamed:@"sumo standing2.png"], nil];
+        one.animationDuration = 0.75;
+        one.animationRepeatCount = 0;
+        [one startAnimating];
+        [_animationzone addSubview:one];
+        
     }
 
 }
@@ -142,6 +191,12 @@ NSString * const messageWatermark = @"Send a message...";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
+        //animationzone
+        _animationzone = [[UIView alloc]initWithFrame:CGRectMake(300,400,600,300)];
+        _animationzone.backgroundColor = [UIColor yellowColor];
+        [self.view addSubview:_animationzone];
+        
         [self.view addSubview:_gamezone];
         _game = game;
         [_game initializeGame];
@@ -315,14 +370,26 @@ NSString * const messageWatermark = @"Send a message...";
                                      withSimultaneousAttackers:&sameAttacks
                                      withAttackers:&attacks];
     
-    // animate defenders
+    //get5s
+    for (int charIdx=0; charIdx<[points count]; charIdx++){
+        [self get5:charIdx+1];
+    }
     
-    // animate points
+    //defends
+    for (NSInteger charIdx=0; charIdx<[defends count]; charIdx++){
+        [self defend:charIdx+1];
+    }
     
     // animate simultaneous attacks
+    for (NSInteger charIdx=0; charIdx<[defends count]; charIdx++){
+        [self attack:charIdx+1 to:(recepient)];
+    }
     
     // animate normal attacks
-        
+    for (NSInteger charIdx=0; charIdx<[defends count]; charIdx++){
+        [self normalattack:charIdx+1 to:(recepient)];
+    }
+    
     [self commitRound];
     
     if(![_game isGameOver])

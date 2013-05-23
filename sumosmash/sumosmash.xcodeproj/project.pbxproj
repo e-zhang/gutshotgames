@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5888F91D174CC1C900046BDF /* sumo attack 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F90F174CC1C900046BDF /* sumo attack 1.png */; };
+		5888F91E174CC1C900046BDF /* sumo attack 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F910174CC1C900046BDF /* sumo attack 2.png */; };
+		5888F91F174CC1C900046BDF /* sumo attack 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F911174CC1C900046BDF /* sumo attack 3.png */; };
+		5888F920174CC1C900046BDF /* sumo attack 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F912174CC1C900046BDF /* sumo attack 4.png */; };
+		5888F921174CC1C900046BDF /* sumo defend 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F913174CC1C900046BDF /* sumo defend 1.png */; };
+		5888F922174CC1C900046BDF /* sumo fall 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F914174CC1C900046BDF /* sumo fall 1.png */; };
+		5888F923174CC1C900046BDF /* sumo fall 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F915174CC1C900046BDF /* sumo fall 2.png */; };
+		5888F924174CC1C900046BDF /* sumo get 5 points.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F916174CC1C900046BDF /* sumo get 5 points.png */; };
+		5888F925174CC1C900046BDF /* sumo super 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F917174CC1C900046BDF /* sumo super 1.png */; };
+		5888F926174CC1C900046BDF /* sumo walk 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F918174CC1C900046BDF /* sumo walk 1.png */; };
+		5888F927174CC1C900046BDF /* sumo walk 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F919174CC1C900046BDF /* sumo walk 2.png */; };
+		5888F928174CC1C900046BDF /* sumo walk 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F91A174CC1C900046BDF /* sumo walk 3.png */; };
+		5888F929174CC1C900046BDF /* sumo standing.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F91B174CC1C900046BDF /* sumo standing.png */; };
+		5888F92A174CC1C900046BDF /* sumo standing2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F91C174CC1C900046BDF /* sumo standing2.png */; };
 		58B9C50116EC535B00891C19 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50016EC535B00891C19 /* UIKit.framework */; };
 		58B9C50316EC535B00891C19 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50216EC535B00891C19 /* Foundation.framework */; };
 		58B9C50516EC535B00891C19 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50416EC535B00891C19 /* CoreGraphics.framework */; };
@@ -74,6 +88,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5888F90F174CC1C900046BDF /* sumo attack 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 1.png"; sourceTree = "<group>"; };
+		5888F910174CC1C900046BDF /* sumo attack 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 2.png"; sourceTree = "<group>"; };
+		5888F911174CC1C900046BDF /* sumo attack 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 3.png"; sourceTree = "<group>"; };
+		5888F912174CC1C900046BDF /* sumo attack 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 4.png"; sourceTree = "<group>"; };
+		5888F913174CC1C900046BDF /* sumo defend 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo defend 1.png"; sourceTree = "<group>"; };
+		5888F914174CC1C900046BDF /* sumo fall 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo fall 1.png"; sourceTree = "<group>"; };
+		5888F915174CC1C900046BDF /* sumo fall 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo fall 2.png"; sourceTree = "<group>"; };
+		5888F916174CC1C900046BDF /* sumo get 5 points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo get 5 points.png"; sourceTree = "<group>"; };
+		5888F917174CC1C900046BDF /* sumo super 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo super 1.png"; sourceTree = "<group>"; };
+		5888F918174CC1C900046BDF /* sumo walk 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo walk 1.png"; sourceTree = "<group>"; };
+		5888F919174CC1C900046BDF /* sumo walk 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo walk 2.png"; sourceTree = "<group>"; };
+		5888F91A174CC1C900046BDF /* sumo walk 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo walk 3.png"; sourceTree = "<group>"; };
+		5888F91B174CC1C900046BDF /* sumo standing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo standing.png"; sourceTree = "<group>"; };
+		5888F91C174CC1C900046BDF /* sumo standing2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo standing2.png"; sourceTree = "<group>"; };
 		58B9C4FD16EC535B00891C19 /* sumosmash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sumosmash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B9C50016EC535B00891C19 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		58B9C50216EC535B00891C19 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -313,6 +341,20 @@
 		E72AF8DA1713967500BC1E04 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5888F90F174CC1C900046BDF /* sumo attack 1.png */,
+				5888F910174CC1C900046BDF /* sumo attack 2.png */,
+				5888F911174CC1C900046BDF /* sumo attack 3.png */,
+				5888F912174CC1C900046BDF /* sumo attack 4.png */,
+				5888F913174CC1C900046BDF /* sumo defend 1.png */,
+				5888F914174CC1C900046BDF /* sumo fall 1.png */,
+				5888F915174CC1C900046BDF /* sumo fall 2.png */,
+				5888F916174CC1C900046BDF /* sumo get 5 points.png */,
+				5888F917174CC1C900046BDF /* sumo super 1.png */,
+				5888F918174CC1C900046BDF /* sumo walk 1.png */,
+				5888F919174CC1C900046BDF /* sumo walk 2.png */,
+				5888F91A174CC1C900046BDF /* sumo walk 3.png */,
+				5888F91B174CC1C900046BDF /* sumo standing.png */,
+				5888F91C174CC1C900046BDF /* sumo standing2.png */,
 				E72AF89B1713967000BC1E04 /* AppDelegate.h */,
 				E72AF89C1713967000BC1E04 /* AppDelegate.m */,
 				E72AF8AF1713967000BC1E04 /* main.m */,
@@ -481,6 +523,20 @@
 				E79D7B931728AA8D007972E0 /* InvitePopupScreen.xib in Resources */,
 				E79D7B941728AA8D007972E0 /* MenuView.xib in Resources */,
 				E79D7B951728AA8D007972E0 /* Waitscreen.xib in Resources */,
+				5888F91D174CC1C900046BDF /* sumo attack 1.png in Resources */,
+				5888F91E174CC1C900046BDF /* sumo attack 2.png in Resources */,
+				5888F91F174CC1C900046BDF /* sumo attack 3.png in Resources */,
+				5888F920174CC1C900046BDF /* sumo attack 4.png in Resources */,
+				5888F921174CC1C900046BDF /* sumo defend 1.png in Resources */,
+				5888F922174CC1C900046BDF /* sumo fall 1.png in Resources */,
+				5888F923174CC1C900046BDF /* sumo fall 2.png in Resources */,
+				5888F924174CC1C900046BDF /* sumo get 5 points.png in Resources */,
+				5888F925174CC1C900046BDF /* sumo super 1.png in Resources */,
+				5888F926174CC1C900046BDF /* sumo walk 1.png in Resources */,
+				5888F927174CC1C900046BDF /* sumo walk 2.png in Resources */,
+				5888F928174CC1C900046BDF /* sumo walk 3.png in Resources */,
+				5888F929174CC1C900046BDF /* sumo standing.png in Resources */,
+				5888F92A174CC1C900046BDF /* sumo standing2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

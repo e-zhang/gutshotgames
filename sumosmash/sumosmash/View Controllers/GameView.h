@@ -29,13 +29,13 @@
     UITextView* _gameInfo;
     
     Move* _selectedMove;
-    
 }
 
 @property (strong, nonatomic) IBOutlet UIImageView *gamezone;
 //@property (strong, nonatomic) IBOutlet UIButton *smbutton;
 @property (strong, nonatomic) IBOutlet UITableView *chatTable;
 @property (strong, nonatomic) IBOutlet UITextField *messageText;
+@property (strong, nonatomic) UIView *animationzone;
 
 - (IBAction)returntap:(id)sender;
 
