@@ -107,6 +107,8 @@ NSString * const messageWatermark = @"Send a message...";
 {
     NSLog(@"players-%@",_game.players);
     charidtonum = [[NSMutableDictionary alloc]init];
+    actions = [[NSMutableDictionary alloc]init];
+
     NSArray* players = [_game.players allKeys];
     
     CGFloat angleSize = 2*M_PI/[_game.players count];
@@ -157,9 +159,9 @@ NSString * const messageWatermark = @"Send a message...";
             one.frame = CGRectMake(50,80*i,75,75);
             one.transform = CGAffineTransformRotate(one.transform, degreesToRadians(180));
         }
-        [charidtonum setObject:[NSString stringWithFormat:@"%d",i+1] forKey:character.Char.Id];
+        [charidtonum setObject:[NSString stringWithFormat:@"%d",100+i+1] forKey:character.Char.Id];
 
-        one.tag = i+1;
+        one.tag = 100+i+1;
         one.animationImages = [NSArray arrayWithObjects:
                                [UIImage imageNamed:@"sumo standing.png"],
                                [UIImage imageNamed:@"sumo standing2.png"], nil];
@@ -440,7 +442,7 @@ NSString * const messageWatermark = @"Send a message...";
 -(void)get5:(NSString *)player{
     int playernum = [[charidtonum objectForKey:player] intValue];
     for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==playernum){
+        if(a.tag==100+playernum){
             NSLog(@"ab-%d",playernum);
             [a stopAnimating];
             a.animationImages = [NSArray arrayWithObjects:
@@ -456,7 +458,7 @@ NSString * const messageWatermark = @"Send a message...";
 -(void)defend:(NSString *)player{
     int playernum = [[charidtonum objectForKey:player] intValue];
     for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==playernum){
+        if(a.tag==100+playernum){
             NSLog(@"ab-%d",playernum);
             [a stopAnimating];
             a.animationImages = [NSArray arrayWithObjects:
@@ -479,10 +481,10 @@ NSString * const messageWatermark = @"Send a message...";
     UIImageView *attacker;
     UIImageView *defender;
     for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==playernum){
+        if(a.tag==100+playernum){
             attacker = a;
         }
-        if(a.tag==playernum1){
+        if(a.tag==100+playernum1){
             defender = a;
         }
     }
@@ -695,6 +697,7 @@ NSString * const messageWatermark = @"Send a message...";
     
     NSLog(@"players-%@",_game.players);
     charidtonum = [[NSMutableDictionary alloc]init];
+    actions = [[NSMutableDictionary alloc]init];
     NSArray* players = [_game.players allKeys];
         
     for (int i = 0; i < [players count]; ++i)
@@ -709,7 +712,7 @@ NSString * const messageWatermark = @"Send a message...";
         one.transform = CGAffineTransformRotate(one.transform, degreesToRadians(180));
     }
     
-    one.tag = i+1;
+    one.tag = 100+i+1;
     one.animationImages = [NSArray arrayWithObjects:
                            [UIImage imageNamed:@"sumo standing.png"],
                            [UIImage imageNamed:@"sumo standing2.png"], nil];
