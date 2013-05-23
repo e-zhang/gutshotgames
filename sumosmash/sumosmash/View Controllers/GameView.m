@@ -372,22 +372,26 @@ NSString * const messageWatermark = @"Send a message...";
     
     //get5s
     for (int charIdx=0; charIdx<[points count]; charIdx++){
-        [self get5:charIdx+1];
+        Character* c = [points objectAtIndex:charIdx];
+        [self get5:c.Id];
     }
     
     //defends
     for (NSInteger charIdx=0; charIdx<[defends count]; charIdx++){
-        [self defend:charIdx+1];
+        Character* c = [defends objectAtIndex:charIdx];
+        [self defend:c.Id];
     }
     
     // animate simultaneous attacks
-    for (NSInteger charIdx=0; charIdx<[defends count]; charIdx++){
-        [self attack:charIdx+1 to:(recepient)];
+    for (NSInteger charIdx=0; charIdx<[sameAttacks count]; charIdx++){
+        NSArray* attks = [sameAttacks objectAtIndex:charIdx];
+        [self attack:[attks objectAtIndex:0] to:[attks objectAtIndex:1]];
     }
     
     // animate normal attacks
-    for (NSInteger charIdx=0; charIdx<[defends count]; charIdx++){
-        [self normalattack:charIdx+1 to:(recepient)];
+    for (NSInteger charIdx=0; charIdx<[attacks count]; charIdx++){
+        Character* c = [attacks objectAtIndex:charIdx];
+        [self normalattack:c.Id to:c.NextMove.TargetId];
     }
     
     [self commitRound];
