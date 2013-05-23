@@ -29,6 +29,9 @@
     UITextView* _gameInfo;
     
     Move* _selectedMove;
+    
+    NSMutableDictionary *charidtonum;
+    NSMutableDictionary *actions;
 }
 
 @property (strong, nonatomic) IBOutlet UIImageView *gamezone;

@@ -25,23 +25,23 @@
 #define MESSAGE_TAG 8
 
 typedef enum{
-    twplayer1x = 200,
-    twplayer1y = 50,
+    twplayer1x = 50,
+    twplayer1y = 80,
     twrota = 160,
-    twplayer2x = 500,
-    twplayer2y = 50,
+    twplayer2x = 450,
+    twplayer2y = 80,
     twrotb = 0
 } twoplayergame;
 
 typedef enum{
-    thplayer1x = 200,
-    thplayer1y = 125,
+    thplayer1x = 50,
+    thplayer1y = 80,
     throta = -34,
-    thplayer2x = 550,
-    thplayer2y = 50,
+    thplayer2x = 450,
+    thplayer2y = 80,
     throtb = -70,
-    thplayer3x = 550,
-    thplayer3y = 400,
+    thplayer3x = 50,
+    thplayer3y = 160,
     throtc = 70,
 } threeplayergame;
 
@@ -106,6 +106,7 @@ NSString * const messageWatermark = @"Send a message...";
 - (void) initPlayers
 {
     NSLog(@"players-%@",_game.players);
+    charidtonum = [[NSMutableDictionary alloc]init];
     NSArray* players = [_game.players allKeys];
     
     CGFloat angleSize = 2*M_PI/[_game.players count];
@@ -150,12 +151,14 @@ NSString * const messageWatermark = @"Send a message...";
         //animationzone
         UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
         if (i+1 % 2 && i!=0){
-            one.frame = CGRectMake(450,50,75,75);
+            one.frame = CGRectMake(450,80*(i+1),75,75);
         }
         else{
-            one.frame = CGRectMake(50,50,75,75);
+            one.frame = CGRectMake(50,80*i,75,75);
             one.transform = CGAffineTransformRotate(one.transform, degreesToRadians(180));
         }
+        [charidtonum setObject:[NSString stringWithFormat:@"%d",i+1] forKey:character.Char.Id];
+
         one.tag = i+1;
         one.animationImages = [NSArray arrayWithObjects:
                                [UIImage imageNamed:@"sumo standing.png"],
@@ -385,13 +388,41 @@ NSString * const messageWatermark = @"Send a message...";
     // animate simultaneous attacks
     for (NSInteger charIdx=0; charIdx<[sameAttacks count]; charIdx++){
         NSArray* attks = [sameAttacks objectAtIndex:charIdx];
-        [self attack:[attks objectAtIndex:0] to:[attks objectAtIndex:1]];
+      //  [self attack:[attks objectAtIndex:0] to:[attks objectAtIndex:1]];
+        
+        
+        NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
+        [add setObject:@"simulattack" forKey:@"move"];
+        [add setObject:[attks objectAtIndex:0] forKey:@"from"];
+        [add setObject:[attks objectAtIndex:1] forKey:@"to"];
+        [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
+        
     }
     
     // animate normal attacks
     for (NSInteger charIdx=0; charIdx<[attacks count]; charIdx++){
         Character* c = [attacks objectAtIndex:charIdx];
-        [self normalattack:c.Id to:c.NextMove.TargetId];
+     //   [self normalattack:c.Id to:c.NextMove.TargetId];
+        
+        
+        NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
+        [add setObject:@"simulattack" forKey:@"move"];
+        [add setObject:c.Id forKey:@"from"];
+        [add setObject:c.NextMove.TargetId forKey:@"to"];
+        [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
+    }
+    
+    NSLog(@"actions-%@",actions);
+    if([actions objectForKey:@"1"]){
+        if([[[actions objectForKey:@"1"] objectForKey:@"move"]isEqual:@"attack"]){
+            [self attack:[[[actions objectForKey:@"1"] objectForKey:@"from"] intValue] to:[[[actions objectForKey:@"1"] objectForKey:@"to"] intValue] movenumber:1];
+        }
+        if([[actions objectForKey:@"1"] objectForKey:@"superattack"]){
+            [self superattack:[[[actions objectForKey:@"1"] objectForKey:@"from"] intValue] to:[[[actions objectForKey:@"1"] objectForKey:@"to"] intValue] movenumber:1];
+        }
+    }
+    else{
+        [self reset];
     }
     
     [self commitRound];
@@ -403,6 +434,292 @@ NSString * const messageWatermark = @"Send a message...";
     else
     {
         _status.text = @"Game Over";
+    }
+}
+
+-(void)get5:(NSString *)player{
+    int playernum = [[charidtonum objectForKey:player] intValue];
+    for (UIImageView *a in [self.view subviews]) {
+        if(a.tag==playernum){
+            NSLog(@"ab-%d",playernum);
+            [a stopAnimating];
+            a.animationImages = [NSArray arrayWithObjects:
+                                 [UIImage imageNamed:@"sumo get 5 points.png"],
+                                 nil];
+            a.animationDuration = 0;
+            a.animationRepeatCount = 0;
+            [a startAnimating];
+        }
+    }
+}
+
+-(void)defend:(NSString *)player{
+    int playernum = [[charidtonum objectForKey:player] intValue];
+    for (UIImageView *a in [self.view subviews]) {
+        if(a.tag==playernum){
+            NSLog(@"ab-%d",playernum);
+            [a stopAnimating];
+            a.animationImages = [NSArray arrayWithObjects:
+                                 [UIImage imageNamed:@"sumo defend 1.png"],
+                                 nil];
+            a.animationDuration = 0;
+            a.animationRepeatCount = 0;
+            [a startAnimating];
+        }
+    }
+}
+
+-(void)attack:(int)player1 to:(int)player2 movenumber:(int)t{
+    // sleep(t*10);
+    NSLog(@"player1-%d,player2-%d",player1,player2);
+    UIImageView *attacker;
+    UIImageView *defender;
+    for (UIImageView *a in [self.view subviews]) {
+        if(a.tag==player1){
+            attacker = a;
+        }
+        if(a.tag==player2){
+            defender = a;
+        }
+    }
+    int tpg=0;
+    int tpgy=0;
+    int org=0;
+    int orgy=0;
+    int rotation=1;
+    int fallrotation=1;
+    NSArray* players = [_game.players allKeys];
+
+    if([players count]==2){
+        if(player1==1){
+            tpg = twplayer2x - 80;
+            tpgy = twplayer2y;
+            org = twplayer1x;
+            orgy = twplayer1y;
+            rotation = -1;
+            fallrotation = 1;
+        }
+        if(player1==2){
+            tpg = twplayer1x + 80;
+            tpgy = twplayer1y;
+            org = twplayer2x;
+            orgy = twplayer2y;
+            rotation = 1;
+            fallrotation = -1;
+        }
+    }
+    if([players count]==3){
+        if(player1==1){
+            org = thplayer1x;
+            orgy = thplayer1y;
+            if(player2==2){
+                tpg = thplayer2x - 80;
+                tpgy = thplayer2y - 80;
+                rotation = -1;
+                fallrotation = 1;
+            }
+            if(player2==3){
+                tpg = thplayer3x - 80;
+                tpgy = thplayer3y + 80;
+                rotation = -1;
+                fallrotation = 1;
+            }
+        }
+        if(player1==2){
+            org = thplayer2x;
+            orgy = thplayer2y;
+            if(player2==1){
+                tpg = thplayer1x + 80;
+                tpgy = thplayer1y;
+                rotation = -70;
+                fallrotation = 1;
+            }
+            if(player2==3){
+                tpg = thplayer3x - 80;
+                tpgy = thplayer3y + 80;
+                rotation = -70;
+                fallrotation = 1;
+            }
+        }
+        if(player1==3){
+            org = thplayer3x;
+            orgy = thplayer3y;
+            if(player2==1){
+                tpg = thplayer1x + 80;
+                tpgy = thplayer1y;
+                rotation = 1;
+                fallrotation = 1;
+            }
+            if(player2==2){
+                tpg = thplayer3x - 80;
+                tpgy = thplayer3y - 80;
+                rotation = 1;
+                fallrotation = 1;
+            }
+        }
+    }
+    NSLog(@"below");
+    [attacker stopAnimating];
+    
+    [UIView animateWithDuration:2 animations:^{
+        // animation 1
+        attacker.animationImages = [NSArray arrayWithObjects:
+                                    [UIImage imageNamed:@"sumo walk 1.png"],
+                                    [UIImage imageNamed:@"sumo walk 2.png"],
+                                    [UIImage imageNamed:@"sumo walk 3.png"],nil];
+        //         attacker.transform = CGAffineTransformMakeRotation(0);
+        //         attacker.transform = CGAffineTransformScale(attacker.transform,1, 1);
+        //         attacker.transform = CGAffineTransformRotate(attacker.transform, degreesToRadians(-45));
+        
+        CGRect frame;
+        frame= attacker.frame;
+        frame.origin.x= tpg;
+        frame.origin.y= tpgy;
+        attacker.frame=frame;
+        attacker.alpha=1.0;
+        [attacker startAnimating];
+        
+    } completion:^(BOOL finished){
+        NSLog(@"poop");
+        [UIView animateWithDuration:1 animations:^{
+            // animation 2
+            attacker.animationImages = [NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"sumo attack 1.png"],
+                                        [UIImage imageNamed:@"sumo attack 2.png"],
+                                        [UIImage imageNamed:@"sumo attack 3.png"],nil];
+            //        attacker.transform = CGAffineTransformMakeRotation(rotation);
+            //        attacker.transform = CGAffineTransformScale(attacker.transform,.5, .5);
+            //        attacker.transform = CGAffineTransformMakeScale(1, 1);
+            
+            CGRect frame;
+            frame= attacker.frame;
+            frame.origin.x= tpg-1;
+            frame.origin.y= tpgy-1;
+            attacker.frame=frame;
+            attacker.alpha=1.0;
+            [attacker startAnimating];
+            [self fall:defender:fallrotation];
+        } completion:^(BOOL finished){
+            NSLog(@"loop");
+            [UIView animateWithDuration:2 animations:^{
+                // animation 3
+                attacker.animationImages = [NSArray arrayWithObjects:
+                                            [UIImage imageNamed:@"sumo walk 1.png"],
+                                            [UIImage imageNamed:@"sumo walk 2.png"],
+                                            [UIImage imageNamed:@"sumo walk 3.png"],nil];
+                //        attacker.transform = CGAffineTransformRotate(attacker.transform, degreesToRadians(225));
+                //           attacker.transform = CGAffineTransformMakeRotation(rotation);
+                //         attacker.transform = CGAffineTransformScale(attacker.transform,1, 1);
+                //          attacker.transform = CGAffineTransformMakeScale(1, 1);
+                //          attacker.transform = CGAffineTransformRotate(attacker.transform, degreesToRadians(-45));
+                CGRect frame;
+                frame= attacker.frame;
+                frame.origin.x= org;
+                frame.origin.y= orgy;
+                attacker.frame=frame;
+                attacker.alpha=1.0;
+                [attacker startAnimating];
+                
+            } completion:^(BOOL finished){
+                
+                if([actions objectForKey:[NSString stringWithFormat:@"%d",t+1]]){
+                    if([[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"move"]isEqual:@"attack"]){
+                        [self attack:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] intValue] to:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] intValue] movenumber:t+1];
+                    }
+                    if([[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"superattack"]){
+                        [self superattack:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] intValue] to:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] intValue] movenumber:t+1];
+                    }
+                }
+                else{
+                    [self reset];
+                }
+                
+            }];
+        }];
+    }];
+}
+
+-(void)simulattack:(int)player1 to:(int)player2 movenumber:(int)t{
+    
+}
+
+-(void)superattack:(int)player1 to:(int)player2 movenumber:(int)t{
+    
+}
+
+-(void)fall: (UIImageView *) falli :(int)fallrotation{
+    
+    CGPoint originalCenter = falli.center;
+    [UIView animateWithDuration:2.0
+                     animations:^{
+                         falli.animationImages = [NSArray arrayWithObjects:
+                                                  [UIImage imageNamed:@"sumo fall 1.png"],
+                                                  [UIImage imageNamed:@"sumo fall 2.png"],nil];
+                         
+                         falli.animationDuration = 1.5;
+                         falli.animationRepeatCount = 0;
+                         [falli startAnimating];
+                         
+                         
+                         CGPoint center = falli.center;
+                         center.y += 1;
+                         falli.center = center;
+                     }
+                     completion:^(BOOL finished){
+                         
+                         [UIView animateWithDuration:2.0
+                                          animations:^{
+                                              falli.animationImages = [NSArray arrayWithObjects:
+                                                                       [UIImage imageNamed:@"sumo standing.png"],
+                                                                       [UIImage imageNamed:@"sumo standing2.png"], nil];
+                                              falli.animationDuration = 0.75;
+                                              falli.animationRepeatCount = 0;
+                                              [falli startAnimating];
+                                              falli.center = originalCenter;
+                                          }
+                                          completion:^(BOOL finished){
+                                              ;
+                                          }];
+                         
+                     }];
+}
+
+-(void)reset{
+    for (UIImageView *a in [_animationzone subviews]) {
+            [a removeFromSuperview];
+    }
+    
+    NSLog(@"players-%@",_game.players);
+    charidtonum = [[NSMutableDictionary alloc]init];
+    NSArray* players = [_game.players allKeys];
+        
+    for (int i = 0; i < [players count]; ++i)
+    {
+        NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
+        
+        CharacterViewController* character = [[CharacterViewController alloc] initWithId: [player objectForKey:DB_USER_ID]
+                                                                                    name:[player objectForKey:DB_USER_NAME]
+                                                                                  selfId:_myPlayerId
+                                                                                delegate:self];
+        
+    UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+    if (i+1 % 2 && i!=0){
+        one.frame = CGRectMake(450,80*(i+1),75,75);
+    }
+    else{
+        one.frame = CGRectMake(50,80*i,75,75);
+        one.transform = CGAffineTransformRotate(one.transform, degreesToRadians(180));
+    }
+    [charidtonum setObject:[NSString stringWithFormat:@"%d",i+1] forKey:character.Char.Id];
+    
+    one.tag = i+1;
+    one.animationImages = [NSArray arrayWithObjects:
+                           [UIImage imageNamed:@"sumo standing.png"],
+                           [UIImage imageNamed:@"sumo standing2.png"], nil];
+    one.animationDuration = 0.75;
+    one.animationRepeatCount = 0;
+    [one startAnimating];
+    [_animationzone addSubview:one];
     }
 }
 
