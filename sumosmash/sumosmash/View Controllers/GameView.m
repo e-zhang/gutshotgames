@@ -415,10 +415,10 @@ NSString * const messageWatermark = @"Send a message...";
     NSLog(@"actions-%@",actions);
     if([actions objectForKey:@"1"]){
         if([[[actions objectForKey:@"1"] objectForKey:@"move"]isEqual:@"attack"]){
-            [self attack:[[[actions objectForKey:@"1"] objectForKey:@"from"] intValue] to:[[[actions objectForKey:@"1"] objectForKey:@"to"] intValue] movenumber:1];
+            [self attack:[[actions objectForKey:@"1"] objectForKey:@"from"] to:[[actions objectForKey:@"1"] objectForKey:@"to"] movenumber:1];
         }
         if([[actions objectForKey:@"1"] objectForKey:@"superattack"]){
-            [self superattack:[[[actions objectForKey:@"1"] objectForKey:@"from"] intValue] to:[[[actions objectForKey:@"1"] objectForKey:@"to"] intValue] movenumber:1];
+            [self superattack:[[actions objectForKey:@"1"] objectForKey:@"from"] to:[[actions objectForKey:@"1"] objectForKey:@"to"] movenumber:1];
         }
     }
     else{
@@ -469,16 +469,20 @@ NSString * const messageWatermark = @"Send a message...";
     }
 }
 
--(void)attack:(int)player1 to:(int)player2 movenumber:(int)t{
+-(void)attack:(NSString *)player1 to:(NSString *)player2 movenumber:(int)t{
     // sleep(t*10);
-    NSLog(@"player1-%d,player2-%d",player1,player2);
+    
+    int playernum = [[charidtonum objectForKey:player1] intValue];
+
+    int playernum1 = [[charidtonum objectForKey:player2] intValue];
+
     UIImageView *attacker;
     UIImageView *defender;
     for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==player1){
+        if(a.tag==playernum){
             attacker = a;
         }
-        if(a.tag==player2){
+        if(a.tag==playernum1){
             defender = a;
         }
     }
@@ -491,7 +495,7 @@ NSString * const messageWatermark = @"Send a message...";
     NSArray* players = [_game.players allKeys];
 
     if([players count]==2){
-        if(player1==1){
+        if(playernum==1){
             tpg = twplayer2x - 80;
             tpgy = twplayer2y;
             org = twplayer1x;
@@ -499,7 +503,7 @@ NSString * const messageWatermark = @"Send a message...";
             rotation = -1;
             fallrotation = 1;
         }
-        if(player1==2){
+        if(playernum==2){
             tpg = twplayer1x + 80;
             tpgy = twplayer1y;
             org = twplayer2x;
@@ -509,48 +513,48 @@ NSString * const messageWatermark = @"Send a message...";
         }
     }
     if([players count]==3){
-        if(player1==1){
+        if(playernum==1){
             org = thplayer1x;
             orgy = thplayer1y;
-            if(player2==2){
+            if(playernum1==2){
                 tpg = thplayer2x - 80;
                 tpgy = thplayer2y - 80;
                 rotation = -1;
                 fallrotation = 1;
             }
-            if(player2==3){
+            if(playernum1==3){
                 tpg = thplayer3x - 80;
                 tpgy = thplayer3y + 80;
                 rotation = -1;
                 fallrotation = 1;
             }
         }
-        if(player1==2){
+        if(playernum==2){
             org = thplayer2x;
             orgy = thplayer2y;
-            if(player2==1){
+            if(playernum1==1){
                 tpg = thplayer1x + 80;
                 tpgy = thplayer1y;
                 rotation = -70;
                 fallrotation = 1;
             }
-            if(player2==3){
+            if(playernum1==3){
                 tpg = thplayer3x - 80;
                 tpgy = thplayer3y + 80;
                 rotation = -70;
                 fallrotation = 1;
             }
         }
-        if(player1==3){
+        if(playernum==3){
             org = thplayer3x;
             orgy = thplayer3y;
-            if(player2==1){
+            if(playernum1==1){
                 tpg = thplayer1x + 80;
                 tpgy = thplayer1y;
                 rotation = 1;
                 fallrotation = 1;
             }
-            if(player2==2){
+            if(playernum1==2){
                 tpg = thplayer3x - 80;
                 tpgy = thplayer3y - 80;
                 rotation = 1;
@@ -624,10 +628,10 @@ NSString * const messageWatermark = @"Send a message...";
                 
                 if([actions objectForKey:[NSString stringWithFormat:@"%d",t+1]]){
                     if([[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"move"]isEqual:@"attack"]){
-                        [self attack:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] intValue] to:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] intValue] movenumber:t+1];
+                        [self attack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] movenumber:t+1];
                     }
                     if([[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"superattack"]){
-                        [self superattack:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] intValue] to:[[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] intValue] movenumber:t+1];
+                        [self superattack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] movenumber:t+1];
                     }
                 }
                 else{
@@ -639,11 +643,11 @@ NSString * const messageWatermark = @"Send a message...";
     }];
 }
 
--(void)simulattack:(int)player1 to:(int)player2 movenumber:(int)t{
+-(void)simulattack:(NSString *)player1 to:(NSString *)player2 movenumber:(int)t{
     
 }
 
--(void)superattack:(int)player1 to:(int)player2 movenumber:(int)t{
+-(void)superattack:(NSString *)player1 to:(NSString *)player2 movenumber:(int)t{
     
 }
 
@@ -694,23 +698,16 @@ NSString * const messageWatermark = @"Send a message...";
     NSArray* players = [_game.players allKeys];
         
     for (int i = 0; i < [players count]; ++i)
-    {
-        NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
-        
-        CharacterViewController* character = [[CharacterViewController alloc] initWithId: [player objectForKey:DB_USER_ID]
-                                                                                    name:[player objectForKey:DB_USER_NAME]
-                                                                                  selfId:_myPlayerId
-                                                                                delegate:self];
-        
+    {        
+             
     UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
     if (i+1 % 2 && i!=0){
         one.frame = CGRectMake(450,80*(i+1),75,75);
     }
     else{
-        one.frame = CGRectMake(50,80*i,75,75);
+        one.frame = CGRectMake(50,80*(i),75,75);
         one.transform = CGAffineTransformRotate(one.transform, degreesToRadians(180));
     }
-    [charidtonum setObject:[NSString stringWithFormat:@"%d",i+1] forKey:character.Char.Id];
     
     one.tag = i+1;
     one.animationImages = [NSArray arrayWithObjects:
