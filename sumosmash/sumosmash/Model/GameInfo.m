@@ -51,7 +51,7 @@
     NSError* error = nil;
     do
     {
-        if(error) [[self.document GET] wait];
+        if(error) [self.document refresh];
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
         [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
@@ -59,7 +59,7 @@
         self.players = joinedPlayers;
         [[self save] wait:&error];
         
-    } while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
+    } while ([error.domain isEqual: @"CouchDB"] &&
              error.code == 409);
     
 }
@@ -78,7 +78,7 @@
             [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
             self.gameData = rounds;
             [[self save] wait:&error];
-        }while ([error.domain isEqualToString: CouchHTTPErrorDomain] &&
+        }while ([error.domain isEqual: @"CouchDB"] &&
                 error.code == 409);
     }
 
@@ -93,6 +93,8 @@
         if(error)
         {
             [self.document refresh];
+            [self.document resolveConflictingRevisions:[self.document getConflictingRevisions]
+                                        withProperties:self.document.properties];
         }
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
@@ -170,8 +172,7 @@
     do {
         if(error != nil)
         {
-            NSDictionary* content = _gameChat.document.properties;
-            [[_gameChat.document putProperties:content] wait];
+            [self.gameChat.document refresh];
         }
         NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
         [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
