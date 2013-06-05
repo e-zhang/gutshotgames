@@ -59,6 +59,15 @@ const int SERVER_PORT = 443;
         ![_invites ensureCreated: &error] &&
         ![_localGames ensureCreated: &error]) { NSLog(@"creation");}
     
+    CouchDocument *sup = [_localInfo documentWithID:@"maininfo"];
+    NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
+    [add setObject:@"61DC1036-5652-4C41-9763-38C172A7B25B" forKey:@"userid"];
+    [add setObject:@"100003863748281" forKey:@"fb_id"];
+    [add setObject:@"Simon Bob" forKey:@"fb_name"];
+    
+    RESTOperation* operation = [sup putProperties:add];
+    [operation wait];
+    
     [self initUser];
     
     return self;

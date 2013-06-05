@@ -26,22 +26,22 @@
 
 typedef enum{
     twplayer1x = 50,
-    twplayer1y = 80,
+    twplayer1y = 0,
     twrota = 160,
     twplayer2x = 450,
-    twplayer2y = 80,
+    twplayer2y = 0,
     twrotb = 0
 } twoplayergame;
 
 typedef enum{
     thplayer1x = 50,
-    thplayer1y = 80,
+    thplayer1y = 0,
     throta = -34,
     thplayer2x = 450,
-    thplayer2y = 80,
+    thplayer2y = 0,
     throtb = -70,
     thplayer3x = 50,
-    thplayer3y = 160,
+    thplayer3y = 80,
     throtc = 70,
 } threeplayergame;
 
@@ -142,6 +142,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         double x = cos(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.width/2 - 50;
         double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 60;
+
         character.view.frame =  CGRectMake(x,
                                            y,
                                            PLAYER_WIDTH,
@@ -153,7 +154,7 @@ NSString * const messageWatermark = @"Send a message...";
         //animationzone
         UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
         if (i+1 % 2 && i!=0){
-            one.frame = CGRectMake(450,80*(i+1),75,75);
+            one.frame = CGRectMake(450,80*(i-1),75,75);
         }
         else{
             one.frame = CGRectMake(50,80*i,75,75);
@@ -162,6 +163,7 @@ NSString * const messageWatermark = @"Send a message...";
         [charidtonum setObject:[NSString stringWithFormat:@"%d",100+i+1] forKey:character.Char.Id];
 
         one.tag = 100+i+1;
+        NSLog(@"player0%d",one.tag);
         one.animationImages = [NSArray arrayWithObjects:
                                [UIImage imageNamed:@"sumo standing.png"],
                                [UIImage imageNamed:@"sumo standing2.png"], nil];
@@ -199,7 +201,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         //animationzone
         _animationzone = [[UIView alloc]initWithFrame:CGRectMake(300,400,600,300)];
-        _animationzone.backgroundColor = [UIColor yellowColor];
+     //   _animationzone.backgroundColor = [UIColor yellowColor];
         [self.view addSubview:_animationzone];
         
         [self.view addSubview:_gamezone];
@@ -212,8 +214,9 @@ NSString * const messageWatermark = @"Send a message...";
         
         _status = [[UILabel alloc] initWithFrame:CGRectMake(90, 0, 75, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
-        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 250, 200, 100)];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 250, 300, 400)];
         _gameInfo.editable = NO;
+        _gameInfo.userInteractionEnabled = YES;
         _gameInfo.scrollEnabled = YES;
         _gameInfo.font = [UIFont systemFontOfSize:9.0];
         
@@ -361,9 +364,22 @@ NSString * const messageWatermark = @"Send a message...";
     
     for( Character* c in [_characters allValues])
     {
-        _gameInfo.text = [NSString stringWithFormat:@"%@\n%@", _gameInfo.text,
+        if([MoveStrings[c.NextMove.Type] isEqual:@"Attack"] || [MoveStrings[c.NextMove.Type] isEqual:@"Super Attack"]){
+            NSString *recepient;
+            for( Character* d in [_characters allValues])
+            {
+                if ([d.Id isEqualToString:c.NextMove.TargetId]){
+                    recepient = d.Name;
+                }
+            }
+            _gameInfo.text = [NSString stringWithFormat:@"%@\n%@", _gameInfo.text,
+                              [NSString stringWithFormat:@"%@ used move: %@ to %@", c.Name, MoveStrings[c.NextMove.Type],recepient]];
+        }else{
+            _gameInfo.text = [NSString stringWithFormat:@"%@\n%@", _gameInfo.text,
                           [NSString stringWithFormat:@"%@ used move: %@", c.Name, MoveStrings[c.NextMove.Type]]];
+        }
     }
+    
     //simulate attacks
     NSMutableArray* defends = [[NSMutableArray alloc] init];
     NSMutableArray* points = [[NSMutableArray alloc] init];
@@ -374,7 +390,6 @@ NSString * const messageWatermark = @"Send a message...";
                                      withPointGetters:&points
                                      withSimultaneousAttackers:&sameAttacks
                                      withAttackers:&attacks];
-    
     //get5s
     for (int charIdx=0; charIdx<[points count]; charIdx++){
         Character* c = [points objectAtIndex:charIdx];
@@ -394,9 +409,9 @@ NSString * const messageWatermark = @"Send a message...";
         
         
         NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
-        [add setObject:@"simulattack" forKey:@"move"];
-        [add setObject:[attks objectAtIndex:0] forKey:@"from"];
-        [add setObject:[attks objectAtIndex:1] forKey:@"to"];
+        [add setObject:@"simuattack" forKey:@"move"];
+        [add setObject:[attks objectAtIndex:0] forKey:@"a"];
+        [add setObject:[attks objectAtIndex:1] forKey:@"b"];
         [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
         
     }
@@ -408,7 +423,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         
         NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
-        [add setObject:@"simulattack" forKey:@"move"];
+        [add setObject:@"attack" forKey:@"move"];
         [add setObject:c.Id forKey:@"from"];
         [add setObject:c.NextMove.TargetId forKey:@"to"];
         [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
@@ -419,12 +434,13 @@ NSString * const messageWatermark = @"Send a message...";
         if([[[actions objectForKey:@"1"] objectForKey:@"move"]isEqual:@"attack"]){
             [self attack:[[actions objectForKey:@"1"] objectForKey:@"from"] to:[[actions objectForKey:@"1"] objectForKey:@"to"] movenumber:1];
         }
-        if([[actions objectForKey:@"1"] objectForKey:@"superattack"]){
-            [self superattack:[[actions objectForKey:@"1"] objectForKey:@"from"] to:[[actions objectForKey:@"1"] objectForKey:@"to"] movenumber:1];
+        if([[actions objectForKey:@"1"] objectForKey:@"simuattack"]){
+            [self simulattack:[[actions objectForKey:@"1"] objectForKey:@"a"] to:[[actions objectForKey:@"1"] objectForKey:@"b"] movenumber:1];
         }
     }
     else{
-        [self reset];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(reset) userInfo:nil repeats:NO];
+
     }
     
     [self commitRound];
@@ -441,8 +457,9 @@ NSString * const messageWatermark = @"Send a message...";
 
 -(void)get5:(NSString *)player{
     int playernum = [[charidtonum objectForKey:player] intValue];
-    for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==100+playernum){
+    NSLog(@"get5-%d",playernum);
+    for (UIImageView *a in [_animationzone subviews]) {
+        if(a.tag==playernum){
             NSLog(@"ab-%d",playernum);
             [a stopAnimating];
             a.animationImages = [NSArray arrayWithObjects:
@@ -457,8 +474,10 @@ NSString * const messageWatermark = @"Send a message...";
 
 -(void)defend:(NSString *)player{
     int playernum = [[charidtonum objectForKey:player] intValue];
-    for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==100+playernum){
+    NSLog(@"defendplayer-%d",playernum);
+
+    for (UIImageView *a in [_animationzone subviews]) {
+        if(a.tag==playernum){
             NSLog(@"ab-%d",playernum);
             [a stopAnimating];
             a.animationImages = [NSArray arrayWithObjects:
@@ -475,16 +494,17 @@ NSString * const messageWatermark = @"Send a message...";
     // sleep(t*10);
     
     int playernum = [[charidtonum objectForKey:player1] intValue];
-
+    NSLog(@"attackplayernum-%d",playernum);
     int playernum1 = [[charidtonum objectForKey:player2] intValue];
+    NSLog(@"attackplayernum1-%d",playernum1);
 
     UIImageView *attacker;
     UIImageView *defender;
-    for (UIImageView *a in [self.view subviews]) {
-        if(a.tag==100+playernum){
+    for (UIImageView *a in [_animationzone subviews]) {
+        if(a.tag==playernum){
             attacker = a;
         }
-        if(a.tag==100+playernum1){
+        if(a.tag==playernum1){
             defender = a;
         }
     }
@@ -497,7 +517,7 @@ NSString * const messageWatermark = @"Send a message...";
     NSArray* players = [_game.players allKeys];
 
     if([players count]==2){
-        if(playernum==1){
+        if(playernum==101){
             tpg = twplayer2x - 80;
             tpgy = twplayer2y;
             org = twplayer1x;
@@ -505,7 +525,7 @@ NSString * const messageWatermark = @"Send a message...";
             rotation = -1;
             fallrotation = 1;
         }
-        if(playernum==2){
+        if(playernum==102){
             tpg = twplayer1x + 80;
             tpgy = twplayer1y;
             org = twplayer2x;
@@ -515,48 +535,48 @@ NSString * const messageWatermark = @"Send a message...";
         }
     }
     if([players count]==3){
-        if(playernum==1){
+        if(playernum==101){
             org = thplayer1x;
             orgy = thplayer1y;
-            if(playernum1==2){
+            if(playernum1==102){
                 tpg = thplayer2x - 80;
                 tpgy = thplayer2y - 80;
                 rotation = -1;
                 fallrotation = 1;
             }
-            if(playernum1==3){
+            if(playernum1==103){
                 tpg = thplayer3x - 80;
                 tpgy = thplayer3y + 80;
                 rotation = -1;
                 fallrotation = 1;
             }
         }
-        if(playernum==2){
+        if(playernum==102){
             org = thplayer2x;
             orgy = thplayer2y;
-            if(playernum1==1){
+            if(playernum1==101){
                 tpg = thplayer1x + 80;
                 tpgy = thplayer1y;
                 rotation = -70;
                 fallrotation = 1;
             }
-            if(playernum1==3){
+            if(playernum1==103){
                 tpg = thplayer3x - 80;
                 tpgy = thplayer3y + 80;
                 rotation = -70;
                 fallrotation = 1;
             }
         }
-        if(playernum==3){
+        if(playernum==103){
             org = thplayer3x;
             orgy = thplayer3y;
-            if(playernum1==1){
+            if(playernum1==101){
                 tpg = thplayer1x + 80;
                 tpgy = thplayer1y;
                 rotation = 1;
                 fallrotation = 1;
             }
-            if(playernum1==2){
+            if(playernum1==102){
                 tpg = thplayer3x - 80;
                 tpgy = thplayer3y - 80;
                 rotation = 1;
@@ -632,12 +652,12 @@ NSString * const messageWatermark = @"Send a message...";
                     if([[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"move"]isEqual:@"attack"]){
                         [self attack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] movenumber:t+1];
                     }
-                    if([[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"superattack"]){
-                        [self superattack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] movenumber:t+1];
+                    if([[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"simuattack"]){
+                        [self simulattack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"a"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"b"] movenumber:t+1];
                     }
                 }
                 else{
-                    [self reset];
+                    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(reset) userInfo:nil repeats:NO];
                 }
                 
             }];
@@ -646,7 +666,220 @@ NSString * const messageWatermark = @"Send a message...";
 }
 
 -(void)simulattack:(NSString *)player1 to:(NSString *)player2 movenumber:(int)t{
+   
+    int playernum = [[charidtonum objectForKey:player1] intValue];
+    NSLog(@"simulattackplayernum-%d",playernum);
+    int playernum1 = [[charidtonum objectForKey:player2] intValue];
+    NSLog(@"simulattackplayernum1-%d",playernum1);
     
+    UIImageView *attacker;
+    UIImageView *defender;
+    for (UIImageView *a in [_animationzone subviews]) {
+        if(a.tag==playernum){
+            attacker = a;
+        }
+        if(a.tag==playernum1){
+            defender = a;
+        }
+    }
+    int tpg=0 ,tpgb=0;
+    int tpgy=0, tpgyb=0;
+    int org=0, orgb=0;
+    int orgy=0, orgyb=0;
+    int rotation=1, rotationb=1;
+    int fallrotation=1, fallrotationb=1;
+    NSArray* players = [_game.players allKeys];
+    
+    if([players count]==2){
+        if(playernum==101){
+            tpg = 240;
+            tpgy = 0;
+            org = twplayer1x;
+            orgy = twplayer1y;
+            rotation = -1;
+            fallrotation = 1;
+        }
+        if(playernum==102){
+            tpg = 240;
+            tpgy = 0;
+            org = twplayer2x;
+            orgy = twplayer2y;
+            rotation = 1;
+            fallrotation = -1;
+        }
+        
+        if(playernum1==101){
+            tpgb = 300;
+            tpgyb = 0;
+            orgb = twplayer1x;
+            orgyb = twplayer1y;
+            rotationb = -1;
+            fallrotationb = 1;
+        }
+        if(playernum1==102){
+            tpgb = 300;
+            tpgyb = 0;
+            orgb = twplayer2x;
+            orgyb = twplayer2y;
+            rotationb = 1;
+            fallrotationb = -1;
+        }
+    }
+    if([players count]==3){
+        tpg = 240;
+        tpgy = 0;
+        rotation = -1;
+        fallrotation = 1;
+        
+        tpgb = 240;
+        tpgyb = 0;
+        rotationb = -1;
+        fallrotationb = 1;
+        
+        if(playernum==101){
+            org = thplayer1x;
+            orgy = thplayer1y;
+        }
+        if(playernum==102){
+            org = thplayer2x;
+            orgy = thplayer2y;
+                   }
+        if(playernum==103){
+            org = thplayer3x;
+            orgy = thplayer3y;
+        }
+        
+        if(playernum1==101){
+            orgb = thplayer1x;
+            orgyb = thplayer1y;
+        }
+        if(playernum1==102){
+            orgb = thplayer2x;
+            orgyb = thplayer2y;
+        }
+        if(playernum1==103){
+            orgb = thplayer3x;
+            orgyb = thplayer3y;
+        }
+    }
+    
+    [UIView animateWithDuration:2 animations:^{
+        // animation 1
+        attacker.animationImages = [NSArray arrayWithObjects:
+                                    [UIImage imageNamed:@"sumo walk 1.png"],
+                                    [UIImage imageNamed:@"sumo walk 2.png"],
+                                    [UIImage imageNamed:@"sumo walk 3.png"],nil];
+        //         attacker.transform = CGAffineTransformMakeRotation(0);
+        //         attacker.transform = CGAffineTransformScale(attacker.transform,1, 1);
+        //         attacker.transform = CGAffineTransformRotate(attacker.transform, degreesToRadians(-45));
+        
+        CGRect frame;
+        frame= attacker.frame;
+        frame.origin.x= tpg;
+        frame.origin.y= tpgy;
+        attacker.frame=frame;
+        attacker.alpha=1.0;
+        [attacker startAnimating];
+        
+        defender.animationImages = [NSArray arrayWithObjects:
+                                    [UIImage imageNamed:@"sumo walk 1.png"],
+                                    [UIImage imageNamed:@"sumo walk 2.png"],
+                                    [UIImage imageNamed:@"sumo walk 3.png"],nil];
+        //         attacker.transform = CGAffineTransformMakeRotation(0);
+        //         attacker.transform = CGAffineTransformScale(attacker.transform,1, 1);
+        //         attacker.transform = CGAffineTransformRotate(attacker.transform, degreesToRadians(-45));
+        
+        CGRect frame1;
+        frame1= defender.frame;
+        frame1.origin.x= tpgb;
+        frame1.origin.y= tpgyb;
+        defender.frame=frame1;
+        defender.alpha=1.0;
+        [defender startAnimating];
+        
+    } completion:^(BOOL finished){
+        NSLog(@"poop");
+        [UIView animateWithDuration:1 animations:^{
+            // animation 2
+            attacker.animationImages = [NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"sumo attack 1.png"],
+                                        [UIImage imageNamed:@"sumo attack 2.png"],
+                                        [UIImage imageNamed:@"sumo attack 3.png"],nil];
+            //        attacker.transform = CGAffineTransformMakeRotation(rotation);
+            //        attacker.transform = CGAffineTransformScale(attacker.transform,.5, .5);
+            //        attacker.transform = CGAffineTransformMakeScale(1, 1);
+            
+            CGRect frame;
+            frame= attacker.frame;
+            frame.origin.x= tpg-1;
+            frame.origin.y= tpgy-1;
+            attacker.frame=frame;
+            attacker.alpha=1.0;
+            [attacker startAnimating];
+
+            defender.animationImages = [NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"sumo attack 1.png"],
+                                        [UIImage imageNamed:@"sumo attack 2.png"],
+                                        [UIImage imageNamed:@"sumo attack 3.png"],nil];
+            //        attacker.transform = CGAffineTransformMakeRotation(rotation);
+            //        attacker.transform = CGAffineTransformScale(attacker.transform,.5, .5);
+            //        attacker.transform = CGAffineTransformMakeScale(1, 1);
+            
+            CGRect frame1;
+            frame1= defender.frame;
+            frame1.origin.x= tpgb-1;
+            frame1.origin.y= tpgyb-1;
+            defender.frame=frame;
+            defender.alpha=1.0;
+            [defender startAnimating];
+            
+        } completion:^(BOOL finished){
+            NSLog(@"loop");
+            [UIView animateWithDuration:2 animations:^{
+                // animation 3
+                attacker.animationImages = [NSArray arrayWithObjects:
+                                            [UIImage imageNamed:@"sumo walk 1.png"],
+                                            [UIImage imageNamed:@"sumo walk 2.png"],
+                                            [UIImage imageNamed:@"sumo walk 3.png"],nil];
+
+                CGRect frame;
+                frame= attacker.frame;
+                frame.origin.x= org;
+                frame.origin.y= orgy;
+                attacker.frame=frame;
+                attacker.alpha=1.0;
+                [attacker startAnimating];
+                
+                defender.animationImages = [NSArray arrayWithObjects:
+                                            [UIImage imageNamed:@"sumo walk 1.png"],
+                                            [UIImage imageNamed:@"sumo walk 2.png"],
+                                            [UIImage imageNamed:@"sumo walk 3.png"],nil];
+                
+                CGRect frame1;
+                frame1= attacker.frame;
+                frame1.origin.x= orgb;
+                frame1.origin.y= orgyb;
+                defender.frame=frame;
+                defender.alpha=1.0;
+                [attacker startAnimating];
+                
+            } completion:^(BOOL finished){
+                
+                if([actions objectForKey:[NSString stringWithFormat:@"%d",t+1]]){
+                    if([[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"move"]isEqual:@"attack"]){
+                        [self attack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"from"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"to"] movenumber:t+1];
+                    }
+                    if([[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"simuattack"]){
+                        [self simulattack:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"a"] to:[[actions objectForKey:[NSString stringWithFormat:@"%d",t+1]] objectForKey:@"b"] movenumber:t+1];
+                    }
+                }
+                else{
+                    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(reset) userInfo:nil repeats:NO];
+                }
+                
+            }];
+        }];
+    }];
 }
 
 -(void)superattack:(NSString *)player1 to:(NSString *)player2 movenumber:(int)t{
@@ -695,8 +928,7 @@ NSString * const messageWatermark = @"Send a message...";
             [a removeFromSuperview];
     }
     
-    NSLog(@"players-%@",_game.players);
-    charidtonum = [[NSMutableDictionary alloc]init];
+  //  NSLog(@"players-%@",_game.players);
     actions = [[NSMutableDictionary alloc]init];
     NSArray* players = [_game.players allKeys];
         
@@ -705,7 +937,7 @@ NSString * const messageWatermark = @"Send a message...";
              
     UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
     if (i+1 % 2 && i!=0){
-        one.frame = CGRectMake(450,80*(i+1),75,75);
+        one.frame = CGRectMake(450,80*(i-1),75,75);
     }
     else{
         one.frame = CGRectMake(50,80*(i),75,75);
@@ -713,6 +945,7 @@ NSString * const messageWatermark = @"Send a message...";
     }
     
     one.tag = 100+i+1;
+    NSLog(@"player0%d",one.tag);
     one.animationImages = [NSArray arrayWithObjects:
                            [UIImage imageNamed:@"sumo standing.png"],
                            [UIImage imageNamed:@"sumo standing2.png"], nil];

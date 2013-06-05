@@ -182,16 +182,14 @@
         FBSession *session =
         [[FBSession alloc] initWithAppID:nil
                              permissions:nil
-                         urlSchemeSuffix:@"freeapp"
+                         urlSchemeSuffix:nil
                       tokenCacheStrategy:nil];
         
         [FBSession setActiveSession:session];
         [session openWithBehavior:FBSessionLoginBehaviorUseSystemAccountIfPresent
                 completionHandler:
          ^(FBSession *session, FBSessionState state, NSError *error) {
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 [self openfb];
-             });
+             [self openfb1];
          }];
     }
     
