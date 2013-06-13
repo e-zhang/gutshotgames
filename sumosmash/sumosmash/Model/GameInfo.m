@@ -92,9 +92,9 @@
     {
         if(error)
         {
+            NSLog(@"current revision:%@", [self.document currentRevisionID]);
+            NSLog(@"conflicts:%@", [self.document getConflictingRevisions]);
             [self.document refresh];
-            [self.document resolveConflictingRevisions:[self.document getConflictingRevisions]
-                                        withProperties:self.document.properties];
         }
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
@@ -172,12 +172,12 @@
     do {
         if(error != nil)
         {
-            [self.gameChat.document refresh];
+            [_gameChat.document refresh];
         }
         NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
         [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
 
-        self.gameChat.chatHistory = history;
+        _gameChat.chatHistory = history;
         
         [[_gameChat save] wait:&error];
     } while([error.domain isEqualToString:CouchHTTPErrorDomain] && error.code == 409);
