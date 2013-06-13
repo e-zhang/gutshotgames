@@ -95,6 +95,7 @@
             NSLog(@"current revision:%@", [self.document currentRevisionID]);
             NSLog(@"conflicts:%@", [self.document getConflictingRevisions]);
             [self.document refresh];
+            [self.document resolveConflictingRevisions:[self.document getConflictingRevisions] withRevision:self.document.currentRevision];
         }
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
