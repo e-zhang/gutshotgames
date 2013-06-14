@@ -95,7 +95,8 @@
             NSLog(@"current revision:%@", [self.document currentRevisionID]);
             NSLog(@"conflicts:%@", [self.document getConflictingRevisions]);
             [self.document refresh];
-            [self.document resolveConflictingRevisions:[self.document getConflictingRevisions] withRevision:self.document.currentRevision];
+            [[self.document putProperties:self.document.properties] wait:&error];
+            NSLog(@"error: %@", [error localizedDescription]);
         }
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
@@ -213,6 +214,7 @@
         for(NSString* playerId in currentRound)
         {
             Move* move = [[Move alloc] initWithDictionary:[currentRound objectForKey:playerId]];
+            NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
             [_delegate onMoveSubmitted:move byPlayer:playerId];
         }
         
