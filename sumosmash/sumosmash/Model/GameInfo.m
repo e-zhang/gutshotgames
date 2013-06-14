@@ -94,9 +94,11 @@
         {
             NSLog(@"current revision:%@", [self.document currentRevisionID]);
             NSLog(@"conflicts:%@", [self.document getConflictingRevisions]);
+            NSLog(@"properties: %@", self.propertiesToSave);
             [self.document refresh];
-            [[self.document putProperties:self.document.properties] wait:&error];
+            [self.document resolveConflictingRevisions:[self.document getConflictingRevisions] withProperties:self.propertiesToSave];
             NSLog(@"error: %@", [error localizedDescription]);
+            NSLog(@"properties1: %@", self.propertiesToSave);
         }
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
