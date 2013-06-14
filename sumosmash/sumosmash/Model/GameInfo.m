@@ -101,6 +101,7 @@
             NSLog(@"error: %@", [error localizedDescription]);
         }
         
+        [self.document refresh];
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
         [currentRound setObject:[move getMove] forKey:player];
@@ -220,9 +221,10 @@
             [_delegate onMoveSubmitted:move byPlayer:playerId];
         }
         
-        NSLog(@"current round is: %@, game round is %d", self.currentRound, _gameRound);
+        NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
         if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
         {
+            NSLog(@"round complete!");
             [_delegate onRoundComplete];
         }
     }
