@@ -95,9 +95,9 @@
             NSLog(@"current revision:%@", [self.document currentRevisionID]);
             NSLog(@"conflicts:%@", [self.document getConflictingRevisions]);
             NSLog(@"properties: %@", self.propertiesToSave);
-            NSLog(@"properties1: %@", self.document.properties);
             [self.document refresh];
             [[self.document resolveConflictingRevisions:[self.document getConflictingRevisions] withProperties:self.propertiesToSave] wait:&error];
+            NSLog(@"properties1: %@", self.document.properties);
             NSLog(@"error: %@", [error localizedDescription]);
         }
         
@@ -220,9 +220,9 @@
             [_delegate onMoveSubmitted:move byPlayer:playerId];
         }
         
+        NSLog(@"current round is: %@, game round is %d", self.currentRound, _gameRound);
         if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
         {
-            NSLog(@"current round is: %@, game round is %d", self.currentRound, _gameRound);
             [_delegate onRoundComplete];
         }
     }
