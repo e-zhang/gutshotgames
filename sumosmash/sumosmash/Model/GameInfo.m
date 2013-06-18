@@ -51,7 +51,11 @@
     NSError* error = nil;
     do
     {
-        if(error) [self.document refresh];
+
+        if(error)
+        {
+            [self resolveConflicts:self];
+        }
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
         [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
@@ -72,7 +76,11 @@
         NSError* error = nil;
         do
         {
-            if(error) [self.document refresh];
+            if(error)
+            {
+                [self resolveConflicts:self];
+            }
+            
             self.currentRound = [NSNumber numberWithInt:_gameRound /*[self.currentRound intValue] + 1*/];
             NSMutableArray* rounds = [self.gameData mutableCopy];
             [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
@@ -92,21 +100,18 @@
     {
         if(error)
         {
-            NSLog(@"current revision:%@", [self.document currentRevisionID]);
-            NSLog(@"conflicts:%@", [self.document getConflictingRevisions]);
-            NSLog(@"properties: %@", self.propertiesToSave);
-            [self.document refresh];
-            [[self.document resolveConflictingRevisions:[self.document getConflictingRevisions] withProperties:self.propertiesToSave] wait:&error];
-            NSLog(@"properties1: %@", self.document.properties);
-            NSLog(@"error: %@", [error localizedDescription]);
+            [self resolveConflicts:self];
+            error = nil;
         }
         
-        [self.document refresh];
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
+        
+        
         [currentRound setObject:[move getMove] forKey:player];
         [data setObject:currentRound atIndexedSubscript:[self.currentRound intValue]];
-       
+        NSLog(@"data - %@", data);
+        
         self.gameData = data;
         [[self save] wait:&error];
         
@@ -177,7 +182,8 @@
     do {
         if(error != nil)
         {
-            [_gameChat.document refresh];
+            [self resolveConflicts:self.gameChat];
+            error = nil;
         }
         NSMutableArray* history = [_gameChat.chatHistory mutableCopy];
         [history addObject:[NSArray arrayWithObjects:name, chat, nil]];
@@ -230,6 +236,23 @@
     }
 
     
+}
+
+
+-(void) resolveConflicts:(CouchModel*) model
+{
+    NSLog(@"current revision:%@", [model.document currentRevisionID]);
+    NSArray* conflicts = [model.document getConflictingRevisions];
+    NSLog(@"current conflicts:%@", conflicts);
+    for (CouchRevision* rev in conflicts)
+    {
+        NSLog(@"rev-properties: %@", rev.properties);
+        for(NSString* prop in rev.properties)
+        {
+            [model setValue:[rev.properties objectForKey:prop] ofProperty:prop];
+        }
+    }
+    NSLog(@"properties %@", model.propertiesToSave);
 }
 
 
