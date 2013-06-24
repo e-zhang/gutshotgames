@@ -117,11 +117,8 @@
         
     } while([error.domain isEqual:@"CouchDB"] && error.code == 409);
     
-    if ([[self.gameData objectAtIndex:[self.currentRound intValue]] count] == [self.players count]
-        && [self.currentRound intValue] == _gameRound)
-    {
-        [_delegate onRoundComplete];
-    }
+    
+    [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
 }
 
 - (void) simulateRound:(NSDictionary *)characters withDefenders:(NSMutableArray *__autoreleasing *)defenders
@@ -220,24 +217,28 @@
     
         if(!currentRound) return;
         
+        [self checkRound:currentRound];
+    }
+    
+}
+
+
+-(void) checkRound:(NSDictionary*) currentRound
+{
+    
+    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
+    if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
+    {
         for(NSString* playerId in currentRound)
         {
             Move* move = [[Move alloc] initWithDictionary:[currentRound objectForKey:playerId]];
             NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
             [_delegate onMoveSubmitted:move byPlayer:playerId];
         }
-        
-        NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
-        if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
-        {
-            NSLog(@"round complete!");
-            [_delegate onRoundComplete];
-        }
+        NSLog(@"round complete!");
+        [_delegate onRoundComplete];
     }
-
-    
 }
-
 
 -(void) resolveConflicts:(CouchModel*) model
 {
