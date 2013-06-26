@@ -16,6 +16,7 @@
 #import "GameInfo.h"
 #import "GameInvitations.h"
 #include "DBDefs.h"
+#include "Tags.h"
 
 #import "InvitationsViewController.h"
 
@@ -368,7 +369,7 @@
                                           selector:@selector(gotogame:)];
     [self addChildViewController:invites];
     [_selectedMenu addSubview:invites.view];
-    _selectedMenu.tag = 3;
+    _selectedMenu.tag = INVITATIONS_VIEW;
 }
 
 -(void)gotogame:(GameRequest*) request
@@ -394,7 +395,7 @@
 
 - (IBAction) showCreateGame:(id)sender
 {
-    if(_selectedMenu.tag == 1) return;
+    if(_selectedMenu.tag == CREATE_VIEW) return;
     
     [[_selectedMenu subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
@@ -403,9 +404,9 @@
     
     NSLog(@"size of view is %@", NSStringFromCGRect([UIScreen mainScreen].bounds));
     [_selectedMenu addSubview:createView];
-    _selectedMenu.tag = 1;
+    _selectedMenu.tag = CREATE_VIEW;
     
-    UICollectionView* collection = (UICollectionView*)[createView viewWithTag:2];
+    UICollectionView* collection = (UICollectionView*)[createView viewWithTag:INVITE_COLLECTION];
     
     [collection registerClass:[UICollectionViewCell class]
                                       forCellWithReuseIdentifier:@"invite_cell"];
@@ -485,7 +486,7 @@
 {
     NSLog(@"clicked");
     _players = friendPicker.selection;
-    UICollectionView* collection = (UICollectionView*)[_selectedMenu viewWithTag:2];
+    UICollectionView* collection = (UICollectionView*)[_selectedMenu viewWithTag:INVITE_COLLECTION];
     [collection reloadData];
 }
 
@@ -681,13 +682,13 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"invite_cell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
-    UILabel* label = (UILabel*)[cell.contentView viewWithTag:1];
+    UILabel* label = (UILabel*)[cell.contentView viewWithTag:INVITE_COLLECTION];
     if(!label)
     {
         label = [[UILabel alloc] initWithFrame:CGRectMake(5,0,48,48)];
         cell.layer.borderColor = [[UIColor grayColor] CGColor];
         cell.layer.borderWidth = 1.5;
-        label.tag = 1;
+        label.tag = INVITE_COLLECTION;
         label.lineBreakMode = UILineBreakModeWordWrap;
         label.font = [UIFont systemFontOfSize:12.0];
         [label adjustsFontSizeToFitWidth];

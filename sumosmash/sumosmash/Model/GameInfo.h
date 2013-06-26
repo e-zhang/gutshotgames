@@ -43,6 +43,9 @@
 -(void) initializeGame;
 - (void) setDelegate:(id<GameUpdateDelegate>) delegate;
 
+- (void) reset;
+- (void) start;
+
 - (BOOL) isGameOver;
 - (void) setGameOver:(BOOL) over;
 - (void) setGameChat:(GameChat *)gameChat;

@@ -17,17 +17,23 @@
 {
     _id = playerId;
     _name = name;
-    _isTarget = NO;
     _isConnected = NO;
+    
+    [self reset];
+    
+    return self;
+}
+
+
+-(void) reset
+{
+    _isTarget = NO;
     
     _life = 5;
     _points = 5;
     _lifeUpdate = 0;
     _pointsUpdate = 0;
-    
-    return self;
 }
-
 
 -(NSString*) getStats
 {

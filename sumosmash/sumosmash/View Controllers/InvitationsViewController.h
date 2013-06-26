@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "GameInvitations.h"
 
-#define INVITATIONS_TAG 3
-
 @interface InvitationsViewController : UIViewController<UICollectionViewDataSource,
                                                         InvitationUpdateDelegate>
 {

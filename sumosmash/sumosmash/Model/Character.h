@@ -30,6 +30,8 @@
 
 -(id) initWithId:(NSString*) playerId andName:(NSString*)name;
 
+-(void) reset;
+
 - (NSString*) getStats;
 
 -(BOOL) UpdateNextMove:(Move*) nextMove;

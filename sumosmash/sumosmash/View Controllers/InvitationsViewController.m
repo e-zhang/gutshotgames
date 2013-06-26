@@ -10,6 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "GameRequest.h"
 
+#import "Tags.h"
+
 @interface InvitationsViewController ()
 
 @end
@@ -27,7 +29,7 @@
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         UICollectionView* collection = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
         collection.backgroundColor = [UIColor clearColor];
-        collection.tag = INVITATIONS_TAG;
+        collection.tag = INVITATIONS_VIEW;
         
         _selector = selector;
         _target = target;

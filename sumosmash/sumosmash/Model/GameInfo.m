@@ -17,13 +17,46 @@
 
 @synthesize gameChat=_gameChat;
 
-// todo: probably keep a mutable copy of the rounds and stuff on hand to set
-// the dynamic properties to, so we dont incur the cost of the copy each time
+
+-(void) reset
+{
+    _isOver = NO;
+    _gameRound = -1;
+    self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
+    self.currentRound = [NSNumber numberWithInt:_gameRound];
+}
+
+-(void) start
+{
+    NSError* error = nil;
+    do
+    {
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
+        [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+        
+        NSDate *now = [NSDate date]; // Grab current time
+        self.startDate = [dateFormat stringFromDate:now];
+        [[self save] wait:&error];
+    } while ([error.domain isEqual: @"CouchDB"] &&
+             error.code == 409);
+}
 
 -(void) initializeGame
 {
     _isOver = NO;
     _gameRound = -1;
+    
+    for( int i = 0; i < [self.gameData count]; ++i )
+    {
+        _gameRound = i;
+        NSLog(@" replaying round %d / %d", _gameRound, [self.gameData count]);
+        [self checkRound:[self.gameData objectAtIndex:i]];
+        if([[self.gameData objectAtIndex:i] count] < [self.players count])
+        {
+            break;
+        }
+    }
 }
 
 - (void) setDelegate:(id<GameUpdateDelegate>)delegate
@@ -83,7 +116,10 @@
             
             self.currentRound = [NSNumber numberWithInt:_gameRound /*[self.currentRound intValue] + 1*/];
             NSMutableArray* rounds = [self.gameData mutableCopy];
-            [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
+            if(_gameRound >= [rounds count])
+            {
+                [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
+            }
             self.gameData = rounds;
             [[self save] wait:&error];
         }while ([error.domain isEqual: @"CouchDB"] &&
@@ -118,7 +154,11 @@
     } while([error.domain isEqual:@"CouchDB"] && error.code == 409);
     
     
-    [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
+    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
+    if([self.currentRound intValue] == _gameRound)
+    {
+        [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
+    }
 }
 
 - (void) simulateRound:(NSDictionary *)characters withDefenders:(NSMutableArray *__autoreleasing *)defenders
@@ -216,8 +256,12 @@
         NSDictionary* currentRound = [self.gameData objectAtIndex:[self.currentRound intValue]];
     
         if(!currentRound) return;
-        
-        [self checkRound:currentRound];
+
+        NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
+        if([self.currentRound intValue] == _gameRound)
+        {
+            [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
+        }
     }
     
 }
@@ -225,9 +269,7 @@
 
 -(void) checkRound:(NSDictionary*) currentRound
 {
-    
-    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
-    if ([currentRound count] == [self.players count] && [self.currentRound intValue] == _gameRound)
+    if ([currentRound count] == [self.players count])
     {
         for(NSString* playerId in currentRound)
         {

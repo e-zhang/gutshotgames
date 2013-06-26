@@ -193,6 +193,7 @@
 		E72AFA391719F5BB00BC1E04 /* GameChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameChat.h; sourceTree = "<group>"; };
 		E72AFA3A1719F5BC00BC1E04 /* GameChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameChat.m; sourceTree = "<group>"; };
 		E747EBD317496447007D7756 /* CouchCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchCocoa.framework; sourceTree = "<group>"; };
+		E747EBD5177A72E8007D7756 /* Tags.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
 		E79D7B52171CD8BF007972E0 /* createaccount~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "createaccount~ipad.xib"; path = "Views/createaccount~ipad.xib"; sourceTree = "<group>"; };
 		E79D7B59171CD8BF007972E0 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Views/MBProgressHUD.h; sourceTree = "<group>"; };
 		E79D7B5C171CD937007972E0 /* MoveMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoveMenu.h; path = Controls/MoveMenu.h; sourceTree = "<group>"; };
@@ -453,6 +454,7 @@
 				E79D7B79172488BE007972E0 /* MenuView.m */,
 				E706AC23172F4F08008F2A1A /* InvitationsViewController.h */,
 				E706AC24172F4F08008F2A1A /* InvitationsViewController.m */,
+				E747EBD5177A72E8007D7756 /* Tags.h */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";

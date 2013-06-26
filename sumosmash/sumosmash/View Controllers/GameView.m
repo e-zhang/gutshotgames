@@ -14,15 +14,14 @@
 #import "Character.h"
 #import "MoveMenu.h"
 
+#include "Tags.h"
+
 #define degreesToRadians(x) (M_PI * x / 180.0)
 
 #define PLAYER_HEIGHT 120
 #define PLAYER_WIDTH 100
 
 #define ARENA_RADIUS 80
-
-#define HEADER_TAG 9
-#define MESSAGE_TAG 8
 
 typedef enum{
     twplayer1x = 50,
@@ -180,12 +179,7 @@ NSString * const messageWatermark = @"Send a message...";
 {
     if([_myPlayerId isEqual:_game.hostId])
     {
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
-        [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-        
-        NSDate *now = [NSDate date]; // Grab current time
-        _game.startDate = [dateFormat stringFromDate:now];
+        [_game start];
     }
     
     _status.text = [NSString stringWithFormat:@"Round: %d",[_game getNextRound:_myPlayerId]];
@@ -193,6 +187,26 @@ NSString * const messageWatermark = @"Send a message...";
 
     return YES;
 }
+
+
+-(void) restartGame:(UIButton*) sender
+{
+    [_game reset];
+    [self startGame];
+    
+    [[_gamezone viewWithTag:SUBMIT_BUTTON] setHidden:NO];
+    UIView* restart = [_gamezone viewWithTag:RESTART_BUTTON];
+    if(restart)
+    {
+        [restart setHidden:YES];
+    }
+    
+    for(Character* c in [_characters allValues])
+    {
+        [c reset];
+    }
+}
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil gameInfo:(GameInfo*)game myid:(NSString *) myid
 {
@@ -206,7 +220,6 @@ NSString * const messageWatermark = @"Send a message...";
         
         [self.view addSubview:_gamezone];
         _game = game;
-        [_game initializeGame];
         [_game.gameChat setDelegate:self];
         [_game setDelegate:self];
         
@@ -228,7 +241,25 @@ NSString * const messageWatermark = @"Send a message...";
         submit.layer.borderColor = [[UIColor blackColor] CGColor];
         submit.layer.borderWidth = 1.5;
         submit.showsTouchWhenHighlighted = YES;
+        submit.tag = SUBMIT_BUTTON;
         [submit addTarget:self action:@selector(submitMove:) forControlEvents:UIControlEventTouchUpInside];
+        [_gamezone addSubview:submit];
+        
+        if([myid isEqual:_game.hostId])
+        {
+            UIButton* restart = [[UIButton alloc] initWithFrame:CGRectMake(90,30,70,25)];
+            [restart setTitle:@"Restart Game" forState:UIControlStateNormal];
+            [restart setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            restart.titleLabel.font = [UIFont systemFontOfSize:10.0];
+            restart.backgroundColor = [UIColor lightGrayColor];
+            restart.layer.borderColor = [[UIColor blackColor] CGColor];
+            restart.layer.borderWidth = 1.5;
+            restart.showsTouchWhenHighlighted = YES;
+            restart.tag = RESTART_BUTTON;
+            [restart addTarget:self action:@selector(restartGame:) forControlEvents:UIControlEventTouchUpInside];
+            [restart setHidden:YES];
+            [_gamezone addSubview:restart];
+        }
         
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
@@ -246,17 +277,7 @@ NSString * const messageWatermark = @"Send a message...";
         _chatTable.separatorStyle = UITableViewCellSeparatorStyleNone;
         
         _myPlayerId = myid;
-        // _status = [[UILabel alloc]init];
-     /*   if([[gamedata.properties objectForKey:@"player1"]isEqualToString:myid]){
-            UIButton *startgame = [UIButton buttonWithType:UIButtonTypeCustom];
-            [startgame setFrame:CGRectMake(170,80,100,50)];
-            [startgame setTitle:@"Start Game" forState:UIControlStateNormal];
-            [startgame setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-            [startgame addTarget:self action:@selector(initiategame:) forControlEvents:UIControlEventTouchUpInside];
-            
-            [self.view addSubview:startgame];
 
-        }*/
         
         _gameStarted = 0;
         [self initPlayers];
@@ -270,7 +291,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         [_gamezone addSubview:_status];
         [_gamezone addSubview:_gameInfo];
-        [_gamezone addSubview:submit];
+        [_game initializeGame];
     }
     return self;
 }
@@ -349,13 +370,13 @@ NSString * const messageWatermark = @"Send a message...";
     {
         // not connected, newly joined
         joiner.IsConnected = YES;
-        
-        if(++_gameStarted == [_game.players count])
-        {
-            [self startGame];
-        }
+        _gameStarted++;
     }
-
+    
+    if(_gameStarted == [_game.players count])
+    {
+        [self startGame];
+    }
 }
 
 - (void) onRoundComplete
@@ -452,6 +473,12 @@ NSString * const messageWatermark = @"Send a message...";
     else
     {
         _status.text = @"Game Over";
+        [[_gamezone viewWithTag:SUBMIT_BUTTON] setHidden:YES];
+        UIView* restart = [_gamezone viewWithTag:RESTART_BUTTON];
+        if(restart)
+        {
+            [restart setHidden:NO];
+        }
     }
 }
 
