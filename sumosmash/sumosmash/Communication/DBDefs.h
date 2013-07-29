@@ -13,6 +13,7 @@ static NSString * const DB_USER_ID = @"playerId";
 static NSString * const DB_FB_ID = @"fb_id";
 static NSString * const DB_USER_NAME = @"name";
 static NSString * const DB_CONNECTED = @"connected";
+static NSString * const DB_DEFAULT_MOVE = @"move";
 
 static NSString * const DB_PROFILES = @"profiles";
 static NSString * const DB_UPDATES = @"docupdate";

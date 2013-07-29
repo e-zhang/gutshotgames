@@ -13,8 +13,9 @@
 @protocol GameUpdateDelegate <NSObject>
 
 - (void) onPlayerJoined:(NSString*) playerId;
-- (void) onMoveSubmitted:(Move*) move byPlayer:(NSString*) playerId;
+- (BOOL) onMoveSubmitted:(Move*) move byPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
+- (void) onRoundStart;
 
 @end
 
@@ -23,6 +24,7 @@
     id<GameUpdateDelegate> _delegate;
     BOOL _isOver;
     int _gameRound;
+    BOOL _isLast;
     
     GameChat* _gameChat;
 }
@@ -31,20 +33,23 @@
 @property (nonatomic) NSArray* gameData;
 @property (nonatomic) NSNumber* currentRound;
 
-@property (nonatomic) NSString* startDate;
-@property (nonatomic) NSInteger* timeInterval;
+@property (nonatomic) NSString* roundStartTime;
+@property (nonatomic) NSNumber* roundBuffer;
+@property (nonatomic) NSNumber* timeInterval;
 
 @property (nonatomic) NSDictionary* players;
 
 @property (nonatomic) NSString* hostId;
 
 @property (readonly, nonatomic) GameChat* gameChat;
+@property (readonly) int GameRound;
 
 -(void) initializeGame;
 - (void) setDelegate:(id<GameUpdateDelegate>) delegate;
 
 - (void) reset;
-- (void) start;
+- (void) startRound;
+- (void) endRound;
 
 - (BOOL) isGameOver;
 - (void) setGameOver:(BOOL) over;
@@ -53,7 +58,6 @@
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
 
 - (void) joinGame:(NSString*) userId;
-- (int) getNextRound:(NSString*) playerId;
 - (void) submitMove:(Move*) move forPlayer:(NSString*)player;
 
 - (void) simulateRound:(NSDictionary*) characters withDefenders:(NSMutableArray**)defenders

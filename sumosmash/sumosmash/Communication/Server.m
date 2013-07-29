@@ -59,14 +59,21 @@ const int SERVER_PORT = 443;
         ![_invites ensureCreated: &error] &&
         ![_localGames ensureCreated: &error]) { NSLog(@"creation");}
     
-    CouchDocument *sup = [_localInfo documentWithID:@"maininfo"];
-    NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
-    [add setObject:@"61DC1036-5652-4C41-9763-38C172A7B25B" forKey:@"userid"];
-    [add setObject:@"100003863748281" forKey:@"fb_id"];
-    [add setObject:@"Simon Bob" forKey:@"fb_name"];
-    
-    RESTOperation* operation = [sup putProperties:add];
-    [operation wait];
+//    CouchDocument *sup = [_localInfo documentWithID:@"maininfo"];
+//    NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
+//    [add setObject:@"AD4EDE5E-E9F0-4A78-AB6D-4D9F5AC821C8" forKey:@"userid"];
+//    [add setObject:@"500386241" forKey:@"fb_id"];
+//    [add setObject:@"Eric Zhang" forKey:@"fb_name"];
+//    [add setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"AD4EDE5E-E9F0-4A78-AB6D-4D9F5AC821C8", @"target", [NSNumber numberWithInt:1], @"type", nil] forKey:@"default_move"];
+//    
+//    RESTOperation* operation = [sup putProperties:add];
+//    if([operation wait:&error])
+//    {
+//        NSLog(@"%@", [error localizedDescription]);
+//    }
+//       
+//    
+//    NSLog(@"whereyouat-%@", sup.properties);
     
     [self initUser];
     
@@ -76,9 +83,8 @@ const int SERVER_PORT = 443;
 -(void) initUser
 {
     CouchDocument *sup = [_localInfo documentWithID:@"maininfo"];
-    
-    NSLog(@"whereyouat-%@",sup.properties);
     _user = [UserAccount modelForDocument:sup];
+    NSLog(@"whereyouat-%@",_user.document.properties);
     
     _userInvitations = [GameInvitations modelForDocument:
                         [_gameInvites documentWithID:self.user.userid]];

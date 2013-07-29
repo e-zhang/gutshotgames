@@ -13,6 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Character.h"
 #import "MoveMenu.h"
+#import <Foundation/NSCalendar.h>
 
 #include "Tags.h"
 
@@ -134,7 +135,11 @@ NSString * const messageWatermark = @"Send a message...";
         if([[player objectForKey:DB_CONNECTED] boolValue])
         {
             character.Char.isConnected = YES;
-            _gameStarted++;
+            // dont count self, we will do this when we join
+            if(![_myPlayerId isEqual:character.Char.Id])
+            {
+                _gameStarted++;
+            }
         }
         
         [self addChildViewController:character];
@@ -177,12 +182,9 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (BOOL) startGame
 {
-    if([_myPlayerId isEqual:_game.hostId])
-    {
-        [_game start];
-    }
+    [_game reset];
+    [_game startRound];
     
-    _status.text = [NSString stringWithFormat:@"Round: %d",[_game getNextRound:_myPlayerId]];
     _gameInfo.text = @"Game starting....";
 
     return YES;
@@ -191,7 +193,6 @@ NSString * const messageWatermark = @"Send a message...";
 
 -(void) restartGame:(UIButton*) sender
 {
-    [_game reset];
     [self startGame];
     
     [[_gamezone viewWithTag:SUBMIT_BUTTON] setHidden:NO];
@@ -261,6 +262,11 @@ NSString * const messageWatermark = @"Send a message...";
             [_gamezone addSubview:restart];
         }
         
+        _countdownLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 50, 100, 25)];
+        [_countdownLabel setText:@""];
+        _countdownLabel.font = [UIFont systemFontOfSize:10.0];
+        [_gamezone addSubview:_countdownLabel];
+        
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
         _deadCharacters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
@@ -278,13 +284,17 @@ NSString * const messageWatermark = @"Send a message...";
         
         _myPlayerId = myid;
 
+        [_game addObserver:self forKeyPath:@"GameRound" options:NSKeyValueObservingOptionNew context:nil];
         
         _gameStarted = 0;
         [self initPlayers];
         _myPlayerName = ((Character*)[_characters objectForKey:_myPlayerId]).Name;
         _status.text = @"Waiting for players...";
         
-        if(_gameStarted == [_game.players count])
+        BOOL isLast = _gameStarted == ([_game.players count] - 1);
+        [_game joinGame:_myPlayerId];
+        ++_gameStarted;
+        if(isLast)
         {
             [self startGame];
         }
@@ -317,6 +327,17 @@ NSString * const messageWatermark = @"Send a message...";
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath
+                       ofObject:(id)object
+                         change:(NSDictionary *)change
+                        context:(void *)context
+{
+    if([keyPath isEqual:@"GameRound"])
+    {
+        _status.text = [NSString stringWithFormat:@"Round %d", [[change objectForKey:NSKeyValueChangeKindKey] intValue]];
+    }
 }
 
 -(void) submitMove:(UIButton*) sender
@@ -355,11 +376,52 @@ NSString * const messageWatermark = @"Send a message...";
     }
 }
 
-- (void) onMoveSubmitted:(Move *)move byPlayer:playerId
+- (BOOL) onMoveSubmitted:(Move *)move byPlayer:playerId
 {
     Character* player = [_characters objectForKey:playerId];
+    BOOL hasMove = [player hasNextMove];
     
     [player UpdateNextMove:move];
+    
+    return hasMove;
+}
+
+- (void) onRoundStart
+{
+    _countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                       target:self
+                                                     selector:@selector(countdown)
+                                                     userInfo:nil
+                                                      repeats:YES];
+}
+
+-(void) countdown
+{
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
+    [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    
+    NSDate* start = [dateFormat dateFromString:_game.roundStartTime];
+    NSTimeInterval cd = [start timeIntervalSinceNow];
+    if(cd >= 0)
+    {
+        _countdownLabel.text = [NSString stringWithFormat:@"Round starting in %d", (int) cd];
+    }
+    else
+    {
+        NSDate* end = [NSDate dateWithTimeInterval:[_game.timeInterval intValue] sinceDate:start];
+        cd = [end timeIntervalSinceNow];
+        if(cd >= 0)
+        {
+            _countdownLabel.text = [NSString stringWithFormat:@"Round ends in %d", (int)cd];
+        }
+        else
+        {
+            [_game endRound];
+            [_countdownTimer invalidate];
+            _countdownTimer = nil;
+        }
+    }
 }
 
 - (void) onPlayerJoined:(NSString *)playerId
@@ -370,12 +432,6 @@ NSString * const messageWatermark = @"Send a message...";
     {
         // not connected, newly joined
         joiner.IsConnected = YES;
-        _gameStarted++;
-    }
-    
-    if(_gameStarted == [_game.players count])
-    {
-        [self startGame];
     }
 }
 
@@ -466,11 +522,7 @@ NSString * const messageWatermark = @"Send a message...";
     
     [self commitRound];
     
-    if(![_game isGameOver])
-    {
-        _status.text = [NSString stringWithFormat:@"Round: %d", [_game getNextRound:_myPlayerId]];
-    }
-    else
+    if([_game isGameOver])
     {
         _status.text = @"Game Over";
         [[_gamezone viewWithTag:SUBMIT_BUTTON] setHidden:YES];

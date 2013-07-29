@@ -25,6 +25,8 @@ typedef enum {
 @property (nonatomic) NSString* password;
 @property (nonatomic) NSString* email;
 
+@property (nonatomic) NSDictionary* default_move;
+
 - (UserType) GetUserName:(NSString**) username Pic:(NSData**)userPic Id:(NSString**) userId;
 
 - (NSDictionary*) getUserPlayer;

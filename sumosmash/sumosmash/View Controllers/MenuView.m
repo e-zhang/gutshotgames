@@ -379,7 +379,6 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         GameInfo* game = [_gameServer getGameForRequest:request];
-        [game joinGame:_gameServer.user.userid];
         self.gamewindow = [[GameView alloc] initWithNibName:@"GameView" bundle:nil gameInfo:game myid:_gameServer.user.userid];
         //self.gamewindow.delegate = self;
         
@@ -519,6 +518,7 @@
             
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"username"] forKey:DB_USER_NAME];
+            [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
         }
     }
     else
@@ -537,6 +537,7 @@
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"fb_name"] forKey:DB_USER_NAME];
             [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"facebook"] forKey:DB_FB_ID];
+            [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
             
         }
     }
@@ -632,6 +633,8 @@
     newg.currentRound = [NSNumber numberWithInt:-1];
     newg.gameData = [[NSArray alloc] init];
     newg.players = playerAccounts;
+    newg.roundBuffer = [NSNumber numberWithInt:5];
+    newg.timeInterval = [NSNumber numberWithInt:10];
 
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}

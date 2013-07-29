@@ -21,7 +21,8 @@
     NSString* _myPlayerId;
     NSString* _myPlayerName;
     int _gameStarted;
-    UILabel *countdownLabel;
+    UILabel* _countdownLabel;
+    NSTimer* _countdownTimer;
     NSMutableDictionary* _characters;
     NSMutableDictionary* _deadCharacters;
     

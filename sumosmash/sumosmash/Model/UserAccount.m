@@ -11,7 +11,7 @@
 
 @implementation UserAccount
 
-@dynamic fb_id, fb_name, userid, username, password, email;
+@dynamic fb_id, fb_name, userid, username, password, email, default_move;
 
 -(UserType) GetUserName:(NSString *__autoreleasing *)username Pic:(NSData *__autoreleasing *) userPic Id:(NSString *__autoreleasing *) userId
 {
@@ -54,6 +54,8 @@
         [userAccount setObject:self.username forKey:DB_USER_NAME];
         [userAccount setObject:self.userid forKey:DB_USER_ID];
     }
+    
+    [userAccount setObject:self.default_move forKey:DB_DEFAULT_MOVE];
     
     [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
     return userAccount;
