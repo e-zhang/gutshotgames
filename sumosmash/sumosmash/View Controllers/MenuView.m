@@ -19,6 +19,8 @@
 #include "Tags.h"
 
 #import "InvitationsViewController.h"
+#define EXPAND_SIZE 100
+#define WINDOW_SIZE 480
 
 @interface MenuView ()
 
@@ -54,6 +56,7 @@
     NSString* username; NSString* userId; NSData* userPic;
     UserType userType = [_gameServer.user GetUserName:&username Pic:&userPic Id:&userId];
     
+    UIView* view = [self.view viewWithTag:PLAYER_VIEW];
     switch (userType)
     {
         case FACEBOOK:
@@ -70,8 +73,8 @@
             myImageView.frame = CGRectMake(20,self.view.frame.size.height-40,40,40);
             label1.frame = CGRectMake(85,self.view.frame.size.height-40,400,40);
             label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
-            [self.view addSubview:myImageView];
-            [self.view addSubview:label1];
+            [view addSubview:myImageView];
+            [view addSubview:label1];
             break;
         }
         case GSG:
@@ -82,13 +85,14 @@
             label1.text = username;
             label1.frame = CGRectMake(85,self.view.frame.size.height-40,400,40);
             label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
-            [self.view addSubview:label1];
+            [view addSubview:label1];
             break;
         }
         case NONE:
         {
             UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(85, self.view.frame.size.height-40, 150, 40)];
             [login setTitle:@"Log In" forState:UIControlStateNormal];
+            [view addSubview:login];
             break;
         }
     }
@@ -97,6 +101,18 @@
 
     _players = [[NSMutableArray alloc] init];
 //    [_gameinvitations setContentSize:CGSizeMake(450,1400)];
+
+    
+    UIView* inviteView = [self.view viewWithTag:INVITATIONS_VIEW];
+    CGRect frame = CGRectMake(inviteView.bounds.origin.x + 5, inviteView.bounds.origin.y + 50,
+                              inviteView.bounds.size.width - 10, inviteView.bounds.size.height - 50);
+    InvitationsViewController* invites = [[InvitationsViewController alloc]
+                                          initWithFrame:frame
+                                          invitations:_gameServer.gameInvitations
+                                          target:self
+                                          selector:@selector(gotogame:)];
+    [self addChildViewController:invites];
+    [inviteView addSubview:invites.view];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -357,20 +373,6 @@
 
 }
 
-- (IBAction)showInvitations:(id)sender {
-   
-    [[_selectedMenu subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
-    
-    InvitationsViewController* invites = [[InvitationsViewController alloc]
-                                          initWithFrame:_selectedMenu.bounds
-                                          invitations:_gameServer.gameInvitations
-                                          target:self
-                                          selector:@selector(gotogame:)];
-    [self addChildViewController:invites];
-    [_selectedMenu addSubview:invites.view];
-    _selectedMenu.tag = INVITATIONS_VIEW;
-}
 
 -(void)gotogame:(GameRequest*) request
 {
@@ -394,21 +396,74 @@
 
 - (IBAction) showCreateGame:(id)sender
 {
-    if(_selectedMenu.tag == CREATE_VIEW) return;
-    
-    [[_selectedMenu subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
+    UIView* selectedMenu = [self.view viewWithTag:CREATE_VIEW];
     
     UIView* createView = [[[NSBundle mainBundle] loadNibNamed:@"CreateGameView" owner:self options:nil] objectAtIndex:0];
     
-    NSLog(@"size of view is %@", NSStringFromCGRect([UIScreen mainScreen].bounds));
-    [_selectedMenu addSubview:createView];
-    _selectedMenu.tag = CREATE_VIEW;
+    [selectedMenu addSubview:createView];
+    
+    [self resizeSubviews:CREATE_VIEW];
     
     UICollectionView* collection = (UICollectionView*)[createView viewWithTag:INVITE_COLLECTION];
     
     [collection registerClass:[UICollectionViewCell class]
                                       forCellWithReuseIdentifier:@"invite_cell"];
+    
+}
+
+
+- (IBAction) resetMainMenu:(id)sender
+{
+   for(UIView* v in [self.view subviews])
+   {
+       switch(v.tag)
+       {
+           case CREATE_VIEW:
+               
+               [[v viewWithTag:CREATE_WINDOW] removeFromSuperview];
+               break;
+           default: break;
+       }
+       [UIView animateWithDuration:.1f animations:^{
+           CGRect frame = v.frame;
+           frame.size.width = WINDOW_SIZE / [[self.view subviews] count];
+           frame.origin.x = frame.size.width * (v.tag - 1);
+           NSLog(@"%@, %@", NSStringFromCGRect(v.frame), NSStringFromCGRect(frame));
+           v.frame = frame;
+       }];
+   }
+}
+
+- (void) resizeSubviews:(int)tag
+{
+    for(UIView* v in [self.view subviews])
+    {
+        float wDelta = 1.f * EXPAND_SIZE/([[self.view subviews] count]);
+        float oDelta = wDelta;
+        if(v.tag < tag)
+        {
+            wDelta *= -1.f;
+            oDelta *= (v.tag-1) == 0 ? 0 : -1.0f/tag;
+        }
+        else if(v.tag > tag)
+        {
+            wDelta *= -1.f;
+            oDelta *= [[self.view subviews] count] - v.tag + 1;
+        }
+        else
+        {
+            wDelta *= [[self.view subviews] count] - 1;
+            oDelta *= -1.0f * (tag - 1);
+        }
+        
+        [UIView animateWithDuration:.1f animations:^{
+            CGRect frame = v.frame;
+            frame.size.width += wDelta;
+            frame.origin.x += oDelta;
+            v.frame = frame;
+        }];
+
+    }
 }
 
 - (IBAction)addplayer:(UIButton *)sender
@@ -485,7 +540,7 @@
 {
     NSLog(@"clicked");
     _players = friendPicker.selection;
-    UICollectionView* collection = (UICollectionView*)[_selectedMenu viewWithTag:INVITE_COLLECTION];
+    UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:INVITE_COLLECTION];
     [collection reloadData];
 }
 
@@ -666,7 +721,6 @@
 //    [self setAccountusername:nil];
 //    [self setAccountemail:nil];
 //    [self setGameinvitations:nil];
-    [self setSelectedMenu:nil];
     [super viewDidUnload];
 }
 

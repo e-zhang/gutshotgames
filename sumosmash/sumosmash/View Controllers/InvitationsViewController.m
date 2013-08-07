@@ -16,6 +16,8 @@
 
 @end
 
+#define CELL_SIZE 50
+
 @implementation InvitationsViewController
 
 - (id)initWithFrame:(CGRect)frame invitations:(GameInvitations *)invites
@@ -25,7 +27,7 @@
     if (self) {
         // Custom initialization
         UICollectionViewFlowLayout* layout = [[UICollectionViewFlowLayout alloc] init];
-        [layout setItemSize:CGSizeMake(75, 75)];
+        [layout setItemSize:CGSizeMake(CELL_SIZE, CELL_SIZE)];
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         UICollectionView* collection = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
         collection.backgroundColor = [UIColor clearColor];
@@ -108,11 +110,11 @@
     {
         UIButton *web = [[UIButton alloc] init];
         web.tag = indexPath.row;
-        web.frame = CGRectMake(0,0,75,75);
+        web.frame = CGRectMake(0,0,CELL_SIZE, CELL_SIZE);
         cell.layer.borderColor = [[UIColor blackColor] CGColor];
         cell.layer.borderWidth = 1.5;
         [web setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        web.titleLabel.font = [UIFont systemFontOfSize:11.0];
+        web.titleLabel.font = [UIFont systemFontOfSize:8.0];
         web.titleLabel.numberOfLines = 2;
         [web setTitle:[[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:GAME_ID] forState:UIControlStateNormal];
         [web addTarget:self action:@selector(gotogame:) forControlEvents:UIControlEventTouchUpInside];

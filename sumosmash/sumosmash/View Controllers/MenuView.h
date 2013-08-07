@@ -28,14 +28,13 @@
 @property (strong, nonatomic) Facebook *facebook;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *searchText;
-@property (strong, nonatomic) IBOutlet UIView *selectedMenu;
+//@property (strong, nonatomic) IBOutlet UIView *selectedMenu;
 
 @property (strong, nonatomic) NSArray *players;
 
 //createaccountbuttons
 - (IBAction)createviafb:(id)sender;
 
-- (IBAction)showInvitations:(id)sender;
 
 - (IBAction)showCreateGame:(id)sender;
 
@@ -46,6 +45,8 @@
 - (IBAction)submituser:(id) sender;
 
 - (IBAction)gotodojo:(id)sender;
+
+- (IBAction)resetMainMenu:(id) sender;
 
 - (NSDictionary*) getPlayer:(NSString*) username;
 - (NSDictionary*) getPlayerAccounts;
