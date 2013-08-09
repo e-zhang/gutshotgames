@@ -40,6 +40,7 @@
 		58B9C59D16EC5B5F00891C19 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C59C16EC5B5F00891C19 /* MessageUI.framework */; };
 		58B9C5A316EC5E5000891C19 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C5A216EC5E5000891C19 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E706AC26172F4F08008F2A1A /* InvitationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E706AC24172F4F08008F2A1A /* InvitationsViewController.m */; };
+		E72AE07E17B467F3008EC1A4 /* SavedGames.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AE07D17B467F2008EC1A4 /* SavedGames.m */; };
 		E72AF8C31713967000BC1E04 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AF89C1713967000BC1E04 /* AppDelegate.m */; };
 		E72AF8C41713967000BC1E04 /* back.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E72AF89D1713967000BC1E04 /* back.mp3 */; };
 		E72AF8C51713967000BC1E04 /* button-50.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E72AF89E1713967000BC1E04 /* button-50.mp3 */; };
@@ -124,6 +125,8 @@
 		58B9C5A216EC5E5000891C19 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E706AC23172F4F08008F2A1A /* InvitationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvitationsViewController.h; sourceTree = "<group>"; };
 		E706AC24172F4F08008F2A1A /* InvitationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvitationsViewController.m; sourceTree = "<group>"; };
+		E72AE07C17B467F2008EC1A4 /* SavedGames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGames.h; sourceTree = "<group>"; };
+		E72AE07D17B467F2008EC1A4 /* SavedGames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGames.m; sourceTree = "<group>"; };
 		E72AF89B1713967000BC1E04 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E72AF89C1713967000BC1E04 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E72AF89D1713967000BC1E04 /* back.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = back.mp3; sourceTree = "<group>"; };
@@ -322,6 +325,8 @@
 			children = (
 				E72AF8B61713967000BC1E04 /* Character.h */,
 				E72AF8B71713967000BC1E04 /* Character.m */,
+				E72AE07C17B467F2008EC1A4 /* SavedGames.h */,
+				E72AE07D17B467F2008EC1A4 /* SavedGames.m */,
 				E72AF8B81713967000BC1E04 /* GameInfo.h */,
 				E72AF8B91713967000BC1E04 /* GameInfo.m */,
 				E72AF8BA1713967000BC1E04 /* GameRequest.h */,
@@ -574,6 +579,7 @@
 				E79D7B7C172488BE007972E0 /* GameView.m in Sources */,
 				E79D7B7D172488BE007972E0 /* MenuView.m in Sources */,
 				E706AC26172F4F08008F2A1A /* InvitationsViewController.m in Sources */,
+				E72AE07E17B467F3008EC1A4 /* SavedGames.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

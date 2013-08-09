@@ -388,15 +388,19 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (void) onRoundStart
 {
+    if(![_game isGameOver]) return;
+    
     _countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                        target:self
                                                      selector:@selector(countdown)
                                                      userInfo:nil
-                                                      repeats:YES];
+                                                    repeats:YES];
 }
 
 -(void) countdown
 {
+    if([_game isGameOver]) return;
+    
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
     [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];

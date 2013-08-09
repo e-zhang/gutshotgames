@@ -12,7 +12,7 @@
 
 @implementation Server
 
-@synthesize user=_user, gameInvitations=_userInvitations;
+@synthesize user=_user, gameInvitations=_userInvitations, savedGames = _savedGames;
 
 NSString* const SERVER_HOST = @"sumowars.cloudant.com";
 const int SERVER_PORT = 443;
@@ -76,8 +76,20 @@ const int SERVER_PORT = 443;
 //    NSLog(@"whereyouat-%@", sup.properties);
     
     [self initUser];
+    [self initSavedGames];
     
     return self;
+}
+
+
+-(void) initSavedGames
+{
+    _savedGames = [SavedGames modelForDocument:[_localInfo documentWithID:@"savedgames"]];
+    
+    if(!_savedGames.savedGames)
+    {
+        _savedGames.savedGames = [[NSArray alloc] init];
+    }
 }
 
 -(void) initUser
@@ -139,6 +151,20 @@ const int SERVER_PORT = 443;
 -(GameInvitations*) getUserUpdate:(NSString*)player
 {
     return [GameInvitations modelForDocument:[_gameInvites documentWithID:player]];
+}
+
+-(void) saveCreatedGame:(GameInfo *)game
+{
+    NSMutableArray* gameList = [_savedGames.savedGames mutableCopy];
+    NSDictionary* saveG = [NSDictionary dictionaryWithObjectsAndKeys:game.gameName, @"name", [game.players allKeys], @"players", nil];
+    [gameList insertObject:saveG atIndex:0];
+    if([gameList count] > 5)
+    {
+        [gameList removeLastObject];
+    }
+    
+    _savedGames.savedGames = gameList;
+    [[_savedGames save] wait];
 }
 
 @end

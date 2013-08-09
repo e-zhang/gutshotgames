@@ -113,6 +113,10 @@
                                           selector:@selector(gotogame:)];
     [self addChildViewController:invites];
     [inviteView addSubview:invites.view];
+    
+    UICollectionView* collection = (UICollectionView*)[self.view viewWithTag:SAVED_GAMES];
+    
+    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"game_cell"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -679,33 +683,59 @@
     
     GameInfo* newg = [_gameServer createNewGame:uuidStr];
     newg.gameName = uuidStr;
+
+    [self startNewGame:newg];
+}
+
+
+-(void) startNewGame:(GameInfo*) newg
+{
     newg.hostId = _gameServer.user.userid;
- 
-    NSDictionary* playerAccounts = [self getPlayerAccounts];
-    
-    [self sendRequests:uuidStr toPlayers:playerAccounts];
-    
     newg.currentRound = [NSNumber numberWithInt:-1];
     newg.gameData = [[NSArray alloc] init];
-    newg.players = playerAccounts;
     newg.roundBuffer = [NSNumber numberWithInt:5];
     newg.timeInterval = [NSNumber numberWithInt:10];
-
+    
+    NSDictionary* playerAccounts = [self getPlayerAccounts];
+    newg.players = playerAccounts;
+    
+    [self sendRequests:newg.gameName toPlayers:playerAccounts];
+    
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}
+    
+    [_gameServer saveCreatedGame:newg];
+    
+    UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
+    [collection reloadData];
     
     [newg joinGame:_gameServer.user.userid];
     
     self.gamewindow = [[GameView alloc] initWithNibName:@"GameView" bundle:nil
-                                                 gameInfo:newg myid:_gameServer.user.userid];
+                                               gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;
     
     [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     
     [self presentViewController:self.gamewindow animated:YES completion:nil];
-
-
 }
+
+
+-(void) recreateGame:(UIButton*) sender
+{
+    NSDictionary* game = [_gameServer.savedGames.savedGames objectAtIndex:sender.tag];
+    _players = [game objectForKey:@"players"];
+    
+    CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *uuidStr = (__bridge_transfer NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuidObject);
+    CFRelease(uuidObject);
+    
+    GameInfo* newg = [_gameServer createNewGame:uuidStr];
+    newg.gameName = uuidStr;
+    
+    [self startNewGame:newg];
+}
+
 
 - (IBAction)gotodojo:(id)sender {
   //  self.gamewindow = [[GameView alloc] initWithNibName:@"GameView" bundle:nil gameid:@"002674AC-F9CB-4DD8-93E3-A541FA7339A6" myid:_myid];
@@ -727,9 +757,18 @@
 
 // UICollectionViewDataSource
 
+// switch between invitees and saved games
 // 1
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-    return [_players count];
+    switch (view.tag)
+    {
+        case INVITE_COLLECTION:
+            return [_players count];
+        case SAVED_GAMES:
+            return [_gameServer.savedGames.savedGames count];
+    }
+    
+    return 0;
 }
 // 2
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
@@ -737,6 +776,47 @@
 }
 // 0
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    switch(cv.tag)
+    {
+        case INVITE_COLLECTION:
+            return [self cellForInvites:cv atIndexPath:indexPath];
+        case SAVED_GAMES:
+            return [self cellForGames:cv atIndexPath:indexPath];
+    }
+    
+    return [[UICollectionViewCell alloc] init];
+}
+
+-(UICollectionViewCell*)cellForGames:(UICollectionView*)cv atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"game_cell" forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
+    UIButton* label;
+    if([[cell.contentView subviews] count] == 0)
+    {
+        label = [[UIButton alloc] initWithFrame:CGRectMake(5,0,48,48)];
+        cell.layer.borderColor = [[UIColor grayColor] CGColor];
+        cell.layer.borderWidth = 1.5;
+        label.tag = indexPath.row;
+        label.titleLabel.lineBreakMode = UILineBreakModeWordWrap;
+        label.titleLabel.font = [UIFont systemFontOfSize:9.0];
+        [label.titleLabel adjustsFontSizeToFitWidth];
+        [label setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [cell.contentView addSubview:label];
+        [label addTarget:self action:@selector(recreateGame:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else{
+        label = (UIButton*)[[cell.contentView subviews] objectAtIndex:0];
+    }
+    
+    NSDictionary* game = [_gameServer.savedGames.savedGames objectAtIndex:indexPath.row];
+    [label setTitle:[NSString stringWithFormat:@"Game ID: %@\n # of players:%d",
+                               [game objectForKey:@"name"], [[game objectForKey:@"players"] count]] forState:UIControlStateNormal];
+    return cell;
+}
+
+-(UICollectionViewCell*)cellForInvites:(UICollectionView*)cv atIndexPath:(NSIndexPath *)indexPath
+{
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"invite_cell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
     UILabel* label = (UILabel*)[cell.contentView viewWithTag:INVITE_COLLECTION];

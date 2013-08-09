@@ -15,11 +15,12 @@
 
 #define INVITE_COLLECTION 4
 #define CREATE_WINDOW 5
+#define SAVED_GAMES 6
 
-#define SUBMIT_BUTTON 6
-#define RESTART_BUTTON 7
+#define SUBMIT_BUTTON 7
+#define RESTART_BUTTON 8
 
-#define HEADER_TAG 8
-#define MESSAGE_TAG 9
+#define HEADER_TAG 9
+#define MESSAGE_TAG 10
 
 #endif
