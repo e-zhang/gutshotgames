@@ -7,20 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5888F91D174CC1C900046BDF /* sumo attack 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F90F174CC1C900046BDF /* sumo attack 1.png */; };
-		5888F91E174CC1C900046BDF /* sumo attack 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F910174CC1C900046BDF /* sumo attack 2.png */; };
-		5888F91F174CC1C900046BDF /* sumo attack 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F911174CC1C900046BDF /* sumo attack 3.png */; };
-		5888F920174CC1C900046BDF /* sumo attack 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F912174CC1C900046BDF /* sumo attack 4.png */; };
-		5888F921174CC1C900046BDF /* sumo defend 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F913174CC1C900046BDF /* sumo defend 1.png */; };
-		5888F922174CC1C900046BDF /* sumo fall 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F914174CC1C900046BDF /* sumo fall 1.png */; };
-		5888F923174CC1C900046BDF /* sumo fall 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F915174CC1C900046BDF /* sumo fall 2.png */; };
-		5888F924174CC1C900046BDF /* sumo get 5 points.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F916174CC1C900046BDF /* sumo get 5 points.png */; };
-		5888F925174CC1C900046BDF /* sumo super 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F917174CC1C900046BDF /* sumo super 1.png */; };
-		5888F926174CC1C900046BDF /* sumo walk 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F918174CC1C900046BDF /* sumo walk 1.png */; };
-		5888F927174CC1C900046BDF /* sumo walk 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F919174CC1C900046BDF /* sumo walk 2.png */; };
-		5888F928174CC1C900046BDF /* sumo walk 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F91A174CC1C900046BDF /* sumo walk 3.png */; };
-		5888F929174CC1C900046BDF /* sumo standing.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F91B174CC1C900046BDF /* sumo standing.png */; };
-		5888F92A174CC1C900046BDF /* sumo standing2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5888F91C174CC1C900046BDF /* sumo standing2.png */; };
+		58195D5C17B658FF0095442B /* GameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5A17B658FF0095442B /* GameView.xib */; };
+		58195D6A17B6627D0095442B /* umbrella defend! defend player view.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5D17B6627C0095442B /* umbrella defend! defend player view.png */; };
+		58195D6B17B6627D0095442B /* umbrella defend! opposing player view.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5E17B6627C0095442B /* umbrella defend! opposing player view.png */; };
+		58195D6C17B6627D0095442B /* golf wars swing super 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5F17B6627C0095442B /* golf wars swing super 5.png */; };
+		58195D6D17B6627D0095442B /* golf wars swing super 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6017B6627C0095442B /* golf wars swing super 4.png */; };
+		58195D6E17B6627D0095442B /* golf wars swing super 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6117B6627C0095442B /* golf wars swing super 3.png */; };
+		58195D6F17B6627D0095442B /* golf wars swing super 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6217B6627C0095442B /* golf wars swing super 2.png */; };
+		58195D7017B6627D0095442B /* golf wars swing super 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6317B6627C0095442B /* golf wars swing super 1.png */; };
+		58195D7117B6627D0095442B /* golf wars front swing.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6417B6627C0095442B /* golf wars front swing.png */; };
+		58195D7217B6627D0095442B /* golf wars normal 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6517B6627C0095442B /* golf wars normal 5.png */; };
+		58195D7317B6627D0095442B /* golf wars normal 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6617B6627D0095442B /* golf wars normal 4.png */; };
+		58195D7417B6627D0095442B /* golf wars normal 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6717B6627D0095442B /* golf wars normal 3.png */; };
+		58195D7517B6627D0095442B /* golf wars normal 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6817B6627D0095442B /* golf wars normal 1.png */; };
+		58195D7617B6627D0095442B /* golf wars normal 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D6917B6627D0095442B /* golf wars normal 2.png */; };
+		58195D7B17B662930095442B /* icon defend.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7717B662930095442B /* icon defend.png */; };
+		58195D7C17B662930095442B /* icon get 5 points.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7817B662930095442B /* icon get 5 points.png */; };
+		58195D7D17B662930095442B /* icon normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7917B662930095442B /* icon normal.png */; };
+		58195D7E17B662930095442B /* icon super.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7A17B662930095442B /* icon super.png */; };
 		58B9C50116EC535B00891C19 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50016EC535B00891C19 /* UIKit.framework */; };
 		58B9C50316EC535B00891C19 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50216EC535B00891C19 /* Foundation.framework */; };
 		58B9C50516EC535B00891C19 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50416EC535B00891C19 /* CoreGraphics.framework */; };
@@ -70,7 +74,7 @@
 		E79D7B7C172488BE007972E0 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B77172488BE007972E0 /* GameView.m */; };
 		E79D7B7D172488BE007972E0 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = E79D7B79172488BE007972E0 /* MenuView.m */; };
 		E79D7B901728AA8D007972E0 /* CreateGameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8A1728AA8C007972E0 /* CreateGameView.xib */; };
-		E79D7B911728AA8D007972E0 /* GameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8B1728AA8D007972E0 /* GameView.xib */; };
+		E79D7B911728AA8D007972E0 /* GameView(old).xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8B1728AA8D007972E0 /* GameView(old).xib */; };
 		E79D7B921728AA8D007972E0 /* InvitationsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8C1728AA8D007972E0 /* InvitationsView.xib */; };
 		E79D7B931728AA8D007972E0 /* InvitePopupScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8D1728AA8D007972E0 /* InvitePopupScreen.xib */; };
 		E79D7B951728AA8D007972E0 /* Waitscreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8F1728AA8D007972E0 /* Waitscreen.xib */; };
@@ -89,20 +93,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5888F90F174CC1C900046BDF /* sumo attack 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 1.png"; sourceTree = "<group>"; };
-		5888F910174CC1C900046BDF /* sumo attack 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 2.png"; sourceTree = "<group>"; };
-		5888F911174CC1C900046BDF /* sumo attack 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 3.png"; sourceTree = "<group>"; };
-		5888F912174CC1C900046BDF /* sumo attack 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo attack 4.png"; sourceTree = "<group>"; };
-		5888F913174CC1C900046BDF /* sumo defend 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo defend 1.png"; sourceTree = "<group>"; };
-		5888F914174CC1C900046BDF /* sumo fall 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo fall 1.png"; sourceTree = "<group>"; };
-		5888F915174CC1C900046BDF /* sumo fall 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo fall 2.png"; sourceTree = "<group>"; };
-		5888F916174CC1C900046BDF /* sumo get 5 points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo get 5 points.png"; sourceTree = "<group>"; };
-		5888F917174CC1C900046BDF /* sumo super 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo super 1.png"; sourceTree = "<group>"; };
-		5888F918174CC1C900046BDF /* sumo walk 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo walk 1.png"; sourceTree = "<group>"; };
-		5888F919174CC1C900046BDF /* sumo walk 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo walk 2.png"; sourceTree = "<group>"; };
-		5888F91A174CC1C900046BDF /* sumo walk 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo walk 3.png"; sourceTree = "<group>"; };
-		5888F91B174CC1C900046BDF /* sumo standing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo standing.png"; sourceTree = "<group>"; };
-		5888F91C174CC1C900046BDF /* sumo standing2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sumo standing2.png"; sourceTree = "<group>"; };
+		58195D5A17B658FF0095442B /* GameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameView.xib; sourceTree = "<group>"; };
+		58195D5D17B6627C0095442B /* umbrella defend! defend player view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "umbrella defend! defend player view.png"; sourceTree = "<group>"; };
+		58195D5E17B6627C0095442B /* umbrella defend! opposing player view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "umbrella defend! opposing player view.png"; sourceTree = "<group>"; };
+		58195D5F17B6627C0095442B /* golf wars swing super 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars swing super 5.png"; sourceTree = "<group>"; };
+		58195D6017B6627C0095442B /* golf wars swing super 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars swing super 4.png"; sourceTree = "<group>"; };
+		58195D6117B6627C0095442B /* golf wars swing super 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars swing super 3.png"; sourceTree = "<group>"; };
+		58195D6217B6627C0095442B /* golf wars swing super 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars swing super 2.png"; sourceTree = "<group>"; };
+		58195D6317B6627C0095442B /* golf wars swing super 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars swing super 1.png"; sourceTree = "<group>"; };
+		58195D6417B6627C0095442B /* golf wars front swing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars front swing.png"; sourceTree = "<group>"; };
+		58195D6517B6627C0095442B /* golf wars normal 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars normal 5.png"; sourceTree = "<group>"; };
+		58195D6617B6627D0095442B /* golf wars normal 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars normal 4.png"; sourceTree = "<group>"; };
+		58195D6717B6627D0095442B /* golf wars normal 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars normal 3.png"; sourceTree = "<group>"; };
+		58195D6817B6627D0095442B /* golf wars normal 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars normal 1.png"; sourceTree = "<group>"; };
+		58195D6917B6627D0095442B /* golf wars normal 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "golf wars normal 2.png"; sourceTree = "<group>"; };
+		58195D7717B662930095442B /* icon defend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon defend.png"; sourceTree = "<group>"; };
+		58195D7817B662930095442B /* icon get 5 points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon get 5 points.png"; sourceTree = "<group>"; };
+		58195D7917B662930095442B /* icon normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon normal.png"; sourceTree = "<group>"; };
+		58195D7A17B662930095442B /* icon super.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon super.png"; sourceTree = "<group>"; };
 		58B9C4FD16EC535B00891C19 /* sumosmash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sumosmash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B9C50016EC535B00891C19 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		58B9C50216EC535B00891C19 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -212,7 +220,7 @@
 		E79D7B78172488BE007972E0 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
 		E79D7B79172488BE007972E0 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
 		E79D7B8A1728AA8C007972E0 /* CreateGameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CreateGameView.xib; path = Views/CreateGameView.xib; sourceTree = "<group>"; };
-		E79D7B8B1728AA8D007972E0 /* GameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GameView.xib; path = Views/GameView.xib; sourceTree = "<group>"; };
+		E79D7B8B1728AA8D007972E0 /* GameView(old).xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "GameView(old).xib"; path = "Views/GameView(old).xib"; sourceTree = "<group>"; };
 		E79D7B8C1728AA8D007972E0 /* InvitationsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InvitationsView.xib; path = Views/InvitationsView.xib; sourceTree = "<group>"; };
 		E79D7B8D1728AA8D007972E0 /* InvitePopupScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InvitePopupScreen.xib; path = Views/InvitePopupScreen.xib; sourceTree = "<group>"; };
 		E79D7B8F1728AA8D007972E0 /* Waitscreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = Waitscreen.xib; path = Views/Waitscreen.xib; sourceTree = "<group>"; };
@@ -347,20 +355,23 @@
 		E72AF8DA1713967500BC1E04 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				5888F90F174CC1C900046BDF /* sumo attack 1.png */,
-				5888F910174CC1C900046BDF /* sumo attack 2.png */,
-				5888F911174CC1C900046BDF /* sumo attack 3.png */,
-				5888F912174CC1C900046BDF /* sumo attack 4.png */,
-				5888F913174CC1C900046BDF /* sumo defend 1.png */,
-				5888F914174CC1C900046BDF /* sumo fall 1.png */,
-				5888F915174CC1C900046BDF /* sumo fall 2.png */,
-				5888F916174CC1C900046BDF /* sumo get 5 points.png */,
-				5888F917174CC1C900046BDF /* sumo super 1.png */,
-				5888F918174CC1C900046BDF /* sumo walk 1.png */,
-				5888F919174CC1C900046BDF /* sumo walk 2.png */,
-				5888F91A174CC1C900046BDF /* sumo walk 3.png */,
-				5888F91B174CC1C900046BDF /* sumo standing.png */,
-				5888F91C174CC1C900046BDF /* sumo standing2.png */,
+				58195D7717B662930095442B /* icon defend.png */,
+				58195D7817B662930095442B /* icon get 5 points.png */,
+				58195D7917B662930095442B /* icon normal.png */,
+				58195D7A17B662930095442B /* icon super.png */,
+				58195D5D17B6627C0095442B /* umbrella defend! defend player view.png */,
+				58195D5E17B6627C0095442B /* umbrella defend! opposing player view.png */,
+				58195D5F17B6627C0095442B /* golf wars swing super 5.png */,
+				58195D6017B6627C0095442B /* golf wars swing super 4.png */,
+				58195D6117B6627C0095442B /* golf wars swing super 3.png */,
+				58195D6217B6627C0095442B /* golf wars swing super 2.png */,
+				58195D6317B6627C0095442B /* golf wars swing super 1.png */,
+				58195D6417B6627C0095442B /* golf wars front swing.png */,
+				58195D6517B6627C0095442B /* golf wars normal 5.png */,
+				58195D6617B6627D0095442B /* golf wars normal 4.png */,
+				58195D6717B6627D0095442B /* golf wars normal 3.png */,
+				58195D6817B6627D0095442B /* golf wars normal 1.png */,
+				58195D6917B6627D0095442B /* golf wars normal 2.png */,
 				E72AF89B1713967000BC1E04 /* AppDelegate.h */,
 				E72AF89C1713967000BC1E04 /* AppDelegate.m */,
 				E72AF8AF1713967000BC1E04 /* main.m */,
@@ -380,10 +391,10 @@
 		E72AF8DB1713969000BC1E04 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				58195D5A17B658FF0095442B /* GameView.xib */,
 				E79B03FC17A898C400C81BE7 /* MenuView.xib */,
 				E79B03FB17A898A700C81BE7 /* old */,
 				E79D7B8A1728AA8C007972E0 /* CreateGameView.xib */,
-				E79D7B8B1728AA8D007972E0 /* GameView.xib */,
 				E79D7B8C1728AA8D007972E0 /* InvitationsView.xib */,
 				E79D7B8D1728AA8D007972E0 /* InvitePopupScreen.xib */,
 				E79D7B8F1728AA8D007972E0 /* Waitscreen.xib */,
@@ -441,6 +452,7 @@
 		E79B03FB17A898A700C81BE7 /* old */ = {
 			isa = PBXGroup;
 			children = (
+				E79D7B8B1728AA8D007972E0 /* GameView(old).xib */,
 			);
 			name = old;
 			sourceTree = "<group>";
@@ -533,25 +545,29 @@
 				E72AF8CD1713967000BC1E04 /* InfoPlist.strings in Resources */,
 				E72AF8D91713967100BC1E04 /* sumosmash-Info.plist in Resources */,
 				E79D7B901728AA8D007972E0 /* CreateGameView.xib in Resources */,
-				E79D7B911728AA8D007972E0 /* GameView.xib in Resources */,
+				E79D7B911728AA8D007972E0 /* GameView(old).xib in Resources */,
 				E79D7B921728AA8D007972E0 /* InvitationsView.xib in Resources */,
 				E79D7B931728AA8D007972E0 /* InvitePopupScreen.xib in Resources */,
 				E79D7B951728AA8D007972E0 /* Waitscreen.xib in Resources */,
-				5888F91D174CC1C900046BDF /* sumo attack 1.png in Resources */,
-				5888F91E174CC1C900046BDF /* sumo attack 2.png in Resources */,
-				5888F91F174CC1C900046BDF /* sumo attack 3.png in Resources */,
-				5888F920174CC1C900046BDF /* sumo attack 4.png in Resources */,
-				5888F921174CC1C900046BDF /* sumo defend 1.png in Resources */,
-				5888F922174CC1C900046BDF /* sumo fall 1.png in Resources */,
-				5888F923174CC1C900046BDF /* sumo fall 2.png in Resources */,
-				5888F924174CC1C900046BDF /* sumo get 5 points.png in Resources */,
-				5888F925174CC1C900046BDF /* sumo super 1.png in Resources */,
-				5888F926174CC1C900046BDF /* sumo walk 1.png in Resources */,
-				5888F927174CC1C900046BDF /* sumo walk 2.png in Resources */,
-				5888F928174CC1C900046BDF /* sumo walk 3.png in Resources */,
-				5888F929174CC1C900046BDF /* sumo standing.png in Resources */,
-				5888F92A174CC1C900046BDF /* sumo standing2.png in Resources */,
 				E79B03FD17A898C400C81BE7 /* MenuView.xib in Resources */,
+				58195D5C17B658FF0095442B /* GameView.xib in Resources */,
+				58195D6A17B6627D0095442B /* umbrella defend! defend player view.png in Resources */,
+				58195D6B17B6627D0095442B /* umbrella defend! opposing player view.png in Resources */,
+				58195D6C17B6627D0095442B /* golf wars swing super 5.png in Resources */,
+				58195D6D17B6627D0095442B /* golf wars swing super 4.png in Resources */,
+				58195D6E17B6627D0095442B /* golf wars swing super 3.png in Resources */,
+				58195D6F17B6627D0095442B /* golf wars swing super 2.png in Resources */,
+				58195D7017B6627D0095442B /* golf wars swing super 1.png in Resources */,
+				58195D7117B6627D0095442B /* golf wars front swing.png in Resources */,
+				58195D7217B6627D0095442B /* golf wars normal 5.png in Resources */,
+				58195D7317B6627D0095442B /* golf wars normal 4.png in Resources */,
+				58195D7417B6627D0095442B /* golf wars normal 3.png in Resources */,
+				58195D7517B6627D0095442B /* golf wars normal 1.png in Resources */,
+				58195D7617B6627D0095442B /* golf wars normal 2.png in Resources */,
+				58195D7B17B662930095442B /* icon defend.png in Resources */,
+				58195D7C17B662930095442B /* icon get 5 points.png in Resources */,
+				58195D7D17B662930095442B /* icon normal.png in Resources */,
+				58195D7E17B662930095442B /* icon super.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

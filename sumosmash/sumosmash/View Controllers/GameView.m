@@ -24,33 +24,18 @@
 
 #define ARENA_RADIUS 80
 
-typedef enum{
-    twplayer1x = 50,
-    twplayer1y = 0,
-    twrota = 160,
-    twplayer2x = 450,
-    twplayer2y = 0,
-    twrotb = 0
-} twoplayergame;
-
-typedef enum{
-    thplayer1x = 50,
-    thplayer1y = 0,
-    throta = -34,
-    thplayer2x = 450,
-    thplayer2y = 0,
-    throtb = -70,
-    thplayer3x = 50,
-    thplayer3y = 80,
-    throtc = 70,
-} threeplayergame;
-
-typedef enum{
-    foplayer1x = 200,
-    foplayer1y = 50,
-    foplayer2x = 500,
-    foplayer2y = 50,
-} fourplayergame;
+enum{
+    c1x = 200,
+    c1y = 180,
+    c2x = 200,
+    c2y = 50,
+    c3x = 100,
+    c3y = 10,
+    c4x = 285,
+    c4y = 10,
+    c5x = 10,
+    c5y = 50
+} coordinates;
 
 @interface GameView ()
 
@@ -113,15 +98,17 @@ NSString * const messageWatermark = @"Send a message...";
     
     CGFloat angleSize = 2*M_PI/[_game.players count];
     
+    [self reset];
     for (int i = 0; i < [players count]; ++i)
     {
+        int oppnum = 0;
         NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
         
         CharacterViewController* character = [[CharacterViewController alloc] initWithId: [player objectForKey:DB_USER_ID]
                                                                                     name:[player objectForKey:DB_USER_NAME]
                                                                                   selfId:_myPlayerId
                                                                                 delegate:self];
-        NSString* fbid = [player objectForKey:DB_FB_ID];
+        /*NSString* fbid = [player objectForKey:DB_FB_ID];
         if(fbid)
         {
             NSString *path = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",
@@ -129,7 +116,7 @@ NSString * const messageWatermark = @"Send a message...";
             
             [character setUserPic:path];
             
-        }
+        }*/
         
               
         if([[player objectForKey:DB_CONNECTED] boolValue])
@@ -144,19 +131,34 @@ NSString * const messageWatermark = @"Send a message...";
         
         [self addChildViewController:character];
         
-        double x = cos(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.width/2 - 50;
-        double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 60;
-
-        character.view.frame =  CGRectMake(x,
-                                           y,
-                                           PLAYER_WIDTH,
-                                           PLAYER_HEIGHT);
+     //   double x = cos(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.width/2 - 50;
+     //   double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 60;
+        if([_myPlayerId isEqual:character.Char.Id]){
+            character.view.frame = CGRectMake(c1x,c1y,50,100);
+            [character setCharacterImage:0];
+        }
+        else{
+            [character setCharacterImage:1];
+            if(oppnum==0){
+                character.view.frame = CGRectMake(c2x,c2y,50,100);
+            }
+            if(oppnum==1){
+                character.view.frame = CGRectMake(c3x,c3y,50,100);
+            }
+            if(oppnum==2){
+                character.view.frame = CGRectMake(c4x,c4y,50,100);
+            }
+            if(oppnum==3){
+                character.view.frame = CGRectMake(c5x,c5y,50,100);
+            }
+            oppnum++;
+        }
         
-        [_gamezone addSubview:character.view];
+        [self.view addSubview:character.view];
         [_characters setObject:character.Char forKey:character.Char.Id];
         
         //animationzone
-        UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+      /*  UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
         if (i+1 % 2 && i!=0){
             one.frame = CGRectMake(450,80*(i-1),75,75);
         }
@@ -174,7 +176,7 @@ NSString * const messageWatermark = @"Send a message...";
         one.animationDuration = 0.75;
         one.animationRepeatCount = 0;
         [one startAnimating];
-        [_animationzone addSubview:one];
+        [_animationzone addSubview:one];*/
         
     }
 
@@ -195,8 +197,8 @@ NSString * const messageWatermark = @"Send a message...";
 {
     [self startGame];
     
-    [[_gamezone viewWithTag:SUBMIT_BUTTON] setHidden:NO];
-    UIView* restart = [_gamezone viewWithTag:RESTART_BUTTON];
+    [[self.view viewWithTag:SUBMIT_BUTTON] setHidden:NO];
+    UIView* restart = [self.view viewWithTag:RESTART_BUTTON];
     if(restart)
     {
         [restart setHidden:YES];
@@ -219,22 +221,22 @@ NSString * const messageWatermark = @"Send a message...";
      //   _animationzone.backgroundColor = [UIColor yellowColor];
         [self.view addSubview:_animationzone];
         
-        [self.view addSubview:_gamezone];
+     //   [self.view addSubview:_gamezone];
         _game = game;
         [_game.gameChat setDelegate:self];
         [_game setDelegate:self];
         
         _selectedMove = [Move GetDefaultMove];
         
-        _status = [[UILabel alloc] initWithFrame:CGRectMake(90, 0, 75, 30)];
+        _status = [[UILabel alloc] initWithFrame:CGRectMake(10, 80, 75, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
-        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(0, 250, 300, 400)];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(10, 125, 160, 400)];
         _gameInfo.editable = NO;
         _gameInfo.userInteractionEnabled = YES;
         _gameInfo.scrollEnabled = YES;
         _gameInfo.font = [UIFont systemFontOfSize:9.0];
         
-        UIButton* submit = [[UIButton alloc] initWithFrame:CGRectMake(90, 30, 70, 25)];
+        UIButton* submit = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 70, 25)];
         [submit setTitle:@"Submit Move" forState:UIControlStateNormal];
         [submit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         submit.titleLabel.font = [UIFont systemFontOfSize:10.0];
@@ -244,7 +246,7 @@ NSString * const messageWatermark = @"Send a message...";
         submit.showsTouchWhenHighlighted = YES;
         submit.tag = SUBMIT_BUTTON;
         [submit addTarget:self action:@selector(submitMove:) forControlEvents:UIControlEventTouchUpInside];
-        [_gamezone addSubview:submit];
+        [self.view addSubview:submit];
         
         if([myid isEqual:_game.hostId])
         {
@@ -259,13 +261,13 @@ NSString * const messageWatermark = @"Send a message...";
             restart.tag = RESTART_BUTTON;
             [restart addTarget:self action:@selector(restartGame:) forControlEvents:UIControlEventTouchUpInside];
             [restart setHidden:YES];
-            [_gamezone addSubview:restart];
+            [self.view addSubview:restart];
         }
         
         _countdownLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 50, 100, 25)];
         [_countdownLabel setText:@""];
         _countdownLabel.font = [UIFont systemFontOfSize:10.0];
-        [_gamezone addSubview:_countdownLabel];
+        [self.view addSubview:_countdownLabel];
         
         NSLog(@"game starting with id %@", _game.gameName);
         _characters = [[NSMutableDictionary alloc] initWithCapacity:[_game.players count]];
@@ -299,8 +301,8 @@ NSString * const messageWatermark = @"Send a message...";
             [self startGame];
         }
         
-        [_gamezone addSubview:_status];
-        [_gamezone addSubview:_gameInfo];
+        [self.view addSubview:_status];
+        [_righthandinfo addSubview:_gameInfo];
         [_game initializeGame];
     }
     return self;
@@ -529,8 +531,8 @@ NSString * const messageWatermark = @"Send a message...";
     if([_game isGameOver])
     {
         _status.text = @"Game Over";
-        [[_gamezone viewWithTag:SUBMIT_BUTTON] setHidden:YES];
-        UIView* restart = [_gamezone viewWithTag:RESTART_BUTTON];
+        [[self.view viewWithTag:SUBMIT_BUTTON] setHidden:YES];
+        UIView* restart = [self.view viewWithTag:RESTART_BUTTON];
         if(restart)
         {
             [restart setHidden:NO];
@@ -599,74 +601,6 @@ NSString * const messageWatermark = @"Send a message...";
     int fallrotation=1;
     NSArray* players = [_game.players allKeys];
 
-    if([players count]==2){
-        if(playernum==101){
-            tpg = twplayer2x - 80;
-            tpgy = twplayer2y;
-            org = twplayer1x;
-            orgy = twplayer1y;
-            rotation = -1;
-            fallrotation = 1;
-        }
-        if(playernum==102){
-            tpg = twplayer1x + 80;
-            tpgy = twplayer1y;
-            org = twplayer2x;
-            orgy = twplayer2y;
-            rotation = 1;
-            fallrotation = -1;
-        }
-    }
-    if([players count]==3){
-        if(playernum==101){
-            org = thplayer1x;
-            orgy = thplayer1y;
-            if(playernum1==102){
-                tpg = thplayer2x - 80;
-                tpgy = thplayer2y - 80;
-                rotation = -1;
-                fallrotation = 1;
-            }
-            if(playernum1==103){
-                tpg = thplayer3x - 80;
-                tpgy = thplayer3y + 80;
-                rotation = -1;
-                fallrotation = 1;
-            }
-        }
-        if(playernum==102){
-            org = thplayer2x;
-            orgy = thplayer2y;
-            if(playernum1==101){
-                tpg = thplayer1x + 80;
-                tpgy = thplayer1y;
-                rotation = -70;
-                fallrotation = 1;
-            }
-            if(playernum1==103){
-                tpg = thplayer3x - 80;
-                tpgy = thplayer3y + 80;
-                rotation = -70;
-                fallrotation = 1;
-            }
-        }
-        if(playernum==103){
-            org = thplayer3x;
-            orgy = thplayer3y;
-            if(playernum1==101){
-                tpg = thplayer1x + 80;
-                tpgy = thplayer1y;
-                rotation = 1;
-                fallrotation = 1;
-            }
-            if(playernum1==102){
-                tpg = thplayer3x - 80;
-                tpgy = thplayer3y - 80;
-                rotation = 1;
-                fallrotation = 1;
-            }
-        }
-    }
     NSLog(@"below");
     [attacker stopAnimating];
     
@@ -772,79 +706,6 @@ NSString * const messageWatermark = @"Send a message...";
     int rotation=1, rotationb=1;
     int fallrotation=1, fallrotationb=1;
     NSArray* players = [_game.players allKeys];
-    
-    if([players count]==2){
-        if(playernum==101){
-            tpg = 240;
-            tpgy = 0;
-            org = twplayer1x;
-            orgy = twplayer1y;
-            rotation = -1;
-            fallrotation = 1;
-        }
-        if(playernum==102){
-            tpg = 240;
-            tpgy = 0;
-            org = twplayer2x;
-            orgy = twplayer2y;
-            rotation = 1;
-            fallrotation = -1;
-        }
-        
-        if(playernum1==101){
-            tpgb = 300;
-            tpgyb = 0;
-            orgb = twplayer1x;
-            orgyb = twplayer1y;
-            rotationb = -1;
-            fallrotationb = 1;
-        }
-        if(playernum1==102){
-            tpgb = 300;
-            tpgyb = 0;
-            orgb = twplayer2x;
-            orgyb = twplayer2y;
-            rotationb = 1;
-            fallrotationb = -1;
-        }
-    }
-    if([players count]==3){
-        tpg = 240;
-        tpgy = 0;
-        rotation = -1;
-        fallrotation = 1;
-        
-        tpgb = 240;
-        tpgyb = 0;
-        rotationb = -1;
-        fallrotationb = 1;
-        
-        if(playernum==101){
-            org = thplayer1x;
-            orgy = thplayer1y;
-        }
-        if(playernum==102){
-            org = thplayer2x;
-            orgy = thplayer2y;
-                   }
-        if(playernum==103){
-            org = thplayer3x;
-            orgy = thplayer3y;
-        }
-        
-        if(playernum1==101){
-            orgb = thplayer1x;
-            orgyb = thplayer1y;
-        }
-        if(playernum1==102){
-            orgb = thplayer2x;
-            orgyb = thplayer2y;
-        }
-        if(playernum1==103){
-            orgb = thplayer3x;
-            orgyb = thplayer3y;
-        }
-    }
     
     [UIView animateWithDuration:2 animations:^{
         // animation 1
@@ -1007,6 +868,9 @@ NSString * const messageWatermark = @"Send a message...";
 }
 
 -(void)reset{
+    
+    NSLog(@"heyyo");
+    
     for (UIImageView *a in [_animationzone subviews]) {
             [a removeFromSuperview];
     }
@@ -1014,8 +878,8 @@ NSString * const messageWatermark = @"Send a message...";
   //  NSLog(@"players-%@",_game.players);
     actions = [[NSMutableDictionary alloc]init];
     NSArray* players = [_game.players allKeys];
-        
-    for (int i = 0; i < [players count]; ++i)
+    int playnum = [players count];
+   /* for (int i = 0; i < [players count]; ++i)
     {        
              
     UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
@@ -1036,7 +900,135 @@ NSString * const messageWatermark = @"Send a message...";
     one.animationRepeatCount = 0;
     [one startAnimating];
     [_animationzone addSubview:one];
+    }*/
+    
+  /*  UITapGestureRecognizer *opptap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(opptapping:)];
+    [opptap setNumberOfTapsRequired:1];
+
+    UITapGestureRecognizer *selftap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selftapping:)];
+    [selftap setNumberOfTapsRequired:1];
+    
+    if(playnum==2){
+        UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+        one.frame = CGRectMake(c1x,c1y,50,100);
+        one.tag = 101;
+        one.image =  [UIImage imageNamed:@"golf wars normal 1.png"];
+
+        [one addGestureRecognizer:selftap];
+        [one setUserInteractionEnabled:YES];
+        
+        [self.view addSubview:one];
+        
+        UIImageView* two = [[UIImageView alloc] initWithFrame:self.view.frame];
+        two.frame = CGRectMake(c2x,c2y,50,100);
+        two.tag = 102;
+        two.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [two addGestureRecognizer:opptap];
+        [two setUserInteractionEnabled:YES];
+        
+        [self.view addSubview:two];
     }
+    if(playnum==3){
+        UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+        one.frame = CGRectMake(c1x,c1y,50,100);
+        one.tag = 101;
+        one.image =  [UIImage imageNamed:@"golf wars normal 1.png"];
+        
+        [self.view addSubview:one];
+        
+        UIImageView* two = [[UIImageView alloc] initWithFrame:self.view.frame];
+        two.frame = CGRectMake(c2x,c2y,50,100);
+        two.tag = 102;
+        two.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:two];
+        
+        UIImageView* three = [[UIImageView alloc] initWithFrame:self.view.frame];
+        three.frame = CGRectMake(c3x,c3y,50,100);
+        three.tag = 103;
+        three.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:three];
+    }
+    if(playnum==4){
+        UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+        one.frame = CGRectMake(c1x,c1y,50,100);
+        one.tag = 101;
+        one.image =  [UIImage imageNamed:@"golf wars normal 1.png"];
+        
+        [self.view addSubview:one];
+        
+        UIImageView* two = [[UIImageView alloc] initWithFrame:self.view.frame];
+        two.frame = CGRectMake(c2x,c2y,50,100);
+        two.tag = 102;
+        two.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:two];
+        
+        UIImageView* three = [[UIImageView alloc] initWithFrame:self.view.frame];
+        three.frame = CGRectMake(c3x,c3y,50,100);
+        three.tag = 103;
+        three.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:three];
+        
+        UIImageView* four = [[UIImageView alloc] initWithFrame:self.view.frame];
+        four.frame = CGRectMake(c4x,c4y,50,100);
+        four.tag = 104;
+        four.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:four];
+    }
+    if(playnum==5){
+        UIImageView* one = [[UIImageView alloc] initWithFrame:self.view.frame];
+        one.frame = CGRectMake(c1x,c1y,50,100);
+        one.tag = 101;
+        one.image =  [UIImage imageNamed:@"golf wars normal 1.png"];
+        
+        [self.view addSubview:one];
+        
+        UIImageView* two = [[UIImageView alloc] initWithFrame:self.view.frame];
+        two.frame = CGRectMake(c2x,c2y,50,100);
+        two.tag = 102;
+        two.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:two];
+        
+        UIImageView* three = [[UIImageView alloc] initWithFrame:self.view.frame];
+        three.frame = CGRectMake(c3x,c3y,50,100);
+        three.tag = 103;
+        three.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:three];
+        
+        UIImageView* four = [[UIImageView alloc] initWithFrame:self.view.frame];
+        four.frame = CGRectMake(c4x,c4y,50,100);
+        four.tag = 104;
+        four.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:four];
+        
+        UIImageView* five = [[UIImageView alloc] initWithFrame:self.view.frame];
+        five.frame = CGRectMake(c5x,c5y,50,100);
+        five.tag = 105;
+        five.image = [UIImage imageNamed:@"golf wars front swing.png"];
+        
+        [self.view addSubview:five];
+    }
+*/
+}
+
+-(void)opptapping:(UIGestureRecognizer *)gesture
+{
+    gesture.view.backgroundColor = [UIColor redColor];
+    [self slideup];
+}
+
+-(void)selftapping:(UIGestureRecognizer *)gesture
+{
+    gesture.view.backgroundColor = [UIColor redColor];
+    [self slideup];
 }
 
 - (void) commitRound
@@ -1118,9 +1110,18 @@ NSString * const messageWatermark = @"Send a message...";
 
 
 - (void)viewDidUnload {
-    [self setGamezone:nil];
+ //   [self setGamezone:nil];
     [self setChatTable:nil];
     [self setMessageText:nil];
+    [self setButtonslider:nil];
+    [self setSlideoutleft:nil];
+    [self setRighthandinfo:nil];
+    [self setRighthandbutton:nil];
+ //   [self setRighthandexpand:nil];
+    [self setSupera:nil];
+    [self setA:nil];
+    [self setDefend:nil];
+    [self setGet5:nil];
     [super viewDidUnload];
 }
 
@@ -1200,6 +1201,133 @@ NSString * const messageWatermark = @"Send a message...";
         _messageText.textColor = [UIColor grayColor];
         _messageText.font = [UIFont italicSystemFontOfSize:10.0f];
     }
+}
+
+- (IBAction)righthandexpand:(id)sender {
+    if ([sender isSelected]) {
+        [sender setSelected:NO];
+        [self slideright];
+    }
+    else {
+        [sender setSelected:YES];
+        [self slideleft];
+    }
+}
+
+- (IBAction)submitmove:(id)sender {
+    
+    if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:_selectedMove])
+    {
+        UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
+                                                          message:@"Invalid move selected to submit"
+                                                         delegate:self
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        
+        [myAlert1 show];
+        return;
+    }
+    [_game submitMove:_selectedMove forPlayer:_myPlayerId];
+    Character* c = [_characters objectForKey:_selectedMove.TargetId];
+    c.IsTarget = NO;
+
+}
+
+- (IBAction)superaa:(id)sender {
+    _supera.selected = YES;
+    [_supera setBackgroundColor:[UIColor redColor]];
+
+    _a.selected = NO;
+    [_a setBackgroundColor:NO];
+
+    _defend.selected = NO;
+    [_defend setBackgroundColor:NO];
+    
+    _get5.selected = NO;
+    [_get5 setBackgroundColor:NO];
+}
+
+- (IBAction)aa:(id)sender {
+    _a.selected = YES;
+    [_a setBackgroundColor:[UIColor redColor]];
+    
+    _supera.selected = NO;
+    [_supera setBackgroundColor:NO];
+    
+    _defend.selected = NO;
+    [_defend setBackgroundColor:NO];
+    
+    _get5.selected = NO;
+    [_get5 setBackgroundColor:NO];
+}
+
+- (IBAction)defenda:(id)sender {
+    _defend.selected = YES;
+    [_defend setBackgroundColor:[UIColor redColor]];
+    
+    _supera.selected = NO;
+    [_supera setBackgroundColor:NO];
+    
+    _a.selected = NO;
+    [_a setBackgroundColor:NO];
+    
+    _get5.selected = NO;
+    [_get5 setBackgroundColor:NO];
+}
+
+- (IBAction)get5a:(id)sender {
+    _get5.selected = YES;
+    [_get5 setBackgroundColor:[UIColor redColor]];
+    
+    _supera.selected = NO;
+    [_supera setBackgroundColor:NO];
+    
+    _a.selected = NO;
+    [_a setBackgroundColor:NO];
+    
+    _defend.selected = NO;
+    [_defend setBackgroundColor:NO];
+}
+
+-(void)slideright{
+    NSLog(@"width_%f",self.view.frame.size.width);
+    NSTimeInterval animationDuration = 1.0/* determine length of animation */;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:animationDuration];
+
+    _righthandinfo.frame = CGRectMake(self.view.frame.size.height,0, _righthandinfo.bounds.size.width, _righthandinfo.bounds.size.height);
+    
+    _slideoutleft.frame = CGRectMake(self.view.frame.size.height - _slideoutleft.frame.size.width,0, _slideoutleft.bounds.size.width, _slideoutleft.bounds.size.height);
+    
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView commitAnimations];
+    
+}
+
+-(void)slideleft{
+    NSTimeInterval animationDuration = 1.0/* determine length of animation */;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:animationDuration];
+
+    
+    _righthandinfo.frame = CGRectMake(self.view.frame.size.height-_righthandinfo.frame.size.width,0, _righthandinfo.bounds.size.width, _righthandinfo.bounds.size.height);
+    
+    _slideoutleft.frame = CGRectMake(self.view.frame.size.height-_righthandinfo.frame.size.width-_slideoutleft.frame.size.width,0, _slideoutleft.bounds.size.width, _slideoutleft.bounds.size.height);
+    
+    [UIView commitAnimations];
+        
+}
+
+-(void)slideup{
+    NSTimeInterval animationDuration = 1.0/* determine length of animation */;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:animationDuration];
+    
+    
+    _buttonslider.frame = CGRectMake(0,self.view.frame.size.width - _buttonslider.frame.size.height, _buttonslider.bounds.size.width, _buttonslider.bounds.size.height);
+    
+    [UIView commitAnimations];
+    
 }
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField

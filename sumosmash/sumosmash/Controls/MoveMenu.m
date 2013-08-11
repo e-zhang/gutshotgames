@@ -40,18 +40,35 @@
         // 4
         if(_isSelf && (i == ATTACK || i == SUPERATTACK)) continue;
         if(!_isSelf && (i == GETPOINTS || i == DEFEND)) continue;
-        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 25)];
-        im.backgroundColor = [UIColor lightGrayColor];
-        [im setTitle:MoveStrings[i] forState:UIControlStateNormal];
-        im.titleLabel.font = [UIFont systemFontOfSize:10.0];
-        [im.titleLabel adjustsFontSizeToFitWidth];
-        im.titleLabel.numberOfLines = 2;
-        im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
+        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
+      //  im.backgroundColor = [UIColor lightGrayColor];
+      //  im.titleLabel.font = [UIFont systemFontOfSize:10.0];
+      //  [im.titleLabel adjustsFontSizeToFitWidth];
+     //   im.titleLabel.numberOfLines = 2;
+      //  im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
+        im.layer.zPosition = 100;
+
+        if (i==ATTACK){
+            [im setBackgroundImage:[UIImage imageNamed:@"icon normal.png"] forState:UIControlStateNormal];
+            im.layer.position = CGPointMake(25, 30);
+        }
+        if (i==SUPERATTACK){
+            [im setBackgroundImage:[UIImage imageNamed:@"icon super.png"] forState:UIControlStateNormal];
+            im.layer.position = CGPointMake(25, 75);
+        }
+        if (i==GETPOINTS){
+            [im setBackgroundImage:[UIImage imageNamed:@"icon get 5 points.png"] forState:UIControlStateNormal];
+            im.layer.position = CGPointMake(25, 30);
+        }
+        if (i==DEFEND){
+            [im setBackgroundImage:[UIImage imageNamed:@"icon defend.png"] forState:UIControlStateNormal];
+            im.layer.position = CGPointMake(25, 75);
+        }
+       // [im setTitle:MoveStrings[i] forState:UIControlStateNormal];
         // 5
-        double x = cos(M_PI + angleSize*i)*MENU_RADIUS + _container.bounds.size.width/2.0;
-        double y = sin(M_PI + angleSize*i)*MENU_RADIUS + _container.bounds.size.height - 20;
-        im.layer.position = CGPointMake(x, y);
-        im.transform = CGAffineTransformMakeRotation(angleSize * i);
+       // double x = cos(M_PI + angleSize*i)*MENU_RADIUS + _container.bounds.size.width/2.0;
+       // double y = sin(M_PI + angleSize*i)*MENU_RADIUS + _container.bounds.size.height - 20;
+     //   im.transform = CGAffineTransformMakeRotation(angleSize * i);
         im.tag = i;
         // 6
         im.userInteractionEnabled = YES;
@@ -73,7 +90,7 @@
     if(_selectedMove)
     {
         [_selectedMove setSelected:NO];
-        _selectedMove.backgroundColor = [UIColor lightGrayColor];
+        _selectedMove.backgroundColor = [UIColor clearColor];
     }
     _selectedMove = sender;
    
@@ -86,7 +103,7 @@
 -(void) clearMove
 {
     [_selectedMove setSelected:NO];
-    _selectedMove.backgroundColor = [UIColor lightGrayColor];
+    _selectedMove.backgroundColor = [UIColor clearColor];
     _selectedMove = nil;
 }
 

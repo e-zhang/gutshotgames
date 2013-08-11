@@ -70,6 +70,33 @@
     [myImageView addGestureRecognizer:longPress];
 }
 
+- (void) setCharacterImage:(int) type
+{
+    
+    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 100)];
+    myImageView.userInteractionEnabled = YES;
+    
+    if(type==0){
+        myImageView.image = [UIImage imageNamed:@"golf wars normal 1.png"];
+    }else{
+        myImageView.image = [UIImage imageNamed:@"golf wars front swing.png"];
+    }
+  //  myImageView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview: myImageView];
+    [self.view addSubview:_characterDisplay];
+    _characterDisplay.frame = CGRectMake(0, 100,200,30);
+
+    _menuController = [[UIViewController alloc] init];
+    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,50,100) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
+    _menuController.view.backgroundColor = [UIColor whiteColor];
+    
+    [self addChildViewController:_menuController];
+
+    UITapGestureRecognizer* longPress = [[UITapGestureRecognizer alloc]
+                                         initWithTarget:self action:@selector(selectTarget:)];
+    [myImageView addGestureRecognizer:longPress];
+}
+
 - (void) selectTarget:(UITapGestureRecognizer *)recognizer
 {
     if(recognizer.state != UIGestureRecognizerStateEnded) return;
@@ -77,6 +104,7 @@
     if(![_menuController.view superview])
     {
         [self.view addSubview:_menuController.view];
+        [self.view bringSubviewToFront:_menuController.view];
         self.view.userInteractionEnabled = YES;
         [_delegate onPressSelect:_character.Id];
     }

@@ -35,16 +35,32 @@
     NSMutableDictionary *actions;
 }
 
-@property (strong, nonatomic) IBOutlet UIImageView *gamezone;
 //@property (strong, nonatomic) IBOutlet UIButton *smbutton;
 @property (strong, nonatomic) IBOutlet UITableView *chatTable;
 @property (strong, nonatomic) IBOutlet UITextField *messageText;
 @property (strong, nonatomic) UIView *animationzone;
+@property (strong, nonatomic) IBOutlet UIView *buttonslider;
+@property (strong, nonatomic) IBOutlet UIView *slideoutleft;
+@property (strong, nonatomic) IBOutlet UIView *righthandinfo;
+@property (strong, nonatomic) IBOutlet UIButton *righthandbutton;
+
+//buttons
+@property (strong, nonatomic) IBOutlet UIButton *supera;
+@property (strong, nonatomic) IBOutlet UIButton *a;
+@property (strong, nonatomic) IBOutlet UIButton *defend;
+@property (strong, nonatomic) IBOutlet UIButton *get5;
 
 - (IBAction)returntap:(id)sender;
 
 - (IBAction) textFieldDidBeginEditing:(UITextField *)textField;
 - (IBAction) textFieldDidEndEditing:(UITextField *)textField;
+- (IBAction)righthandexpand:(id)sender;
+- (IBAction)submitmove:(id)sender;
+
+- (IBAction)superaa:(id)sender;
+- (IBAction)aa:(id)sender;
+- (IBAction)defenda:(id)sender;
+- (IBAction)get5a:(id)sender;
 
 - (void)sendMessage;
 

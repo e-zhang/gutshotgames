@@ -33,6 +33,7 @@
 - (id) initWithId:(NSString*) targetId name:(NSString*)name selfId:(NSString*)selfId
      delegate:(id<CharacterDelegate>)target;
 - (void) setUserPic:(NSString*) path;
+- (void) setCharacterImage:(int) type;
 
 
 @property (readonly, nonatomic) UILabel* Display;
