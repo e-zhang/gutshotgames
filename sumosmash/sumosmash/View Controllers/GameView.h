@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "GameInfo.h"
 #import "CharacterViewController.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface GameView : UIViewController<GameUpdateDelegate,
                                          ChatUpdateDelegate,
@@ -34,6 +36,9 @@
     NSMutableDictionary *charidtonum;
     NSMutableDictionary *actions;
     
+    //backgroundmusic
+    //SystemSoundID backgroundbirds;
+    AVAudioPlayer *player;
     
 }
 

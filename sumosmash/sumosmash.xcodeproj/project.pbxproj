@@ -25,6 +25,8 @@
 		58195D7C17B662930095442B /* icon get 5 points.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7817B662930095442B /* icon get 5 points.png */; };
 		58195D7D17B662930095442B /* icon normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7917B662930095442B /* icon normal.png */; };
 		58195D7E17B662930095442B /* icon super.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D7A17B662930095442B /* icon super.png */; };
+		58195D8117B82EE90095442B /* backgroundbirds.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 58195D8017B82EE90095442B /* backgroundbirds.mp3 */; };
+		58195D8317B832B60095442B /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 58195D8217B832B60095442B /* click.mp3 */; };
 		58B9C50116EC535B00891C19 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50016EC535B00891C19 /* UIKit.framework */; };
 		58B9C50316EC535B00891C19 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50216EC535B00891C19 /* Foundation.framework */; };
 		58B9C50516EC535B00891C19 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B9C50416EC535B00891C19 /* CoreGraphics.framework */; };
@@ -111,6 +113,8 @@
 		58195D7817B662930095442B /* icon get 5 points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon get 5 points.png"; sourceTree = "<group>"; };
 		58195D7917B662930095442B /* icon normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon normal.png"; sourceTree = "<group>"; };
 		58195D7A17B662930095442B /* icon super.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon super.png"; sourceTree = "<group>"; };
+		58195D8017B82EE90095442B /* backgroundbirds.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundbirds.mp3; sourceTree = "<group>"; };
+		58195D8217B832B60095442B /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click.mp3; sourceTree = "<group>"; };
 		58B9C4FD16EC535B00891C19 /* sumosmash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sumosmash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B9C50016EC535B00891C19 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		58B9C50216EC535B00891C19 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -231,6 +235,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58B9C58B16EC5ADB00891C19 /* AudioToolbox.framework in Frameworks */,
 				58B9C59316EC5B0300891C19 /* CFNetwork.framework in Frameworks */,
 				E72AFA31171399E300BC1E04 /* TouchDB.framework in Frameworks */,
 				E72AFA071713977D00BC1E04 /* FacebookSDK.framework in Frameworks */,
@@ -244,7 +249,6 @@
 				58B9C50516EC535B00891C19 /* CoreGraphics.framework in Frameworks */,
 				58B9C50316EC535B00891C19 /* Foundation.framework in Frameworks */,
 				58B9C58D16EC5AE000891C19 /* AVFoundation.framework in Frameworks */,
-				58B9C58B16EC5ADB00891C19 /* AudioToolbox.framework in Frameworks */,
 				58B9C58916EC5AD500891C19 /* SystemConfiguration.framework in Frameworks */,
 				58B9C58716EC5ACD00891C19 /* Social.framework in Frameworks */,
 				58B9C58516EC5A2B00891C19 /* libz.dylib in Frameworks */,
@@ -258,6 +262,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		58195D7F17B82ED80095442B /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				58195D8217B832B60095442B /* click.mp3 */,
+				58195D8017B82EE90095442B /* backgroundbirds.mp3 */,
+			);
+			name = sounds;
+			sourceTree = "<group>";
+		};
 		58B9C4F416EC535B00891C19 = {
 			isa = PBXGroup;
 			children = (
@@ -355,6 +368,7 @@
 		E72AF8DA1713967500BC1E04 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				58195D7F17B82ED80095442B /* sounds */,
 				58195D7717B662930095442B /* icon defend.png */,
 				58195D7817B662930095442B /* icon get 5 points.png */,
 				58195D7917B662930095442B /* icon normal.png */,
@@ -568,6 +582,8 @@
 				58195D7C17B662930095442B /* icon get 5 points.png in Resources */,
 				58195D7D17B662930095442B /* icon normal.png in Resources */,
 				58195D7E17B662930095442B /* icon super.png in Resources */,
+				58195D8117B82EE90095442B /* backgroundbirds.mp3 in Resources */,
+				58195D8317B832B60095442B /* click.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

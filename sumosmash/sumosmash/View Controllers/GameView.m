@@ -226,6 +226,22 @@ NSString * const messageWatermark = @"Send a message...";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         
+        //playbackgroundmusic USE THIS WHEN PLAYING SOUNDS <30 secs
+        /*NSString *pewPewPat = [[NSBundle mainBundle] pathForResource:@"backgroundbirds" ofType:@"mp3"];
+        NSURL *pewPewUR = [NSURL fileURLWithPath:pewPewPat];
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef)(pewPewUR), &backgroundbirds);
+        AudioServicesPlaySystemSound(backgroundbirds);*/
+
+        /* Use this code to play an audio file */
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"backgroundbirds" ofType:@"mp3"];
+        NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
+        NSError *error;
+
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:&error];
+        player.numberOfLoops = -1; //Infinite
+        
+        [player play];
+        
         //animationzone
         _animationzone = [[UIView alloc]initWithFrame:CGRectMake(300,400,600,300)];
      //   _animationzone.backgroundColor = [UIColor yellowColor];
