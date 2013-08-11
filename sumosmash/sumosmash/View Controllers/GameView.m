@@ -138,18 +138,21 @@ NSString * const messageWatermark = @"Send a message...";
             [character setCharacterImage:0];
         }
         else{
-            [character setCharacterImage:1];
             if(oppnum==0){
                 character.view.frame = CGRectMake(c2x,c2y,50,100);
+                [character setCharacterImage:1];
             }
             if(oppnum==1){
                 character.view.frame = CGRectMake(c3x,c3y,50,100);
+                [character setCharacterImage:2];
             }
             if(oppnum==2){
                 character.view.frame = CGRectMake(c4x,c4y,50,100);
+                [character setCharacterImage:3];
             }
             if(oppnum==3){
                 character.view.frame = CGRectMake(c5x,c5y,50,100);
+                [character setCharacterImage:4];
             }
             oppnum++;
         }
@@ -542,13 +545,14 @@ NSString * const messageWatermark = @"Send a message...";
 
 -(void)get5:(NSString *)player{
     int playernum = [[charidtonum objectForKey:player] intValue];
-    NSLog(@"get5-%d",playernum);
-    for (UIImageView *a in [_animationzone subviews]) {
+    NSLog(@"defendplayer-%d",playernum);
+    
+    for (UIImageView *a in [self.view subviews]) {
         if(a.tag==playernum){
             NSLog(@"ab-%d",playernum);
             [a stopAnimating];
             a.animationImages = [NSArray arrayWithObjects:
-                                 [UIImage imageNamed:@"sumo get 5 points.png"],
+                                 [UIImage imageNamed:@"sumo defend 1.png"],
                                  nil];
             a.animationDuration = 0;
             a.animationRepeatCount = 0;
@@ -1232,7 +1236,7 @@ NSString * const messageWatermark = @"Send a message...";
     c.IsTarget = NO;
 
 }
-
+/*
 - (IBAction)superaa:(id)sender {
     _supera.selected = YES;
     [_supera setBackgroundColor:[UIColor redColor]];
@@ -1288,6 +1292,7 @@ NSString * const messageWatermark = @"Send a message...";
     _defend.selected = NO;
     [_defend setBackgroundColor:NO];
 }
+*/
 
 -(void)slideright{
     NSLog(@"width_%f",self.view.frame.size.width);

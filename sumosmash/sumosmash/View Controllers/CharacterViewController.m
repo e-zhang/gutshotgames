@@ -75,6 +75,7 @@
     
     UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 100)];
     myImageView.userInteractionEnabled = YES;
+    myImageView.tag = type;
     
     if(type==0){
         myImageView.image = [UIImage imageNamed:@"golf wars normal 1.png"];
@@ -112,6 +113,10 @@
     {
         [_menuController.view removeFromSuperview];
     }
+    
+}
+
+-(void)get5:(NSString *)charID{
     
 }
 
