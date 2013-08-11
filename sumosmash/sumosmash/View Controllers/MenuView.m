@@ -596,7 +596,7 @@
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"fb_name"] forKey:DB_USER_NAME];
             [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"facebook"] forKey:DB_FB_ID];
-            [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
+//            [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
             
         }
     }
