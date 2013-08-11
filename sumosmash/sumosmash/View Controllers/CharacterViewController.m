@@ -75,8 +75,8 @@
     
     UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 100)];
     myImageView.userInteractionEnabled = YES;
-    myImageView.tag = type;
-    
+    myImageView.tag = 100+type+1;
+    NSLog(@"tag has been set. %d",myImageView.tag);
     if(type==0){
         myImageView.image = [UIImage imageNamed:@"golf wars normal 1.png"];
     }else{
@@ -100,6 +100,11 @@
 
 - (void) selectTarget:(UITapGestureRecognizer *)recognizer
 {
+    NSLog(@"target-%ld",(long)recognizer.view.tag);
+    for (UIImageView *a in [self.view subviews]) {
+        NSLog(@"viewtags-%d",a.tag);
+    }
+    
     if(recognizer.state != UIGestureRecognizerStateEnded) return;
     
     if(![_menuController.view superview])
@@ -113,10 +118,6 @@
     {
         [_menuController.view removeFromSuperview];
     }
-    
-}
-
--(void)get5:(NSString *)charID{
     
 }
 

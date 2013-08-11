@@ -33,6 +33,8 @@
     
     NSMutableDictionary *charidtonum;
     NSMutableDictionary *actions;
+    
+    
 }
 
 //@property (strong, nonatomic) IBOutlet UIButton *smbutton;

@@ -208,12 +208,15 @@
                     [c OnRebate];
                 }
                 
+                if([seenPlayers containsObject:playerId]) break;
+                
                 if((target.NextMove.Type == ATTACK || target.NextMove.Type == SUPERATTACK) &&
                    [target.NextMove.TargetId isEqual:playerId] &&
                    ![seenPlayers containsObject:playerId])
                 {
                     [*simAttackers addObject:[NSArray arrayWithObjects:playerId,c.NextMove.TargetId,nil]];
                     [seenPlayers addObject:c.NextMove.TargetId];
+                    [seenPlayers addObject:playerId];
                 }
                 else
                 {
