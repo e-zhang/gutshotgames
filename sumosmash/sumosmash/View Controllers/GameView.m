@@ -534,12 +534,22 @@ NSString * const messageWatermark = @"Send a message...";
     // animate normal attacks
     for (NSInteger charIdx=0; charIdx<[attacks count]; charIdx++){
         Character* c = [attacks objectAtIndex:charIdx];
+      //  NSLog(@"c-attacktype-%u",c.NextMove.Type);
      //   [self normalattack:c.Id to:c.NextMove.TargetId];
+        if(c.NextMove.Type==2){
         NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
-        [add setObject:@"attack" forKey:@"move"];
-        [add setObject:c.Id forKey:@"from"];
-        [add setObject:c.NextMove.TargetId forKey:@"to"];
-        [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
+            [add setObject:@"attack" forKey:@"move"];
+            [add setObject:c.Id forKey:@"from"];
+            [add setObject:c.NextMove.TargetId forKey:@"to"];
+            [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
+        }
+        if(c.NextMove.Type==3){
+            NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
+            [add setObject:@"superattack" forKey:@"move"];
+            [add setObject:c.Id forKey:@"from"];
+            [add setObject:c.NextMove.TargetId forKey:@"to"];
+            [actions setObject:add forKey:[NSString stringWithFormat:@"%d",charIdx+1]];
+        }
     }
     
     NSLog(@"actions-%@",actions);
@@ -547,7 +557,10 @@ NSString * const messageWatermark = @"Send a message...";
         if([[[actions objectForKey:@"1"] objectForKey:@"move"]isEqual:@"attack"]){
             [self attack:[[actions objectForKey:@"1"] objectForKey:@"from"] to:[[actions objectForKey:@"1"] objectForKey:@"to"] movenumber:1];
         }
-        if([[actions objectForKey:@"1"] objectForKey:@"simuattack"]){
+        else if([[[actions objectForKey:@"1"] objectForKey:@"move"]isEqual:@"superattack"]){
+            [self superattack:[[actions objectForKey:@"1"] objectForKey:@"from"] to:[[actions objectForKey:@"1"] objectForKey:@"to"] movenumber:1];
+        }
+        else if([[actions objectForKey:@"1"] objectForKey:@"simuattack"]){
             [self simulattack:[[actions objectForKey:@"1"] objectForKey:@"a"] to:[[actions objectForKey:@"1"] objectForKey:@"b"] movenumber:1];
         }
     }
@@ -570,8 +583,9 @@ NSString * const messageWatermark = @"Send a message...";
     }
 }
 
--(void)get5:(NSString *)player{
-    int playernum = [[charidtonum objectForKey:player] intValue];
+-(void)get5:(NSString *)player1{
+    
+    int playernum = [[charidtonum objectForKey:player1] intValue];
     
     for (CharacterViewController *vc in [self childViewControllers]) {
 
