@@ -55,7 +55,7 @@
         [userAccount setObject:self.userid forKey:DB_USER_ID];
     }
     
-//    [userAccount setObject:self.default_move forKey:DB_DEFAULT_MOVE];
+  //  [userAccount setObject:self.default_move forKey:DB_DEFAULT_MOVE];
     
     [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
     return userAccount;

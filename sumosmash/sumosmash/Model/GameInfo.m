@@ -215,6 +215,7 @@
                 {
                     [*simAttackers addObject:[NSArray arrayWithObjects:playerId,c.NextMove.TargetId,nil]];
                     [seenPlayers addObject:c.NextMove.TargetId];
+                    [seenPlayers addObject:playerId];
                 }
                 else
                 {
