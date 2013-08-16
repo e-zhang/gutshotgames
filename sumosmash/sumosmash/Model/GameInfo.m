@@ -290,6 +290,7 @@
         if([self.currentRound intValue] == _gameRound)
         {
             [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
+            _gameRound++;
         }
     }
     
