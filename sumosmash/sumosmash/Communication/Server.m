@@ -60,17 +60,17 @@ const int SERVER_PORT = 443;
         ![_localGames ensureCreated: &error]) { NSLog(@"creation");}
     
     CouchDocument *sup = [_localInfo documentWithID:@"maininfo"];
-    NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
-    [add setObject:@"C9A486D8-FB1F-4500-90CB-0BBC56E3E036" forKey:@"userid"];
-    [add setObject:@"501416056" forKey:@"fb_id"];
-    [add setObject:@"Danny Witters" forKey:@"fb_name"];
-    [add setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"C9A486D8-FB1F-4500-90CB-0BBC56E3E036", @"target", [NSNumber numberWithInt:1], @"type", nil] forKey:@"default_move"];
-    
-    RESTOperation* operation = [sup putProperties:add];
-    if([operation wait:&error])
-    {
-        NSLog(@"%@", [error localizedDescription]);
-    }
+//    NSMutableDictionary* add = [[NSMutableDictionary alloc] init];
+//    [add setObject:@"C9A486D8-FB1F-4500-90CB-0BBC56E3E036" forKey:@"userid"];
+//    [add setObject:@"501416056" forKey:@"fb_id"];
+//    [add setObject:@"Danny Witters" forKey:@"fb_name"];
+//    [add setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"C9A486D8-FB1F-4500-90CB-0BBC56E3E036", @"target", [NSNumber numberWithInt:1], @"type", nil] forKey:@"default_move"];
+//    
+//    RESTOperation* operation = [sup putProperties:add];
+//    if([operation wait:&error])
+//    {
+//        NSLog(@"%@", [error localizedDescription]);
+//    }
     
     
     NSLog(@"whereyouat-%@", sup.properties);
