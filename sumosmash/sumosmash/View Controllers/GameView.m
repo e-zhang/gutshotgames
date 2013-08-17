@@ -235,14 +235,14 @@ NSString * const messageWatermark = @"Send a message...";
         AudioServicesPlaySystemSound(backgroundbirds);*/
 
         /* Use this code to play an audio file */
-        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"backgroundbirds" ofType:@"mp3"];
+       /* NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"backgroundbirds" ofType:@"mp3"];
         NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
         NSError *error;
 
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:&error];
         player.numberOfLoops = -1; //Infinite
         
-        [player play];
+        [player play];*/
         
         //animationzone
         _animationzone = [[UIView alloc]initWithFrame:CGRectMake(300,400,600,300)];
