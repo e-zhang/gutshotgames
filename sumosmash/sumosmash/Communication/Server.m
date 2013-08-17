@@ -151,7 +151,10 @@ const int SERVER_PORT = 443;
 
 -(GameInvitations*) getUserUpdate:(NSString*)player
 {
-    return [GameInvitations modelForDocument:[_gameInvites documentWithID:player]];
+    GameInvitations* invite = [GameInvitations modelForDocument:[_gameInvites documentWithID:player]];
+    [[invite save] wait];
+    
+    return invite;
 }
 
 -(void) saveCreatedGame:(GameInfo *)game
