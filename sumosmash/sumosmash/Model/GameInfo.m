@@ -29,19 +29,22 @@
 
 -(void) startRound
 {
-    [self getNextRound];
-    NSError* error = nil;
-    do
+    if([self getNextRound])
     {
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
-        [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-        
-        NSDate *start = [NSDate dateWithTimeInterval:[self.roundBuffer intValue] sinceDate:[NSDate date]]; // Grab current time
-        self.roundStartTime = [dateFormat stringFromDate:start];
-        [[self save] wait:&error];
-    } while ([error.domain isEqual: @"CouchDB"] &&
-             error.code == 409);
+        NSError* error = nil;
+        do
+        {
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
+            [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+            
+            NSDate *start = [NSDate dateWithTimeInterval:[self.roundBuffer intValue] sinceDate:[NSDate date]]; // Grab current time
+            self.roundStartTime = [dateFormat stringFromDate:start];
+            [[self save] wait:&error];
+        } while ([error.domain isEqual: @"CouchDB"] &&
+                 error.code == 409);
+            
+    }
     
     [_delegate onRoundStart];
 }
@@ -123,31 +126,38 @@
     
 }
 
--(void) getNextRound
+-(BOOL) getNextRound
 {
     [self willChangeValueForKey:@"GameRound"];
     ++_gameRound;
-    _isLast = NO;
-    NSError* error = nil;
-    do
-    {
-        if(error)
-        {
-            [self resolveConflicts:self];
-        }
-        
-        self.currentRound = [NSNumber numberWithInt:_gameRound];
-        NSMutableArray* rounds = [self.gameData mutableCopy];
-        if(_gameRound >= [rounds count])
-        {
-            [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
-        }
-        self.gameData = rounds;
-        [[self save] wait:&error];
-    }while ([error.domain isEqual: @"CouchDB"] &&
-            error.code == 409);
-
     [self didChangeValueForKey:@"GameRound"];
+    BOOL isLast = _isLast;
+    _isLast = NO;
+    
+    if(isLast)
+    {
+        NSError* error = nil;
+        do
+        {
+            if(error)
+            {
+                [self resolveConflicts:self];
+            }
+            
+            self.currentRound = [NSNumber numberWithInt:_gameRound];
+            NSMutableArray* rounds = [self.gameData mutableCopy];
+            if(_gameRound >= [rounds count])
+            {
+                [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
+            }
+            self.gameData = rounds;
+            [[self save] wait:&error];
+        }while ([error.domain isEqual: @"CouchDB"] &&
+                error.code == 409);
+            
+    }
+    
+    return isLast;
 }
 
 - (void) submitMove:(Move *)move forPlayer:(NSString *)player
@@ -181,10 +191,7 @@
     if([self.currentRound intValue] == _gameRound)
     {
         [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
-        if(_isLast)
-        {
-            [self startRound];
-        }
+
     }
 }
 
@@ -291,15 +298,8 @@
         {
             [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
         }
-        
-        if([self.currentRound intValue] > _gameRound)
-        {
-            [self willChangeValueForKey:@"GameRound"];
-            _gameRound = [self.currentRound intValue];
-            [self didChangeValueForKey:@"GameRound"];
-        }
+
     }
-    
 }
 
 
@@ -315,6 +315,7 @@
         }
         NSLog(@"round complete!");
         [_delegate onRoundComplete];
+        [self startRound];
     }
     else if([currentRound count] == 0)
     {
