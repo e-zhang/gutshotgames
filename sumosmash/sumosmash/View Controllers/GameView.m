@@ -322,7 +322,7 @@ NSString * const messageWatermark = @"Send a message...";
         _status.text = @"Waiting for players...";
         
         BOOL isLast = _gameStarted == ([_game.players count] - 1);
-        [_game joinGame:_myPlayerId];
+        [_game joinGame:_myPlayerId isLast:isLast];
         ++_gameStarted;
         if(isLast)
         {
@@ -468,6 +468,7 @@ NSString * const messageWatermark = @"Send a message...";
         joiner.IsConnected = YES;
         _gameStarted++;
     }
+    NSLog(@"number of players joined: %d", _gameStarted);
     
     return _gameStarted == [_characters count];
 }

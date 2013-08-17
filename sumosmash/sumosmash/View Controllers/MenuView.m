@@ -692,8 +692,6 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
-    [newg joinGame:_gameServer.user.userid];
-    
     self.gamewindow = [[GameView alloc] initWithNibName:@"GameView" bundle:nil
                                                gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;

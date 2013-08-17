@@ -19,6 +19,7 @@
 @synthesize GameRound=_gameRound;
 
 
+
 -(void) reset
 {
     _isOver = NO;
@@ -104,8 +105,9 @@
     return _isOver;
 }
 
-- (void) joinGame:(NSString*) userId
+- (void) joinGame:(NSString*) userId isLast:(BOOL) last
 {
+    _isLast = last;
     NSError* error = nil;
     do
     {
