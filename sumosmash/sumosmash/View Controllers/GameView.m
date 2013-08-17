@@ -99,9 +99,11 @@ NSString * const messageWatermark = @"Send a message...";
     CGFloat angleSize = 2*M_PI/[_game.players count];
     
     [self reset];
+
+    int oppnum = 0;
+    
     for (int i = 0; i < [players count]; ++i)
     {
-        int oppnum = 0;
         NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
         
         CharacterViewController* character = [[CharacterViewController alloc] initWithId: [player objectForKey:DB_USER_ID]

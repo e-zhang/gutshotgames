@@ -20,7 +20,7 @@
 
 #import "InvitationsViewController.h"
 #define EXPAND_SIZE 100
-#define WINDOW_SIZE 480
+#define WINDOW_SIZE 568
 
 @interface MenuView ()
 
@@ -52,51 +52,9 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:204 green:204 blue:204 alpha:1];
     // Do any additional setup after loading the view from its nib.
+   
+    [self createAccountLabels];
     
-    NSString* username; NSString* userId; NSData* userPic;
-    UserType userType = [_gameServer.user GetUserName:&username Pic:&userPic Id:&userId];
-    
-    UIView* view = [self.view viewWithTag:PLAYER_VIEW];
-    switch (userType)
-    {
-        case FACEBOOK:
-        {
-            UIImageView *myImageView = [[UIImageView alloc] init];
-            
-            UILabel* label1 = [[UILabel alloc] init];
-            label1.textColor = [UIColor darkGrayColor];
-            label1.backgroundColor = [UIColor clearColor];
-            
-            myImageView.image = [[UIImage alloc]initWithData:userPic];
-            label1.text = username;
-            
-            myImageView.frame = CGRectMake(20,self.view.frame.size.height-40,40,40);
-            label1.frame = CGRectMake(85,self.view.frame.size.height-40,400,40);
-            label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
-            [view addSubview:myImageView];
-            [view addSubview:label1];
-            break;
-        }
-        case GSG:
-        {
-            UILabel* label1 = [[UILabel alloc] init];
-            label1.textColor = [UIColor darkGrayColor];
-            label1.backgroundColor = [UIColor clearColor];
-            label1.text = username;
-            label1.frame = CGRectMake(85,self.view.frame.size.height-40,400,40);
-            label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
-            [view addSubview:label1];
-            break;
-        }
-        case NONE:
-        {
-            UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(85, self.view.frame.size.height-40, 150, 40)];
-            [login setTitle:@"Log In" forState:UIControlStateNormal];
-            [view addSubview:login];
-            break;
-        }
-    }
-
 //    _cab.hidden = userType == NONE ? NO : YES;
 
     _players = [[NSMutableArray alloc] init];
@@ -134,6 +92,57 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void) createAccountLabels
+{
+    NSString* username; NSString* userId; NSData* userPic;
+    UserType userType = [_gameServer.user GetUserName:&username Pic:&userPic Id:&userId];
+    
+    UIView* view = [self.view viewWithTag:PLAYER_VIEW];
+    [view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    switch (userType)
+    {
+        case FACEBOOK:
+        {
+            UIImageView *myImageView = [[UIImageView alloc] init];
+            
+            UILabel* label1 = [[UILabel alloc] init];
+            label1.textColor = [UIColor darkGrayColor];
+            label1.backgroundColor = [UIColor clearColor];
+            
+            myImageView.image = [[UIImage alloc]initWithData:userPic];
+            label1.text = username;
+            
+            myImageView.frame = CGRectMake(20,40,40,40);
+            label1.frame = CGRectMake(20,90,400,40);
+            label1.font = [UIFont fontWithName:@"GillSans" size:22.0f];
+            [view addSubview:myImageView];
+            [view addSubview:label1];
+            break;
+        }
+        case GSG:
+        {
+            UILabel* label1 = [[UILabel alloc] init];
+            label1.textColor = [UIColor darkGrayColor];
+            label1.backgroundColor = [UIColor clearColor];
+            label1.text = username;
+            label1.frame = CGRectMake(85,self.view.frame.size.height-40,400,40);
+            label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
+            [view addSubview:label1];
+            break;
+        }
+        case NONE:
+        {
+            UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(20, 40, 150, 40)];
+            [login setTitle:@"Log In" forState:UIControlStateNormal];
+            [login addTarget:self action:@selector(createviafb:) forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:login];
+            break;
+        }
+    }
+    
+}
+
 - (void)updateView1 {
     // get the app delegate, so that we can reference the session property
     
@@ -146,53 +155,25 @@
          ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
              
              //createaccount
-             /*NSDictionary *inDocument = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         @"createaccount", @"action",
-                                         @"fb",@"type",
-                                         user.id,@"fb_id",
-                                         user.name,@"fb_name",
-                                         [user objectForKey:@"email"],@"email",
-                                         nil];
-             
-             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-             hud.labelText = @"Creating Account";
-             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
-             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-             });
-             */
+//             NSDictionary *inDocument = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                         @"createaccount", @"action",
+//                                         @"fb",@"type",
+//                                         user.id,@"fb_id",
+//                                         user.name,@"fb_name",
+//                                         [user objectForKey:@"email"],@"email",
+//                                         nil];
+//             
+//             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//             hud.labelText = @"Creating Account";
+//             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
+//             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+//             });
              
              [self SaveAccountInfo:user];
              
               NSLog(@"hello");
-             NSString *fb_id = user.id;
-             
-             NSString *path = @"http://graph.facebook.com/";
-             path = [path stringByAppendingString:fb_id];
-             path = [path stringByAppendingString:@"/picture?type=square"];
-             
-             NSURL *url = [NSURL URLWithString:path];
-             NSData *data = [NSData dataWithContentsOfURL:url];
-             
-             UIImageView *myImageView = [[UIImageView alloc] init];
-             
-             UILabel* label1 = [[UILabel alloc] init];
-             label1.textColor = [UIColor whiteColor];
-             label1.backgroundColor = [UIColor clearColor];
-             
-             myImageView.image = [[UIImage alloc]initWithData:data];
-             label1.text = user.name;
-             
-             myImageView.frame = CGRectMake(20,self.view.frame.size.height-100,80,80);
-             label1.frame = CGRectMake(120,self.view.frame.size.height-110,400,100);
-             label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
-
-             
-             [self.view addSubview:myImageView];
-             [self.view addSubview:label1];
-             
-//             _cab.hidden = YES;
-
+             [self createAccountLabels];
          }];
     }
     
@@ -340,9 +321,11 @@
 //    
 //    op4 = [doc2 putProperties: inDocument2];
     
-    if(![op wait] || ![op1 wait])
+    BOOL err, err1;
+    err = [op wait]; err1 = [op1 wait];
+    if(!err)
     {
-        
+        NSLog(@"%d,%d", err, err1);
         UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
                                                           message:@"A connection error occured. Try again soon."
                                                          delegate:self

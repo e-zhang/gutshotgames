@@ -211,8 +211,7 @@
                 if([seenPlayers containsObject:playerId]) break;
                 
                 if((target.NextMove.Type == ATTACK || target.NextMove.Type == SUPERATTACK) &&
-                   [target.NextMove.TargetId isEqual:playerId] &&
-                   ![seenPlayers containsObject:playerId])
+                   [target.NextMove.TargetId isEqual:playerId])
                 {
                     [*simAttackers addObject:[NSArray arrayWithObjects:playerId,c.NextMove.TargetId,nil]];
                     [seenPlayers addObject:c.NextMove.TargetId];
@@ -291,6 +290,7 @@
         if([self.currentRound intValue] == _gameRound)
         {
             [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
+            _gameRound++;
         }
     }
     
