@@ -458,7 +458,7 @@ NSString * const messageWatermark = @"Send a message...";
     }
 }
 
-- (void) onPlayerJoined:(NSString *)playerId
+- (BOOL) onPlayerJoined:(NSString *)playerId
 {
     Character* joiner = [_characters objectForKey:playerId];
     
@@ -466,7 +466,10 @@ NSString * const messageWatermark = @"Send a message...";
     {
         // not connected, newly joined
         joiner.IsConnected = YES;
+        _gameStarted++;
     }
+    
+    return _gameStarted == [_characters count];
 }
 
 - (void) onRoundComplete

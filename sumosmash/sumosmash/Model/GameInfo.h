@@ -12,7 +12,7 @@
 
 @protocol GameUpdateDelegate <NSObject>
 
-- (void) onPlayerJoined:(NSString*) playerId;
+- (BOOL) onPlayerJoined:(NSString*) playerId;
 - (BOOL) onMoveSubmitted:(Move*) move byPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;

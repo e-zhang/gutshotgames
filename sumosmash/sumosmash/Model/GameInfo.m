@@ -277,13 +277,20 @@
     
     if([self.currentRound intValue] < 0)
     {
+        BOOL start = NO;
         for(NSString* playerId in self.players)
         {
             NSDictionary* player = [self.players objectForKey:playerId];
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
-                [_delegate onPlayerJoined:playerId];
+                start = [_delegate onPlayerJoined:playerId];
             }
+            
+            if(start)
+            {
+                [self startRound];
+            }
+            
         }
     }
     else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
