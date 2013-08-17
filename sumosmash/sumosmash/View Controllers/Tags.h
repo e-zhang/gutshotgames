@@ -23,4 +23,6 @@
 #define HEADER_TAG 9
 #define MESSAGE_TAG 10
 
+#define INVITE_BUTTON 11
+
 #endif

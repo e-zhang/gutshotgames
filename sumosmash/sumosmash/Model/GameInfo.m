@@ -147,7 +147,7 @@
     }while ([error.domain isEqual: @"CouchDB"] &&
             error.code == 409);
 
-    [self willChangeValueForKey:@"GameRound"];
+    [self didChangeValueForKey:@"GameRound"];
 }
 
 - (void) submitMove:(Move *)move forPlayer:(NSString *)player
@@ -294,7 +294,9 @@
         
         if([self.currentRound intValue] > _gameRound)
         {
+            [self willChangeValueForKey:@"GameRound"];
             _gameRound = [self.currentRound intValue];
+            [self didChangeValueForKey:@"GameRound"];
         }
     }
     
