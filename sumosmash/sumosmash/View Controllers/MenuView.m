@@ -745,7 +745,7 @@
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     switch (view.tag)
     {
-        case INVITE_BUTTON:
+        case INVITE_COLLECTION:
             return [_players count];
         case SAVED_GAMES:
             return [_gameServer.savedGames.savedGames count];
@@ -761,7 +761,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     switch(cv.tag)
     {
-        case INVITE_BUTTON:
+        case INVITE_COLLECTION:
             return [self cellForInvites:cv atIndexPath:indexPath];
         case SAVED_GAMES:
             return [self cellForGames:cv atIndexPath:indexPath];
@@ -802,13 +802,13 @@
 {
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"invite_cell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
-    UILabel* label = (UILabel*)[cell.contentView viewWithTag:INVITE_BUTTON];
+    UILabel* label = (UILabel*)[cell.contentView viewWithTag:INVITE_COLLECTION];
     if(!label)
     {
         label = [[UILabel alloc] initWithFrame:CGRectMake(5,0,48,48)];
         cell.layer.borderColor = [[UIColor grayColor] CGColor];
         cell.layer.borderWidth = 1.5;
-        label.tag = INVITE_BUTTON;
+        label.tag = INVITE_COLLECTION;
         label.lineBreakMode = UILineBreakModeWordWrap;
         label.font = [UIFont systemFontOfSize:12.0];
         [label adjustsFontSizeToFitWidth];
