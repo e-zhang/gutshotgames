@@ -84,12 +84,18 @@ const int SERVER_PORT = 443;
 
 -(void) initSavedGames
 {
+    
     _savedGames = [SavedGames modelForDocument:[_localInfo documentWithID:@"savedgames"]];
+
     
     if(!_savedGames.savedGames)
     {
         _savedGames.savedGames = [[NSArray alloc] init];
     }
+    
+    /*deletes saved games on load*/
+    RESTOperation *op = [_savedGames deleteDocument];
+    [op wait];
 }
 
 -(void) initUser
