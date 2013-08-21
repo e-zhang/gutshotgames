@@ -35,6 +35,12 @@
         NSError* error = nil;
         do
         {
+            if(error)
+            {
+                [self resolveConflicts:self];
+                error = nil;
+            }
+            
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"ET"]];
             [dateFormat  setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
