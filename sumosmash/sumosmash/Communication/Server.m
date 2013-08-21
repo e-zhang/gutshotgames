@@ -173,8 +173,8 @@ const int SERVER_PORT = 443;
         [gameList removeLastObject];
     }
     
-    _savedGames.savedGames = gameList;
-    [[_savedGames save] wait];
+   // _savedGames.savedGames = gameList;
+   // [[_savedGames save] wait];
 }
 
 @end

@@ -160,7 +160,7 @@
 -(BOOL) getNextRound
 {
     [self willChangeValueForKey:@"GameRound"];
-    ++_gameRound;
+    _gameRound = [self.currentRound intValue] + 1;
     [self didChangeValueForKey:@"GameRound"];
     BOOL isLast = _isLast;
     _isLast = NO;
@@ -343,6 +343,7 @@
 
 -(void) checkRound:(NSDictionary*) currentRound
 {
+    NSLog(@"currentround-%d,players-%d,charsdead-%d",[currentRound count],[self.players count],_charsDead);
     if ([currentRound count] == [self.players count] - _charsDead)
     {
         for(NSString* playerId in currentRound)
