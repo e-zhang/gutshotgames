@@ -256,7 +256,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         _status = [[UILabel alloc] initWithFrame:CGRectMake(10, 80, 75, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
-        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(10, 125, 160, 400)];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(10, 125, 160, 180)];
         _gameInfo.editable = NO;
         _gameInfo.userInteractionEnabled = YES;
         _gameInfo.scrollEnabled = YES;
@@ -322,7 +322,6 @@ NSString * const messageWatermark = @"Send a message...";
         BOOL isLast = _gameStarted == ([_game.players count] - 1);
         [_game joinGame:_myPlayerId isLast:isLast];
         [self onPlayerJoined:_myPlayerId];
-        ++_gameStarted;
         if(isLast)
         {
             [self startGame];
@@ -365,7 +364,7 @@ NSString * const messageWatermark = @"Send a message...";
 {
     if([keyPath isEqual:@"GameRound"])
     {
-        _status.text = [NSString stringWithFormat:@"Round %d", [[change objectForKey:NSKeyValueChangeKindKey] intValue]];
+        _status.text = [NSString stringWithFormat:@"Round %d", _game.GameRound];
     }
 }
 
@@ -959,7 +958,7 @@ NSString * const messageWatermark = @"Send a message...";
     }
     
     int charsLeft = [_characters count] - [deadChars count];
-    [_game setGameOver: charsLeft <= 1];
+    [_game setGameOver: [deadChars count]];
     if( charsLeft == 1)
     {
         for(Character* c in [_characters allValues])
