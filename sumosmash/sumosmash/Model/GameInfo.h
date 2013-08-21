@@ -22,7 +22,7 @@
 @interface GameInfo : CouchModel<CouchDocumentModel>
 {
     id<GameUpdateDelegate> _delegate;
-    BOOL _isOver;
+    int _charsDead;
     int _gameRound;
     BOOL _isLast;
     
@@ -52,7 +52,7 @@
 - (void) endRound;
 
 - (BOOL) isGameOver;
-- (void) setGameOver:(BOOL) over;
+- (void) setGameOver:(int) chars;
 - (void) setGameChat:(GameChat *)gameChat;
 
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;

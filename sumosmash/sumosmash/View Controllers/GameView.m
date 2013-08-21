@@ -1125,7 +1125,9 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (IBAction)submitmove:(id)sender {
     
-    if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:_selectedMove])
+    Character* c = [_characters objectForKey:_selectedMove.TargetId];
+    c.IsTarget = NO;
+    if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:_selectedMove] || [c IsDead])
     {
         UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
                                                           message:@"Invalid move selected to submit"
@@ -1137,8 +1139,6 @@ NSString * const messageWatermark = @"Send a message...";
         return;
     }
     [_game submitMove:_selectedMove forPlayer:_myPlayerId];
-    Character* c = [_characters objectForKey:_selectedMove.TargetId];
-    c.IsTarget = NO;
 
 }
 /*

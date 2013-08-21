@@ -65,7 +65,7 @@
     
     isValid &= MovePointValues[move.Type] <= _points;
     
-    return isValid;
+    return isValid && ![self IsDead];
 }
 
 -(Move*) RandomizeNextMove:(NSString *)target
@@ -89,7 +89,7 @@
 
 -(BOOL) OnAttack:(MoveType) move by:(NSString *)attacker
 {
-    _pointsUpdate = _nextMove.Type == GETPOINTS ? -1 : 0;
+    _pointsUpdate = _nextMove.Type == GETPOINTS ? -1 : _pointsUpdate;
     if(!(move == SUPERATTACK && _nextMove.Type == SUPERATTACK && [_nextMove.TargetId isEqual:attacker]))
     {
         _lifeUpdate += MoveDamageValues[move] + (_nextMove.Type == DEFEND);
@@ -109,7 +109,7 @@
     _points -=  _pointsUpdate < 0 ? 0 : MovePointValues[_nextMove.Type] - _pointsUpdate;
     [self didChangeValueForKey:@"Points"];
     [self willChangeValueForKey:@"Life"];
-    _life += _lifeUpdate;
+    _life = MAX(0, _life + _lifeUpdate);
     [self didChangeValueForKey:@"Life"];
     
     NSString* move = [NSString stringWithFormat:@" %@ used move: %@ \n" , _id, MoveStrings[self.NextMove.Type]];

@@ -22,7 +22,7 @@
 
 -(void) reset
 {
-    _isOver = NO;
+    _charsDead = NO;
     _gameRound = -1;
     self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
     self.currentRound = [NSNumber numberWithInt:_gameRound];
@@ -74,7 +74,7 @@
 
 -(void) initializeGame
 {
-    _isOver = NO;
+    _charsDead=0;
     _gameRound = -1;
     
     [self willChangeValueForKey:@"GameRound"];
@@ -96,9 +96,9 @@
     _delegate = delegate;
 }
 
-- (void) setGameOver:(BOOL)over
+- (void) setGameOver:(int) chars
 {
-    _isOver = over;
+    _charsDead = chars;
 }
 
 - (void) setGameChat:(GameChat *)gameChat
@@ -108,7 +108,7 @@
 
 - (BOOL) isGameOver
 {
-    return _isOver;
+    return _charsDead >= [self.players count] - 1;
 }
 
 - (void) joinGame:(NSString*) userId isLast:(BOOL) last
@@ -183,7 +183,7 @@
         NSMutableArray* data = [self.gameData mutableCopy];
         
         // last if count - 1 entries and no count for self
-        _isLast = ([currentRound count] == [self.players count] - 1) && ![currentRound objectForKey:player];
+        _isLast = ([currentRound count] == [self.players count] - _charsDead - 1) && ![currentRound objectForKey:player];
         
         [currentRound setObject:[move getMove] forKey:player];
         [data setObject:currentRound atIndexedSubscript:[self.currentRound intValue]];
@@ -320,7 +320,7 @@
 
 -(void) checkRound:(NSDictionary*) currentRound
 {
-    if ([currentRound count] == [self.players count])
+    if ([currentRound count] == [self.players count] - _charsDead)
     {
         for(NSString* playerId in currentRound)
         {
