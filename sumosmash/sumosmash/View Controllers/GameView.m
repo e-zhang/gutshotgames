@@ -125,10 +125,7 @@ NSString * const messageWatermark = @"Send a message...";
         {
             character.Char.isConnected = YES;
             // dont count self, we will do this when we join
-            if(![_myPlayerId isEqual:character.Char.Id])
-            {
-                _gameStarted++;
-            }
+            _gameStarted++;
         }
         
         [self addChildViewController:character];
@@ -323,6 +320,7 @@ NSString * const messageWatermark = @"Send a message...";
         
         BOOL isLast = _gameStarted == ([_game.players count] - 1);
         [_game joinGame:_myPlayerId isLast:isLast];
+        [self onPlayerJoined:_myPlayerId];
         ++_gameStarted;
         if(isLast)
         {

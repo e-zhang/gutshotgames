@@ -594,7 +594,8 @@
 {
     NSMutableDictionary* playerAccounts = [[NSMutableDictionary alloc]init];
    
-    NSDictionary* userAccount = [_gameServer.user getUserPlayer];
+    NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
+    [userAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
        
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
     
