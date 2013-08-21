@@ -959,6 +959,7 @@ NSString * const messageWatermark = @"Send a message...";
     
     int charsLeft = [_characters count] - [deadChars count];
     [_game setGameOver: deadChars.count];
+
     if( charsLeft == 1)
     {
         for(Character* c in [_characters allValues])

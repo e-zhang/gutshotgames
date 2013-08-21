@@ -24,8 +24,21 @@
 {
     _charsDead = NO;
     _gameRound = -1;
-    self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
-    self.currentRound = [NSNumber numberWithInt:_gameRound];
+    
+    NSError* error = nil;
+    do
+    {
+        if(error)
+        {
+            [self resolveConflicts:self];
+        }
+       
+        self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
+        self.currentRound = [NSNumber numberWithInt:_gameRound];
+        [[self save] wait:&error];
+        
+    } while ([error.domain isEqual: @"CouchDB"] &&
+             error.code == 409);
 }
 
 -(void) startRound
@@ -344,6 +357,7 @@
 -(void) checkRound:(NSDictionary*) currentRound
 {
     NSLog(@"currentround-%d,players-%d,charsdead-%d",[currentRound count],[self.players count],_charsDead);
+
     if ([currentRound count] == [self.players count] - _charsDead)
     {
         for(NSString* playerId in currentRound)
