@@ -134,6 +134,29 @@
     
 }
 
+- (void) leaveGame:(NSString*) userId
+{
+    NSError* error = nil;
+    do
+    {
+        
+        if(error)
+        {
+            [self resolveConflicts:self];
+        }
+        NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
+        NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
+        [player setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+        [joinedPlayers setObject:player forKey:userId];
+        self.players = joinedPlayers;
+        [[self save] wait:&error];
+        
+    } while ([error.domain isEqual: @"CouchDB"] &&
+             error.code == 409);
+    
+}
+
+
 -(BOOL) getNextRound
 {
     [self willChangeValueForKey:@"GameRound"];

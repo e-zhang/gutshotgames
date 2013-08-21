@@ -58,6 +58,7 @@
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
 
 - (void) joinGame:(NSString*) userId isLast:(BOOL) isLast;
+- (void) leaveGame:(NSString*) userId;
 - (void) submitMove:(Move*) move forPlayer:(NSString*)player;
 
 - (void) simulateRound:(NSDictionary*) characters withDefenders:(NSMutableArray**)defenders

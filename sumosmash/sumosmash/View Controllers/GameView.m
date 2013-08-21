@@ -84,6 +84,7 @@ NSString * const messageWatermark = @"Send a message...";
 
 
 - (IBAction)returntap:(id)sender {
+    [_game leaveGame:_myPlayerId];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
