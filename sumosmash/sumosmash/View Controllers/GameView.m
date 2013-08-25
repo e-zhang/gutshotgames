@@ -33,8 +33,8 @@ enum{
     c3y = 10,
     c4x = 285,
     c4y = 10,
-    c5x = 10,
-    c5y = 50
+    c5x = 320,
+    c5y = 170
 } coordinates;
 
 @interface GameView ()
