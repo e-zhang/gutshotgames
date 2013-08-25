@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5810B47717C99FD10088F370 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5810B47117C99FD10088F370 /* libTestFlight.a */; };
+		5810B47817C99FD10088F370 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5810B47217C99FD10088F370 /* README.md */; };
+		5810B47917C99FD10088F370 /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 5810B47317C99FD10088F370 /* release_notes.md */; };
 		58195D5C17B658FF0095442B /* GameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5A17B658FF0095442B /* GameView.xib */; };
 		58195D6A17B6627D0095442B /* umbrella defend! defend player view.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5D17B6627C0095442B /* umbrella defend! defend player view.png */; };
 		58195D6B17B6627D0095442B /* umbrella defend! opposing player view.png in Resources */ = {isa = PBXBuildFile; fileRef = 58195D5E17B6627C0095442B /* umbrella defend! opposing player view.png */; };
@@ -95,6 +98,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5810B47117C99FD10088F370 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		5810B47217C99FD10088F370 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		5810B47317C99FD10088F370 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		5810B47417C99FD10088F370 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		5810B47517C99FD10088F370 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		5810B47617C99FD10088F370 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		58195D5A17B658FF0095442B /* GameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameView.xib; sourceTree = "<group>"; };
 		58195D5D17B6627C0095442B /* umbrella defend! defend player view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "umbrella defend! defend player view.png"; sourceTree = "<group>"; };
 		58195D5E17B6627C0095442B /* umbrella defend! opposing player view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "umbrella defend! opposing player view.png"; sourceTree = "<group>"; };
@@ -256,12 +265,26 @@
 				58B9C58116EC59F100891C19 /* libsqlite3.dylib in Frameworks */,
 				58B9C50116EC535B00891C19 /* UIKit.framework in Frameworks */,
 				E747EBD417496447007D7756 /* CouchCocoa.framework in Frameworks */,
+				5810B47717C99FD10088F370 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5810B47017C99FD10088F370 /* TestFlightSDK2.0.0 */ = {
+			isa = PBXGroup;
+			children = (
+				5810B47117C99FD10088F370 /* libTestFlight.a */,
+				5810B47217C99FD10088F370 /* README.md */,
+				5810B47317C99FD10088F370 /* release_notes.md */,
+				5810B47417C99FD10088F370 /* TestFlight+AsyncLogging.h */,
+				5810B47517C99FD10088F370 /* TestFlight+ManualSessions.h */,
+				5810B47617C99FD10088F370 /* TestFlight.h */,
+			);
+			path = TestFlightSDK2.0.0;
+			sourceTree = "<group>";
+		};
 		58195D7F17B82ED80095442B /* sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,6 +314,7 @@
 		58B9C4FF16EC535B00891C19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5810B47017C99FD10088F370 /* TestFlightSDK2.0.0 */,
 				E747EBD317496447007D7756 /* CouchCocoa.framework */,
 				E72AFA30171399E300BC1E04 /* TouchDB.framework */,
 				E72AFA081713989600BC1E04 /* DeprecatedHeaders */,
@@ -584,6 +608,8 @@
 				58195D7E17B662930095442B /* icon super.png in Resources */,
 				58195D8117B82EE90095442B /* backgroundbirds.mp3 in Resources */,
 				58195D8317B832B60095442B /* click.mp3 in Resources */,
+				5810B47817C99FD10088F370 /* README.md in Resources */,
+				5810B47917C99FD10088F370 /* release_notes.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +717,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Danny Witters (E5ZCFDQU25)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Danny Witters (E5ZCFDQU25)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -703,9 +731,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/TestFlightSDK2.0.0\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7B7CE4A2-BFCF-44DA-8C0F-6A9265A62154";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7B7CE4A2-BFCF-44DA-8C0F-6A9265A62154";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -714,6 +745,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Danny Witters (E5ZCFDQU25)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Danny Witters (E5ZCFDQU25)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -726,9 +759,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/TestFlightSDK2.0.0\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7B7CE4A2-BFCF-44DA-8C0F-6A9265A62154";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7B7CE4A2-BFCF-44DA-8C0F-6A9265A62154";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

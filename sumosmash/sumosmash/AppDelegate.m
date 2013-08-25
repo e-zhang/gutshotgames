@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "MenuView.h"
 
+#import "TestFlight.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -28,6 +30,9 @@
     [container setNavigationBarHidden:YES animated:NO];
     [container setViewControllers:[NSArray arrayWithObject:self.navController] animated:NO];
     self.window.rootViewController = container;
+    
+    //testflight
+    [TestFlight takeOff:@"e83def3c-d0fb-4da6-a76d-07f2e0ff1225"];
 
     return YES;
 

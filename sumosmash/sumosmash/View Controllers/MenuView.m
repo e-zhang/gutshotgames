@@ -40,6 +40,7 @@
     if (self) {
         // Custom initialization
         _gameServer = [[Server alloc] init];
+
     }
     return self;
 }
@@ -543,6 +544,7 @@
 
 -(NSDictionary*) getPlayer:(NSString*) username
 {
+    
     NSMutableDictionary* playerAccount = [[NSMutableDictionary alloc] init];
     
     NSLog(@"userab-%@",username);
@@ -572,7 +574,7 @@
         NSData *fbcheck = [NSData dataWithContentsOfURL:[NSURL URLWithString:fburl]];
         NSError *error = nil;
         id fbresult = [NSJSONSerialization JSONObjectWithData:fbcheck options:NSJSONReadingMutableContainers error:&error];
-        NSLog(@"userresult-%@",fbresult);
+        NSLog(@"userresult-%@,%@",fbresult,error);
         if ([[fbresult objectForKey:@"total_rows"] intValue]!=0){
             NSString *userid = [[[fbresult objectForKey:@"rows"]objectAtIndex:0]objectForKey:@"id"];
             
