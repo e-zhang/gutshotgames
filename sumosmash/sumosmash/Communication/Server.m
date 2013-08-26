@@ -118,6 +118,15 @@ const int SERVER_PORT = 443;
 
 -(UserAccount*) GetUser:(NSString *)uuid
 {
+    _userInvitations = [GameInvitations modelForDocument:
+                       [_gameInvites documentWithID:self.user.userid]];
+    
+    if(_userInvitations && !_userInvitations.gameRequests)
+    {
+        _userInvitations.gameRequests = [[NSArray alloc] init];
+        [[_userInvitations save] wait];
+    }
+
     return [UserAccount modelForDocument:[_serverProfiles documentWithID:uuid]];
 }
 
