@@ -29,8 +29,8 @@
 {
     _isTarget = NO;
     
-    _life = 5;
-    _points = 5;
+    _life = 10;
+    _points = 10;
     _lifeUpdate = 0;
     _pointsUpdate = 0;
 }
