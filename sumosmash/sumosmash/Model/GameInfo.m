@@ -341,14 +341,14 @@
     }
     else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
-        NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
-        NSDictionary* currentRound = [self.gameData objectAtIndex:_gameRound];
-    
-        if(!currentRound) return;
-
-        NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
         if([self.currentRound intValue] >= _gameRound)
         {
+            NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
+            NSDictionary* currentRound = [self.gameData objectAtIndex:_gameRound];
+            
+            if(!currentRound) return;
+            
+            NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
             NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
             [self checkRound:currentRound];
         }
