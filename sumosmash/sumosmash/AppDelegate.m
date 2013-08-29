@@ -32,7 +32,7 @@
     self.window.rootViewController = container;
     
     //testflight
-    [TestFlight takeOff:@"e83def3c-d0fb-4da6-a76d-07f2e0ff1225"];
+    [TestFlight takeOff:@"99e6a3cd-c03d-4838-885e-603789388519"];
 
     return YES;
 
