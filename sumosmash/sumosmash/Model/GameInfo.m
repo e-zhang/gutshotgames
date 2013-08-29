@@ -216,6 +216,8 @@
             error = nil;
         }
         
+        if(_gameRound > [self.gameData count]) break;
+        
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:_gameRound] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
         
