@@ -9,6 +9,7 @@
 #import "GameInfo.h"
 #import "Character.h"
 #include "DBDefs.h"
+#import <Foundation/Foundation.h>
 
 @implementation GameInfo
 
@@ -347,7 +348,7 @@
         NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
         if([self.currentRound intValue] >= _gameRound)
         {
-            $NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
+            NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
             [self checkRound:currentRound];
         }
 
