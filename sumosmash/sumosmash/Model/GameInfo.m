@@ -216,14 +216,14 @@
             error = nil;
         }
         
-        NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:[self.currentRound intValue]] mutableCopy];
+        NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:_gameRound] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
         
         // last if count - 1 entries and no count for self
         _isLast = ([currentRound count] == [self.players count] - _charsDead - 1) && ![currentRound objectForKey:player];
         
         [currentRound setObject:[move getMove] forKey:player];
-        [data setObject:currentRound atIndexedSubscript:[self.currentRound intValue]];
+        [data setObject:currentRound atIndexedSubscript:_gameRound];
         NSLog(@"data - %@", data);
         
         self.gameData = data;
@@ -233,9 +233,10 @@
     
     
     NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
-    if([self.currentRound intValue] == _gameRound)
+    if([self.currentRound intValue] >= _gameRound)
     {
-        [self checkRound:[self.gameData objectAtIndex:[self.currentRound intValue]]];
+        NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
+        [self checkRound:[self.gameData objectAtIndex:_gameRound]];
 
     }
 }
