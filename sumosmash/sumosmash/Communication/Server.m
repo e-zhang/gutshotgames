@@ -119,7 +119,7 @@ const int SERVER_PORT = 443;
 -(UserAccount*) GetUser:(NSString *)uuid
 {
     _userInvitations = [GameInvitations modelForDocument:
-                       [_gameInvites documentWithID:self.user.userid]];
+                       [_gameInvites documentWithID:uuid]];
     
     if(_userInvitations && !_userInvitations.gameRequests)
     {
