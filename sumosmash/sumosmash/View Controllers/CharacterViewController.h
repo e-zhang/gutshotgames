@@ -13,6 +13,8 @@
 @protocol CharacterDelegate<NSObject>
 -(BOOL) onMoveSelect:(Move*) move;
 -(void) onPressSelect:(NSString*) playerId;
+-(void) showCharacterHistory:(NSString*) playerId;
+-(void) removeCharacterHistory:(NSString*) playerId;
 @end
 
 @interface CharacterViewController : UIViewController<MoveMenuDelegate>
@@ -33,7 +35,7 @@
 - (id) initWithId:(NSString*) targetId name:(NSString*)name selfId:(NSString*)selfId
      delegate:(id<CharacterDelegate>)target;
 - (void) setUserPic:(NSString*) path;
-- (void) setCharacterImage:(int) type;
+- (void) setCharacterImage:(int) type path:(NSString*) path;
 
 
 @property (readonly, nonatomic) UILabel* Display;

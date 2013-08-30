@@ -40,7 +40,7 @@
         // 4
         if(_isSelf && (i == ATTACK || i == SUPERATTACK)) continue;
         if(!_isSelf && (i == GETPOINTS || i == DEFEND)) continue;
-        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
+        UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
       //  im.backgroundColor = [UIColor lightGrayColor];
       //  im.titleLabel.font = [UIFont systemFontOfSize:10.0];
       //  [im.titleLabel adjustsFontSizeToFitWidth];
@@ -54,7 +54,7 @@
         }
         if (i==SUPERATTACK){
             [im setBackgroundImage:[UIImage imageNamed:@"icon super.png"] forState:UIControlStateNormal];
-            im.layer.position = CGPointMake(25, 75);
+            im.layer.position = CGPointMake(85, 30);
         }
         if (i==GETPOINTS){
             [im setBackgroundImage:[UIImage imageNamed:@"icon get 5 points.png"] forState:UIControlStateNormal];
@@ -62,7 +62,7 @@
         }
         if (i==DEFEND){
             [im setBackgroundImage:[UIImage imageNamed:@"icon defend.png"] forState:UIControlStateNormal];
-            im.layer.position = CGPointMake(25, 75);
+            im.layer.position = CGPointMake(85, 30);
         }
        // [im setTitle:MoveStrings[i] forState:UIControlStateNormal];
         // 5

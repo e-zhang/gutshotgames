@@ -30,7 +30,8 @@
     
     UILabel* _status;
     UITextView* _gameInfo;
-    
+    UITextView* _characterhistory;
+
     Move* _selectedMove;
     
     NSMutableDictionary *charidtonum;

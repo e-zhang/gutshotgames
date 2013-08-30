@@ -19,8 +19,8 @@
 #include "Tags.h"
 
 #import "InvitationsViewController.h"
-#define EXPAND_SIZE 100
-#define WINDOW_SIZE 568
+#define EXPAND_SIZE 0
+#define WINDOW_SIZE 480
 
 @interface MenuView ()
 
@@ -114,9 +114,9 @@
             myImageView.image = [[UIImage alloc]initWithData:userPic];
             label1.text = username;
             
-            myImageView.frame = CGRectMake(20,40,40,40);
-            label1.frame = CGRectMake(20,90,400,40);
-            label1.font = [UIFont fontWithName:@"GillSans" size:22.0f];
+            myImageView.frame = CGRectMake(10,15,35,35);
+            label1.frame = CGRectMake(55,15,100,40);
+            label1.font = [UIFont fontWithName:@"GillSans" size:16.0f];
             [view addSubview:myImageView];
             [view addSubview:label1];
             break;

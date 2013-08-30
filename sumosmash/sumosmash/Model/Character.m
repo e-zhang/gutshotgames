@@ -37,7 +37,8 @@
 
 -(NSString*) getStats
 {
-    return [NSString stringWithFormat:@"%@:\n Lives: %d Points: %d", _name, _life, _points];
+    
+    return [NSString stringWithFormat:@"%@:\nLives: %d Points: %d\nLast Move: %@", _name, _life, _points,MoveStrings[self.NextMove.Type]];
 }
 
 

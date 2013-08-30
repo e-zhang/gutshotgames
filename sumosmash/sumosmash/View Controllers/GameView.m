@@ -25,16 +25,16 @@
 #define ARENA_RADIUS 80
 
 enum{
-    c1x = 200,
-    c1y = 180,
-    c2x = 200,
-    c2y = 50,
+    c1x = 100,
+    c1y = 250,
+    c2x = 100,
+    c2y = 10,
     c3x = 100,
-    c3y = 10,
-    c4x = 285,
-    c4y = 10,
-    c5x = 320,
-    c5y = 170
+    c3y = 70,
+    c4x = 100,
+    c4y = 130,
+    c5x = 100,
+    c5y = 190
 } coordinates;
 
 @interface GameView ()
@@ -112,15 +112,14 @@ NSString * const messageWatermark = @"Send a message...";
                                                                                     name:[player objectForKey:DB_USER_NAME]
                                                                                   selfId:_myPlayerId
                                                                                 delegate:self];
-        /*NSString* fbid = [player objectForKey:DB_FB_ID];
+        NSString* fbid = [player objectForKey:DB_FB_ID];
+        NSString *path;
         if(fbid)
         {
-            NSString *path = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",
+             path = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",
                               fbid];
-            
-            [character setUserPic:path];
-            
-        }*/
+                        
+        }
         
               
         if([[player objectForKey:DB_CONNECTED] boolValue])
@@ -132,32 +131,30 @@ NSString * const messageWatermark = @"Send a message...";
         
         [self addChildViewController:character];
         
-     //   double x = cos(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.width/2 - 50;
-     //   double y = sin(M_PI + angleSize*i)*ARENA_RADIUS + _gamezone.bounds.size.height/2 - 60;
         if([_myPlayerId isEqual:character.Char.Id]){
-            character.view.frame = CGRectMake(c1x,c1y,50,100);
-            [character setCharacterImage:0];
+            character.view.frame = CGRectMake(c1x,c1y,240,60);
+            [character setCharacterImage:0 path:path];
             [charidtonum setObject:@"101" forKey:character.Char.Id];
         }
         else{
             if(oppnum==0){
-                character.view.frame = CGRectMake(c2x,c2y,50,100);
-                [character setCharacterImage:1];
+                character.view.frame = CGRectMake(c2x,c2y,240,60);
+                [character setCharacterImage:1 path:path];
                 [charidtonum setObject:@"102" forKey:character.Char.Id];
             }
             if(oppnum==1){
-                character.view.frame = CGRectMake(c3x,c3y,50,100);
-                [character setCharacterImage:2];
+                character.view.frame = CGRectMake(c3x,c3y,240,60);
+                [character setCharacterImage:2 path:path];
                 [charidtonum setObject:@"103" forKey:character.Char.Id];
             }
             if(oppnum==2){
-                character.view.frame = CGRectMake(c4x,c4y,50,100);
-                [character setCharacterImage:3];
+                character.view.frame = CGRectMake(c4x,c4y,240,60);
+                [character setCharacterImage:3 path:path];
                 [charidtonum setObject:@"104" forKey:character.Char.Id];
             }
             if(oppnum==3){
-                character.view.frame = CGRectMake(c5x,c5y,50,100);
-                [character setCharacterImage:4];
+                character.view.frame = CGRectMake(c5x,c5y,240,60);
+                [character setCharacterImage:4 path:path];
                 [charidtonum setObject:@"105" forKey:character.Char.Id];
             }
             oppnum++;
@@ -257,11 +254,17 @@ NSString * const messageWatermark = @"Send a message...";
         
         _status = [[UILabel alloc] initWithFrame:CGRectMake(10, 80, 75, 30)];
         _status.font = [UIFont systemFontOfSize:14.0];
-        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(10, 125, 160, 180)];
+        _gameInfo = [[UITextView alloc] initWithFrame:CGRectMake(5, 125, 210, 180)];
         _gameInfo.editable = NO;
         _gameInfo.userInteractionEnabled = YES;
         _gameInfo.scrollEnabled = YES;
-        _gameInfo.font = [UIFont systemFontOfSize:9.0];
+        _gameInfo.font = [UIFont systemFontOfSize:10.0];
+        
+        _characterhistory = [[UITextView alloc] initWithFrame:CGRectMake(285, 5, 130, 320)];
+        _characterhistory.editable = NO;
+        _characterhistory.userInteractionEnabled = YES;
+        _characterhistory.scrollEnabled = YES;
+        _characterhistory.font = [UIFont systemFontOfSize:10.0];
         
         UIButton* submit = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 70, 25)];
         [submit setTitle:@"Submit Move" forState:UIControlStateNormal];
@@ -331,6 +334,12 @@ NSString * const messageWatermark = @"Send a message...";
         [self.view addSubview:_status];
         [_righthandinfo addSubview:_gameInfo];
         [_game initializeGame];
+        
+        [self.view bringSubviewToFront:_righthandinfo];
+        [self.view bringSubviewToFront:_slideoutleft];
+        _slideoutleft.layer.zPosition = 10;
+        _righthandinfo.layer.zPosition = 10;
+
     }
     return self;
 }
@@ -486,13 +495,16 @@ NSString * const messageWatermark = @"Send a message...";
                     recepient = d.Name;
                 }
             }
-            _gameInfo.text = [NSString stringWithFormat:@"%@\n%@", _gameInfo.text,
-                              [NSString stringWithFormat:@"%@ used move: %@ to %@", c.Name, MoveStrings[c.NextMove.Type],recepient]];
+            _gameInfo.text = [NSString stringWithFormat:@"%@\n%@",
+                              [NSString stringWithFormat:@"%@: %@ to %@", c.Name, MoveStrings[c.NextMove.Type],recepient],_gameInfo.text];
         }else{
-            _gameInfo.text = [NSString stringWithFormat:@"%@\n%@", _gameInfo.text,
-                          [NSString stringWithFormat:@"%@ used move: %@", c.Name, MoveStrings[c.NextMove.Type]]];
+            _gameInfo.text = [NSString stringWithFormat:@"%@\n%@",
+                          [NSString stringWithFormat:@"%@: %@", c.Name, MoveStrings[c.NextMove.Type]], _gameInfo.text];
         }
     }
+    
+    _gameInfo.text = [NSString stringWithFormat:@"%@\n%@",
+                      [NSString stringWithFormat:@"\nRound %d\n", _game.GameRound], _gameInfo.text];
     
     //simulate attacks
     NSMutableArray* defends = [[NSMutableArray alloc] init];
@@ -505,9 +517,7 @@ NSString * const messageWatermark = @"Send a message...";
                                      withSimultaneousAttackers:&sameAttacks
                                      withAttackers:&attacks];
     
-    NSLog(@"attack-%@", attacks);
-    NSLog(@"sameattack-%@", sameAttacks);
-    
+    /*
     //get5s
     for (int charIdx=0; charIdx<[points count]; charIdx++){
         Character* c = [points objectAtIndex:charIdx];
@@ -573,6 +583,7 @@ NSString * const messageWatermark = @"Send a message...";
         [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(reset) userInfo:nil repeats:NO];
 
     }
+    */
     
     [self commitRound];
     
@@ -588,6 +599,7 @@ NSString * const messageWatermark = @"Send a message...";
     }
 }
 
+/*
 -(void)get5:(NSString *)player1{
     
     int playernum = [[charidtonum objectForKey:player1] intValue];
@@ -776,6 +788,7 @@ NSString * const messageWatermark = @"Send a message...";
     }];
 
 }
+*/
 
 -(void)reset{
     
@@ -1210,7 +1223,9 @@ NSString * const messageWatermark = @"Send a message...";
     _righthandinfo.frame = CGRectMake(self.view.frame.size.height,0, _righthandinfo.bounds.size.width, _righthandinfo.bounds.size.height);
     
     _slideoutleft.frame = CGRectMake(self.view.frame.size.height - _slideoutleft.frame.size.width,0, _slideoutleft.bounds.size.width, _slideoutleft.bounds.size.height);
-    
+
+    [_righthandbutton setTitle:@"<" forState:UIControlStateNormal];
+
     [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
     [UIView commitAnimations];
     
@@ -1220,14 +1235,16 @@ NSString * const messageWatermark = @"Send a message...";
     NSTimeInterval animationDuration = 1.0/* determine length of animation */;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
-
     
     _righthandinfo.frame = CGRectMake(self.view.frame.size.height-_righthandinfo.frame.size.width,0, _righthandinfo.bounds.size.width, _righthandinfo.bounds.size.height);
     
     _slideoutleft.frame = CGRectMake(self.view.frame.size.height-_righthandinfo.frame.size.width-_slideoutleft.frame.size.width,0, _slideoutleft.bounds.size.width, _slideoutleft.bounds.size.height);
-    
+
+    [_righthandbutton setTitle:@">" forState:UIControlStateNormal];
+
     [UIView commitAnimations];
-        
+
+
 }
 
 -(void)slideup{
@@ -1235,11 +1252,56 @@ NSString * const messageWatermark = @"Send a message...";
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
     
-    
     _buttonslider.frame = CGRectMake(0,self.view.frame.size.width - _buttonslider.frame.size.height, _buttonslider.bounds.size.width, _buttonslider.bounds.size.height);
     
     [UIView commitAnimations];
     
+}
+
+-(void) showCharacterHistory:(NSString *)playerId
+{
+    NSArray *a = _game.gameData;
+    [_characterhistory setText:@""];   
+    int i=0;
+    
+    for(NSDictionary* d in a){
+        
+        if([d objectForKey:playerId]){
+        
+        NSDictionary *c = [d objectForKey:playerId];
+        
+        if([c objectForKey:@"type"]){
+        i++;
+        int move = [[c objectForKey:@"type"] intValue];
+        if([MoveStrings[move] isEqual:@"Attack"] || [MoveStrings[move] isEqual:@"Super Attack"]){
+            
+            NSString *recepient;
+            
+            for( Character* d in [_characters allValues]){
+                    if ([d.Id isEqualToString:[c objectForKey:@"target"]]){
+                        recepient = d.Name;
+                    }
+            }
+        
+        _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n%@ %@\n%@",i,MoveStrings[move],
+                          recepient,_characterhistory.text];
+        }
+        else{
+            int move = [[c objectForKey:@"type"] intValue];
+            _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n%@\n%@",i,
+                                      MoveStrings[move],_characterhistory.text];
+        }
+            
+        }
+        }
+    }
+    [self.view addSubview:_characterhistory];
+}
+
+-(void) removeCharacterHistory:(NSString *)playerId
+{
+    [_characterhistory setText:@""];
+    [_characterhistory removeFromSuperview];
 }
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField

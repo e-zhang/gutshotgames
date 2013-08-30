@@ -31,7 +31,7 @@
         
         _characterDisplay.font = [UIFont fontWithName:@"GillSans" size:12.0f];
         _characterDisplay.textColor = [UIColor redColor];
-        _characterDisplay.numberOfLines = 2;
+        _characterDisplay.numberOfLines = 3;
         _isSelf= [playerId isEqual:selfId];
         _delegate = target;
         
@@ -70,10 +70,19 @@
     [myImageView addGestureRecognizer:longPress];
 }
 
-- (void) setCharacterImage:(int) type
+- (void) setCharacterImage:(int) type path:(NSString*) path
 {
+    NSURL *url = [NSURL URLWithString:path];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    _characterPic = [[UIImage alloc]initWithData:data];
     
-    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 100)];
+    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
+    myImageView.userInteractionEnabled = YES;
+    myImageView.image = _characterPic;
+    
+    //golf swing
+    
+   /* UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
     myImageView.userInteractionEnabled = YES;
     myImageView.tag = 100+type+1;
     NSLog(@"tag has been set. %d",myImageView.tag);
@@ -81,14 +90,14 @@
         myImageView.image = [UIImage imageNamed:@"golf wars normal 1.png"];
     }else{
         myImageView.image = [UIImage imageNamed:@"golf wars front swing.png"];
-    }
-  //  myImageView.backgroundColor = [UIColor greenColor];
+    }*/
+
     [self.view addSubview: myImageView];
     [self.view addSubview:_characterDisplay];
-    _characterDisplay.frame = CGRectMake(0, 100,200,30);
+    _characterDisplay.frame = CGRectMake(60, 0,160,60);
 
     _menuController = [[UIViewController alloc] init];
-    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,50,100) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
+    _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,200,60) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
     _menuController.view.backgroundColor = [UIColor whiteColor];
     
     [self addChildViewController:_menuController];
@@ -113,10 +122,13 @@
         [self.view bringSubviewToFront:_menuController.view];
         self.view.userInteractionEnabled = YES;
         [_delegate onPressSelect:_character.Id];
+        [_delegate showCharacterHistory:_character.Id];
+
     }
     else
     {
         [_menuController.view removeFromSuperview];
+        [_delegate removeCharacterHistory:_character.Id];
     }
     
 }
