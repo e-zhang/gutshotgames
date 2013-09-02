@@ -380,6 +380,7 @@ NSString * const messageWatermark = @"Send a message...";
 
 -(void) submitMove:(UIButton*) sender
 {
+
     if(![[_characters objectForKey:_myPlayerId] UpdateNextMove:_selectedMove])
     {
         UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
@@ -394,8 +395,6 @@ NSString * const messageWatermark = @"Send a message...";
     [_game submitMove:_selectedMove forPlayer:_myPlayerId];
     Character* c = [_characters objectForKey:_selectedMove.TargetId];
     c.IsTarget = NO;
-    
-    [_submit setHidden:YES];
     
 }
 
@@ -959,9 +958,7 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (void) commitRound
 {
-   
-    [_submit setHidden:NO];
-
+    
     for(Character* c in [_characters allValues])
     {
         NSLog(@"%@",[c CommitUpdates]);
