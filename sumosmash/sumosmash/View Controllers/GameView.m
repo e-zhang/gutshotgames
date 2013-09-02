@@ -395,7 +395,7 @@ NSString * const messageWatermark = @"Send a message...";
     Character* c = [_characters objectForKey:_selectedMove.TargetId];
     c.IsTarget = NO;
     
-    _submit.hidden = YES;
+    [_submit setHidden:YES];
     
 }
 
@@ -488,8 +488,6 @@ NSString * const messageWatermark = @"Send a message...";
 {
     if ([_game isGameOver]) return;
     
-    _submit.hidden = NO;
-
     for( Character* c in [_characters allValues])
     {
         if([MoveStrings[c.NextMove.Type] isEqual:@"Attack"] || [MoveStrings[c.NextMove.Type] isEqual:@"Super Attack"]){
@@ -961,6 +959,9 @@ NSString * const messageWatermark = @"Send a message...";
 
 - (void) commitRound
 {
+   
+    [_submit setHidden:NO];
+
     for(Character* c in [_characters allValues])
     {
         NSLog(@"%@",[c CommitUpdates]);
