@@ -41,6 +41,7 @@
     //SystemSoundID backgroundbirds;
     AVAudioPlayer *player;
     
+    UIButton* _submit;
 }
 
 //@property (strong, nonatomic) IBOutlet UIButton *smbutton;

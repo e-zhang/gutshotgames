@@ -266,17 +266,17 @@ NSString * const messageWatermark = @"Send a message...";
         _characterhistory.scrollEnabled = YES;
         _characterhistory.font = [UIFont systemFontOfSize:10.0];
         
-        UIButton* submit = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 70, 25)];
-        [submit setTitle:@"Submit Move" forState:UIControlStateNormal];
-        [submit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        submit.titleLabel.font = [UIFont systemFontOfSize:10.0];
-        submit.backgroundColor = [UIColor lightGrayColor];
-        submit.layer.borderColor = [[UIColor blackColor] CGColor];
-        submit.layer.borderWidth = 1.5;
-        submit.showsTouchWhenHighlighted = YES;
-        submit.tag = SUBMIT_BUTTON;
-        [submit addTarget:self action:@selector(submitMove:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:submit];
+        _submit = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 70, 25)];
+        [_submit setTitle:@"Submit Move" forState:UIControlStateNormal];
+        [_submit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        _submit.titleLabel.font = [UIFont systemFontOfSize:10.0];
+        _submit.backgroundColor = [UIColor lightGrayColor];
+        _submit.layer.borderColor = [[UIColor blackColor] CGColor];
+        _submit.layer.borderWidth = 1.5;
+        _submit.showsTouchWhenHighlighted = YES;
+        _submit.tag = SUBMIT_BUTTON;
+        [_submit addTarget:self action:@selector(submitMove:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_submit];
         
         if([myid isEqual:_game.hostId])
         {
@@ -394,6 +394,9 @@ NSString * const messageWatermark = @"Send a message...";
     [_game submitMove:_selectedMove forPlayer:_myPlayerId];
     Character* c = [_characters objectForKey:_selectedMove.TargetId];
     c.IsTarget = NO;
+    
+    _submit.hidden = YES;
+    
 }
 
 - (BOOL) onMoveSelect:(Move *)move
@@ -1002,7 +1005,8 @@ NSString * const messageWatermark = @"Send a message...";
         }
         
     }
-
+    
+    _submit.hidden = NO;
 }
 
 
@@ -1265,13 +1269,12 @@ NSString * const messageWatermark = @"Send a message...";
     int i=0;
     
     for(NSDictionary* d in a){
-        
+        if(_game.GameRound>=i){
         if([d objectForKey:playerId]){
         
         NSDictionary *c = [d objectForKey:playerId];
         
         if([c objectForKey:@"type"]){
-        i++;
         int move = [[c objectForKey:@"type"] intValue];
         if([MoveStrings[move] isEqual:@"Attack"] || [MoveStrings[move] isEqual:@"Super Attack"]){
             
@@ -1293,6 +1296,8 @@ NSString * const messageWatermark = @"Send a message...";
         }
             
         }
+        }
+        i++;
         }
     }
     [self.view addSubview:_characterhistory];
