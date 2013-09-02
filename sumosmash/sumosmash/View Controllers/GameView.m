@@ -488,6 +488,8 @@ NSString * const messageWatermark = @"Send a message...";
 {
     if ([_game isGameOver]) return;
     
+    _submit.hidden = NO;
+
     for( Character* c in [_characters allValues])
     {
         if([MoveStrings[c.NextMove.Type] isEqual:@"Attack"] || [MoveStrings[c.NextMove.Type] isEqual:@"Super Attack"]){
@@ -1005,8 +1007,6 @@ NSString * const messageWatermark = @"Send a message...";
         }
         
     }
-    
-    _submit.hidden = NO;
 }
 
 
@@ -1269,7 +1269,7 @@ NSString * const messageWatermark = @"Send a message...";
     int i=0;
     
     for(NSDictionary* d in a){
-        if(_game.GameRound>=i){
+        if(_game.GameRound>i){
         if([d objectForKey:playerId]){
         
         NSDictionary *c = [d objectForKey:playerId];
