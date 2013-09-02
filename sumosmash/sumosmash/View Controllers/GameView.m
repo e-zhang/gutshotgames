@@ -1297,6 +1297,9 @@ NSString * const messageWatermark = @"Send a message...";
         }
         i++;
         }
+        else{
+            _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n User has submitted his move.",i];
+        }
     }
     [self.view addSubview:_characterhistory];
 }
