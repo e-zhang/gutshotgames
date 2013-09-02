@@ -1267,42 +1267,48 @@ NSString * const messageWatermark = @"Send a message...";
     int i=0;
     
     for(NSDictionary* d in a){
-        if(_game.GameRound>i){
+        
         if([d objectForKey:playerId]){
-        
-        NSDictionary *c = [d objectForKey:playerId];
-        
-        if([c objectForKey:@"type"]){
-        int move = [[c objectForKey:@"type"] intValue];
-        if([MoveStrings[move] isEqual:@"Attack"] || [MoveStrings[move] isEqual:@"Super Attack"]){
             
-            NSString *recepient;
+            NSDictionary *c = [d objectForKey:playerId];
             
-            for( Character* d in [_characters allValues]){
-                    if ([d.Id isEqualToString:[c objectForKey:@"target"]]){
-                        recepient = d.Name;
-                    }
-            }
+            if(_game.GameRound>i){
         
-        _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n%@ %@\n%@",i,MoveStrings[move],
+                if([c objectForKey:@"type"]){
+                        int move = [[c objectForKey:@"type"] intValue];
+                        if([MoveStrings[move] isEqual:@"Attack"] || [MoveStrings[move] isEqual:@"Super Attack"]){
+            
+                                NSString *recepient;
+            
+                                for( Character* d in [_characters allValues]){
+                                    if ([d.Id isEqualToString:[c objectForKey:@"target"]]){
+                                        recepient = d.Name;
+                                    }
+                                }
+        
+                            _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n%@ %@\n%@",i,MoveStrings[move],
                           recepient,_characterhistory.text];
-        }
-        else{
-            int move = [[c objectForKey:@"type"] intValue];
-            _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n%@\n%@",i,
+                }
+                else{
+                        int move = [[c objectForKey:@"type"] intValue];
+                        _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n%@\n%@",i,
                                       MoveStrings[move],_characterhistory.text];
-        }
+                }
             
+            }
+            else if([c objectForKey:@"type"]){
+                _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n User has submitted his move.\n%@",i,_characterhistory.text];
+            }
+       
+            i++;
         }
-        }
-        i++;
-        }
-        else{
-            _characterhistory.text = [NSString stringWithFormat:@"\nRound %d\n User has submitted his move.",i];
+
         }
     }
+    
     [self.view addSubview:_characterhistory];
 }
+
 
 -(void) removeCharacterHistory:(NSString *)playerId
 {
