@@ -12,9 +12,10 @@
 @interface GridCell : UIView
 {
     GridModel* _grid;
+    CoordPoint* _cell;
 }
 
--(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid;
+-(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 
 -(void) update;
 

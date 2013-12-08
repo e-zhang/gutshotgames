@@ -7,25 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef struct
-{
-    int x;
-    int y;
-} CoordPoint;
-
+#import "CoordPoint.h"
 
 @interface Player : NSObject
 {
-    CoordPoint _location;
+    CoordPoint* _location;
     int _points;
-    CoordPoint _move;
+    CoordPoint* _move;
     NSMutableArray* _bombs;
 }
 
 
--(BOOL) addMove:(CoordPoint) move;
--(BOOL) addBomb:(CoordPoint) bomb;
+-(BOOL) addMove:(CoordPoint*) move;
+-(BOOL) addBomb:(CoordPoint*) bomb;
 
 
 

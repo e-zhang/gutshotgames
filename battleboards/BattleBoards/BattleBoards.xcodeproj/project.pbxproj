@@ -27,6 +27,7 @@
 		E7850D7718539EE90076C518 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7418539EE90076C518 /* FacebookSDK.framework */; };
 		E7850D7818539EE90076C518 /* TouchDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7518539EE90076C518 /* TouchDB.framework */; };
 		E7850D7B1853D2E20076C518 /* GridView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D7A1853D2E20076C518 /* GridView.m */; };
+		E7850D811854DB790076C518 /* CoordPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D801854DB790076C518 /* CoordPoint.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,8 @@
 		E7850D791853D2E20076C518 /* GridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridView.h; path = Views/GridView.h; sourceTree = "<group>"; };
 		E7850D7A1853D2E20076C518 /* GridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridView.m; path = Views/GridView.m; sourceTree = "<group>"; };
 		E7850D7C1853E0010076C518 /* CellStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CellStates.h; path = Model/CellStates.h; sourceTree = "<group>"; };
+		E7850D7F1854DB790076C518 /* CoordPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoordPoint.h; path = Model/CoordPoint.h; sourceTree = "<group>"; };
+		E7850D801854DB790076C518 /* CoordPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoordPoint.m; path = Model/CoordPoint.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +186,8 @@
 				E7850D6718539DD40076C518 /* Player.h */,
 				E7850D6818539DD40076C518 /* Player.m */,
 				E7850D7C1853E0010076C518 /* CellStates.h */,
+				E7850D7F1854DB790076C518 /* CoordPoint.h */,
+				E7850D801854DB790076C518 /* CoordPoint.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -304,6 +309,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7850D811854DB790076C518 /* CoordPoint.m in Sources */,
 				E7850D3D185382C70076C518 /* GSGViewController.m in Sources */,
 				E7850D34185382C70076C518 /* GSGAppDelegate.m in Sources */,
 				E7850D7B1853D2E20076C518 /* GridView.m in Sources */,
