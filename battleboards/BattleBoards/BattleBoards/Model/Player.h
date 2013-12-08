@@ -17,10 +17,13 @@
     NSMutableArray* _bombs;
 }
 
+-(id) initWithStart:(CoordPoint*)start andPoints:(int)points;
 
 -(BOOL) addMove:(CoordPoint*) move;
 -(BOOL) addBomb:(CoordPoint*) bomb;
+-(void) reset;
 
+-(BOOL) checkDistance:(CoordPoint*) dest;
 
 
 @end
