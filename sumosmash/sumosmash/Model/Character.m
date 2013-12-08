@@ -35,17 +35,41 @@
     _pointsUpdate = 0;
 }
 
--(NSString*) getStats
+-(NSSet*) Team
 {
+    NSMutableSet* team = [[NSMutableSet alloc] init];
+    [_team enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL* stop)
+     {
+         if([object boolValue]){
+             [team addObject:key];
+         }
+     }];
     
-    return [NSString stringWithFormat:@"%@:\nLives: %d Points: %d\nLast Move: %@", _name, _life, _points,MoveStrings[self.NextMove.Type]];
+    return team;
 }
-
 
 -(BOOL) hasNextMove;
 {
     return _nextMove == [Move GetDefaultMove];
 }
+
+-(BOOL) addToTeam:(NSString *)teammate
+{
+    id status = [_team objectForKey:teammate];
+    if(status == nil)
+    {
+        [_team setObject:[NSNumber numberWithBool:NO] forKey:teammate];
+        return NO;
+    }
+    
+    if(![status boolValue])
+    {
+        [_team setObject:[NSNumber numberWithBool:YES] forKey:teammate];
+    }
+    
+    return YES;
+}
+
 
 -(BOOL) UpdateNextMove:(Move*)nextMove
 {
@@ -56,12 +80,13 @@
     return isValid;
 }
 
+
 -(BOOL) IsValidMove:(Move*) move
 {
     BOOL isValid = move.Type != MOVECOUNT;
     if (move.Type == ATTACK || move.Type == SUPERATTACK)
     {
-        isValid &= move.TargetId != nil;
+        isValid &= (move.TargetId != nil && ![_team containsObject:move.TargetId]);
     }
     
     isValid &= MovePointValues[move.Type] <= _points;
@@ -88,7 +113,7 @@
     return _life <= 0;
 }
 
--(BOOL) OnAttack:(MoveType) move by:(NSString *)attacker
+-(enum RebateType) OnAttack:(MoveType) move by:(NSString *)attacker
 {
     _pointsUpdate = _nextMove.Type == GETPOINTS ? -1 : _pointsUpdate;
     if(!(move == SUPERATTACK && _nextMove.Type == SUPERATTACK && [_nextMove.TargetId isEqual:attacker]))
@@ -96,12 +121,32 @@
         _lifeUpdate += MoveDamageValues[move] + (_nextMove.Type == DEFEND);
     }
     
-    return _pointsUpdate < 0;
+    if( _pointsUpdate < 0 )
+    {
+        return POINTS;
+    }
+    
+    if( _nextMove.Type == GETLIFE )
+    {
+        return LIFE;
+    }
+    
+    return NO_REBATE;
 }
 
--(void) OnRebate
+-(void) OnRebate:(enum RebateType) type
 {
-    _pointsUpdate = MovePointValues[_nextMove.Type] + REBATE_POINTS;
+    switch( type )
+    {
+        case POINTS:
+            _pointsUpdate = MovePointValues[_nextMove.Type] + REBATE_POINTS;
+            break;
+        case LIFE:
+            _lifeUpdate += REBATE_LIFE;
+            break;
+        case NO_REBATE:
+            break;
+    }
 }
 
 -(NSString*) CommitUpdates
@@ -110,7 +155,14 @@
     _points -=  _pointsUpdate < 0 ? 0 : MovePointValues[_nextMove.Type] - _pointsUpdate;
     [self didChangeValueForKey:@"Points"];
     [self willChangeValueForKey:@"Life"];
-    _life = MAX(0, _life + _lifeUpdate);
+    if( _nextMove.Type == GETLIFE && _lifeUpdate >= 0 )
+    {
+        _life += REBATE_LIFE;
+    }
+    else
+    {
+        _life = MAX(0, _life + _lifeUpdate);
+    }
     [self didChangeValueForKey:@"Life"];
     
     NSString* move = [NSString stringWithFormat:@" %@ used move: %@ \n" , _id, MoveStrings[self.NextMove.Type]];

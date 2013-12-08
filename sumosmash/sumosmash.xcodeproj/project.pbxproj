@@ -83,6 +83,7 @@
 		E79D7B921728AA8D007972E0 /* InvitationsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8C1728AA8D007972E0 /* InvitationsView.xib */; };
 		E79D7B931728AA8D007972E0 /* InvitePopupScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8D1728AA8D007972E0 /* InvitePopupScreen.xib */; };
 		E79D7B951728AA8D007972E0 /* Waitscreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E79D7B8F1728AA8D007972E0 /* Waitscreen.xib */; };
+		E7C1FD9A17FBC261002FD707 /* UIButton+StringButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C1FD9917FBC261002FD707 /* UIButton+StringButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -237,6 +238,8 @@
 		E79D7B8C1728AA8D007972E0 /* InvitationsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InvitationsView.xib; path = Views/InvitationsView.xib; sourceTree = "<group>"; };
 		E79D7B8D1728AA8D007972E0 /* InvitePopupScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InvitePopupScreen.xib; path = Views/InvitePopupScreen.xib; sourceTree = "<group>"; };
 		E79D7B8F1728AA8D007972E0 /* Waitscreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = Waitscreen.xib; path = Views/Waitscreen.xib; sourceTree = "<group>"; };
+		E7C1FD9817FBC261002FD707 /* UIButton+StringButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+StringButton.h"; path = "Controls/UIButton+StringButton.h"; sourceTree = "<group>"; };
+		E7C1FD9917FBC261002FD707 /* UIButton+StringButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+StringButton.m"; path = "Controls/UIButton+StringButton.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -500,6 +503,8 @@
 			children = (
 				E79D7B5C171CD937007972E0 /* MoveMenu.h */,
 				E79D7B5D171CD937007972E0 /* MoveMenu.m */,
+				E7C1FD9817FBC261002FD707 /* UIButton+StringButton.h */,
+				E7C1FD9917FBC261002FD707 /* UIButton+StringButton.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -638,6 +643,7 @@
 				E79D7B7D172488BE007972E0 /* MenuView.m in Sources */,
 				E706AC26172F4F08008F2A1A /* InvitationsViewController.m in Sources */,
 				E72AE07E17B467F3008EC1A4 /* SavedGames.m in Sources */,
+				E7C1FD9A17FBC261002FD707 /* UIButton+StringButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

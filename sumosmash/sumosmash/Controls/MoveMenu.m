@@ -39,7 +39,7 @@
     for (int i = 0; i < MOVECOUNT; i++) {
         // 4
         if(_isSelf && (i == ATTACK || i == SUPERATTACK)) continue;
-        if(!_isSelf && (i == GETPOINTS || i == DEFEND)) continue;
+        if(!_isSelf && (i == GETPOINTS || i == DEFEND || i == GETLIFE || i == ADDTEAM)) continue;
         UIButton *im = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
       //  im.backgroundColor = [UIColor lightGrayColor];
       //  im.titleLabel.font = [UIFont systemFontOfSize:10.0];
@@ -48,21 +48,28 @@
       //  im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
         im.layer.zPosition = 100;
 
-        if (i==ATTACK){
-            [im setBackgroundImage:[UIImage imageNamed:@"icon normal.png"] forState:UIControlStateNormal];
-            im.layer.position = CGPointMake(25, 30);
-        }
-        if (i==SUPERATTACK){
-            [im setBackgroundImage:[UIImage imageNamed:@"icon super.png"] forState:UIControlStateNormal];
-            im.layer.position = CGPointMake(85, 30);
-        }
-        if (i==GETPOINTS){
-            [im setBackgroundImage:[UIImage imageNamed:@"icon get 5 points.png"] forState:UIControlStateNormal];
-            im.layer.position = CGPointMake(25, 30);
-        }
-        if (i==DEFEND){
-            [im setBackgroundImage:[UIImage imageNamed:@"icon defend.png"] forState:UIControlStateNormal];
-            im.layer.position = CGPointMake(85, 30);
+        switch(i)
+        {
+            case ATTACK:
+                [im setBackgroundImage:[UIImage imageNamed:@"icon normal.png"] forState:UIControlStateNormal];
+                im.layer.position = CGPointMake(25, 30);
+                break;
+            case SUPERATTACK:
+                [im setBackgroundImage:[UIImage imageNamed:@"icon super.png"] forState:UIControlStateNormal];
+                im.layer.position = CGPointMake(85, 30);
+                break;
+            case GETPOINTS:
+                [im setBackgroundImage:[UIImage imageNamed:@"icon get 5 points.png"] forState:UIControlStateNormal];
+                im.layer.position = CGPointMake(25, 30);
+                break;
+            case DEFEND:
+                [im setBackgroundImage:[UIImage imageNamed:@"icon defend.png"] forState:UIControlStateNormal];
+                im.layer.position = CGPointMake(85, 30);
+                break;
+            case GETLIFE:
+                [im setTitle:@"GET LIFE" forState:UIControlStateNormal];
+                im.layer.position = CGPointMake(145, 30);
+                break;
         }
        // [im setTitle:MoveStrings[i] forState:UIControlStateNormal];
         // 5

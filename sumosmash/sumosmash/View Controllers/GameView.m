@@ -17,6 +17,8 @@
 
 #include "Tags.h"
 
+#import "UIButton+StringButton.h"
+
 #define degreesToRadians(x) (M_PI * x / 180.0)
 
 #define PLAYER_HEIGHT 120
@@ -104,6 +106,7 @@ NSString * const messageWatermark = @"Send a message...";
 
     int oppnum = 0;
     
+        
     for (int i = 0; i < [players count]; ++i)
     {
         NSDictionary* player = [_game.players objectForKey:[players objectAtIndex:i]];
@@ -120,6 +123,19 @@ NSString * const messageWatermark = @"Send a message...";
                               fbid];
                         
         }
+        
+        if(![character.Char.Id isEqualToString:_myPlayerId])
+        {
+            UIButton* but = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 115 - 20*oppnum, 20)];
+            but.showsTouchWhenHighlighted = YES;
+            but.layer.borderColor = [[UIColor blackColor] CGColor];
+            but.layer.borderWidth = 1.5;
+            
+            but.stringTag = character.Char.Id;
+            [but setTitle:character.Char.Id forState:UIControlStateNormal];
+            [_submit addTarget:self action:@selector(addTeam:) forControlEvents:UIControlEventTouchUpInside];
+        }
+    
         
               
         if([[player objectForKey:DB_CONNECTED] boolValue])
@@ -266,7 +282,7 @@ NSString * const messageWatermark = @"Send a message...";
         _characterhistory.scrollEnabled = YES;
         _characterhistory.font = [UIFont systemFontOfSize:10.0];
         
-        _submit = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 70, 25)];
+        _submit = [[UIButton alloc] initWithFrame:CGRectMake(10, 120, 125, 25)];
         [_submit setTitle:@"Submit Move" forState:UIControlStateNormal];
         [_submit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _submit.titleLabel.font = [UIFont systemFontOfSize:10.0];
@@ -467,6 +483,36 @@ NSString * const messageWatermark = @"Send a message...";
         }
     }
 }
+
+
+-(void) addTeam:(id) sender
+{
+    Character* c = [_characters objectForKey:((UIButton*) sender).stringTag];
+    if([c.Team count] > 0)
+    {
+        UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
+                                                          message:@"Cannot invite to team"
+                                                         delegate:self
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        
+        [myAlert1 show];
+        return;
+    }
+    
+    [_game addToTeam:c.Id forPlayer:_myPlayerId];
+    
+    Character* me = [_characters objectForKey:_myPlayerId];
+    [me addToTeam:c.Id];
+}
+
+
+- (BOOL) onTeamInvite:(NSString *)team forPlayer:(NSString*)playerId
+{
+    Character* c = [_characters objectForKey:playerId];
+    return [c addToTeam:team];
+}
+
 
 - (BOOL) onPlayerJoined:(NSString *)playerId
 {
@@ -975,7 +1021,6 @@ NSString * const messageWatermark = @"Send a message...";
     }
     
     int charsLeft = [_characters count] - [deadChars count];
-    [_game setGameOver: deadChars.count];
 
     if( charsLeft == 1)
     {
@@ -986,6 +1031,7 @@ NSString * const messageWatermark = @"Send a message...";
             NSLog(@"Game Over...\n Winner is %@", c.Name);
             break;
         }
+        [_game setGameOver: YES withChars:charsLeft];
     }
     else if (charsLeft == 0)
     {
@@ -994,6 +1040,7 @@ NSString * const messageWatermark = @"Send a message...";
         {
             NSLog(@"%@", c.Name);
         }
+        [_game setGameOver: YES withChars:charsLeft];
     }
     else
     {
@@ -1003,7 +1050,21 @@ NSString * const messageWatermark = @"Send a message...";
             [_characters removeObjectForKey:c.Name];
             [_deadCharacters setObject:c forKey:c.Name];
         }
-        
+
+        Character* c = [[_characters allValues] objectAtIndex:0];
+
+        NSMutableSet* team = [NSMutableSet setWithObject:c.Id];
+        [team setByAddingObjectsFromSet:c.Team];
+
+        if( [team isEqualToSet:[NSSet setWithArray:[_characters allKeys]]] )
+        {
+            NSLog(@"Game over, team wins" );
+            [_game setGameOver:YES withChars:charsLeft];
+        }
+        else
+        {
+            [_game setGameOver:NO withChars:charsLeft];
+        }
     }
 }
 

@@ -21,4 +21,6 @@ static NSString * const DB_GAMES = @"games";
 
 static NSString * const DB_CHAT = @"chat";
 
+static NSString * const DB_TEAM_INVITES = @"team invites";
+
 #endif

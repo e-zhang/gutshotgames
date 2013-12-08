@@ -23,7 +23,7 @@
 
 -(void) reset
 {
-    _charsDead = NO;
+    _charsLeft = self.players.count;
     _gameRound = -1;
     
     NSError* error = nil;
@@ -88,7 +88,7 @@
 
 -(void) initializeGame
 {
-    _charsDead=0;
+    _charsLeft=self.players.count;
     _gameRound = -1;
     
     [self willChangeValueForKey:@"GameRound"];
@@ -110,9 +110,10 @@
     _delegate = delegate;
 }
 
-- (void) setGameOver:(int) chars
+- (void) setGameOver:(BOOL) gameOver withChars:(int) chars
 {
-    _charsDead = chars;
+    _charsLeft= chars;
+    _isGameOver = gameOver;
 }
 
 - (void) setGameChat:(GameChat *)gameChat
@@ -122,7 +123,7 @@
 
 - (BOOL) isGameOver
 {
-    return _charsDead >= [self.players count] - 1;
+    return _isGameOver;
 }
 
 - (void) joinGame:(NSString*) userId isLast:(BOOL) last
@@ -205,6 +206,34 @@
     return isLast;
 }
 
+
+-(void) addToTeam:(NSString *)team forPlayer:(NSString *)playerId
+{
+    NSError* error = nil;
+    do
+    {
+        if(error)
+        {
+            [self resolveConflicts:self];
+        }
+       
+        NSMutableDictionary* players = [self.players mutableCopy];
+        NSMutableDictionary* player = [players objectForKey:team];
+        NSMutableArray* invites = [player objectForKey:DB_TEAM_INVITES];
+        if(![invites containsObject:playerId])
+        {
+            [invites addObject:playerId];
+        }
+        [player setObject:invites forKey:DB_TEAM_INVITES];
+        [players setObject:player forKey:team];
+        self.players = players;
+        
+        [[self save] wait:&error];
+    }while ([error.domain isEqual: @"CouchDB"] &&
+            error.code == 409);
+}
+
+
 - (void) submitMove:(Move *)move forPlayer:(NSString *)player
 {
     NSError* error = nil;
@@ -216,13 +245,13 @@
             error = nil;
         }
         
-        if(_gameRound > [self.gameData count]) break;
+        if(_gameRound >= [self.gameData count]) break;
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:_gameRound] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
         
         // last if count - 1 entries and no count for self
-        _isLast = ([currentRound count] == [self.players count] - _charsDead - 1) && ![currentRound objectForKey:player];
+        _isLast = ([currentRound count] == _charsLeft - 1) && ![currentRound objectForKey:player];
         
         [currentRound setObject:[move getMove] forKey:player];
         [data setObject:currentRound atIndexedSubscript:_gameRound];
@@ -258,10 +287,8 @@
             case SUPERATTACK:
             {
                 Character* target = [characters objectForKey:c.NextMove.TargetId];
-                if ([target OnAttack:c.NextMove.Type by:c.Id])
-                {
-                    [c OnRebate];
-                }
+                
+                [c OnRebate:[target OnAttack:c.NextMove.Type by:c.Id]];
                 
                 if([seenPlayers containsObject:playerId]) break;
                 
@@ -343,6 +370,8 @@
     }
     else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
+        [self checkForTeams];
+        
         if([self.currentRound intValue] >= _gameRound)
         {
             NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
@@ -359,11 +388,28 @@
 }
 
 
+-(void) checkForTeams
+{
+    NSMutableDictionary* players = [self.players mutableCopy];
+    for( NSDictionary* p in [self.players allValues] )
+    {
+        NSMutableArray* invites = [[NSMutableArray alloc] init];
+        for( NSString* invite in [p objectForKey:DB_TEAM_INVITES])
+        {
+            if(![_delegate onTeamInvite:invite forPlayer:[p objectForKey:DB_USER_ID]])
+            {
+                
+            }
+        }
+    }
+}
+
+
 -(void) checkRound:(NSDictionary*) currentRound
 {
-    NSLog(@"currentround-%d,players-%d,charsdead-%d",[currentRound count],[self.players count],_charsDead);
+    NSLog(@"currentround-%d,players-%d,charsleft-%d",[currentRound count],[self.players count],_charsLeft);
 
-    if ([currentRound count] == [self.players count] - _charsDead)
+    if ([currentRound count] == _charsLeft)
     {
         for(NSString* playerId in currentRound)
         {

@@ -13,6 +13,7 @@
 @protocol GameUpdateDelegate <NSObject>
 
 - (BOOL) onPlayerJoined:(NSString*) playerId;
+- (BOOL) onTeamInvite:(NSString*) team forPlayer:(NSString*) playerId;
 - (BOOL) onMoveSubmitted:(Move*) move byPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;
@@ -22,7 +23,8 @@
 @interface GameInfo : CouchModel<CouchDocumentModel>
 {
     id<GameUpdateDelegate> _delegate;
-    int _charsDead;
+    int _charsLeft;
+    BOOL _isGameOver;
     int _gameRound;
     BOOL _isLast;
     
@@ -52,7 +54,7 @@
 - (void) endRound;
 
 - (BOOL) isGameOver;
-- (void) setGameOver:(int) chars;
+- (void) setGameOver:(BOOL) gameOver withChars:(int) chars;
 - (void) setGameChat:(GameChat *)gameChat;
 
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
@@ -60,6 +62,7 @@
 - (void) joinGame:(NSString*) userId isLast:(BOOL) isLast;
 - (void) leaveGame:(NSString*) userId;
 - (void) submitMove:(Move*) move forPlayer:(NSString*)player;
+- (void) addToTeam:(NSString*)team forPlayer:(NSString*)playerId;
 
 - (void) simulateRound:(NSDictionary*) characters withDefenders:(NSMutableArray**)defenders
                                                   withPointGetters:(NSMutableArray**)pointGetters

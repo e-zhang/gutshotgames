@@ -24,23 +24,43 @@
     {
         _character = [[Character alloc] initWithId:playerId andName:name];
         
-        _characterDisplay = [[UILabel alloc] init];
-        _characterDisplay.textColor = [UIColor whiteColor];
-        _characterDisplay.backgroundColor = [UIColor clearColor];
-        _characterDisplay.text = [_character getStats];
+        _charDisplay = [[UILabel alloc] init];
+        _charDisplay.textColor = [UIColor whiteColor];
+        _charDisplay.backgroundColor = [UIColor clearColor];
         
-        _characterDisplay.font = [UIFont fontWithName:@"GillSans" size:12.0f];
-        _characterDisplay.textColor = [UIColor redColor];
-        _characterDisplay.numberOfLines = 3;
-        _isSelf= [playerId isEqual:selfId];
+        _charDisplay.font = [UIFont fontWithName:@"GillSans" size:10.0f];
+        _charDisplay.textColor = [UIColor redColor];
+        _charDisplay.numberOfLines = 2;
+        
+        _lifeDisplay = [[UILabel alloc] init];
+        _lifeDisplay.textColor = [UIColor whiteColor];
+        _lifeDisplay.backgroundColor = [UIColor clearColor];
+        
+        _lifeDisplay.font = [UIFont fontWithName:@"GillSans" size:10.0f];
+        _lifeDisplay.textColor = [UIColor redColor];
+        _lifeDisplay.numberOfLines = 1;
+        
+        _pointDisplay = [[UILabel alloc] init];
+        _pointDisplay.textColor = [UIColor whiteColor];
+        _pointDisplay.backgroundColor = [UIColor clearColor];
+        
+        _pointDisplay.font = [UIFont fontWithName:@"GillSans" size:10.0f];
+        _pointDisplay.textColor = [UIColor redColor];
+        _pointDisplay.numberOfLines = 1;
+        
+        _charDisplay.text = [NSString stringWithFormat:@"%@\nLast Move: %@",
+                             _character.Name, MoveStrings[_character.NextMove.Type]];
+        _lifeDisplay.text = [NSString stringWithFormat:@"Life: %d", _character.Life];
+        _pointDisplay.text = [NSString stringWithFormat:@"Points: %d", _character.Points];
         _delegate = target;
+        _isSelf= [playerId isEqual:selfId];
         
         self.view = [[UIView alloc] init];
         
-        [_character addObserver:self forKeyPath:@"IsConnected" options:NSKeyValueObservingOptionNew context:nil];
-        [_character addObserver:self forKeyPath:@"IsTarget" options:NSKeyValueObservingOptionNew context:nil];
-        [_character addObserver:self forKeyPath:@"Life" options:NSKeyValueObservingOptionNew context:nil];
-        [_character addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
+        [_character addObserver:self forKeyPath:@"IsConnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+        [_character addObserver:self forKeyPath:@"IsTarget" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+        [_character addObserver:self forKeyPath:@"Life" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+        [_character addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     }
     
     return self;
@@ -57,9 +77,13 @@
     myImageView.image = _characterPic;
     
     [self.view addSubview: myImageView];
-    [self.view addSubview:_characterDisplay];
-    _characterDisplay.frame = CGRectMake(0, 60,200,30);
-   
+    [self.view addSubview:_lifeDisplay];
+    [self.view addSubview:_pointDisplay];
+    [self.view addSubview:_charDisplay];
+    _lifeDisplay.frame = CGRectMake(0, 80,50,20);
+    _pointDisplay.frame = CGRectMake(50, 80,50,20);
+    _charDisplay.frame = CGRectMake(0, 60, 200, 25);
+    
     _menuController = [[UIViewController alloc] init];
     _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,75,75) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
     
@@ -93,9 +117,13 @@
     }*/
 
     [self.view addSubview: myImageView];
-    [self.view addSubview:_characterDisplay];
-    _characterDisplay.frame = CGRectMake(60, 0,160,60);
-
+    [self.view addSubview:_lifeDisplay];
+    [self.view addSubview:_pointDisplay];
+    [self.view addSubview:_charDisplay];
+    _lifeDisplay.frame = CGRectMake(0, 80,50,20);
+    _pointDisplay.frame = CGRectMake(50, 80,50,20);
+    _charDisplay.frame = CGRectMake(0, 60, 200, 25);
+    
     _menuController = [[UIViewController alloc] init];
     _menuController.view = [[MoveMenu alloc] initWithFrame:CGRectMake(0,0,200,60) andDelegate:self forPlayer:_character.Id isSelf:_isSelf];
     _menuController.view.backgroundColor = [UIColor whiteColor];
@@ -158,8 +186,9 @@
 {
     if([keyPath isEqual:@"IsConnected"])
     {
-        _characterDisplay.textColor = [[change objectForKey:NSKeyValueChangeNewKey] boolValue] ?
+        _lifeDisplay.textColor = [[change objectForKey:NSKeyValueChangeNewKey] boolValue] ?
                                       [UIColor blackColor] : [UIColor redColor];
+        _pointDisplay.textColor = _lifeDisplay.textColor;
     }
     
     if([keyPath isEqual:@"IsTarget"])
@@ -172,9 +201,41 @@
         }
     }
     
-    if([keyPath isEqual:@"Life"] || [keyPath isEqual:@"Points"])
+    
+    if([keyPath isEqual:@"Life"])
     {
-        _characterDisplay.text = [_character getStats];
+        _lifeDisplay.text = [NSString stringWithFormat:@"Life: %d", _character.Life];
+        
+        int oldValue = [[change objectForKey:NSKeyValueChangeOldKey] intValue];
+        if( oldValue > _character.Life )
+        {
+            _lifeDisplay.textColor = [UIColor redColor];
+        }
+        else
+        {
+            _lifeDisplay.textColor = [UIColor greenColor];
+        }
+        
+        _charDisplay.text = [NSString stringWithFormat:@"%@\nLast Move: %@",
+                             _character.Name, MoveStrings[_character.NextMove.Type]];
+    }
+    
+    if([keyPath isEqual:@"Points"])
+    {
+        _pointDisplay.text = [NSString stringWithFormat:@"Points: %d", _character.Points];
+        
+        int oldValue = [[change objectForKey:NSKeyValueChangeOldKey] intValue];
+        if( oldValue > _character.Points)
+        {
+            _pointDisplay.textColor = [UIColor redColor];
+        }
+        else
+        {
+            _pointDisplay.textColor = [UIColor greenColor];
+        }
+        
+        _charDisplay.text = [NSString stringWithFormat:@"%@     Last Move: %@",
+                             _character.Name, MoveStrings[_character.NextMove.Type]];
     }
 }
 

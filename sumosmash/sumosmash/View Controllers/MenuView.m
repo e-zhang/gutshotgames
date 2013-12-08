@@ -564,6 +564,7 @@
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"username"] forKey:DB_USER_NAME];
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
         }
+        
     }
     else
     {
@@ -587,6 +588,7 @@
     }
     
     [playerAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+    [playerAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
     
     return playerAccount;
 }
@@ -598,6 +600,7 @@
    
     NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
     [userAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+    [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
        
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
     

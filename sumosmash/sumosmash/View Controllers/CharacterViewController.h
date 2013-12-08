@@ -21,7 +21,9 @@
 {
     Character* _character;
     
-    UILabel* _characterDisplay;
+    UILabel* _pointDisplay;
+    UILabel* _lifeDisplay;
+    UILabel* _charDisplay;
     UIImage* _characterPic;
     
     BOOL _isShowingMenu;
