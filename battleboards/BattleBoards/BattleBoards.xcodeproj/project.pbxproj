@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E103185625F900526640 /* CFNetwork.framework */; };
+		58E8E106185625FE00526640 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E105185625FE00526640 /* Security.framework */; };
+		58E8E1081856260900526640 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E1071856260900526640 /* libz.dylib */; };
+		58E8E10A1856261000526640 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E1091856261000526640 /* libsqlite3.dylib */; };
+		58E8E10C1856262700526640 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E10B1856262700526640 /* SystemConfiguration.framework */; };
+		58E8E10E1856263900526640 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E10D1856263900526640 /* libxml2.dylib */; };
 		E7850D24185382C70076C518 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D23185382C70076C518 /* Foundation.framework */; };
 		E7850D26185382C70076C518 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D25185382C70076C518 /* CoreGraphics.framework */; };
 		E7850D28185382C70076C518 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D27185382C70076C518 /* UIKit.framework */; };
@@ -41,6 +47,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		58E8E103185625F900526640 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		58E8E105185625FE00526640 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		58E8E1071856260900526640 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		58E8E1091856261000526640 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		58E8E10B1856262700526640 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		58E8E10D1856263900526640 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E7850D20185382C70076C518 /* BattleBoards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BattleBoards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7850D23185382C70076C518 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E7850D25185382C70076C518 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -80,6 +92,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */,
+				58E8E10E1856263900526640 /* libxml2.dylib in Frameworks */,
+				58E8E10C1856262700526640 /* SystemConfiguration.framework in Frameworks */,
+				58E8E10A1856261000526640 /* libsqlite3.dylib in Frameworks */,
+				58E8E1081856260900526640 /* libz.dylib in Frameworks */,
+				58E8E106185625FE00526640 /* Security.framework in Frameworks */,
 				E7850D7618539EE90076C518 /* CouchCocoa.framework in Frameworks */,
 				E7850D7718539EE90076C518 /* FacebookSDK.framework in Frameworks */,
 				E7850D7818539EE90076C518 /* TouchDB.framework in Frameworks */,
@@ -124,6 +142,12 @@
 		E7850D22185382C70076C518 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				58E8E10D1856263900526640 /* libxml2.dylib */,
+				58E8E10B1856262700526640 /* SystemConfiguration.framework */,
+				58E8E1091856261000526640 /* libsqlite3.dylib */,
+				58E8E1071856260900526640 /* libz.dylib */,
+				58E8E105185625FE00526640 /* Security.framework */,
+				58E8E103185625F900526640 /* CFNetwork.framework */,
 				E7850D7318539EE90076C518 /* CouchCocoa.framework */,
 				E7850D7418539EE90076C518 /* FacebookSDK.framework */,
 				E7850D7518539EE90076C518 /* TouchDB.framework */,
@@ -435,11 +459,12 @@
 		E7850D56185382C80076C518 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/ezhang/Documents/GutShotGames/gutshotgames/battleboards/BattleBoards,
+					"./**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BattleBoards/BattleBoards-Prefix.pch";
@@ -453,11 +478,12 @@
 		E7850D57185382C80076C518 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/ezhang/Documents/GutShotGames/gutshotgames/battleboards/BattleBoards,
+					"./**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BattleBoards/BattleBoards-Prefix.pch";
@@ -529,6 +555,7 @@
 				E7850D57185382C80076C518 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E7850D58185382C80076C518 /* Build configuration list for PBXNativeTarget "BattleBoardsTests" */ = {
 			isa = XCConfigurationList;
@@ -537,6 +564,7 @@
 				E7850D5A185382C80076C518 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
