@@ -52,18 +52,13 @@
 
 -(BOOL) checkDistance:(CoordPoint *)dest
 {
-    // check if straight vertical, horizontal, or diagonal;
+    // check to see if player has enough points for distance;
     
     int xDiff = abs(dest.x - _location.x);
     int yDiff = abs(dest.y - _location.y);
     
-    // check to see if valid move
-    if(xDiff != 0 && yDiff != 0 && xDiff != yDiff)
-    {
-        return NO;
-    }
     
-    int distance = MAX(xDiff, yDiff);
+    int distance = xDiff + yDiff;
     
     if(_points < distance) return NO;
     
