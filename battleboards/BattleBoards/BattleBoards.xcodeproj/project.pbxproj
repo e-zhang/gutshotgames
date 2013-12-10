@@ -7,6 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		586EEA551856DCA100A5D3A5 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA521856DCA100A5D3A5 /* MenuView.m */; };
+		586EEA561856DCA100A5D3A5 /* InvitationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */; };
+		586EEA5D1856DDB100A5D3A5 /* GameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586EEA581856DDB100A5D3A5 /* GameView.xib */; };
+		586EEA5E1856DDB100A5D3A5 /* MenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586EEA591856DDB100A5D3A5 /* MenuView.xib */; };
+		586EEA5F1856DDB100A5D3A5 /* CreateGameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586EEA5A1856DDB100A5D3A5 /* CreateGameView.xib */; };
+		586EEA601856DDB100A5D3A5 /* InvitationsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586EEA5B1856DDB100A5D3A5 /* InvitationsView.xib */; };
+		586EEA611856DDB100A5D3A5 /* InvitePopupScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586EEA5C1856DDB100A5D3A5 /* InvitePopupScreen.xib */; };
+		586EEA641856DDFA00A5D3A5 /* createaccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA631856DDFA00A5D3A5 /* createaccount.m */; };
+		586EEA671856DE4100A5D3A5 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA661856DE4100A5D3A5 /* MBProgressHUD.m */; };
+		586EEA6B1856DEA400A5D3A5 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA6A1856DEA400A5D3A5 /* Server.m */; };
+		586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA6D1856DEB700A5D3A5 /* GameInvitations.m */; };
+		586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA701856DEE400A5D3A5 /* GameRequest.m */; };
+		586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA731856DFB600A5D3A5 /* UserAccount.m */; };
+		586EEA771856E0F800A5D3A5 /* GameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA761856E0F800A5D3A5 /* GameInfo.m */; };
+		586EEA7A1856E14C00A5D3A5 /* Move.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA791856E14C00A5D3A5 /* Move.m */; };
+		586EEA7F1856E28000A5D3A5 /* GameChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA7E1856E28000A5D3A5 /* GameChat.m */; };
+		586EEA821856E2DA00A5D3A5 /* SavedGames.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA811856E2DA00A5D3A5 /* SavedGames.m */; };
+		586EEA871856EBC500A5D3A5 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */; };
 		58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E103185625F900526640 /* CFNetwork.framework */; };
 		58E8E106185625FE00526640 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E105185625FE00526640 /* Security.framework */; };
 		58E8E1081856260900526640 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E1071856260900526640 /* libz.dylib */; };
@@ -30,7 +48,6 @@
 		E7850D6C18539E2D0076C518 /* GridModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D6B18539E2D0076C518 /* GridModel.m */; };
 		E7850D7218539E4C0076C518 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D7018539E4C0076C518 /* GridCell.m */; };
 		E7850D7618539EE90076C518 /* CouchCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7318539EE90076C518 /* CouchCocoa.framework */; };
-		E7850D7718539EE90076C518 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7418539EE90076C518 /* FacebookSDK.framework */; };
 		E7850D7818539EE90076C518 /* TouchDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7518539EE90076C518 /* TouchDB.framework */; };
 		E7850D7B1853D2E20076C518 /* GridView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D7A1853D2E20076C518 /* GridView.m */; };
 		E7850D811854DB790076C518 /* CoordPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D801854DB790076C518 /* CoordPoint.m */; };
@@ -47,6 +64,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		586EEA511856DCA100A5D3A5 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
+		586EEA521856DCA100A5D3A5 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
+		586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvitationsViewController.h; sourceTree = "<group>"; };
+		586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvitationsViewController.m; sourceTree = "<group>"; };
+		586EEA581856DDB100A5D3A5 /* GameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameView.xib; sourceTree = "<group>"; };
+		586EEA591856DDB100A5D3A5 /* MenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuView.xib; sourceTree = "<group>"; };
+		586EEA5A1856DDB100A5D3A5 /* CreateGameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateGameView.xib; sourceTree = "<group>"; };
+		586EEA5B1856DDB100A5D3A5 /* InvitationsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InvitationsView.xib; sourceTree = "<group>"; };
+		586EEA5C1856DDB100A5D3A5 /* InvitePopupScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InvitePopupScreen.xib; sourceTree = "<group>"; };
+		586EEA621856DDFA00A5D3A5 /* createaccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = createaccount.h; sourceTree = "<group>"; };
+		586EEA631856DDFA00A5D3A5 /* createaccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = createaccount.m; sourceTree = "<group>"; };
+		586EEA651856DE4100A5D3A5 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		586EEA661856DE4100A5D3A5 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		586EEA691856DEA400A5D3A5 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		586EEA6A1856DEA400A5D3A5 /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		586EEA6C1856DEB700A5D3A5 /* GameInvitations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInvitations.h; sourceTree = "<group>"; };
+		586EEA6D1856DEB700A5D3A5 /* GameInvitations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInvitations.m; sourceTree = "<group>"; };
+		586EEA6F1856DEE400A5D3A5 /* GameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRequest.h; sourceTree = "<group>"; };
+		586EEA701856DEE400A5D3A5 /* GameRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameRequest.m; sourceTree = "<group>"; };
+		586EEA721856DFB600A5D3A5 /* UserAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAccount.h; sourceTree = "<group>"; };
+		586EEA731856DFB600A5D3A5 /* UserAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAccount.m; sourceTree = "<group>"; };
+		586EEA751856E0F800A5D3A5 /* GameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInfo.h; sourceTree = "<group>"; };
+		586EEA761856E0F800A5D3A5 /* GameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInfo.m; sourceTree = "<group>"; };
+		586EEA781856E14C00A5D3A5 /* Move.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Move.h; sourceTree = "<group>"; };
+		586EEA791856E14C00A5D3A5 /* Move.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Move.m; sourceTree = "<group>"; };
+		586EEA7B1856E19600A5D3A5 /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
+		586EEA7C1856E23700A5D3A5 /* DBDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBDefs.h; sourceTree = "<group>"; };
+		586EEA7D1856E28000A5D3A5 /* GameChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameChat.h; sourceTree = "<group>"; };
+		586EEA7E1856E28000A5D3A5 /* GameChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameChat.m; sourceTree = "<group>"; };
+		586EEA801856E2DA00A5D3A5 /* SavedGames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGames.h; sourceTree = "<group>"; };
+		586EEA811856E2DA00A5D3A5 /* SavedGames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGames.m; sourceTree = "<group>"; };
+		586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		58E8E103185625F900526640 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		58E8E105185625FE00526640 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		58E8E1071856260900526640 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -78,7 +127,6 @@
 		E7850D6F18539E4C0076C518 /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridCell.h; path = Views/GridCell.h; sourceTree = "<group>"; };
 		E7850D7018539E4C0076C518 /* GridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridCell.m; path = Views/GridCell.m; sourceTree = "<group>"; };
 		E7850D7318539EE90076C518 /* CouchCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchCocoa.framework; sourceTree = "<group>"; };
-		E7850D7418539EE90076C518 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		E7850D7518539EE90076C518 /* TouchDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TouchDB.framework; sourceTree = "<group>"; };
 		E7850D791853D2E20076C518 /* GridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridView.h; path = Views/GridView.h; sourceTree = "<group>"; };
 		E7850D7A1853D2E20076C518 /* GridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridView.m; path = Views/GridView.m; sourceTree = "<group>"; };
@@ -97,9 +145,9 @@
 				58E8E10C1856262700526640 /* SystemConfiguration.framework in Frameworks */,
 				58E8E10A1856261000526640 /* libsqlite3.dylib in Frameworks */,
 				58E8E1081856260900526640 /* libz.dylib in Frameworks */,
+				586EEA871856EBC500A5D3A5 /* FacebookSDK.framework in Frameworks */,
 				58E8E106185625FE00526640 /* Security.framework in Frameworks */,
 				E7850D7618539EE90076C518 /* CouchCocoa.framework in Frameworks */,
-				E7850D7718539EE90076C518 /* FacebookSDK.framework in Frameworks */,
 				E7850D7818539EE90076C518 /* TouchDB.framework in Frameworks */,
 				E7850D26185382C70076C518 /* CoreGraphics.framework in Frameworks */,
 				E7850D28185382C70076C518 /* UIKit.framework in Frameworks */,
@@ -120,10 +168,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		586EEA571856DDA700A5D3A5 /* Views XIBS */ = {
+			isa = PBXGroup;
+			children = (
+				586EEA581856DDB100A5D3A5 /* GameView.xib */,
+				586EEA591856DDB100A5D3A5 /* MenuView.xib */,
+				586EEA5A1856DDB100A5D3A5 /* CreateGameView.xib */,
+				586EEA5B1856DDB100A5D3A5 /* InvitationsView.xib */,
+				586EEA5C1856DDB100A5D3A5 /* InvitePopupScreen.xib */,
+			);
+			name = "Views XIBS";
+			sourceTree = "<group>";
+		};
+		586EEA681856DE9A00A5D3A5 /* Server & DB */ = {
+			isa = PBXGroup;
+			children = (
+				586EEA7C1856E23700A5D3A5 /* DBDefs.h */,
+				586EEA691856DEA400A5D3A5 /* Server.h */,
+				586EEA6A1856DEA400A5D3A5 /* Server.m */,
+			);
+			name = "Server & DB";
+			path = BattleBoards;
+			sourceTree = "<group>";
+		};
+		586EEA881857323E00A5D3A5 /* Server Com Related */ = {
+			isa = PBXGroup;
+			children = (
+				586EEA801856E2DA00A5D3A5 /* SavedGames.h */,
+				586EEA811856E2DA00A5D3A5 /* SavedGames.m */,
+				586EEA7D1856E28000A5D3A5 /* GameChat.h */,
+				586EEA7E1856E28000A5D3A5 /* GameChat.m */,
+				586EEA721856DFB600A5D3A5 /* UserAccount.h */,
+				586EEA731856DFB600A5D3A5 /* UserAccount.m */,
+				586EEA6C1856DEB700A5D3A5 /* GameInvitations.h */,
+				586EEA6D1856DEB700A5D3A5 /* GameInvitations.m */,
+				586EEA6F1856DEE400A5D3A5 /* GameRequest.h */,
+				586EEA701856DEE400A5D3A5 /* GameRequest.m */,
+			);
+			name = "Server Com Related";
+			sourceTree = "<group>";
+		};
 		E7850D17185382C70076C518 = {
 			isa = PBXGroup;
 			children = (
 				E7850D29185382C70076C518 /* BattleBoards */,
+				586EEA681856DE9A00A5D3A5 /* Server & DB */,
 				E7850D4B185382C80076C518 /* BattleBoardsTests */,
 				E7850D22185382C70076C518 /* Frameworks */,
 				E7850D21185382C70076C518 /* Products */,
@@ -142,6 +231,7 @@
 		E7850D22185382C70076C518 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */,
 				58E8E10D1856263900526640 /* libxml2.dylib */,
 				58E8E10B1856262700526640 /* SystemConfiguration.framework */,
 				58E8E1091856261000526640 /* libsqlite3.dylib */,
@@ -149,7 +239,6 @@
 				58E8E105185625FE00526640 /* Security.framework */,
 				58E8E103185625F900526640 /* CFNetwork.framework */,
 				E7850D7318539EE90076C518 /* CouchCocoa.framework */,
-				E7850D7418539EE90076C518 /* FacebookSDK.framework */,
 				E7850D7518539EE90076C518 /* TouchDB.framework */,
 				E7850D23185382C70076C518 /* Foundation.framework */,
 				E7850D25185382C70076C518 /* CoreGraphics.framework */,
@@ -162,6 +251,7 @@
 		E7850D29185382C70076C518 /* BattleBoards */ = {
 			isa = PBXGroup;
 			children = (
+				586EEA571856DDA700A5D3A5 /* Views XIBS */,
 				E7850D6318539D840076C518 /* Views */,
 				E7850D5C18539C000076C518 /* ViewControllers */,
 				E7850D5B18539BF70076C518 /* Model */,
@@ -176,6 +266,8 @@
 		E7850D2A185382C70076C518 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				586EEA651856DE4100A5D3A5 /* MBProgressHUD.h */,
+				586EEA661856DE4100A5D3A5 /* MBProgressHUD.m */,
 				E7850D2B185382C70076C518 /* BattleBoards-Info.plist */,
 				E7850D2C185382C70076C518 /* InfoPlist.strings */,
 				E7850D2F185382C70076C518 /* main.m */,
@@ -205,6 +297,11 @@
 		E7850D5B18539BF70076C518 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				586EEA881857323E00A5D3A5 /* Server Com Related */,
+				586EEA781856E14C00A5D3A5 /* Move.h */,
+				586EEA791856E14C00A5D3A5 /* Move.m */,
+				586EEA751856E0F800A5D3A5 /* GameInfo.h */,
+				586EEA761856E0F800A5D3A5 /* GameInfo.m */,
 				E7850D6A18539E2D0076C518 /* GridModel.h */,
 				E7850D6B18539E2D0076C518 /* GridModel.m */,
 				E7850D6718539DD40076C518 /* Player.h */,
@@ -219,8 +316,15 @@
 		E7850D5C18539C000076C518 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				586EEA621856DDFA00A5D3A5 /* createaccount.h */,
+				586EEA631856DDFA00A5D3A5 /* createaccount.m */,
+				586EEA511856DCA100A5D3A5 /* MenuView.h */,
+				586EEA521856DCA100A5D3A5 /* MenuView.m */,
+				586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */,
+				586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */,
 				E7850D3B185382C70076C518 /* GSGViewController.h */,
 				E7850D3C185382C70076C518 /* GSGViewController.m */,
+				586EEA7B1856E19600A5D3A5 /* Tags.h */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -313,8 +417,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				586EEA5F1856DDB100A5D3A5 /* CreateGameView.xib in Resources */,
+				586EEA5D1856DDB100A5D3A5 /* GameView.xib in Resources */,
+				586EEA5E1856DDB100A5D3A5 /* MenuView.xib in Resources */,
+				586EEA611856DDB100A5D3A5 /* InvitePopupScreen.xib in Resources */,
 				E7850D3F185382C70076C518 /* Images.xcassets in Resources */,
 				E7850D2E185382C70076C518 /* InfoPlist.strings in Resources */,
+				586EEA601856DDB100A5D3A5 /* InvitationsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,9 +443,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7850D811854DB790076C518 /* CoordPoint.m in Sources */,
+				586EEA6B1856DEA400A5D3A5 /* Server.m in Sources */,
+				586EEA641856DDFA00A5D3A5 /* createaccount.m in Sources */,
 				E7850D3D185382C70076C518 /* GSGViewController.m in Sources */,
+				586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */,
+				586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */,
+				586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */,
+				586EEA771856E0F800A5D3A5 /* GameInfo.m in Sources */,
+				586EEA551856DCA100A5D3A5 /* MenuView.m in Sources */,
+				586EEA561856DCA100A5D3A5 /* InvitationsViewController.m in Sources */,
+				586EEA7A1856E14C00A5D3A5 /* Move.m in Sources */,
+				586EEA821856E2DA00A5D3A5 /* SavedGames.m in Sources */,
 				E7850D34185382C70076C518 /* GSGAppDelegate.m in Sources */,
 				E7850D7B1853D2E20076C518 /* GridView.m in Sources */,
+				586EEA671856DE4100A5D3A5 /* MBProgressHUD.m in Sources */,
+				586EEA7F1856E28000A5D3A5 /* GameChat.m in Sources */,
 				E7850D30185382C70076C518 /* main.m in Sources */,
 				E7850D7218539E4C0076C518 /* GridCell.m in Sources */,
 				E7850D6918539DD40076C518 /* Player.m in Sources */,
@@ -460,17 +581,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"./**",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\\\"${DEVELOPER_LIBRARY_DIR}/Frameworks\\\"",
+					/Users/dannywitters/Documents/gutshotgames/battleboards/BattleBoards,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BattleBoards/BattleBoards-Prefix.pch";
 				INFOPLIST_FILE = "BattleBoards/BattleBoards-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -479,17 +608,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"./**",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\\\"${DEVELOPER_LIBRARY_DIR}/Frameworks\\\"",
+					/Users/dannywitters/Documents/gutshotgames/battleboards/BattleBoards,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BattleBoards/BattleBoards-Prefix.pch";
 				INFOPLIST_FILE = "BattleBoards/BattleBoards-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -434,10 +434,10 @@
 			children = (
 				58195D5A17B658FF0095442B /* GameView.xib */,
 				E79B03FC17A898C400C81BE7 /* MenuView.xib */,
-				E79B03FB17A898A700C81BE7 /* old */,
 				E79D7B8A1728AA8C007972E0 /* CreateGameView.xib */,
 				E79D7B8C1728AA8D007972E0 /* InvitationsView.xib */,
 				E79D7B8D1728AA8D007972E0 /* InvitePopupScreen.xib */,
+				E79B03FB17A898A700C81BE7 /* old */,
 				E79D7B8F1728AA8D007972E0 /* Waitscreen.xib */,
 				E79D7B52171CD8BF007972E0 /* createaccount~ipad.xib */,
 				E79D7B59171CD8BF007972E0 /* MBProgressHUD.h */,

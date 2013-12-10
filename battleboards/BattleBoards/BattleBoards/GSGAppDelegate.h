@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class MenuView;
+
 @interface GSGAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property (strong, nonatomic) MenuView *viewController;
 
 @end
