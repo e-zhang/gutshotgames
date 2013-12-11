@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GridView.h"
 
 @interface GSGViewController : UIViewController
 

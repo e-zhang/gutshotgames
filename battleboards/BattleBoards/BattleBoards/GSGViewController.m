@@ -18,6 +18,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.view.backgroundColor = [UIColor redColor];
+    
+    //max grid size 9
+    
+    GridView *view = [[GridView alloc] initWithFrame:CGRectMake(0,0,320,320) andGridSize:9];
+    view.backgroundColor = [UIColor yellowColor];
+    [self.view addSubview:view];
 }
 
 - (void)didReceiveMemoryWarning

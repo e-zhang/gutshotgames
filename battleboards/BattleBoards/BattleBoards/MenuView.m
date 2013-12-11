@@ -595,7 +595,7 @@
     return playerAccount;
 }
 
-
+/*
 - (NSDictionary*) getPlayerAccounts
 {
     NSMutableDictionary* playerAccounts = [[NSMutableDictionary alloc]init];
@@ -628,6 +628,7 @@
     
     return playerAccounts;
 }
+*/
 
 - (void) sendRequests:(NSString*) gameId toPlayers:(NSDictionary*)players
 {
@@ -687,10 +688,10 @@
     newg.roundBuffer = [NSNumber numberWithInt:5];
     newg.timeInterval = [NSNumber numberWithInt:10];
     
-    NSDictionary* playerAccounts = [self getPlayerAccounts];
-    newg.players = playerAccounts;
+ //   NSDictionary* playerAccounts = [self getPlayerAccounts];
+ //   newg.players = playerAccounts;
     
-    [self sendRequests:newg.gameName toPlayers:playerAccounts];
+ //   [self sendRequests:newg.gameName toPlayers:playerAccounts];
     
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}
@@ -700,7 +701,7 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
-    self.gamewindow = [[GSGViewController alloc] initWithNibName:@"GSGViewController" bundle:nil];
+    self.gamewindow = [[GSGViewController alloc] init];
                                           //     gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;
     

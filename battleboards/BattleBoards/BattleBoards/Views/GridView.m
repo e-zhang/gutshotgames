@@ -8,6 +8,7 @@
 
 #import "GridView.h"
 #import "GridCell.h"
+#import "CoordPoint.h"
 
 @implementation GridView
 
@@ -24,7 +25,11 @@
         {
             for(int c = 0; c < size; ++c)
             {
-                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, c, r)];
+                NSLog(@"c-%d",c);
+                
+                CoordPoint* cp = [[CoordPoint alloc] initWithX:r andY:c];
+                
+                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * width, r * height, width, height) andGrid:_grid andCoord:cp];
                 [self addSubview:cell];
             }
         }
