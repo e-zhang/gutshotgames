@@ -320,10 +320,10 @@
 				586EEA631856DDFA00A5D3A5 /* createaccount.m */,
 				586EEA511856DCA100A5D3A5 /* MenuView.h */,
 				586EEA521856DCA100A5D3A5 /* MenuView.m */,
-				586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */,
-				586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */,
 				E7850D3B185382C70076C518 /* GSGViewController.h */,
 				E7850D3C185382C70076C518 /* GSGViewController.m */,
+				586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */,
+				586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */,
 				586EEA7B1856E19600A5D3A5 /* Tags.h */,
 			);
 			name = ViewControllers;

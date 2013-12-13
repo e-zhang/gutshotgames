@@ -12,7 +12,15 @@
 
 @end
 
-@implementation GSGViewController
+@implementation GSGViewController{
+    int _bots;
+}
+
+- (id)initwithGameData:(GameInfo*)gI myid:(NSString *)myid{
+
+    
+    return self;
+}
 
 - (void)viewDidLoad
 {

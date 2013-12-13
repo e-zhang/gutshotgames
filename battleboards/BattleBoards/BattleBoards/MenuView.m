@@ -53,7 +53,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:204 green:204 blue:204 alpha:1];
     // Do any additional setup after loading the view from its nib.
-   
+       
     [self createAccountLabels];
     
 //    _cab.hidden = userType == NONE ? NO : YES;
@@ -77,6 +77,7 @@
     
     [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"game_cell"];
 }
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -595,14 +596,14 @@
     return playerAccount;
 }
 
-/*
+
 - (NSDictionary*) getPlayerAccounts
 {
     NSMutableDictionary* playerAccounts = [[NSMutableDictionary alloc]init];
    
-    NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
+   /*( NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
     [userAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
-   // [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
+    [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
        
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
     
@@ -625,10 +626,10 @@
         
         [playerAccounts setObject:player forKey:[player objectForKey:DB_USER_ID]];
     }
-    
+    */
     return playerAccounts;
 }
-*/
+
 
 - (void) sendRequests:(NSString*) gameId toPlayers:(NSDictionary*)players
 {
@@ -688,8 +689,8 @@
     newg.roundBuffer = [NSNumber numberWithInt:5];
     newg.timeInterval = [NSNumber numberWithInt:10];
     
- //   NSDictionary* playerAccounts = [self getPlayerAccounts];
- //   newg.players = playerAccounts;
+    NSDictionary* playerAccounts = [self getPlayerAccounts];
+    newg.players = playerAccounts;
     
  //   [self sendRequests:newg.gameName toPlayers:playerAccounts];
     
@@ -701,7 +702,7 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
-    self.gamewindow = [[GSGViewController alloc] init];
+    self.gamewindow = [[GSGViewController alloc] initwithGameData:newg myid:_gameServer.user.userid];
                                           //     gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;
     
@@ -829,4 +830,9 @@
     return cell;
 }
 
+- (IBAction)sliderAction:(id)sender {
+    NSLog(@"slide");
+    NSString *newText = [[NSString alloc] initWithFormat:@"%f",_gridSlider.value];
+    _gridVal.text = newText;
+}
 @end

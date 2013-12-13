@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "GridView.h"
+#import "GameInfo.h"
 
 @interface GSGViewController : UIViewController
+
+- (id)initwithGameData:(GameInfo*)gI myid:(NSString *)myid;
 
 @end
