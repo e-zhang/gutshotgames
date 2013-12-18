@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "GridModel.h"
+#import "GridCell.h"
 
-@interface GridView : UIView
+@protocol GridViewDelegate <NSObject>
+@end
+
+@interface GridView : UIView<GridCellDelegate, GridModelDelegate>
 {
     GridModel* _grid;
 }
+
+@property (strong, nonatomic) id <GridViewDelegate> delegate;
 
 -(id) initWithFrame:(CGRect) frame andGridSize:(int) size;
 

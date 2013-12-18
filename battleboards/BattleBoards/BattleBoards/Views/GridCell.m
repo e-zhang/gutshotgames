@@ -40,6 +40,13 @@
 }
 */
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
+    
+    if([state isEmpty])
+        [_delegate cellTouched:_cell];
+}
 
 -(void) update
 {
@@ -69,12 +76,21 @@
     {
         // todo: get player image
         NSLog(@"intva3241lue-%d",[state intValue]);
-
+        
+    }
+    if([state isKindOfClass:[NSArray class]])
+    {
+        // todo: evaluate all occurances on the square
     }
     else
     {
         NSAssert(NO, @"Received an invalid class for cell state: %@", [state class]);
     }
 }
+
+-(void) displayMovePossibilities{}
+
+-(void) displayBombPossibilities{}
+
 
 @end

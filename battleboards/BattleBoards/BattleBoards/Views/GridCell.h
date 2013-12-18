@@ -9,11 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "GridModel.h"
 
+@protocol GridCellDelegate <NSObject>
+- (void)cellTouched:(CoordPoint*)coord;
+@end
+
 @interface GridCell : UIView
 {
     GridModel* _grid;
     CoordPoint* _cell;
 }
+
+@property (strong, nonatomic) id <GridCellDelegate> delegate;
 
 -(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 

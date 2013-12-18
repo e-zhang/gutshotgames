@@ -7,7 +7,6 @@
 //
 
 #import "GridView.h"
-#import "GridCell.h"
 #import "CoordPoint.h"
 
 @implementation GridView
@@ -30,11 +29,17 @@
                 CoordPoint* cp = [[CoordPoint alloc] initWithX:r andY:c];
                 
                 GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * width, r * height, width, height) andGrid:_grid andCoord:cp];
+                cell.delegate = self;
                 [self addSubview:cell];
             }
         }
     }
     return self;
+}
+
+- (void)cellTouched:(CoordPoint *)coord{
+    
+    //check rounddata
 }
 
 /*

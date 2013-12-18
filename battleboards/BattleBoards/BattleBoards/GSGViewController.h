@@ -11,7 +11,10 @@
 #import "GridView.h"
 #import "GameInfo.h"
 
-@interface GSGViewController : UIViewController
+@interface GSGViewController : UIViewController<GameUpdateDelegate,GridViewDelegate>{
+    GridView *_gridView;
+}
+
 
 - (id)initwithGameData:(GameInfo*)gI myid:(NSString *)myid;
 

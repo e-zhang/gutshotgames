@@ -31,9 +31,12 @@
     
     //max grid size 9
     
-    GridView *view = [[GridView alloc] initWithFrame:CGRectMake(0,0,320,320) andGridSize:9];
-    view.backgroundColor = [UIColor yellowColor];
-    [self.view addSubview:view];
+    _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,0,320,320) andGridSize:9];
+    _gridView.backgroundColor = [UIColor yellowColor];
+    _gridView.delegate = self;
+    
+    [self.view addSubview:_gridView];
+    
 }
 
 - (void)didReceiveMemoryWarning
