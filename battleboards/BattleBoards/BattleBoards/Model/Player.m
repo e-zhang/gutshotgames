@@ -10,6 +10,9 @@
 
 @implementation Player
 
+@synthesize Points=_points;
+@synthesize Alive;
+
 -(id) initWithStart:(CoordPoint *)start andPoints:(int)points
 {
     if([super init])
@@ -65,6 +68,12 @@
     _points -= distance;
     
     return YES;
+}
+
+
+-(void) getPointsFromBomb:(int)points
+{
+    _points += points;
 }
 
 @end

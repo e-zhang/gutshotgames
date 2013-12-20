@@ -7,7 +7,6 @@
 //
 
 #import "GridCell.h"
-#import "CellStates.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation GridCell
@@ -19,7 +18,6 @@
         // Initialization code
         _grid = grid;
         _cell = coord;
-        
         
         [self update];
     }
@@ -38,11 +36,9 @@
 
 -(void) update
 {
-    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
-    
-    if([state isKindOfClass:[NSString class]])
-    {
-        switch([state intValue])
+        CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+
+        switch(cell.state)
         {
             case EMPTY:
                 self.layer.borderColor = [UIColor blackColor].CGColor;
@@ -56,16 +52,9 @@
                 self.backgroundColor = [UIColor blackColor];
                 self.layer.borderColor = [UIColor blackColor].CGColor;
                 break;
+            case OCCUPIED:
+                break;
         }
-    }
-    else if([state isKindOfClass:[NSNumber class]])
-    {
-        // todo: get player image
-    }
-    else
-    {
-        NSAssert(NO, @"Received an invalid class for cell state: %@", [state class]);
-    }
 }
 
 @end

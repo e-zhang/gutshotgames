@@ -25,5 +25,10 @@
 
 -(BOOL) checkDistance:(CoordPoint*) dest;
 
+-(void) getPointsFromBomb:(int) points;
+
+@property (readonly) int Points;
+@property (readwrite) BOOL Alive;
+
 
 @end

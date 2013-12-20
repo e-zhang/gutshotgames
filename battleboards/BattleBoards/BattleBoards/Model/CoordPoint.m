@@ -30,4 +30,10 @@
     return [[self alloc] initWithX:x andY:y];
 }
 
+
++(id) coordWithArray:(NSArray *)array
+{
+    return [[self alloc] initWithX:[array[0] intValue] andY:[array[1] intValue]];
+}
+
 @end

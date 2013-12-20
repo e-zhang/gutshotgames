@@ -16,5 +16,6 @@
 -(id) initWithX:(int)initX andY:(int)initY;
 
 +(id) coordWithX:(int)x andY:(int)y;
++(id) coordWithArray:(NSArray*) array;
 @end
 

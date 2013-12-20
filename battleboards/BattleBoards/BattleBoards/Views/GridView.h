@@ -11,9 +11,12 @@
 
 @interface GridView : UIView
 {
-    GridModel* _grid;
+    int _size;
 }
 
--(id) initWithFrame:(CGRect) frame andGridSize:(int) size;
+-(id) initWithFrame:(CGRect) frame withSize:(int)size andGridModel:(GridModel*)grid;
+
+-(void) updateCell:(CoordPoint*)cell;
+
 
 @end

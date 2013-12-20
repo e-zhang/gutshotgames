@@ -7,14 +7,14 @@
 //
 
 #import <CouchCocoa/CouchCocoa.h>
-#import "Move.h"
+#import "CoordPoint.h"
 #import "GameChat.h"
 
 @protocol GameUpdateDelegate <NSObject>
 
-- (BOOL) onPlayerJoined:(NSString*) playerId;
-- (BOOL) onTeamInvite:(NSString*) team forPlayer:(NSString*) playerId;
-- (BOOL) onMoveSubmitted:(Move*) move byPlayer:(NSString*) playerId;
+- (BOOL) onPlayerJoined:(NSDictionary*) player;
+- (BOOL) onMove:(CoordPoint*)move byPlayer:(NSString*) playerId;
+- (BOOL) addBombs:(NSArray*)bombs byPlayer:(NSString*)playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;
 
@@ -34,6 +34,7 @@
 @property (nonatomic) NSString* gameName;
 @property (nonatomic) NSArray* gameData;
 @property (nonatomic) NSNumber* currentRound;
+@property (nonatomic) NSNumber* gridSize;
 
 @property (nonatomic) NSString* roundStartTime;
 @property (nonatomic) NSNumber* roundBuffer;
@@ -61,13 +62,9 @@
 
 - (void) joinGame:(NSString*) userId isLast:(BOOL) isLast;
 - (void) leaveGame:(NSString*) userId;
-- (void) submitMove:(Move*) move forPlayer:(NSString*)player;
-- (void) addToTeam:(NSString*)team forPlayer:(NSString*)playerId;
+- (void) submitMove:(CoordPoint*)move andBombs:(NSArray*)bombs byPlayer:(NSString*)player;
 
-- (void) simulateRound:(NSDictionary*) characters withDefenders:(NSMutableArray**)defenders
-                                                  withPointGetters:(NSMutableArray**)pointGetters
-                                                  withSimultaneousAttackers:(NSMutableArray**)simAttackers
-                                                  withAttackers:(NSMutableArray**)attackers;
+
 
 
 @end

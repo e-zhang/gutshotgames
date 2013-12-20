@@ -11,25 +11,36 @@
 
 @implementation GridView
 
-- (id)initWithFrame:(CGRect)frame andGridSize:(int)size
+- (id)initWithFrame:(CGRect)frame withSize:(int)size andGridModel:(GridModel *)grid;
 {
     
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _grid = [[GridModel alloc] initWithSize:size];
-        float width = frame.size.width / size;
-        float height = frame.size.height / size;
-        for(int r = 0; r < size; ++r)
+        _size = size;
+        float width = frame.size.width / _size;
+        float height = frame.size.height / _size;
+        for(int r = 0; r < _size; ++r)
         {
-            for(int c = 0; c < size; ++c)
+            for(int c = 0; c < _size; ++c)
             {
-                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, c, r)];
+                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, c, r)
+                                                         andGrid:grid
+                                                        andCoord:[CoordPoint coordWithX:r andY:c]];
+                cell.tag = r*_size + c;
                 [self addSubview:cell];
             }
         }
     }
     return self;
+}
+
+-(void) updateCell:(CoordPoint *)cell
+{
+    int tag = cell.x*_size + cell.y;
+    GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
+    
+    [gridCell update];
 }
 
 /*

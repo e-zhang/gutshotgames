@@ -7,25 +7,30 @@
 //
 
 #import "GridModel.h"
-#import "CellStates.h"
+
 
 @implementation GridModel
 
-@synthesize Players = _players;
 
--(id) initWithSize:(int) size
+-(id) initWithGame:(GameInfo *)game andPlayer:(NSString *)player
 {
-    NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
-    
+
     if([super init])
     {
+        _gameInfo = game;
+        _myPlayerId = player;
+        int size = [game.gridSize intValue];
+        NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
+        
         NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
         for(int i = 0; i < size; ++i)
         {
             NSMutableArray* row = [NSMutableArray arrayWithCapacity:size];
             for(int i = 0; i < size; ++i)
             {
-                [row addObject:[NSNumber numberWithInt: EMPTY]];
+                CellValue* cell = [[CellValue alloc] init];
+                cell.state = EMPTY;
+                [row addObject:cell];
             }
             [grid addObject:row];
         }
@@ -36,17 +41,18 @@
 }
 
 
--(id) getStateForRow:(int)row andCol:(int)col
+-(CellValue*) getCellAtRow:(int)row andCol:(int)col
 {
     return _grid[row][col];
 }
 
--(void) setState:(id)state forRow:(int)row andCol:(int)col
+
+-(void) addMove:(CoordPoint *)move byPlayer:(NSString *)player
 {
-    _grid[row][col] = state;
+    
 }
 
--(void) couchDocumentChanged:(CouchDocument *)doc
+-(void) addBombs:(NSArray*)bombs byPlayer:(NSString *)player
 {
     
 }

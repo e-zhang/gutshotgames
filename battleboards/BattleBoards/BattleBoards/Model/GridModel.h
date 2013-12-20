@@ -9,21 +9,27 @@
 #import <UIKit/UIKit.h>
 #import <CouchCocoa/CouchCocoa.h>
 #import "Player.h"
+#import "GameInfo.h"
+#import "CellValue.h"
 
-@interface GridModel : CouchModel<CouchDocumentModel>
+
+@protocol RoundUpdateDelegate <NSObject>
+-(void) updateRoundForCells:(NSArray*)cells andPlayers:(NSDictionary*)players;
+@end
+
+@interface GridModel : NSObject<GameUpdateDelegate>
 {
     NSArray* _grid;
     NSMutableDictionary* _players;
+    GameInfo* _gameInfo;
+    NSString* _myPlayerId;
 }
 
--(id) initWithSize:(int) size;
+-(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player;
 
--(id) getStateForRow:(int)row andCol:(int)col;
--(void) setState:(id)state forRow:(int)row andCol:(int)col;
--(void) addPlayer:(Player*)p;
+-(CellValue*) getCellAtRow:(int)row andCol:(int)col;
 
--(void) couchDocumentChanged:(CouchDocument *)doc;
-
-@property(readonly) NSDictionary* Players;
+-(void) addMove:(CoordPoint*)coord forPlayer:(Player*)player;
+-(void) addBombs:(NSArray*)bombs forPlayer:(Player*)player;
 
 @end
