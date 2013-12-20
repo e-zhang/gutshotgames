@@ -32,9 +32,12 @@
 
 @property (strong, nonatomic) NSArray *players;
 
+@property (strong, nonatomic) IBOutlet UILabel *gridVal;
+@property (strong, nonatomic) IBOutlet UISlider *gridSlider;
+- (IBAction)sliderAction:(id)sender;
+
 //createaccountbuttons
 - (IBAction)createviafb:(id)sender;
-
 
 - (IBAction)showCreateGame:(id)sender;
 

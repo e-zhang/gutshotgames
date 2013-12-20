@@ -15,6 +15,7 @@
     CoordPoint* _cell;
 }
 
+
 -(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 
 

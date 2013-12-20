@@ -7,7 +7,7 @@
 //
 
 #import "GridView.h"
-#import "GridCell.h"
+#import "CoordPoint.h"
 
 @implementation GridView
 

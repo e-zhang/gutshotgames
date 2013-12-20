@@ -146,15 +146,15 @@ const int SERVER_PORT = 443;
 -(GameInfo*) createNewGame:(NSString *)gameName
 {
     GameInfo* game = [GameInfo modelForDocument:[_games documentWithID:gameName]];
-    GameChat* chat = [GameChat modelForDocument:[_chat documentWithID:gameName]];
+  //  GameChat* chat = [GameChat modelForDocument:[_chat documentWithID:gameName]];
     NSArray* welcome = [NSArray arrayWithObjects:@"sumosmash",
                                                 [NSString stringWithFormat:@"Welcome to game: %@", gameName],
                                                 nil];
-    chat.chatHistory = [NSArray arrayWithObject:welcome];
+  //  chat.chatHistory = [NSArray arrayWithObject:welcome];
     
-    [[chat save] wait];
+  //  [[chat save] wait];
     
-    [game setGameChat:chat];
+  //  [game setGameChat:chat];
     return game;
 }
 
