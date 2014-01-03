@@ -18,8 +18,7 @@
     GridModel* _gridModel;
 }
 
--(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-             gameInfo:(GameInfo*)game playerId:(NSString*)playerId;
+-(id) initWithGameInfo:(GameInfo*)game playerId:(NSString*)playerId;
 
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players;

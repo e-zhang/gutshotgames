@@ -14,12 +14,11 @@
 
 @implementation GameViewController
 
--(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-             gameInfo:(GameInfo *)game playerId:(NSString *)playerId
+-(id) initWithGameInfo:(GameInfo *)game playerId:(NSString *)playerId
 {
-    if([super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
+    if([super initWithNibName:nil bundle:nil])
     {
-        _gridModel = [[GridModel alloc] initWithGame:game andPlayer:playerId];
+        _gridModel = [[GridModel alloc] initWithGame:game andPlayer:playerId andDelegate:self];
         _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,
                                                                0,
                                                                [UIScreen mainScreen].bounds.size.width,
@@ -31,6 +30,11 @@
     return self;
 }
 
+
+-(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
+{
+
+}
 
 - (void)viewDidLoad
 {

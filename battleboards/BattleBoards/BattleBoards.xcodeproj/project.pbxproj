@@ -50,6 +50,7 @@
 		E7850D7B1853D2E20076C518 /* GridView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D7A1853D2E20076C518 /* GridView.m */; };
 		E7850D811854DB790076C518 /* CoordPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D801854DB790076C518 /* CoordPoint.m */; };
 		E7850D84185938E60076C518 /* GameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D83185938E60076C518 /* GameInfo.m */; };
+		E79FD3D318763560007BCBA4 /* CellValue.m in Sources */ = {isa = PBXBuildFile; fileRef = E79FD3D218763560007BCBA4 /* CellValue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +131,7 @@
 		E7850D801854DB790076C518 /* CoordPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoordPoint.m; path = Model/CoordPoint.m; sourceTree = "<group>"; };
 		E7850D82185938E60076C518 /* GameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInfo.h; sourceTree = "<group>"; };
 		E7850D83185938E60076C518 /* GameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInfo.m; sourceTree = "<group>"; };
+		E79FD3D218763560007BCBA4 /* CellValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CellValue.m; path = Model/CellValue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,6 +303,7 @@
 				E7850D6718539DD40076C518 /* Player.h */,
 				E7850D6818539DD40076C518 /* Player.m */,
 				E7850D7C1853E0010076C518 /* CellValue.h */,
+				E79FD3D218763560007BCBA4 /* CellValue.m */,
 				E7850D7F1854DB790076C518 /* CoordPoint.h */,
 				E7850D801854DB790076C518 /* CoordPoint.m */,
 			);
@@ -443,6 +446,7 @@
 				E7850D3D185382C70076C518 /* GameViewController.m in Sources */,
 				586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */,
 				586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */,
+				E79FD3D318763560007BCBA4 /* CellValue.m in Sources */,
 				586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */,
 				586EEA551856DCA100A5D3A5 /* MenuView.m in Sources */,
 				586EEA561856DCA100A5D3A5 /* InvitationsViewController.m in Sources */,

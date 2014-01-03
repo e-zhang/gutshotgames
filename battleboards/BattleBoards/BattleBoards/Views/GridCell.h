@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GridModel.h"
 
-@interface GridCell : UIView<CellStateDelegate>
+@interface GridCell : UIView
 {
     GridModel* _grid;
     CoordPoint* _cell;

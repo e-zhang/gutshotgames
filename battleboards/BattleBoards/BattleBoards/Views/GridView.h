@@ -11,7 +11,7 @@
 #import "GridCell.h"
 
 
-@interface GridView : UIView<GridCellDelegate, GridModelDelegate>
+@interface GridView : UIView
 {
     int _size;
 }

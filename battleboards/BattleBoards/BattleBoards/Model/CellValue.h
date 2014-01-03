@@ -20,9 +20,7 @@ typedef enum CellStates
 @interface CellValue : NSObject
 
 @property CellStates state;
-@property NSArray* occupants;
-@property NSArray* bombers;
-
+@property NSMutableArray* occupants;
+@property NSMutableArray* bombers;
 
 @end
-

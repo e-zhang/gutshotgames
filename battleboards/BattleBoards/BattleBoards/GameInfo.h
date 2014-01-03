@@ -7,14 +7,12 @@
 //
 
 #import <CouchCocoa/CouchCocoa.h>
-#import "CoordPoint.h"
 #import "GameChat.h"
 
 @protocol GameUpdateDelegate <NSObject>
 
 - (BOOL) onPlayerJoined:(NSDictionary*) player;
-- (BOOL) onMove:(CoordPoint*)move byPlayer:(NSString*) playerId;
-- (BOOL) addBombs:(NSArray*)bombs byPlayer:(NSString*)playerId;
+- (BOOL) onMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;
 
@@ -62,7 +60,7 @@
 
 - (void) joinGame:(NSString*) userId isLast:(BOOL) isLast;
 - (void) leaveGame:(NSString*) userId;
-- (void) submitMove:(CoordPoint*)move andBombs:(NSArray*)bombs byPlayer:(NSString*)player;
+- (void) submitMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*)player;
 
 
 

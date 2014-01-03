@@ -41,21 +41,28 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
-    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
-    
-    if([state isEmpty])
-        [_delegate cellTouched:_cell];
+    CellValue* state = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+}
+
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
 }
 
 -(void) update
 {
-        CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 
-    id state = cell.state; 
-    NSLog(@"called-%@",state);
+    NSLog(@"called-%d",cell.state);
     
-    NSLog(@"intvalue-%d",[state intValue]);
-    switch([state intValue])
+    switch(cell.state)
     {
 	case EMPTY:
 	    self.layer.borderColor = [UIColor blackColor].CGColor;

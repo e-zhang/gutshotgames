@@ -11,7 +11,7 @@
 #import "GridView.h"
 #import "GameInfo.h"
 
-@interface GSGViewController : UIViewController<GameUpdateDelegate,GridViewDelegate>{
+@interface GSGViewController : UIViewController<GameUpdateDelegate>{
     GridView *_gridView;
 }
 

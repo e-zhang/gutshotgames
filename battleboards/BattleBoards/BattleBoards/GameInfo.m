@@ -204,7 +204,7 @@
     return isLast;
 }
 
-- (void) submitMove:(CoordPoint*)move andBombs:(NSArray*)bombs forPlayer:(NSString *)player
+- (void) submitMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString *)player
 {
     NSError* error = nil;
     do
@@ -220,6 +220,13 @@
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:_gameRound] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
         
+        // last if count - 1 entries and no count for self
+        _isLast = ([currentRound count] == _charsLeft - 1) && ![currentRound objectForKey:player];
+        
+        
+        NSDictionary* playerData = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects: move, bombs, nil]
+                                                           forKeys:[NSArray arrayWithObjects: DB_MOVES, DB_BOMBS, nil]];
+        [currentRound setObject:playerData forKey:player];
 
         [data setObject:currentRound atIndexedSubscript:_gameRound];
         NSLog(@"data - %@", data);
@@ -274,7 +281,7 @@
             NSDictionary* player = [self.players objectForKey:playerId];
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
-                start = [_delegate onPlayerJoined:playerId];
+                start = [_delegate onPlayerJoined:player];
             }
             
             if(start)
@@ -312,6 +319,10 @@
     {
         for(NSString* playerId in currentRound)
         {
+            NSDictionary* player = [currentRound objectForKey:playerId];
+            _isLast = ![_delegate onMove:[player objectForKey:DB_MOVES]
+                                andBombs:[player objectForKey:DB_BOMBS]
+                               forPlayer:playerId];
           //  NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
         }
         NSLog(@"round complete!");

@@ -23,13 +23,22 @@
     NSMutableDictionary* _players;
     GameInfo* _gameInfo;
     NSString* _myPlayerId;
+    id<RoundUpdateDelegate> _delegate;
 }
 
--(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player;
+-(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
 
 -(CellValue*) getCellAtRow:(int)row andCol:(int)col;
 
--(void) addMove:(CoordPoint*)coord forPlayer:(Player*)player;
--(void) addBombs:(NSArray*)bombs forPlayer:(Player*)player;
+// update database
+-(void) submitForMyPlayer;
+
+// gameupdate delegate
+-(BOOL) onPlayerJoined:(NSDictionary *)player;
+-(BOOL) onMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*)player;
+-(void) onRoundComplete;
+-(void) onRoundStart;
+
+
 
 @end
