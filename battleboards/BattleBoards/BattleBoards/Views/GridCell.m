@@ -7,6 +7,7 @@
 //
 
 #import "GridCell.h"
+#import "CellStates.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation GridCell
@@ -41,31 +42,14 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
-<<<<<<< HEAD
     id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
 
     if([state integerValue] == -1)
         [_delegate cellTouched:_cell];
-=======
-    CellValue* state = [_grid getCellAtRow:_cell.x andCol:_cell.y];
-}
-
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-}
-
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-}
-
--(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
->>>>>>> e8d49ca87bce1673d50e470fc5582460d192bc2e
 }
 
 -(void) update
 {
-<<<<<<< HEAD
     id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
     
     if([state isKindOfClass:[NSString class]])
@@ -95,28 +79,8 @@
         // todo: evaluate all occurances on the square
     }
     else
-=======
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
-
-    NSLog(@"called-%d",cell.state);
-    
-    switch(cell.state)
->>>>>>> e8d49ca87bce1673d50e470fc5582460d192bc2e
     {
-	case EMPTY:
-	    self.layer.borderColor = [UIColor blackColor].CGColor;
-	    self.backgroundColor = [UIColor whiteColor];
-	    break;
-	case BOMB:
-	    self.backgroundColor = [UIColor grayColor];
-	    self.layer.borderColor = [UIColor redColor].CGColor;
-	    break;
-	case GONE:
-	    self.backgroundColor = [UIColor blackColor];
-	    self.layer.borderColor = [UIColor blackColor].CGColor;
-	    break;
-	case OCCUPIED:
-	    break;
+        NSAssert(NO, @"Received an invalid class for cell state: %@", [state class]);
     }
 }
 
