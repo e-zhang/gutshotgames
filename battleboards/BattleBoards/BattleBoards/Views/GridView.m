@@ -8,6 +8,7 @@
 
 #import "GridView.h"
 #import "CoordPoint.h"
+#import "GridModel.h"
 
 @implementation GridView
 
@@ -18,13 +19,13 @@
     if (self) {
         // Initialization code
         _grid = [[GridModel alloc] initWithSize:size];
+        //_grid.delegate = self;
         float width = frame.size.width / size;
         float height = frame.size.height / size;
         for(int r = 0; r < size; ++r)
         {
             for(int c = 0; c < size; ++c)
             {
-                NSLog(@"c-%d",c);
                 
                 CoordPoint* cp = [[CoordPoint alloc] initWithX:r andY:c];
                 
@@ -39,7 +40,6 @@
 
 - (void)cellTouched:(CoordPoint *)coord{
     
-    //check rounddata
 }
 
 /*

@@ -374,7 +374,6 @@
         GameInfo* game = [_gameServer getGameForRequest:request];
      //   self.gamewindow = [[GSGViewController alloc] initWithNibName:@"GSGViewController" bundle:nil gameInfo:game myid:_gameServer.user.userid];
         //self.gamewindow.delegate = self;
-        
         [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
         [self presentViewController:self.gamewindow animated:YES completion:nil];
@@ -691,6 +690,8 @@
     
     NSDictionary* playerAccounts = [self getPlayerAccounts];
     newg.players = playerAccounts;
+    
+    [newg reset];
     
  //   [self sendRequests:newg.gameName toPlayers:playerAccounts];
     

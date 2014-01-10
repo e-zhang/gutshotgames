@@ -12,7 +12,12 @@
 #import "GameInfo.h"
 
 @interface GSGViewController : UIViewController<GameUpdateDelegate,GridViewDelegate>{
+    
+    GameInfo *_gI;
     GridView *_gridView;
+    
+    UIButton *_bomb;
+    UIButton *_move;
 }
 
 
