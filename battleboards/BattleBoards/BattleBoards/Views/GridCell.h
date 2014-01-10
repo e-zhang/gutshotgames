@@ -9,20 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "GridModel.h"
 
-@protocol GridCellDelegate <NSObject>
-- (void)cellTouched:(CoordPoint*)coord;
-@end
-
 @interface GridCell : UIView
 {
     GridModel* _grid;
     CoordPoint* _cell;
 }
 
-@property (strong, nonatomic) id <GridCellDelegate> delegate;
 
 -(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 
+
 -(void) update;
+
+
+// todo: determine how we want to do touches
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 
 @end
