@@ -7,15 +7,28 @@
 //
 
 #import "Player.h"
+#import "DBDefs.h"
 
 @implementation Player
 
--(id) initWithStart:(CoordPoint *)start andPoints:(int)points
+@synthesize Points=_remainingPoints;
+@synthesize Alive;
+@synthesize Bombs=_bombs;
+@synthesize Move=_move;
+@synthesize Location=_location;
+@synthesize Id=_userId;
+@synthesize Name=_name;
+
+-(id) initWithProperties:(NSDictionary *)props andPoints:(int)points
 {
     if([super init])
     {
-        _move = start;
+        _name = props[DB_USER_NAME];
+        _userId = props[DB_USER_ID];
+        _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
         _points = points;
+        _remainingPoints = points;
+        _updated = NO;
         [self reset];
     }
     
@@ -28,6 +41,15 @@
     _location = _move;
     _move = nil;
     [_bombs removeAllObjects];
+    _points = _remainingPoints;
+    _updated = NO;
+}
+
+-(void) cancel
+{
+    _move = nil;
+    [_bombs removeAllObjects];
+    _remainingPoints = _points;
 }
 
 
@@ -50,21 +72,47 @@
 }
 
 
+-(BOOL) updateMove:(CoordPoint *)move andBombs:(NSArray *)bombs
+{
+    BOOL hasUpdate = _updated;
+    
+    // cancel previous update, and apply new one
+    [self cancel];
+    if(move)
+    {
+        BOOL check = [self addMove:move];
+        NSAssert(check, @"move update from database has invalid move");
+    }
+    
+    for(CoordPoint* b in bombs)
+    {
+        BOOL check = [self addBomb:b];
+        NSAssert(check, @"bomb update from database has invalid bomb");
+    }
+    
+    _updated = YES;
+    return hasUpdate;
+}
+
+
 -(BOOL) checkDistance:(CoordPoint *)dest
 {
     // check to see if player has enough points for distance;
-    
-    int xDiff = abs(dest.x - _location.x);
-    int yDiff = abs(dest.y - _location.y);
-    
-    
-    int distance = xDiff + yDiff;
+
+    int distance = [CoordPoint distanceFrom:dest To:_location];
     
     if(_points < distance) return NO;
     
-    _points -= distance;
+    _remainingPoints -= distance;
     
     return YES;
+}
+
+
+-(void) getPointsFromBomb:(int)points
+{
+    _points += points;
+    _remainingPoints += points;
 }
 
 @end
