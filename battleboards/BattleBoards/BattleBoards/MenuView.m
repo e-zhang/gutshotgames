@@ -24,7 +24,7 @@
 
 @interface MenuView ()
 
-@property (nonatomic, strong)GSGViewController *gamewindow;
+@property (nonatomic, strong)GameViewController *gamewindow;
 
 @end
 
@@ -564,7 +564,7 @@
             
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"username"] forKey:DB_USER_NAME];
-            [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
+//            [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
         }
         
     }
@@ -703,7 +703,7 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
-    self.gamewindow = [[GSGViewController alloc] initwithGameData:newg myid:_gameServer.user.userid];
+    self.gamewindow = [[GameViewController alloc] initWithGameInfo:newg playerId:_gameServer.user.userid];
                                           //     gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;
     
