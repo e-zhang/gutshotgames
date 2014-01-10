@@ -10,11 +10,16 @@
 #import <CouchCocoa/CouchCocoa.h>
 #import "Player.h"
 
+@protocol GridModelDelegate <NSObject>
+@end
+
 @interface GridModel : CouchModel<CouchDocumentModel>
 {
     NSArray* _grid;
     NSMutableDictionary* _players;
 }
+
+@property (strong, nonatomic) id <GridModelDelegate> delegate;
 
 -(id) initWithSize:(int) size;
 

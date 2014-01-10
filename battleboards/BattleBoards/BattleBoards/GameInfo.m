@@ -14,14 +14,16 @@
 @implementation GameInfo
 
 @dynamic gameName, gameData, roundStartTime, roundBuffer,
-         timeInterval, players, bots, hostId, currentRound;
+         timeInterval, players, hostId, currentRound;
 
 @synthesize gameChat=_gameChat;
 @synthesize GameRound=_gameRound;
 
+
+
 -(void) reset
 {
-    _charsLeft = self.players.count + self.bots.count;
+    _charsLeft = self.players.count;
     _gameRound = -1;
     
     NSError* error = nil;
@@ -37,7 +39,7 @@
         [[self save] wait:&error];
         
     } while ([error.domain isEqual: @"CouchDB"] &&
-              error.code == 409);
+             error.code == 409);
 }
 
 -(void) startRound
@@ -61,7 +63,7 @@
             self.roundStartTime = [dateFormat stringFromDate:start];
             [[self save] wait:&error];
         } while ([error.domain isEqual: @"CouchDB"] &&
-                  error.code == 409);
+                 error.code == 409);
             
     }
     

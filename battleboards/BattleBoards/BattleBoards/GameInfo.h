@@ -40,7 +40,6 @@
 @property (nonatomic) NSNumber* timeInterval;
 
 @property (nonatomic) NSDictionary* players;
-@property (nonatomic) NSDictionary* bots;
 
 @property (nonatomic) NSString* hostId;
 
