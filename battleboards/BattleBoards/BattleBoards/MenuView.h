@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Server.h"
 #import "createaccount.h"
-#import "GSGViewController.h"
+#import "GameViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 
 

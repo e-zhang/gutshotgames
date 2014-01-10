@@ -78,8 +78,6 @@
     {
         if(![currentRound objectForKey:[player objectForKey:DB_USER_ID]])
         {
-            [self submitMove:[[Move alloc] initWithDictionary:[player objectForKey:DB_DEFAULT_MOVE]]
-                   forPlayer:[player objectForKey:DB_USER_ID]];
         }
     }
 }
@@ -204,35 +202,7 @@
     return isLast;
 }
 
-
--(void) addToTeam:(NSString *)team forPlayer:(NSString *)playerId
-{
-    NSError* error = nil;
-    do
-    {
-        if(error)
-        {
-            [self resolveConflicts:self];
-        }
-       
-        NSMutableDictionary* players = [self.players mutableCopy];
-        NSMutableDictionary* player = [players objectForKey:team];
-        NSMutableArray* invites = [player objectForKey:DB_TEAM_INVITES];
-        if(![invites containsObject:playerId])
-        {
-            [invites addObject:playerId];
-        }
-        [player setObject:invites forKey:DB_TEAM_INVITES];
-        [players setObject:player forKey:team];
-        self.players = players;
-        
-        [[self save] wait:&error];
-    }while ([error.domain isEqual: @"CouchDB"] &&
-            error.code == 409);
-}
-
-
-- (void) submitMove:(Move *)move forPlayer:(NSString *)player
+- (void) submitMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString *)player
 {
     NSError* error = nil;
     do
@@ -251,7 +221,11 @@
         // last if count - 1 entries and no count for self
         _isLast = ([currentRound count] == _charsLeft - 1) && ![currentRound objectForKey:player];
         
-        [currentRound setObject:[move getMove] forKey:player];
+        
+        NSDictionary* playerData = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects: move, bombs, nil]
+                                                           forKeys:[NSArray arrayWithObjects: DB_MOVES, DB_BOMBS, nil]];
+        [currentRound setObject:playerData forKey:player];
+
         [data setObject:currentRound atIndexedSubscript:_gameRound];
         NSLog(@"data - %@", data);
         
@@ -270,57 +244,6 @@
     }
 }
 
-- (void) simulateRound:(NSDictionary *)characters withDefenders:(NSMutableArray *__autoreleasing *)defenders
-                                                  withPointGetters:(NSMutableArray *__autoreleasing *)pointGetters
-                                                  withSimultaneousAttackers:(NSMutableArray*__autoreleasing *)simAttackers
-                                                  withAttackers:(NSMutableArray *__autoreleasing *)attackers
-{
-    NSMutableSet* seenPlayers = [[NSMutableSet alloc] initWithCapacity:[characters count]];
-    for(NSString* playerId in characters)
-    {
-     /*   Character* c = [characters objectForKey:playerId];
-        switch(c.NextMove.Type)
-        {
-            case ATTACK:
-            case SUPERATTACK:
-            {
-                Character* target = [characters objectForKey:c.NextMove.TargetId];
-                
-                [c OnRebate:[target OnAttack:c.NextMove.Type by:c.Id]];
-                
-                if([seenPlayers containsObject:playerId]) break;
-                
-                if((target.NextMove.Type == ATTACK || target.NextMove.Type == SUPERATTACK) &&
-                   [target.NextMove.TargetId isEqual:playerId])
-                {
-                    [*simAttackers addObject:[NSArray arrayWithObjects:playerId,c.NextMove.TargetId,nil]];
-                    [seenPlayers addObject:c.NextMove.TargetId];
-                    [seenPlayers addObject:playerId];
-                }
-                else
-                {
-                    [*attackers addObject:c];
-                }
-                break;
-            }
-            case DEFEND:
-            {
-                [*defenders addObject:c];
-                break;
-            }
-            case GETPOINTS:
-            {
-                [*pointGetters addObject:c];
-                break;
-            }
-            default: break;
-        }
-        [seenPlayers addObject:playerId];*/
-    }
-    
-
-    
-}
 
 - (void) sendChat:(NSString *)chat fromUser:(NSString *)name
 {
@@ -356,7 +279,7 @@
             NSDictionary* player = [self.players objectForKey:playerId];
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
-                start = [_delegate onPlayerJoined:playerId];
+                start = [_delegate onPlayerJoined:player];
             }
             
             if(start)
@@ -368,7 +291,6 @@
     }
     else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
-        [self checkForTeams];
         
         if([self.currentRound intValue] >= _gameRound)
         {
@@ -386,22 +308,6 @@
 }
 
 
--(void) checkForTeams
-{
-    NSMutableDictionary* players = [self.players mutableCopy];
-    for( NSDictionary* p in [self.players allValues] )
-    {
-        NSMutableArray* invites = [[NSMutableArray alloc] init];
-        for( NSString* invite in [p objectForKey:DB_TEAM_INVITES])
-        {
-            if(![_delegate onTeamInvite:invite forPlayer:[p objectForKey:DB_USER_ID]])
-            {
-                
-            }
-        }
-    }
-}
-
 
 -(void) checkRound:(NSDictionary*) currentRound
 {
@@ -411,9 +317,11 @@
     {
         for(NSString* playerId in currentRound)
         {
-            Move* move = [[Move alloc] initWithDictionary:[currentRound objectForKey:playerId]];
+            NSDictionary* player = [currentRound objectForKey:playerId];
+            _isLast = ![_delegate onMove:[player objectForKey:DB_MOVES]
+                                andBombs:[player objectForKey:DB_BOMBS]
+                               forPlayer:playerId];
           //  NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
-            _isLast = ![_delegate onMoveSubmitted:move byPlayer:playerId];
         }
         NSLog(@"round complete!");
         [_delegate onRoundComplete];
