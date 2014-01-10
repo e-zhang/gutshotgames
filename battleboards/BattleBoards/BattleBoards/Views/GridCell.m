@@ -43,19 +43,17 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
     id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
-    
-    if([state isEmpty])
+
+    if([state integerValue] == -1)
         [_delegate cellTouched:_cell];
 }
 
 -(void) update
 {
     id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
-    NSLog(@"called-%@",state);
     
     if([state isKindOfClass:[NSString class]])
     {
-        NSLog(@"intvalue-%d",[state intValue]);
         switch([state intValue])
         {
             case EMPTY:
@@ -74,11 +72,9 @@
     }
     else if([state isKindOfClass:[NSNumber class]])
     {
-        // todo: get player image
-        NSLog(@"intva3241lue-%d",[state intValue]);
-        
+        // player numbers
     }
-    if([state isKindOfClass:[NSArray class]])
+    else if([state isKindOfClass:[NSArray class]])
     {
         // todo: evaluate all occurances on the square
     }

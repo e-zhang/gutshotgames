@@ -7,13 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GridModel.h"
 #import "GridCell.h"
 
 @protocol GridViewDelegate <NSObject>
 @end
 
-@interface GridView : UIView<GridCellDelegate, GridModelDelegate>
+@interface GridView : UIView<GridCellDelegate>
 {
     GridModel* _grid;
 }
