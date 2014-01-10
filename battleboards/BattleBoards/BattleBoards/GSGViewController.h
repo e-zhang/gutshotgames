@@ -11,13 +11,9 @@
 #import "GridView.h"
 #import "GameInfo.h"
 
-<<<<<<< HEAD
 @interface GSGViewController : UIViewController<GameUpdateDelegate,GridViewDelegate>{
     
     GameInfo *_gI;
-=======
-@interface GSGViewController : UIViewController<GameUpdateDelegate>{
->>>>>>> e8d49ca87bce1673d50e470fc5582460d192bc2e
     GridView *_gridView;
     
     UIButton *_bomb;
