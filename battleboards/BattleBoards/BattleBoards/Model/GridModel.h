@@ -9,44 +9,21 @@
 #import <UIKit/UIKit.h>
 #import <CouchCocoa/CouchCocoa.h>
 #import "Player.h"
-#import "GameInfo.h"
-#import "CellValue.h"
 
-<<<<<<< HEAD
 @interface GridModel : CouchModel<CouchDocumentModel>
-=======
-
-@protocol RoundUpdateDelegate <NSObject>
--(void) updateRoundForCells:(NSArray*)cells andPlayers:(NSDictionary*)players;
-@end
-
-@interface GridModel : NSObject<GameUpdateDelegate>
->>>>>>> e8d49ca87bce1673d50e470fc5582460d192bc2e
 {
     NSArray* _grid;
     NSMutableDictionary* _players;
-    GameInfo* _gameInfo;
-    NSString* _myPlayerId;
-    id<RoundUpdateDelegate> _delegate;
 }
 
-<<<<<<< HEAD
 -(id) initWithSize:(int) size;
-=======
--(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
 
--(CellValue*) getCellAtRow:(int)row andCol:(int)col;
+-(id) getStateForRow:(int)row andCol:(int)col;
+-(void) setState:(id)state forRow:(int)row andCol:(int)col;
+-(void) addPlayer:(Player*)p;
 
-// update database
--(void) submitForMyPlayer;
->>>>>>> e8d49ca87bce1673d50e470fc5582460d192bc2e
+-(void) couchDocumentChanged:(CouchDocument *)doc;
 
-// gameupdate delegate
--(BOOL) onPlayerJoined:(NSDictionary *)player;
--(BOOL) onMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*)player;
--(void) onRoundComplete;
--(void) onRoundStart;
-
-
+@property(readonly) NSDictionary* Players;
 
 @end
