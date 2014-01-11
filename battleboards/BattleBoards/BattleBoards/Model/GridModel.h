@@ -19,16 +19,20 @@
 
 @interface GridModel : NSObject<GameUpdateDelegate>
 {
+    BOOL init;
     NSArray* _grid;
     NSMutableDictionary* _players;
     GameInfo* _gameInfo;
-    NSString* _myPlayerId;
     id<RoundUpdateDelegate> _delegate;
 }
+
+@property (strong, nonatomic) NSString* myPlayerId;
 
 -(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
 
 -(CellValue*) getCellAtRow:(int)row andCol:(int)col;
+
+-(void)initailizePositionatRow:(int)row andCol:(int)col;
 
 // update database
 -(void) submitForMyPlayer;

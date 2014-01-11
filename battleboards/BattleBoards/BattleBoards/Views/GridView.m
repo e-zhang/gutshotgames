@@ -24,7 +24,7 @@
         {
             for(int c = 0; c < _size; ++c)
             {
-                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, c, r)
+                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, width, height)
                                                          andGrid:grid
                                                         andCoord:[CoordPoint coordWithX:r andY:c]];
                 cell.tag = r*_size + c;

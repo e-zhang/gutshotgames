@@ -52,6 +52,11 @@
     _remainingPoints = _points;
 }
 
+//we need to add a different initial set because the interface is different. Click and place vs. click and drag.
+-(BOOL) setInitialPos:(CoordPoint *)pos{
+    _move = pos;
+    return YES;
+}
 
 -(BOOL) addMove:(CoordPoint *)move
 {

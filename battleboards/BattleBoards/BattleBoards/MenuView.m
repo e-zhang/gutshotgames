@@ -688,6 +688,7 @@
     newg.gameData = [[NSArray alloc] init];
     newg.roundBuffer = [NSNumber numberWithInt:5];
     newg.timeInterval = [NSNumber numberWithInt:10];
+    newg.gridSize = [NSNumber numberWithInt:9];
     
     NSDictionary* playerAccounts = [self getPlayerAccounts];
     newg.players = playerAccounts;

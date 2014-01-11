@@ -14,7 +14,6 @@
 @interface GameViewController : UIViewController<RoundUpdateDelegate>
 {
     GridView* _gridView;
-
     GridModel* _gridModel;
 }
 

@@ -13,6 +13,8 @@
 {
     GridModel* _grid;
     CoordPoint* _cell;
+    
+    BOOL positionChange;
 }
 
 

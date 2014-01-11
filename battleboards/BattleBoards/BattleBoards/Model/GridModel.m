@@ -23,7 +23,8 @@
         _gameInfo = game;
         _myPlayerId = player;
         int size = [game.gridSize intValue];
-        NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
+        NSLog(@"size-%d-%d-%d",size,GONE,EMPTY);
+      //  NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
         
         NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
         for(int i = 0; i < size; ++i)
@@ -32,12 +33,13 @@
             for(int i = 0; i < size; ++i)
             {
                 CellValue* cell = [[CellValue alloc] init];
-                cell.state = EMPTY;
+                cell.state = INIT;
                 [row addObject:cell];
             }
             [grid addObject:row];
         }
         _grid = grid;
+        init = YES;
     }
     
     return self;
@@ -62,6 +64,11 @@
     [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
 }
 
+-(void)initailizePositionatRow:(int)row andCol:(int)col
+{
+    Player* myP = [_players objectForKey:_myPlayerId];
+    [myP setInitialPos:[CoordPoint coordWithX:row andY:col]];
+}
 
 -(BOOL) onMove:(NSArray *)move andBombs:(NSArray *)bombs forPlayer:(NSString *)player
 {
@@ -102,7 +109,6 @@
 
 -(void) onRoundStart
 {
-    
 }
 
 -(void) onRoundComplete

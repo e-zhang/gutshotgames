@@ -9,12 +9,12 @@
 
 typedef enum CellStates
 {
-    EMPTY,
-    BOMB,
-    OCCUPIED,
-    GONE
+    INIT = -1,
+    EMPTY = 0,
+    BOMB = 1,
+    OCCUPIED = 2,
+    GONE = 3
 } CellStates;
-
 
 
 @interface CellValue : NSObject

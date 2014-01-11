@@ -25,6 +25,7 @@
 -(id) initWithProperties:(NSDictionary*)props andPoints:(int)points;
 
 // for updating user inputs
+-(BOOL) setInitialPos:(CoordPoint *)pos;
 -(BOOL) addMove:(CoordPoint*) move;
 -(BOOL) addBomb:(CoordPoint*) bomb;
 // for updating from database
