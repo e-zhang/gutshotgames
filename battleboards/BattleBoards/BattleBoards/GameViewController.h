@@ -15,6 +15,14 @@
 {
     GridView* _gridView;
     GridModel* _gridModel;
+    
+    UIActivityIndicatorView *_activityView;
+    
+    UIView *_sidePanel;
+    UIButton *_submitButton;
+
+    UILabel *_noticeMsg;
+    UILabel *_roundInfo;
 }
 
 -(id) initWithGameInfo:(GameInfo*)game playerId:(NSString*)playerId;

@@ -8,49 +8,71 @@
 
 #import "GridCell.h"
 #import <QuartzCore/QuartzCore.h>
+#include "CharColors.h"
+
+static const int SELF = 1;
 
 @implementation GridCell
 
 - (id)initWithFrame:(CGRect)frame andGrid:(GridModel *)grid andCoord:(CoordPoint *)coord
 {
-    NSLog(@"corez");
     self = [super initWithFrame:frame];
     if (self) {
-        NSLog(@"should be called?");
-        // Initialization code
+
         _grid = grid;
         _cell = coord;
         
         self.layer.borderColor = [UIColor blackColor].CGColor;
         self.layer.borderWidth = 1.0f;
         
-      //  [self update];
+        _cost = [[UILabel alloc] initWithFrame:CGRectMake(0.0f,0.0f,self.frame.size.width, self.frame.size.height)];
+        _cost.textAlignment = NSTextAlignmentCenter;
+        _cost.textColor = [UIColor blackColor];
+        _cost.text = @"";
+        
+        [self addSubview:_cost];
     }
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)drawMyDot
 {
-    // Drawing code
+    UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, self.frame.size.width - 10.0f, self.frame.size.height - 10.0f)];
+    circle.tag = SELF;
+    circle.backgroundColor = player1Color;
+    circle.layer.cornerRadius = (self.frame.size.width - 10.0f) / 2;
+    [self addSubview:circle];
 }
-*/
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
     CellValue* cellV = [_grid getCellAtRow:_cell.x andCol:_cell.y];
-    NSLog(@"displayCellState-%d",cellV.state);
+    NSLog(@"displayCellState-%d%d--%d-%d",_cell.x,_cell.y,cellV.state,cellV.moveCost);
     
     switch (cellV.state)
     {
         case INIT:
-            self.backgroundColor = [UIColor blueColor];
+        {
+            [_grid makeAllInit];
             [_grid initailizePositionatRow:_cell.x andCol:_cell.y];
+            [self drawMyDot];
             break;
+        }
         case OCCUPIED:
+        {
+            NSLog(@"occupied-occupants-%@",cellV.occupants);
+            if([cellV.occupants containsObject:_grid.myPlayerId])
+            {
+                NSLog(@"thats me");
+                UITouch *touch = [[event allTouches] anyObject];
+                CGPoint touchLocation = [touch locationInView:self];
+                //drag
+                dragging = YES;
+                oldX = touchLocation.x;
+                oldY = touchLocation.y;
+            }
             break;
+        }
         case BOMB:
             break;
         case EMPTY:
@@ -61,7 +83,7 @@
             break;
     }
     
-    if(cellV.state==OCCUPIED && [cellV.occupants containsObject:_grid.myPlayerId])
+    /*if(cellV.state==OCCUPIED && [cellV.occupants containsObject:_grid.myPlayerId])
     {
         //drag self to new block
         //display possibilities
@@ -74,7 +96,7 @@
     else
     {
         //try and place bomb.. check if pts allow, if so update
-    }
+    }*/
     
     
 }
@@ -101,14 +123,19 @@
 {
     CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 
-    NSLog(@"called-%d",cell.state);
+  //  NSLog(@"called-%d",cell.state);
     
     switch(cell.state)
     {
         case EMPTY:
+        case INIT:
+        {
+            UIView *view = [self viewWithTag:SELF];
+            [view removeFromSuperview];
             self.layer.borderColor = [UIColor blackColor].CGColor;
             self.backgroundColor = [UIColor whiteColor];
             break;
+        }
         case BOMB:
             self.backgroundColor = [UIColor grayColor];
             self.layer.borderColor = [UIColor redColor].CGColor;
@@ -122,11 +149,25 @@
     }
 }
 
--(void) displayMovePossibilities
-{}
+-(void) showMP{
+    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+    
+    if(cell.moveCost)
+    {
+        _cost.text = [NSString stringWithFormat:@"%d",cell.moveCost];
+        _cost.textColor = [UIColor blackColor];
 
--(void) displayBombPossibilities
-{}
+    }
+}
 
+-(void) showBP{
+    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+    
+    if(cell.bombCost)
+    {
+        _cost.text = [NSString stringWithFormat:@"%d",cell.bombCost];
+        _cost.textColor = player1Color;
+    }
+}
 
 @end

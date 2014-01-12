@@ -14,7 +14,7 @@
 @implementation GameInfo
 
 @dynamic gameName, gameData, roundStartTime, roundBuffer,
-         timeInterval, players, hostId, currentRound;
+         timeInterval, players, hostId, currentRound, gridSize;
 
 @synthesize gameChat=_gameChat;
 @synthesize GameRound=_gameRound;
@@ -86,6 +86,7 @@
 
 -(void) initializeGame
 {
+    NSLog(@"initializeGame-%@",self.gameData);
     _charsLeft=self.players.count;
     _gameRound = -1;
     
@@ -126,6 +127,7 @@
 
 - (void) joinGame:(NSString*) userId isLast:(BOOL) last
 {
+    NSLog(@"joingame");
     _isLast = last;
     NSError* error = nil;
     do
@@ -267,6 +269,7 @@
 
 - (void) couchDocumentChanged:(CouchDocument *)doc
 {
+    NSLog(@"couch document changed");
     if (self.document != doc)
     {
         NSLog(@"Update on different doc");
@@ -278,7 +281,9 @@
         BOOL start = NO;
         for(NSString* playerId in self.players)
         {
+            NSLog(@"playerId-%@",playerId);
             NSDictionary* player = [self.players objectForKey:playerId];
+            NSLog(@"pdata-%@",player);
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
                 start = [_delegate onPlayerJoined:player];
@@ -323,7 +328,6 @@
             _isLast = ![_delegate onMove:[player objectForKey:DB_MOVES]
                                 andBombs:[player objectForKey:DB_BOMBS]
                                forPlayer:playerId];
-          //  NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
         }
         NSLog(@"round complete!");
         [_delegate onRoundComplete];

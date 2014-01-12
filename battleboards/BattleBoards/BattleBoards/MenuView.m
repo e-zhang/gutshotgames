@@ -372,7 +372,7 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         GameInfo* game = [_gameServer getGameForRequest:request];
-     //   self.gamewindow = [[GSGViewController alloc] initWithNibName:@"GSGViewController" bundle:nil gameInfo:game myid:_gameServer.user.userid];
+        self.gamewindow = [[GameViewController alloc] initWithGameInfo:game playerId:_gameServer.user.userid];
         //self.gamewindow.delegate = self;
         
         [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
@@ -545,7 +545,7 @@
     //   [self.friendPickerController loadData];
 }
 
--(NSDictionary*) getPlayer:(NSString*) username
+-(NSDictionary*) getPlayer:(NSString*) username setId:(int)a
 {
     
     NSMutableDictionary* playerAccount = [[NSMutableDictionary alloc] init];
@@ -565,7 +565,7 @@
             
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"username"] forKey:DB_USER_NAME];
-//            [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
+            [playerAccount setObject:@(a) forKey:INGAMEID];
         }
         
     }
@@ -585,6 +585,7 @@
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"fb_name"] forKey:DB_USER_NAME];
             [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"facebook"] forKey:DB_FB_ID];
+            [playerAccount setObject:@(a) forKey:INGAMEID];
      //       [playerAccount setObject:fbresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
             
         }
@@ -601,16 +602,17 @@
 {
     NSMutableDictionary* playerAccounts = [[NSMutableDictionary alloc]init];
    
-   /*( NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
+    NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
     [userAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
     [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
-       
+    [userAccount setObject:@1 forKey:INGAMEID];
+
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
-    
+    int a = 2;
     for(id<FBGraphUser> userFB in _players)
     {
         NSString* user = [@"fb-" stringByAppendingString:userFB.id];
-        NSDictionary* player = [self getPlayer:user];
+        NSDictionary* player = [self getPlayer:user setId:a];
         
         if([player count] == 0)
         {
@@ -624,9 +626,11 @@
             break;
         }
         
+        
         [playerAccounts setObject:player forKey:[player objectForKey:DB_USER_ID]];
+        a++;
     }
-    */
+    NSLog(@"playerAccounts-%@",playerAccounts);
     return playerAccounts;
 }
 
@@ -693,7 +697,7 @@
     NSDictionary* playerAccounts = [self getPlayerAccounts];
     newg.players = playerAccounts;
     
- //   [self sendRequests:newg.gameName toPlayers:playerAccounts];
+    [self sendRequests:newg.gameName toPlayers:playerAccounts];
     
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}
@@ -703,8 +707,8 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
+    //replace 1 with _gameServer.user.userid
     self.gamewindow = [[GameViewController alloc] initWithGameInfo:newg playerId:_gameServer.user.userid];
-                                          //     gameInfo:newg myid:_gameServer.user.userid];
     //self.gamewindow.delegate = self;
     
     [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];

@@ -14,31 +14,42 @@
 
 
 @protocol RoundUpdateDelegate <NSObject>
--(void) updateRoundForCells:(NSArray*)cells andPlayers:(NSDictionary*)players;
+-(void)startGame;
+-(void)startNextRound:(int)roundNum;
+-(void)updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players andRound:(int)roundNum;
+-(void)initplayers:(NSDictionary*)players;
+-(void)refreshCellatRow:(int)x andCol:(int)y;
+
+-(void)showMovePossibilities;
+-(void)showBombPossibilities;
 @end
 
 @interface GridModel : NSObject<GameUpdateDelegate>
 {
     BOOL init;
+    int _gameStarted;
     NSArray* _grid;
     NSMutableDictionary* _players;
     GameInfo* _gameInfo;
     id<RoundUpdateDelegate> _delegate;
+    
+    int checkB;
+    int checkM;
 }
 
 @property (strong, nonatomic) NSString* myPlayerId;
 
 -(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
-
 -(CellValue*) getCellAtRow:(int)row andCol:(int)col;
-
 -(void)initailizePositionatRow:(int)row andCol:(int)col;
+-(void)makeAllInit;
+-(void)beginGame;
 
 // update database
--(void) submitForMyPlayer;
+-(BOOL) submitForMyPlayer;
 
 // gameupdate delegate
--(BOOL) onPlayerJoined:(NSDictionary *)player;
+-(BOOL) onPlayerJoined:(NSString *)player;
 -(BOOL) onMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*)player;
 -(void) onRoundComplete;
 -(void) onRoundStart;

@@ -21,9 +21,10 @@
     {
         _delegate = delegate;
         _gameInfo = game;
+        [_gameInfo setDelegate:self];
         _myPlayerId = player;
+        _players = [[NSMutableDictionary alloc] init];
         int size = [game.gridSize intValue];
-        NSLog(@"size-%d-%d-%d",size,GONE,EMPTY);
       //  NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
         
         NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
@@ -39,7 +40,6 @@
             [grid addObject:row];
         }
         _grid = grid;
-        init = YES;
     }
     
     return self;
@@ -51,23 +51,86 @@
     return _grid[row][col];
 }
 
--(void) submitForMyPlayer
+-(void)beginGame{
+    NSLog(@"beginGame");
+    init = YES;
+    _gameStarted = 0;
+    [_delegate initplayers:_gameInfo.players];
+
+    BOOL isLast = _gameStarted == ([_gameInfo.players count] - 1);
+    [_gameInfo joinGame:_myPlayerId isLast:isLast];
+    [self onPlayerJoined:_myPlayerId];
+    
+    if(isLast)
+    {
+        [self startGame];
+    }
+    
+    [_gameInfo initializeGame];
+
+}
+
+-(BOOL) submitForMyPlayer
 {
     Player* myP = [_players objectForKey:_myPlayerId];
     NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:myP.Bombs.count];
     for (CoordPoint* b in myP.Bombs) {
         [bombs addObject:[b arrayFromCoord]];
     }
-    
+    NSLog(@"move,%@",myP.Move);
+    NSLog(@"player-%@",myP);
     NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : nil;
     
-    [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
+    NSLog(@"init-%hhd,move-%@",init,move);
+    if(init == YES && move == nil)
+    {
+        return NO;
+    }
+    else
+    {
+        NSLog(@"submit move");
+        [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
+        return YES;
+    }
+}
+
+-(void)makeAllInit
+{
+    NSLog(@"clearCells");
+    int size = [_gameInfo.gridSize intValue];
+
+    NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
+    for(int i = 0; i < size; ++i)
+    {
+        NSMutableArray* row = [NSMutableArray arrayWithCapacity:size];
+        for(int x = 0; x < size; ++x)
+        {
+            CellValue* cell = [self getCellAtRow:x andCol:i];
+            
+            if(cell.state!=INIT)
+            {
+                NSLog(@"not init");
+                cell.state = INIT;
+                
+                [_delegate refreshCellatRow:x andCol:i];
+            }
+        }
+        [grid addObject:row];
+    }
+
 }
 
 -(void)initailizePositionatRow:(int)row andCol:(int)col
 {
-    Player* myP = [_players objectForKey:_myPlayerId];
+    NSLog(@"players-%@",_players);
+    CellValue* cell = [self getCellAtRow:row andCol:col];
+    cell.state = OCCUPIED;
+    NSLog(@"myplayerid-%@",_myPlayerId);
+    Player* myP = _players[_myPlayerId];
+    NSLog(@"player-%@",myP);
     [myP setInitialPos:[CoordPoint coordWithX:row andY:col]];
+    
+
 }
 
 -(BOOL) onMove:(NSArray *)move andBombs:(NSArray *)bombs forPlayer:(NSString *)player
@@ -91,17 +154,16 @@
     return [p updateMove:moveCoord andBombs:bombCoords];
 }
 
--(BOOL) onPlayerJoined:(NSDictionary *)player
+-(BOOL) onPlayerJoined:(NSString *)player
 {
-    NSString* userId = player[DB_USER_ID];
-    
-    Player* p = _players[userId];
+    NSLog(@"playerjoined-%@",player);
+    Player* p = _players[player];
     
     if(!p)
     {
         int points = START_POINTS + _gameInfo.players.count;
-        p = [[Player alloc] initWithProperties:player andPoints:points];
-        _players[userId] = p;
+        p = [[Player alloc] initWithProperties:[_gameInfo.players objectForKey:player] andPoints:points];
+        _players[player] = p;
     }
     
     return _players.count == _gameInfo.players.count;
@@ -109,10 +171,29 @@
 
 -(void) onRoundStart
 {
+    NSLog(@"R STARTS-%d",_gameInfo.GameRound);
+    [_delegate startNextRound:_gameInfo.GameRound];
+    
+    if(_gameInfo.GameRound==1)
+    {
+        int size = [_gameInfo.gridSize intValue];
+        
+        for(int a = 0; a < size; ++a)
+        {
+            for(int b = 0; b < size; ++b)
+            {
+                CellValue *cell = _grid[a][b];
+                
+                if(cell.state == INIT)
+                    cell.state = EMPTY;
+            }
+        }
+    }
 }
 
 -(void) onRoundComplete
 {
+    NSLog(@"R COMPLETE");
     // todo figure out how to check for equality
     NSMutableSet* updatedCells = [[NSMutableSet alloc] init];
     
@@ -124,19 +205,28 @@
     [updatedCells addObjectsFromArray:cells];
 
     
-    for(Player* player in _players)
+    for(NSString* a in _players)
     {
+        Player *player = [_players objectForKey:a];
+
         [player reset];
     }
     
-    [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
+    [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players andRound:_gameInfo.GameRound];
+    
+
+    [self populateMovePossibilities];
+    [self populateBombPossibilities];
 }
 
 -(NSArray*) checkMoves
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
-    for(Player* p in _players)
+    NSLog(@"players-%@",_players);
+    for(NSString* a in _players)
     {
+        Player *p = [_players objectForKey:a];
+        NSLog(@"playa-%@,%@",p.Name,p.Location);
         if(!p.Move) continue;
         
         // update old location
@@ -160,8 +250,9 @@
 -(NSArray*) checkBombs
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
-    for(Player* p in _players)
+    for(NSString* a in _players)
     {
+        Player *p = [_players objectForKey:a];
         for(CoordPoint* bomb in p.Bombs)
         {
             // update old location
@@ -192,6 +283,185 @@
     return [cells allObjects];
 }
 
+-(void)populateMovePossibilities{
+    Player* myP = [_players objectForKey:_myPlayerId];
+    NSLog(@"mylocfeqwation-%d-%d",myP.Location.x,myP.Location.y);
+    int points = myP.Points , cost = 0;
+    checkM = 0;
+    
+    [self checkMovePossatCoordPoint:myP.Location cost:cost points:points];
+}
 
+-(void)populateBombPossibilities{
+    Player* myP = [_players objectForKey:_myPlayerId];
+    int points = myP.Points , cost = 0;
+    checkB = 0;
+
+    [self checkBombPossatCoordPoint:myP.Location cost:cost points:points];
+
+}
+
+-(void)checkMovePossatCoordPoint:(CoordPoint *)a cost:(int)b points:(int)c{
+    
+    checkM++;
+    BOOL done = YES;
+    CellValue *cell = [self getCellAtRow:a.x andCol:a.y];
+    
+    NSLog(@"checkMove-%d%d-cost%d,point%d,moveCost%d",a.x,a.y,b,c,cell.moveCost);
+
+    if((!cell.moveCost && cell.state != BOMB) || (b < cell.moveCost))
+    {
+        NSLog(@"setting");
+        cell.moveCost = b;
+    }
+    else
+    {
+        NSLog(@"already set-%d",checkM--);
+        checkM--;
+        
+        if(checkM==0)
+        {
+         //   [_delegate showMovePossibilities];
+        }
+        return;
+    }
+    
+    NSLog(@"continueCheck");
+    b++; c--;
+
+    if(a.x+1 < [_gameInfo.gridSize intValue])
+    {
+        NSLog(@"left-%d-%d",a.x+1,a.y);
+        CoordPoint *newP = [CoordPoint coordWithX:a.x+1 andY:a.y];
+        if(c > 0)
+        {
+            done = NO;
+            [self checkMovePossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(a.x-1 >= 0)
+    {
+        NSLog(@"right-%d-%d",a.x-1,a.y);
+        CoordPoint *newP = [CoordPoint coordWithX:a.x-1 andY:a.y];
+        if(c > 0)
+        {
+            done = NO;
+            [self checkMovePossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(a.y+1 < [_gameInfo.gridSize intValue])
+    {
+        NSLog(@"up-%d-%d",a.x,a.y+1);
+        CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y+1];
+        if(c > 0)
+        {
+            done = NO;
+            [self checkMovePossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(a.y-1 >= 0)
+    {
+        NSLog(@"down-%d-%d",a.x,a.y-1);
+        CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y-1];
+        if(c > 0)
+        {
+            done = NO;
+            [self checkMovePossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(done==YES)
+        checkM--;
+    NSLog(@"checkM-%d",checkM);
+    if(done==YES && checkM==0)
+    {
+      //  [_delegate showMovePossibilities];
+    }
+}
+
+-(void)checkBombPossatCoordPoint:(CoordPoint *)a cost:(int)b points:(int)c{
+    
+    checkB++;
+    BOOL done = YES;
+    CellValue *cell = [self getCellAtRow:a.x andCol:a.y];
+    
+    NSLog(@"checkMove-%d%d-cost%d,point%d,bombCost%d",a.x,a.y,b,c,cell.bombCost);
+    
+    if((!cell.bombCost && cell.state != BOMB) || (b < cell.bombCost))
+    {
+        NSLog(@"setting");
+        cell.bombCost = b;
+    }
+    else
+    {
+        NSLog(@"checkB-%d",checkB--);
+        checkB--;
+        if(checkB==0)
+            [_delegate showBombPossibilities];
+        return;
+    }
+    
+    NSLog(@"continueCheck");
+    
+    if(a.x+1 < [_gameInfo.gridSize intValue])
+    {
+        CoordPoint *newP = [CoordPoint coordWithX:a.x+1 andY:a.y];
+        b++; c--;
+        if(c > 0)
+        {
+            done = NO;
+            [self checkBombPossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(a.x > 0)
+    {
+        CoordPoint *newP = [CoordPoint coordWithX:a.x-1 andY:a.y];
+        b++; c--;
+        if(c > 0)
+        {
+            done = NO;
+            [self checkBombPossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(a.y+1 < [_gameInfo.gridSize intValue])
+    {
+        CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y+1];
+        b++; c--;
+        if(c > 0)
+        {
+            done = NO;
+            [self checkBombPossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(a.y > 0)
+    {
+        CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y-1];
+        b++; c--;
+        if(c > 0)
+        {
+            done = NO;
+            [self checkBombPossatCoordPoint:newP cost:b points:c];
+        }
+    }
+    
+    if(done==YES)
+        checkB--;
+    NSLog(@"checkB-%d",checkB);
+    if(done==YES && checkB==0)
+        [_delegate showBombPossibilities];
+}
+
+-(void)startGame{
+    [_delegate startGame];
+    
+    [_gameInfo reset];
+    [_gameInfo startRound];
+}
 
 @end

@@ -27,7 +27,8 @@
                 GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, width, height)
                                                          andGrid:grid
                                                         andCoord:[CoordPoint coordWithX:r andY:c]];
-                cell.tag = r*_size + c;
+                cell.tag = (r+1)*_size + (c+1);
+                NSLog(@"cell.tag-%ld",(long)cell.tag);
                 [self addSubview:cell];
             }
         }
@@ -37,10 +38,39 @@
 
 -(void) updateCell:(CoordPoint *)cell
 {
-    int tag = cell.x*_size + cell.y;
+    int tag = (cell.x+1)*_size + (cell.y+1);
     GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
     
     [gridCell update];
+}
+
+-(void)startNR{
+ 
+}
+
+-(void)showMoveP{
+
+    for(int r = 0; r < _size; ++r)
+    {
+        for(int c = 0; c < _size; ++c)
+        {
+            int tag = (r+1)*_size + (c+1);
+            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
+            [gridCell showMP];
+        }
+    }
+}
+
+-(void)showBombP{
+    for(int r = 0; r < _size; ++r)
+    {
+        for(int c = 0; c < _size; ++c)
+        {
+            int tag = (r+1)*_size + (c+1);
+            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
+            [gridCell showBP];
+        }
+    }
 }
 
 /*

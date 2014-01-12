@@ -19,5 +19,8 @@
 -(id) initWithFrame:(CGRect) frame withSize:(int)size andGridModel:(GridModel*)grid;
 
 -(void) updateCell:(CoordPoint*)cell;
+-(void) startNR;
+-(void) showMoveP;
+-(void) showBombP;
 
 @end

@@ -15,14 +15,19 @@
     CoordPoint* _cell;
     
     BOOL positionChange;
+    
+    UILabel *_cost;
+    
+    float oldX, oldY;
+    BOOL dragging;
 }
 
 
 -(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 
-
 -(void) update;
-
+-(void) showMP;
+-(void) showBP;
 
 // todo: determine how we want to do touches
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;

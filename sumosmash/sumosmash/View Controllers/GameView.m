@@ -212,7 +212,7 @@ NSString * const messageWatermark = @"Send a message...";
     [_game startRound];
     
     _gameInfo.text = @"Game starting....";
-
+    
     return YES;
 }
 

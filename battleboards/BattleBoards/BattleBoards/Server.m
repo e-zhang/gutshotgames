@@ -44,7 +44,7 @@ const int SERVER_PORT = 443;
     _games = [remoteServer databaseNamed: DB_GAMES];
   //  _chat = [remoteServer databaseNamed:DB_CHAT];
    
-    _chat.tracksChanges = YES;
+   // _chat.tracksChanges = YES;
     _gameInvites.tracksChanges = YES;
     _games.tracksChanges = YES;
     
@@ -132,14 +132,12 @@ const int SERVER_PORT = 443;
 
 -(GameInfo*) getGameForRequest:(GameRequest*) request
 {
-    NSLog(@"request-%@",request);
-    GameInfo* game = [GameInfo modelForDocument:
-                      [_games documentWithID:request.game_id]];
+    GameInfo* game = [GameInfo modelForDocument:[_games documentWithID:request.game_id]];
     
-    GameChat* chat = [GameChat modelForDocument:[_chat documentWithID:request.game_id]];
+  //  GameChat* chat = [GameChat modelForDocument:[_chat documentWithID:request.game_id]];
     
-    [game setGameChat:chat];
-    
+  //  [game setGameChat:chat];
+    NSLog(@"gamereturn-%@",game.document.properties);
     return game;
 }
 

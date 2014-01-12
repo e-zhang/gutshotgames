@@ -25,11 +25,13 @@
     {
         _name = props[DB_USER_NAME];
         _userId = props[DB_USER_ID];
-        _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
+       // _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
         _points = points;
         _remainingPoints = points;
         _updated = NO;
         [self reset];
+        
+        NSLog(@"initializing-%@",_name);
     }
     
     return self;
@@ -55,6 +57,7 @@
 //we need to add a different initial set because the interface is different. Click and place vs. click and drag.
 -(BOOL) setInitialPos:(CoordPoint *)pos{
     _move = pos;
+    _location = _move;
     return YES;
 }
 
@@ -103,10 +106,10 @@
 -(BOOL) checkDistance:(CoordPoint *)dest
 {
     // check to see if player has enough points for distance;
-
     int distance = [CoordPoint distanceFrom:dest To:_location];
+    NSLog(@"checking d-%d-%d",distance,_points);
     
-    if(_points < distance) return NO;
+    //if(_points < distance) return NO;
     
     _remainingPoints -= distance;
     
