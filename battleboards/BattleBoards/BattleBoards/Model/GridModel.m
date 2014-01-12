@@ -7,18 +7,19 @@
 //
 
 #import "GridModel.h"
-#import "DBDefs.h"
-
-#define START_POINTS 5
+#import "CellStates.h"
 
 @implementation GridModel
 
+@synthesize Players = _players;
 
--(id) initWithGame:(GameInfo *)game andPlayer:(NSString *)player andDelegate:(id)delegate
+-(id) initWithSize:(int) size
 {
-
+    NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
+    
     if([super init])
     {
+<<<<<<< HEAD
         _delegate = delegate;
         _gameInfo = game;
         [_gameInfo setDelegate:self];
@@ -27,15 +28,21 @@
         int size = [game.gridSize intValue];
       //  NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
         
+=======
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
         NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
         for(int i = 0; i < size; ++i)
         {
             NSMutableArray* row = [NSMutableArray arrayWithCapacity:size];
             for(int i = 0; i < size; ++i)
             {
+<<<<<<< HEAD
                 CellValue* cell = [[CellValue alloc] init];
                 cell.state = INIT;
                 [row addObject:cell];
+=======
+                [row addObject:[NSNumber numberWithInt: EMPTY]];
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
             }
             [grid addObject:row];
         }
@@ -46,11 +53,12 @@
 }
 
 
--(CellValue*) getCellAtRow:(int)row andCol:(int)col
+-(id) getStateForRow:(int)row andCol:(int)col
 {
     return _grid[row][col];
 }
 
+<<<<<<< HEAD
 -(void)beginGame{
     NSLog(@"beginGame");
     init = YES;
@@ -167,9 +175,14 @@
     }
     
     return _players.count == _gameInfo.players.count;
+=======
+-(void) setState:(id)state forRow:(int)row andCol:(int)col
+{
+    _grid[row][col] = state;
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
 }
 
--(void) onRoundStart
+-(void) couchDocumentChanged:(CouchDocument *)doc
 {
     NSLog(@"R STARTS-%d",_gameInfo.GameRound);
     [_delegate startNextRound:_gameInfo.GameRound];
@@ -191,6 +204,7 @@
     }
 }
 
+<<<<<<< HEAD
 -(void) onRoundComplete
 {
     NSLog(@"R COMPLETE");
@@ -464,4 +478,6 @@
     [_gameInfo startRound];
 }
 
+=======
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
 @end

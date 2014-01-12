@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "GridModel.h"
 
+@protocol GridCellDelegate <NSObject>
+- (void)cellTouched:(CoordPoint*)coord;
+@end
+
 @interface GridCell : UIView
 {
     GridModel* _grid;
@@ -22,10 +26,12 @@
     BOOL dragging;
 }
 
+@property (strong, nonatomic) id <GridCellDelegate> delegate;
 
 -(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 
 -(void) update;
+<<<<<<< HEAD
 -(void) showMP;
 -(void) showBP;
 
@@ -34,5 +40,7 @@
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+=======
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
 
 @end

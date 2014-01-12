@@ -7,6 +7,7 @@
 //
 
 #import "GridCell.h"
+#import "CellStates.h"
 #import <QuartzCore/QuartzCore.h>
 #include "CharColors.h"
 
@@ -46,6 +47,7 @@ static const int SELF = 1;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
+<<<<<<< HEAD
     CellValue* cellV = [_grid getCellAtRow:_cell.x andCol:_cell.y];
     NSLog(@"displayCellState-%d%d--%d-%d",_cell.x,_cell.y,cellV.state,cellV.moveCost);
     
@@ -117,16 +119,53 @@ static const int SELF = 1;
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+=======
+    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
+
+    if([state integerValue] == -1)
+        [_delegate cellTouched:_cell];
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
 }
 
 -(void) update
 {
+<<<<<<< HEAD
     CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 
   //  NSLog(@"called-%d",cell.state);
+=======
+    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
     
-    switch(cell.state)
+    if([state isKindOfClass:[NSString class]])
     {
+        switch([state intValue])
+        {
+            case EMPTY:
+                self.layer.borderColor = [UIColor blackColor].CGColor;
+                self.backgroundColor = [UIColor whiteColor];
+                break;
+            case BOMB:
+                self.backgroundColor = [UIColor grayColor];
+                self.layer.borderColor = [UIColor redColor].CGColor;
+                break;
+            case GONE:
+                self.backgroundColor = [UIColor blackColor];
+                self.layer.borderColor = [UIColor blackColor].CGColor;
+                break;
+        }
+    }
+    else if([state isKindOfClass:[NSNumber class]])
+    {
+        // player numbers
+    }
+    else if([state isKindOfClass:[NSArray class]])
+    {
+        // todo: evaluate all occurances on the square
+    }
+    else
+    {
+<<<<<<< HEAD
         case EMPTY:
         case INIT:
         {
@@ -146,6 +185,9 @@ static const int SELF = 1;
             break;
         case OCCUPIED:
             break;
+=======
+        NSAssert(NO, @"Received an invalid class for cell state: %@", [state class]);
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
     }
 }
 

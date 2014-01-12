@@ -24,7 +24,7 @@
 
 @interface MenuView ()
 
-@property (nonatomic, strong)GameViewController *gamewindow;
+@property (nonatomic, strong)GSGViewController *gamewindow;
 
 @end
 
@@ -374,7 +374,6 @@
         GameInfo* game = [_gameServer getGameForRequest:request];
         self.gamewindow = [[GameViewController alloc] initWithGameInfo:game playerId:_gameServer.user.userid];
         //self.gamewindow.delegate = self;
-        
         [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
         [self presentViewController:self.gamewindow animated:YES completion:nil];
@@ -565,7 +564,11 @@
             
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"username"] forKey:DB_USER_NAME];
+<<<<<<< HEAD
             [playerAccount setObject:@(a) forKey:INGAMEID];
+=======
+            [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"default_move"] forKey:DB_DEFAULT_MOVE];
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
         }
         
     }
@@ -697,7 +700,13 @@
     NSDictionary* playerAccounts = [self getPlayerAccounts];
     newg.players = playerAccounts;
     
+<<<<<<< HEAD
     [self sendRequests:newg.gameName toPlayers:playerAccounts];
+=======
+    [newg reset];
+    
+ //   [self sendRequests:newg.gameName toPlayers:playerAccounts];
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
     
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}
@@ -707,8 +716,13 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
+<<<<<<< HEAD
     //replace 1 with _gameServer.user.userid
     self.gamewindow = [[GameViewController alloc] initWithGameInfo:newg playerId:_gameServer.user.userid];
+=======
+    self.gamewindow = [[GSGViewController alloc] initwithGameData:newg myid:_gameServer.user.userid];
+                                          //     gameInfo:newg myid:_gameServer.user.userid];
+>>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
     //self.gamewindow.delegate = self;
     
     [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];

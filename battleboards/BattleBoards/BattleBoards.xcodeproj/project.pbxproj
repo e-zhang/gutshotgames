@@ -19,6 +19,8 @@
 		586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA6D1856DEB700A5D3A5 /* GameInvitations.m */; };
 		586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA701856DEE400A5D3A5 /* GameRequest.m */; };
 		586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA731856DFB600A5D3A5 /* UserAccount.m */; };
+		586EEA771856E0F800A5D3A5 /* GameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA761856E0F800A5D3A5 /* GameInfo.m */; };
+		586EEA7A1856E14C00A5D3A5 /* Move.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA791856E14C00A5D3A5 /* Move.m */; };
 		586EEA7F1856E28000A5D3A5 /* GameChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA7E1856E28000A5D3A5 /* GameChat.m */; };
 		586EEA821856E2DA00A5D3A5 /* SavedGames.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA811856E2DA00A5D3A5 /* SavedGames.m */; };
 		586EEA871856EBC500A5D3A5 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */; };
@@ -36,7 +38,7 @@
 		E7850D2E185382C70076C518 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7850D2C185382C70076C518 /* InfoPlist.strings */; };
 		E7850D30185382C70076C518 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D2F185382C70076C518 /* main.m */; };
 		E7850D34185382C70076C518 /* GSGAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D33185382C70076C518 /* GSGAppDelegate.m */; };
-		E7850D3D185382C70076C518 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D3C185382C70076C518 /* GameViewController.m */; };
+		E7850D3D185382C70076C518 /* GSGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D3C185382C70076C518 /* GSGViewController.m */; };
 		E7850D3F185382C70076C518 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7850D3E185382C70076C518 /* Images.xcassets */; };
 		E7850D46185382C80076C518 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D45185382C80076C518 /* XCTest.framework */; };
 		E7850D47185382C80076C518 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D23185382C70076C518 /* Foundation.framework */; };
@@ -50,8 +52,6 @@
 		E7850D7818539EE90076C518 /* TouchDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7518539EE90076C518 /* TouchDB.framework */; };
 		E7850D7B1853D2E20076C518 /* GridView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D7A1853D2E20076C518 /* GridView.m */; };
 		E7850D811854DB790076C518 /* CoordPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D801854DB790076C518 /* CoordPoint.m */; };
-		E7850D84185938E60076C518 /* GameInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D83185938E60076C518 /* GameInfo.m */; };
-		E79FD3D318763560007BCBA4 /* CellValue.m in Sources */ = {isa = PBXBuildFile; fileRef = E79FD3D218763560007BCBA4 /* CellValue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +85,10 @@
 		586EEA701856DEE400A5D3A5 /* GameRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameRequest.m; sourceTree = "<group>"; };
 		586EEA721856DFB600A5D3A5 /* UserAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAccount.h; sourceTree = "<group>"; };
 		586EEA731856DFB600A5D3A5 /* UserAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAccount.m; sourceTree = "<group>"; };
+		586EEA751856E0F800A5D3A5 /* GameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInfo.h; sourceTree = "<group>"; };
+		586EEA761856E0F800A5D3A5 /* GameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInfo.m; sourceTree = "<group>"; };
+		586EEA781856E14C00A5D3A5 /* Move.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Move.h; sourceTree = "<group>"; };
+		586EEA791856E14C00A5D3A5 /* Move.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Move.m; sourceTree = "<group>"; };
 		586EEA7B1856E19600A5D3A5 /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tags.h; sourceTree = "<group>"; };
 		586EEA7C1856E23700A5D3A5 /* DBDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBDefs.h; sourceTree = "<group>"; };
 		586EEA7D1856E28000A5D3A5 /* GameChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameChat.h; sourceTree = "<group>"; };
@@ -111,8 +115,8 @@
 		E7850D31185382C70076C518 /* BattleBoards-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BattleBoards-Prefix.pch"; sourceTree = "<group>"; };
 		E7850D32185382C70076C518 /* GSGAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSGAppDelegate.h; sourceTree = "<group>"; };
 		E7850D33185382C70076C518 /* GSGAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSGAppDelegate.m; sourceTree = "<group>"; };
-		E7850D3B185382C70076C518 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		E7850D3C185382C70076C518 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		E7850D3B185382C70076C518 /* GSGViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSGViewController.h; sourceTree = "<group>"; };
+		E7850D3C185382C70076C518 /* GSGViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSGViewController.m; sourceTree = "<group>"; };
 		E7850D3E185382C70076C518 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E7850D44185382C80076C518 /* BattleBoardsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BattleBoardsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7850D45185382C80076C518 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -129,12 +133,9 @@
 		E7850D7518539EE90076C518 /* TouchDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TouchDB.framework; sourceTree = "<group>"; };
 		E7850D791853D2E20076C518 /* GridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridView.h; path = Views/GridView.h; sourceTree = "<group>"; };
 		E7850D7A1853D2E20076C518 /* GridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridView.m; path = Views/GridView.m; sourceTree = "<group>"; };
-		E7850D7C1853E0010076C518 /* CellValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CellValue.h; path = Model/CellValue.h; sourceTree = "<group>"; };
+		E7850D7C1853E0010076C518 /* CellStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CellStates.h; path = Model/CellStates.h; sourceTree = "<group>"; };
 		E7850D7F1854DB790076C518 /* CoordPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoordPoint.h; path = Model/CoordPoint.h; sourceTree = "<group>"; };
 		E7850D801854DB790076C518 /* CoordPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoordPoint.m; path = Model/CoordPoint.m; sourceTree = "<group>"; };
-		E7850D82185938E60076C518 /* GameInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInfo.h; sourceTree = "<group>"; };
-		E7850D83185938E60076C518 /* GameInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInfo.m; sourceTree = "<group>"; };
-		E79FD3D218763560007BCBA4 /* CellValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CellValue.m; path = Model/CellValue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,13 +193,12 @@
 				586EEA6A1856DEA400A5D3A5 /* Server.m */,
 			);
 			name = "Server & DB";
+			path = BattleBoards;
 			sourceTree = "<group>";
 		};
 		586EEA881857323E00A5D3A5 /* Server Com Related */ = {
 			isa = PBXGroup;
 			children = (
-				E7850D82185938E60076C518 /* GameInfo.h */,
-				E7850D83185938E60076C518 /* GameInfo.m */,
 				586EEA801856E2DA00A5D3A5 /* SavedGames.h */,
 				586EEA811856E2DA00A5D3A5 /* SavedGames.m */,
 				586EEA7D1856E28000A5D3A5 /* GameChat.h */,
@@ -217,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				E7850D29185382C70076C518 /* BattleBoards */,
+				586EEA681856DE9A00A5D3A5 /* Server & DB */,
 				E7850D4B185382C80076C518 /* BattleBoardsTests */,
 				E7850D22185382C70076C518 /* Frameworks */,
 				E7850D21185382C70076C518 /* Products */,
@@ -257,7 +258,6 @@
 		E7850D29185382C70076C518 /* BattleBoards */ = {
 			isa = PBXGroup;
 			children = (
-				586EEA681856DE9A00A5D3A5 /* Server & DB */,
 				586EEA571856DDA700A5D3A5 /* Views XIBS */,
 				E7850D6318539D840076C518 /* Views */,
 				E7850D5C18539C000076C518 /* ViewControllers */,
@@ -305,12 +305,15 @@
 			isa = PBXGroup;
 			children = (
 				586EEA881857323E00A5D3A5 /* Server Com Related */,
+				586EEA781856E14C00A5D3A5 /* Move.h */,
+				586EEA791856E14C00A5D3A5 /* Move.m */,
+				586EEA751856E0F800A5D3A5 /* GameInfo.h */,
+				586EEA761856E0F800A5D3A5 /* GameInfo.m */,
 				E7850D6A18539E2D0076C518 /* GridModel.h */,
 				E7850D6B18539E2D0076C518 /* GridModel.m */,
 				E7850D6718539DD40076C518 /* Player.h */,
 				E7850D6818539DD40076C518 /* Player.m */,
-				E7850D7C1853E0010076C518 /* CellValue.h */,
-				E79FD3D218763560007BCBA4 /* CellValue.m */,
+				E7850D7C1853E0010076C518 /* CellStates.h */,
 				E7850D7F1854DB790076C518 /* CoordPoint.h */,
 				E7850D801854DB790076C518 /* CoordPoint.m */,
 			);
@@ -320,14 +323,14 @@
 		E7850D5C18539C000076C518 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				586EEA511856DCA100A5D3A5 /* MenuView.h */,
-				586EEA521856DCA100A5D3A5 /* MenuView.m */,
 				586EEA621856DDFA00A5D3A5 /* createaccount.h */,
 				586EEA631856DDFA00A5D3A5 /* createaccount.m */,
+				586EEA511856DCA100A5D3A5 /* MenuView.h */,
+				586EEA521856DCA100A5D3A5 /* MenuView.m */,
+				E7850D3B185382C70076C518 /* GSGViewController.h */,
+				E7850D3C185382C70076C518 /* GSGViewController.m */,
 				586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */,
 				586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */,
-				E7850D3B185382C70076C518 /* GameViewController.h */,
-				E7850D3C185382C70076C518 /* GameViewController.m */,
 				586EEA7B1856E19600A5D3A5 /* Tags.h */,
 			);
 			name = ViewControllers;
@@ -446,16 +449,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7850D811854DB790076C518 /* CoordPoint.m in Sources */,
-				E7850D84185938E60076C518 /* GameInfo.m in Sources */,
 				586EEA6B1856DEA400A5D3A5 /* Server.m in Sources */,
 				586EEA641856DDFA00A5D3A5 /* createaccount.m in Sources */,
-				E7850D3D185382C70076C518 /* GameViewController.m in Sources */,
+				E7850D3D185382C70076C518 /* GSGViewController.m in Sources */,
 				586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */,
 				586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */,
-				E79FD3D318763560007BCBA4 /* CellValue.m in Sources */,
 				586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */,
+				586EEA771856E0F800A5D3A5 /* GameInfo.m in Sources */,
 				586EEA551856DCA100A5D3A5 /* MenuView.m in Sources */,
 				586EEA561856DCA100A5D3A5 /* InvitationsViewController.m in Sources */,
+				586EEA7A1856E14C00A5D3A5 /* Move.m in Sources */,
 				586EEA821856E2DA00A5D3A5 /* SavedGames.m in Sources */,
 				E7850D34185382C70076C518 /* GSGAppDelegate.m in Sources */,
 				E7850D7B1853D2E20076C518 /* GridView.m in Sources */,
