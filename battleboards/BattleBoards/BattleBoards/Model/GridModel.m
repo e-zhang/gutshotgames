@@ -56,11 +56,23 @@
     init = YES;
     _gameStarted = 0;
     [_delegate initplayers:_gameInfo.players];
+    
+    for(NSString* playerId in _gameInfo.players)
+    {
+        if(![playerId isEqualToString:_myPlayerId])
+        {
+            NSDictionary* player = [_gameInfo.players objectForKey:playerId];
 
+            if([[player objectForKey:DB_CONNECTED] boolValue])
+                _gameStarted++;
+        }
+    }
+    
     BOOL isLast = _gameStarted == ([_gameInfo.players count] - 1);
     [_gameInfo joinGame:_myPlayerId isLast:isLast];
     [self onPlayerJoined:_myPlayerId];
     
+    NSLog(@"beginGame - %d - %d",_gameStarted, [_gameInfo.players count] - 1);
     if(isLast)
     {
         [self startGame];
@@ -79,16 +91,19 @@
     }
     NSLog(@"move,%@",myP.Move);
     NSLog(@"player-%@",myP);
-    NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : nil;
     
-    NSLog(@"init-%hhd,move-%@",init,move);
-    if(init == YES && move == nil)
+    NSLog(@"init-%hhd,move-%@",init,myP.Move);
+    if(init == YES && myP.Move == nil)
     {
         return NO;
     }
     else
     {
+        NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : [myP.Location arrayFromCoord];
+
         NSLog(@"submit move");
+        init = NO;
+        
         [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
         return YES;
     }
@@ -99,10 +114,8 @@
     NSLog(@"clearCells");
     int size = [_gameInfo.gridSize intValue];
 
-    NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
     for(int i = 0; i < size; ++i)
     {
-        NSMutableArray* row = [NSMutableArray arrayWithCapacity:size];
         for(int x = 0; x < size; ++x)
         {
             CellValue* cell = [self getCellAtRow:x andCol:i];
@@ -115,22 +128,37 @@
                 [_delegate refreshCellatRow:x andCol:i];
             }
         }
-        [grid addObject:row];
     }
 
 }
 
+
+-(void)clearcosts
+{
+    NSLog(@"clearCells");
+    int size = [_gameInfo.gridSize intValue];
+    
+    for(int i = 0; i < size; ++i)
+    {
+        for(int x = 0; x < size; ++x)
+        {
+            CellValue* cell = [self getCellAtRow:x andCol:i];
+            cell.bombCost = 0;
+            cell.moveCost = 0;
+        }
+    }
+    
+}
+
 -(void)initailizePositionatRow:(int)row andCol:(int)col
 {
-    NSLog(@"players-%@",_players);
+    NSLog(@"initializpos-%d%d",row,col);
     CellValue* cell = [self getCellAtRow:row andCol:col];
     cell.state = OCCUPIED;
     NSLog(@"myplayerid-%@",_myPlayerId);
     Player* myP = _players[_myPlayerId];
     NSLog(@"player-%@",myP);
     [myP setInitialPos:[CoordPoint coordWithX:row andY:col]];
-    
-
 }
 
 -(BOOL) onMove:(NSArray *)move andBombs:(NSArray *)bombs forPlayer:(NSString *)player
@@ -158,14 +186,21 @@
 {
     NSLog(@"playerjoined-%@",player);
     Player* p = _players[player];
-    
-    if(!p)
+    NSLog(@"p-%@--%@",p,[_gameInfo.players objectForKey:player]);
+
+    if(!p && [_gameInfo.players objectForKey:player])
     {
+        NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
         p = [[Player alloc] initWithProperties:[_gameInfo.players objectForKey:player] andPoints:points];
         _players[player] = p;
+        [_delegate playerupdate:player newpoints:points withPlayers:_gameInfo.players];
+
     }
-    
+    NSLog(@"players count-%d, _gameinfo.players count - %d", _players.count, _gameInfo.players.count);
+    if(_players.count==_gameInfo.players.count)
+        [self startGame];
+
     return _players.count == _gameInfo.players.count;
 }
 
@@ -173,22 +208,7 @@
 {
     NSLog(@"R STARTS-%d",_gameInfo.GameRound);
     [_delegate startNextRound:_gameInfo.GameRound];
-    
-    if(_gameInfo.GameRound==1)
-    {
-        int size = [_gameInfo.gridSize intValue];
-        
-        for(int a = 0; a < size; ++a)
-        {
-            for(int b = 0; b < size; ++b)
-            {
-                CellValue *cell = _grid[a][b];
-                
-                if(cell.state == INIT)
-                    cell.state = EMPTY;
-            }
-        }
-    }
+ 
 }
 
 -(void) onRoundComplete
@@ -203,13 +223,39 @@
     
     cells = [self checkBombs];
     [updatedCells addObjectsFromArray:cells];
+    
+    if(_gameInfo.GameRound==0)
+    {
+        int size = [_gameInfo.gridSize intValue];
+        
+        for(int a = 0; a < size; ++a)
+        {
+            for(int b = 0; b < size; ++b)
+            {
+                CellValue *cell = _grid[a][b];
+                
+                if(cell.state == INIT)
+                {
+                    NSLog(@"cellholy-%d%d",a,b);
+                    cell.state = EMPTY;
+                }
+            }
+        }
+    }
 
     
     for(NSString* a in _players)
     {
-        Player *player = [_players objectForKey:a];
-
+        Player *player = _players[a];
         [player reset];
+        if(_gameInfo.GameRound>0)
+        {
+            player.Points = player.Points + START_POINTS;
+            NSLog(@"new round player point-%d",player.Points);
+            [_delegate playerupdate:a newpoints:player.Points withPlayers:_gameInfo.players];
+
+        }
+        NSLog(@"resetting player-%@-%@",player.Id,player.Move);
     }
     
     [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players andRound:_gameInfo.GameRound];
@@ -228,7 +274,7 @@
         Player *p = [_players objectForKey:a];
         NSLog(@"playa-%@,%@",p.Name,p.Location);
         if(!p.Move) continue;
-        
+        NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
         // update old location
         CellValue* value = [self getCellAtRow:p.Location.x andCol:p.Location.y];
         
@@ -239,11 +285,14 @@
         // update new location
         value = [self getCellAtRow:p.Move.x andCol:p.Move.y];
         value.state = OCCUPIED;
-        [value.occupants addObject:p.Id];
+        NSLog(@"this one-%d%d,-%@",p.Move.x,p.Move.y,p.Id);
+        //[value.occupants addObject:p.Id];
+        [value insertOccupant:p.Id];
+        NSLog(@"value.occupants-%@",value.occupants);
         [cells addObject:p.Move];
     
     }
-    
+    NSLog(@"cells-%@",cells);
     return [cells allObjects];
 }
 
@@ -285,19 +334,22 @@
 
 -(void)populateMovePossibilities{
     Player* myP = [_players objectForKey:_myPlayerId];
-    NSLog(@"mylocfeqwation-%d-%d",myP.Location.x,myP.Location.y);
     int points = myP.Points , cost = 0;
     checkM = 0;
+    NSLog(@"points-%d,mylocfeqwation-%d-%d",points,myP.Location.x,myP.Location.y);
     
     [self checkMovePossatCoordPoint:myP.Location cost:cost points:points];
+    [_delegate showMovePossibilities];
+
 }
 
 -(void)populateBombPossibilities{
     Player* myP = [_players objectForKey:_myPlayerId];
     int points = myP.Points , cost = 0;
     checkB = 0;
-
+    NSLog(@"populateBombPoss-%d-%d",cost,points);
     [self checkBombPossatCoordPoint:myP.Location cost:cost points:points];
+    [_delegate showBombPossibilities];
 
 }
 
@@ -307,33 +359,33 @@
     BOOL done = YES;
     CellValue *cell = [self getCellAtRow:a.x andCol:a.y];
     
-    NSLog(@"checkMove-%d%d-cost%d,point%d,moveCost%d",a.x,a.y,b,c,cell.moveCost);
+  // NSLog(@"checkMove-%d%d-cost%d,point%d,moveCost%d",a.x,a.y,b,c,cell.moveCost);
 
-    if((!cell.moveCost && cell.state != BOMB) || (b < cell.moveCost))
+    if((!cell.moveCost && cell.state != BOMB) || (b <= cell.moveCost))
     {
-        NSLog(@"setting");
+   //     NSLog(@"setting");
         cell.moveCost = b;
     }
     else
     {
-        NSLog(@"already set-%d",checkM--);
+    //    NSLog(@"already set-%d",checkM--);
         checkM--;
         
         if(checkM==0)
         {
-         //   [_delegate showMovePossibilities];
+          //  [_delegate showMovePossibilities];
         }
         return;
     }
     
-    NSLog(@"continueCheck");
+  //  NSLog(@"continueCheck");
     b++; c--;
 
     if(a.x+1 < [_gameInfo.gridSize intValue])
     {
-        NSLog(@"left-%d-%d",a.x+1,a.y);
+    //    NSLog(@"left-%d-%d",a.x+1,a.y);
         CoordPoint *newP = [CoordPoint coordWithX:a.x+1 andY:a.y];
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkMovePossatCoordPoint:newP cost:b points:c];
@@ -342,9 +394,9 @@
     
     if(a.x-1 >= 0)
     {
-        NSLog(@"right-%d-%d",a.x-1,a.y);
+     //   NSLog(@"right-%d-%d",a.x-1,a.y);
         CoordPoint *newP = [CoordPoint coordWithX:a.x-1 andY:a.y];
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkMovePossatCoordPoint:newP cost:b points:c];
@@ -353,9 +405,9 @@
     
     if(a.y+1 < [_gameInfo.gridSize intValue])
     {
-        NSLog(@"up-%d-%d",a.x,a.y+1);
+     //   NSLog(@"up-%d-%d",a.x,a.y+1);
         CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y+1];
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkMovePossatCoordPoint:newP cost:b points:c];
@@ -364,9 +416,9 @@
     
     if(a.y-1 >= 0)
     {
-        NSLog(@"down-%d-%d",a.x,a.y-1);
+      //  NSLog(@"down-%d-%d",a.x,a.y-1);
         CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y-1];
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkMovePossatCoordPoint:newP cost:b points:c];
@@ -375,10 +427,10 @@
     
     if(done==YES)
         checkM--;
-    NSLog(@"checkM-%d",checkM);
+  //  NSLog(@"checkM-%d",checkM);
     if(done==YES && checkM==0)
     {
-      //  [_delegate showMovePossibilities];
+    //    [_delegate showMovePossibilities];
     }
 }
 
@@ -388,40 +440,39 @@
     BOOL done = YES;
     CellValue *cell = [self getCellAtRow:a.x andCol:a.y];
     
-    NSLog(@"checkMove-%d%d-cost%d,point%d,bombCost%d",a.x,a.y,b,c,cell.bombCost);
+    NSLog(@"checkBomb-%d%d-cost%d,point%d,bombCost%d",a.x,a.y,b,c,cell.bombCost);
     
-    if((!cell.bombCost && cell.state != BOMB) || (b < cell.bombCost))
+    if((!cell.bombCost && cell.state != BOMB) || (b <= cell.bombCost))
     {
-        NSLog(@"setting");
+  //      NSLog(@"setting");
         cell.bombCost = b;
     }
     else
     {
-        NSLog(@"checkB-%d",checkB--);
         checkB--;
+        NSLog(@"14 checkB-%d",checkB);
         if(checkB==0)
             [_delegate showBombPossibilities];
         return;
     }
     
-    NSLog(@"continueCheck");
+ //   NSLog(@"continueCheck");
+    b++; c--;
     
     if(a.x+1 < [_gameInfo.gridSize intValue])
     {
         CoordPoint *newP = [CoordPoint coordWithX:a.x+1 andY:a.y];
-        b++; c--;
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkBombPossatCoordPoint:newP cost:b points:c];
         }
     }
     
-    if(a.x > 0)
+    if(a.x-1 >= 0)
     {
         CoordPoint *newP = [CoordPoint coordWithX:a.x-1 andY:a.y];
-        b++; c--;
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkBombPossatCoordPoint:newP cost:b points:c];
@@ -431,30 +482,92 @@
     if(a.y+1 < [_gameInfo.gridSize intValue])
     {
         CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y+1];
-        b++; c--;
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkBombPossatCoordPoint:newP cost:b points:c];
         }
     }
     
-    if(a.y > 0)
+    if(a.y-1 >= 0)
     {
         CoordPoint *newP = [CoordPoint coordWithX:a.x andY:a.y-1];
-        b++; c--;
-        if(c > 0)
+        if(c >= 0)
         {
             done = NO;
             [self checkBombPossatCoordPoint:newP cost:b points:c];
         }
     }
     
-    if(done==YES)
-        checkB--;
+    //if(done==YES)
+    checkB--;
     NSLog(@"checkB-%d",checkB);
-    if(done==YES && checkB==0)
+    if(checkB==0)
+    {
+        NSLog(@"53146");
         [_delegate showBombPossibilities];
+    }
+}
+
+-(void)cellTap:(int)row andCol:(int)col{
+    
+    CoordPoint* cell = [CoordPoint coordWithX:row andY:col];
+    CellValue* value = [self getCellAtRow:cell.x andCol:cell.y];
+    
+    if(movement)
+    {
+        movement = NO;
+        
+        Player* myP = [_players objectForKey:_myPlayerId];
+        
+        if(value.moveCost && !myP.Move && (![myP.Location.arrayFromCoord isEqualToArray:cell.arrayFromCoord]))
+        {
+            value.state = OCCUPIED;
+            
+            CellValue* cell1 = [self getCellAtRow:myP.Location.x andCol:myP.Location.y];
+            cell1.state = EMPTY;
+            NSLog(@"movementmyoldlocation-%d%d",myP.Location.x,myP.Location.y);
+            [myP addMove:cell];
+            myP.Points = myP.Points - value.moveCost;
+            [_delegate updateRoundForCells:[NSArray arrayWithObjects:myP.Location,cell, nil] andPlayers:_players[_myPlayerId] andRound:_gameInfo.GameRound];
+            [self clearcosts];
+            [self populateBombPossibilities];
+        }
+    }
+    else
+    {
+        if(value.bombCost)
+        {
+            if(value.bombCost && value.state!=BOMB && value.state!=GONE)
+            {
+                Player* myP = [_players objectForKey:_myPlayerId];
+
+                [myP addBomb:cell];
+                myP.Points = myP.Points - value.bombCost;
+                NSLog(@"newp-%d-%d",myP.Points,value.bombCost);
+                value.state = BOMB;
+
+                NSLog(@"sho12312uld?");
+                [_delegate updateRoundForCells:[NSArray arrayWithObjects:cell, nil] andPlayers:0 andRound:_gameInfo.GameRound];
+                [self clearcosts];
+                [self populateBombPossibilities];
+                [_delegate showBombPossibilities];
+
+            }
+        }
+    }
+
+}
+
+-(void)showMovePs{
+    NSLog(@"showmoveps");
+    [self populateMovePossibilities];
+    [_delegate showMovePossibilities];
+    movement = YES;
+}
+
+-(void)showBombPs{
+    [_delegate showBombPossibilities];
 }
 
 -(void)startGame{

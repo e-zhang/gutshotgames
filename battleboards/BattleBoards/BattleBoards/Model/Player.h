@@ -37,7 +37,7 @@
 
 -(void) getPointsFromBomb:(int) points;
 
-@property (readonly) int Points;
+@property (readwrite) int Points;
 @property (readwrite) BOOL Alive;
 @property (readonly) NSArray* Bombs;
 @property (readonly) CoordPoint* Move;

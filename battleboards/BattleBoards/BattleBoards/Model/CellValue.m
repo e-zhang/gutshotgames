@@ -10,4 +10,20 @@
 
 @implementation CellValue
 
+-(void)insertOccupant:(NSString*)occupant{
+    if(!self.occupants)
+        self.occupants = [[NSMutableArray alloc] init];
+    
+    if(![self.occupants containsObject:occupant])
+        [self.occupants addObject:occupant];
+}
+
+-(void)insertBomb:(NSString*)bomb{
+    if(!self.bombers)
+        self.bombers = [[NSMutableArray alloc] init];
+    
+    if(![self.bombers containsObject:bomb])
+        [self.bombers addObject:bomb];
+}
+
 @end

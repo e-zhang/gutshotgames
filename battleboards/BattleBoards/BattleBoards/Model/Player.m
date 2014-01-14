@@ -11,7 +11,7 @@
 
 @implementation Player
 
-@synthesize Points=_remainingPoints;
+@synthesize Points=_points;
 @synthesize Alive;
 @synthesize Bombs=_bombs;
 @synthesize Move=_move;
@@ -27,7 +27,7 @@
         _userId = props[DB_USER_ID];
        // _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
         _points = points;
-        _remainingPoints = points;
+       // _remainingPoints = points;
         _updated = NO;
         [self reset];
         
@@ -43,7 +43,7 @@
     _location = _move;
     _move = nil;
     [_bombs removeAllObjects];
-    _points = _remainingPoints;
+   // _points = _remainingPoints;
     _updated = NO;
 }
 
@@ -51,7 +51,7 @@
 {
     _move = nil;
     [_bombs removeAllObjects];
-    _remainingPoints = _points;
+  // _remainingPoints = _points;
 }
 
 //we need to add a different initial set because the interface is different. Click and place vs. click and drag.
@@ -106,12 +106,12 @@
 -(BOOL) checkDistance:(CoordPoint *)dest
 {
     // check to see if player has enough points for distance;
-    int distance = [CoordPoint distanceFrom:dest To:_location];
-    NSLog(@"checking d-%d-%d",distance,_points);
+   // int distance = [CoordPoint distanceFrom:dest To:_location];
+  //  NSLog(@"checking d-%d-%d",distance,_points);
     
     //if(_points < distance) return NO;
     
-    _remainingPoints -= distance;
+   // _remainingPoints -= distance;
     
     return YES;
 }
@@ -119,8 +119,8 @@
 
 -(void) getPointsFromBomb:(int)points
 {
-    _points += points;
-    _remainingPoints += points;
+   // _points += points;
+  //  _remainingPoints += points;
 }
 
 @end

@@ -26,4 +26,7 @@ typedef enum CellStates
 @property NSInteger moveCost;
 @property NSInteger bombCost;
 
+-(void)insertOccupant:(NSString*)occupant;
+-(void)insertBomb:(NSString*)bomb;
+
 @end

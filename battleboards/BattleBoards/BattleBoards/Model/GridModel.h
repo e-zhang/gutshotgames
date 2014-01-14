@@ -19,6 +19,7 @@
 -(void)updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players andRound:(int)roundNum;
 -(void)initplayers:(NSDictionary*)players;
 -(void)refreshCellatRow:(int)x andCol:(int)y;
+-(void)playerupdate:(NSString *)pId newpoints:(int)points withPlayers:(NSDictionary *)players;
 
 -(void)showMovePossibilities;
 -(void)showBombPossibilities;
@@ -27,6 +28,8 @@
 @interface GridModel : NSObject<GameUpdateDelegate>
 {
     BOOL init;
+    BOOL movement;
+
     int _gameStarted;
     NSArray* _grid;
     NSMutableDictionary* _players;
@@ -45,6 +48,10 @@
 -(void)makeAllInit;
 -(void)beginGame;
 
+-(void)cellTap:(int)row andCol:(int)col;
+
+-(void)showMovePs;
+-(void)showBombPs;
 // update database
 -(BOOL) submitForMyPlayer;
 

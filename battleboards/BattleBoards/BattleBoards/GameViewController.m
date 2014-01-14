@@ -50,12 +50,18 @@
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players andRound:(int)roundNum
 {
-    NSLog(@"upadteRoundforCells-roundNum%d",roundNum);
+    NSLog(@"upadteRoundforCells-roundNum%d-cells-%@,players-%@",roundNum,cells,players);
     [_activityView stopAnimating];
     
     [_gridView setUserInteractionEnabled:YES];
     [_submitButton setUserInteractionEnabled:YES];
     NSLog(@"...");
+    
+    for (CoordPoint *p in cells)
+    {
+        //update cell
+        [_gridView updateCell:p];
+    }
 }
 
 -(void) refreshCellatRow:(int)x andCol:(int)y{
@@ -163,6 +169,39 @@
         [_sidePanel addSubview:charView];
         a++;
     }
+}
+
+-(void)playerupdate:(NSString *)pId newpoints:(int)points withPlayers:(NSDictionary *)players{
+    
+    int i = 0;
+    for (NSString* player in players)
+    {
+        NSLog(@"playerupdate-%@-pId-%@",player,pId);
+        if([player isEqualToString:pId])
+        {
+            NSDictionary *data = [players objectForKey:player];
+            
+            UILabel *a = (UILabel *)[_sidePanel viewWithTag:[[data objectForKey:INGAMEID] integerValue] + 100];
+            
+            if(a)
+            {
+                a.text = [NSString stringWithFormat:@"%d",points];
+            }
+            else
+            {
+                UILabel *a = [[UILabel alloc] initWithFrame:CGRectMake(150.0f, 70.0f + 50 * i, 25.0f, 50.0f)];
+                a.font = [UIFont systemFontOfSize:10.0f];
+                a.tag = [[data objectForKey:INGAMEID] integerValue] + 100;
+                a.text = [NSString stringWithFormat:@"%d",points];
+                [_sidePanel addSubview:a];
+            }
+            
+            break;
+        }
+        
+        i++;
+    }
+
 }
 
 - (void)submitPlay:(id)sender{

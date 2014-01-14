@@ -40,7 +40,7 @@
 {
     int tag = (cell.x+1)*_size + (cell.y+1);
     GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
-    
+    NSLog(@"gridview cellupdate-%@",gridCell);
     [gridCell update];
 }
 
@@ -50,6 +50,7 @@
 
 -(void)showMoveP{
 
+    NSLog(@"show da moves");
     for(int r = 0; r < _size; ++r)
     {
         for(int c = 0; c < _size; ++c)
@@ -62,6 +63,8 @@
 }
 
 -(void)showBombP{
+    
+    NSLog(@"show da bombs");
     for(int r = 0; r < _size; ++r)
     {
         for(int c = 0; c < _size; ++c)

@@ -203,16 +203,18 @@
 }
 
 -(void)openfb1{
-    [self dismissModalViewControllerAnimated:NO];
+   // [self dismissModalViewControllerAnimated:NO];
     
-    /*if (nil == self.facebook) {
-        self.facebook = [[Facebook alloc]
-                         initWithAppId:FBSession.activeSession.appID
-                         andDelegate:nil];
-        
-        // Store the Facebook session information
-        self.facebook.accessToken = FBSession.activeSession.accessToken;
-        self.facebook.expirationDate = FBSession.activeSession.expirationDate;
+    FBSession *session = [[FBSession alloc] init];
+    
+    if (nil == session) {
+        NSLog(@"nil seesion");
+        [FBSession setActiveSession:session];
+        [session openWithBehavior:FBSessionLoginBehaviorUseSystemAccountIfPresent
+                completionHandler:
+         ^(FBSession *session, FBSessionState state, NSError *error) {
+  
+         }];
     }
     
     if (self.friendPickerController == nil) {
@@ -237,7 +239,7 @@
     self.searchBar.showsCancelButton = YES;
     
     [self.friendPickerController.canvasView addSubview:self.searchBar];
-    */
+    
     UIView *bottombar = [[UIView alloc]init];
     bottombar.backgroundColor = [UIColor darkGrayColor];
     
@@ -257,13 +259,13 @@
     [self.friendPickerController.canvasView addSubview:bottombar];
     
     CGRect newFrame = self.friendPickerController.view.bounds;
-   // newFrame.size.height -= searchBarHeight;
-   // newFrame.origin.y = searchBarHeight;
+    newFrame.size.height -= searchBarHeight;
+    newFrame.origin.y = searchBarHeight;
     self.friendPickerController.canvasView.backgroundColor =  [UIColor blackColor];
     
         library.frame = CGRectMake(0, 0, 180, 55);
-        library.titleLabel.font = [UIFont fontWithName:@"GillSans" size:20.0f];
-        web.titleLabel.font = [UIFont fontWithName:@"GillSans" size:20.0f];
+        library.titleLabel.font = [UIFont systemFontOfSize:16.0f];
+        web.titleLabel.font = [UIFont systemFontOfSize:16.0f];
         bottombar.frame = CGRectMake(0,self.friendPickerController.canvasView.frame.size.height-55,self.view.frame.size.width,55);
         web.frame = CGRectMake(self.friendPickerController.canvasView.frame.size.width-180, 0, 180, 55);
   }
@@ -554,7 +556,7 @@
     if ([username rangeOfString:@"-"].location == NSNotFound)
     {
         NSString *userurl  = [NSString stringWithFormat:
-                              @"https://sumowars.cloudant.com/profiles/_design/view/_search/users?q=username:%%22%@%%22",
+                              @"https://sumowars.cloudant.com/battleboards_users/_design/view/_search/users?q=username:%%22%@%%22",
                               username];
         NSData *usercheck = [NSData dataWithContentsOfURL:[NSURL URLWithString:userurl]];
         NSError *error = nil;
@@ -573,12 +575,12 @@
     {
         NSArray* foo = [username componentsSeparatedByString: @"fb-"];
         NSString *fburl = [NSString stringWithFormat:
-                           @"https://sumowars.cloudant.com/profiles/_design/view/_search/users?q=facebook:%%22%@%%22",
+                           @"https://sumowars.cloudant.com/battleboards_users/_design/view/_search/users?q=facebook:%%22%@%%22",
                           [foo objectAtIndex:1]];
         NSData *fbcheck = [NSData dataWithContentsOfURL:[NSURL URLWithString:fburl]];
         NSError *error = nil;
         id fbresult = [NSJSONSerialization JSONObjectWithData:fbcheck options:NSJSONReadingMutableContainers error:&error];
-        NSLog(@"userresult-%@,%@",fbresult,error);
+        NSLog(@"fbr-%@,%@",fbresult,error);
         if ([[fbresult objectForKey:@"total_rows"] intValue]!=0){
             NSString *userid = [[[fbresult objectForKey:@"rows"]objectAtIndex:0]objectForKey:@"id"];
             
@@ -592,7 +594,7 @@
     }
     
     [playerAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
-   // [playerAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
+    [playerAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
     
     return playerAccount;
 }
