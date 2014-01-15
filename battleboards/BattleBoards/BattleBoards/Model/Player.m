@@ -103,8 +103,13 @@
 {
     // check to see if player has enough points for distance;
 <<<<<<< HEAD
+<<<<<<< HEAD
    // int distance = [CoordPoint distanceFrom:dest To:_location];
   //  NSLog(@"checking d-%d-%d",distance,_points);
+=======
+
+    int distance = [CoordPoint distanceFrom:dest To:_location];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
 
     int distance = [CoordPoint distanceFrom:dest To:_location];

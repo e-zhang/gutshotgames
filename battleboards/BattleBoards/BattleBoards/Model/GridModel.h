@@ -15,6 +15,7 @@
 
 @protocol RoundUpdateDelegate <NSObject>
 <<<<<<< HEAD
+<<<<<<< HEAD
 -(void)startGame;
 -(void)startNextRound:(int)roundNum;
 -(void)updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players andRound:(int)roundNum;
@@ -27,15 +28,21 @@
 =======
 -(void) updateRoundForCells:(NSArray*)cells andPlayers:(NSDictionary*)players;
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
+-(void) updateRoundForCells:(NSArray*)cells andPlayers:(NSDictionary*)players;
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 @end
 
 @interface GridModel : NSObject<GameUpdateDelegate>
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     BOOL init;
     BOOL movement;
 
     int _gameStarted;
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     NSArray* _grid;

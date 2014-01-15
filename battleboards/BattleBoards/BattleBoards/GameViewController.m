@@ -22,6 +22,7 @@ static const int MOVELBL = 2;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 -(void)showMovePossibilities{
     [_gridView showMoveP];
 }
@@ -53,11 +54,18 @@ static const int MOVELBL = 2;
 =======
 - (id)initWithGameInfo:(GameInfo*)gI playerId:(NSString *)myid{
     
+=======
+- (id)initWithGameInfo:(GameInfo*)gI playerId:(NSString *)myid{
+    
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     if([super init])
     {
         _gridModel = [[GridModel alloc] initWithGame:gI andPlayer:myid andDelegate:self];
     }
     return self;
+<<<<<<< HEAD
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }
 
@@ -115,6 +123,7 @@ static const int MOVELBL = 2;
         
         [_move setSelected:NO];
         [_bomb setSelected:YES];
+<<<<<<< HEAD
         
         //do anything else you want to do.
     }
@@ -167,10 +176,18 @@ static const int MOVELBL = 2;
     
 }
 =======
+=======
+        
+        //do anything else you want to do.
+    }
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     else {
         
         [_move setSelected:YES];
         [_bomb setSelected:NO];
+<<<<<<< HEAD
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
         //do anything you want to do.

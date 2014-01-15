@@ -9,6 +9,11 @@
 #import "GridCell.h"
 #import "CellValue.h"
 #import <QuartzCore/QuartzCore.h>
+<<<<<<< HEAD
+=======
+
+static const int SELF = 1;
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
 @implementation GridCell
 
@@ -54,6 +59,7 @@
 
     CellValue* cellV = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 <<<<<<< HEAD
+<<<<<<< HEAD
     NSLog(@"displayCellState-%d%d--%d-MOVECOST%d",_cell.x,_cell.y,cellV.state,cellV.moveCost);
     NSLog(@"displayCellState-%d%d--%d-BOMBCOST%d",_cell.x,_cell.y,cellV.state,cellV.bombCost);
 
@@ -66,6 +72,12 @@
             _view.backgroundColor = player1Color;
             break;
         }
+=======
+    NSLog(@"displayCellState-%d%d--%d",_cell.x,_cell.y,cellV.state);
+    
+    switch (cellV.state)
+    {
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
     NSLog(@"displayCellState-%d%d--%d",_cell.x,_cell.y,cellV.state);
     
@@ -111,8 +123,12 @@
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     NSLog(@"update-called-%d%d-%d",_cell.x,_cell.y,cell.state);
     
+=======
+    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
     CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
@@ -121,8 +137,11 @@
         case EMPTY:
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             NSLog(@"removeView4321");
             [_view setHidden:YES];
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
             self.layer.borderColor = [UIColor blackColor].CGColor;
@@ -139,9 +158,12 @@
             break;
         case OCCUPIED:
 <<<<<<< HEAD
+<<<<<<< HEAD
             [_view setHidden:NO];
             _view.backgroundColor = player1Color;
 =======
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
             [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
             int w = self.bounds.size.width/cell.occupants.count;
             int h = self.bounds.size.height/cell.occupants.count;
@@ -155,6 +177,9 @@
                 block.layer.borderColor = [UIColor grayColor].CGColor;
                 [self addSubview:block];
             }
+<<<<<<< HEAD
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
             break;
 
@@ -166,11 +191,17 @@
     _cost.text = [NSString stringWithFormat:@"%d", diff];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
     else
     {
         _cost.text = @"";
     }
+=======
+    _cost.textColor = [_grid.MyPlayer checkDistance:_cell] ?
+                        [UIColor blackColor] : [UIColor redColor];
+    
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
     _cost.textColor = [_grid.MyPlayer checkDistance:_cell] ?
                         [UIColor blackColor] : [UIColor redColor];
@@ -186,6 +217,7 @@
     [UIColor blackColor] : [UIColor redColor];
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     if(cell.bombCost)
     {
         _cost.text = [NSString stringWithFormat:@"%d",cell.bombCost];
@@ -195,6 +227,8 @@
     {
         _cost.text = @"";
     }
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }

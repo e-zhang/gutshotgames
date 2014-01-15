@@ -62,6 +62,7 @@
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 -(void)beginGame{
     NSLog(@"beginGame");
     init = YES;
@@ -97,12 +98,16 @@
 =======
 -(void) submitForMyPlayer
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
+-(void) submitForMyPlayer
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 {
     Player* myP = [_players objectForKey:_myPlayerId];
     NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:myP.Bombs.count];
     for (CoordPoint* b in myP.Bombs) {
         [bombs addObject:[b arrayFromCoord]];
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
     NSLog(@"move,%@",myP.Move);
     NSLog(@"player-%@",myP);
@@ -181,6 +186,14 @@
     
     [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
 }
+=======
+    
+    NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : nil;
+    
+    [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
+}
+
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
@@ -208,12 +221,15 @@
 -(BOOL) onPlayerJoined:(NSDictionary *)player
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     NSLog(@"playerjoined-%@",player);
     Player* p = _players[player];
     NSLog(@"p-%@--%@",p,[_gameInfo.players objectForKey:player]);
 
     if(!p && [_gameInfo.players objectForKey:player])
 =======
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     NSString* userId = player[DB_USER_ID];
     
     Player* p = _players[userId];
@@ -224,15 +240,21 @@
         NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
 <<<<<<< HEAD
+<<<<<<< HEAD
         p = [[Player alloc] initWithProperties:[_gameInfo.players objectForKey:player] andPoints:points];
         _players[player] = p;
         [_delegate playerupdate:player newpoints:points withPlayers:_gameInfo.players];
 
 =======
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
         p = [[Player alloc] initWithProperties:player
                                      withColor:_charColors[_gameInfo.players.count]
                                      andPoints:points];
         _players[userId] = p;
+<<<<<<< HEAD
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     }
     NSLog(@"players count-%d, _gameinfo.players count - %d", _players.count, _gameInfo.players.count);
@@ -244,6 +266,7 @@
 
 -(void) onRoundStart
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     NSLog(@"R STARTS-%d",_gameInfo.GameRound);
     [_delegate startNextRound:_gameInfo.GameRound];
@@ -294,12 +317,31 @@
     }
 =======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
+=======
+    
+}
+
+-(void) onRoundComplete
+{
+    // todo figure out how to check for equality
+    NSMutableSet* updatedCells = [[NSMutableSet alloc] init];
+    
+    // update moves
+    NSArray* cells = [self checkMoves];
+    [updatedCells addObjectsFromArray:cells];
+    
+    cells = [self checkBombs];
+    [updatedCells addObjectsFromArray:cells];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
     
     for(Player* player in _players)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         Player *player = _players[a];
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 =======
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
         [player reset];
@@ -379,6 +421,7 @@
     return [cells allObjects];
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 -(void)populateMovePossibilities{
     Player* myP = [_players objectForKey:_myPlayerId];
@@ -624,6 +667,14 @@
 >>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }
 
+=======
+
+-(Player*) MyPlayer
+{
+    return _players[_myPlayerId];
+}
+
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 -(int) GridSize
 {
     return [_gameInfo.gridSize intValue];
