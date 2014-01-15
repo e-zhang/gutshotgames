@@ -14,18 +14,18 @@
 
 @interface GridView : UIView<GridCellDelegate>
 {
-    GridModel* _grid;
+    int _size;
 }
 
 @property (strong, nonatomic) id <GridViewDelegate> delegate;
 
-<<<<<<< HEAD
+
 -(void) updateCell:(CoordPoint*)cell;
 -(void) startNR;
 -(void) showMoveP;
 -(void) showBombP;
-=======
--(id) initWithFrame:(CGRect) frame andGridSize:(int) size;
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
+
+- (id)initWithFrame:(CGRect)frame withGridModel:(GridModel *)grid;
+
 
 @end

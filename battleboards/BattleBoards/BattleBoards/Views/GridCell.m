@@ -7,9 +7,8 @@
 //
 
 #import "GridCell.h"
-#import "CellStates.h"
+#import "CellValue.h"
 #import <QuartzCore/QuartzCore.h>
-#include "CharColors.h"
 
 static const int SELF = 1;
 
@@ -40,30 +39,23 @@ static const int SELF = 1;
 {
     UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, self.frame.size.width - 10.0f, self.frame.size.height - 10.0f)];
     circle.tag = SELF;
-    circle.backgroundColor = player1Color;
+
     circle.layer.cornerRadius = (self.frame.size.width - 10.0f) / 2;
     [self addSubview:circle];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
-<<<<<<< HEAD
+
     CellValue* cellV = [_grid getCellAtRow:_cell.x andCol:_cell.y];
-    NSLog(@"displayCellState-%d%d--%d-%d",_cell.x,_cell.y,cellV.state,cellV.moveCost);
+    NSLog(@"displayCellState-%d%d--%d",_cell.x,_cell.y,cellV.state);
     
     switch (cellV.state)
     {
-        case INIT:
-        {
-            [_grid makeAllInit];
-            [_grid initailizePositionatRow:_cell.x andCol:_cell.y];
-            [self drawMyDot];
-            break;
-        }
         case OCCUPIED:
         {
             NSLog(@"occupied-occupants-%@",cellV.occupants);
-            if([cellV.occupants containsObject:_grid.myPlayerId])
+            if([_cell isEqual:_grid.MyPlayer.Location])
             {
                 NSLog(@"thats me");
                 UITouch *touch = [[event allTouches] anyObject];
@@ -119,58 +111,16 @@ static const int SELF = 1;
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-=======
-    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
-
-    if([state integerValue] == -1)
-        [_delegate cellTouched:_cell];
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
 }
 
 -(void) update
 {
-<<<<<<< HEAD
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 
-  //  NSLog(@"called-%d",cell.state);
-=======
-    id state = [_grid getStateForRow:_cell.x andCol:_cell.y];
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
-    
-    if([state isKindOfClass:[NSString class]])
+    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+    switch(cell.state)
     {
-        switch([state intValue])
-        {
-            case EMPTY:
-                self.layer.borderColor = [UIColor blackColor].CGColor;
-                self.backgroundColor = [UIColor whiteColor];
-                break;
-            case BOMB:
-                self.backgroundColor = [UIColor grayColor];
-                self.layer.borderColor = [UIColor redColor].CGColor;
-                break;
-            case GONE:
-                self.backgroundColor = [UIColor blackColor];
-                self.layer.borderColor = [UIColor blackColor].CGColor;
-                break;
-        }
-    }
-    else if([state isKindOfClass:[NSNumber class]])
-    {
-        // player numbers
-    }
-    else if([state isKindOfClass:[NSArray class]])
-    {
-        // todo: evaluate all occurances on the square
-    }
-    else
-    {
-<<<<<<< HEAD
         case EMPTY:
-        case INIT:
         {
-            UIView *view = [self viewWithTag:SELF];
-            [view removeFromSuperview];
             self.layer.borderColor = [UIColor blackColor].CGColor;
             self.backgroundColor = [UIColor whiteColor];
             break;
@@ -184,32 +134,40 @@ static const int SELF = 1;
             self.layer.borderColor = [UIColor blackColor].CGColor;
             break;
         case OCCUPIED:
+            [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            int w = self.bounds.size.width/cell.occupants.count;
+            int h = self.bounds.size.height/cell.occupants.count;
+            for(int i=0; i < cell.occupants.count; ++i)
+            {
+                Player* player = _grid.Players[cell.occupants[i]];
+                UIView* block = [[UIView alloc] initWithFrame:
+                                  CGRectMake(w*i, h*i, w, h)];
+                
+                block.backgroundColor=player.Color;
+                block.layer.borderColor = [UIColor grayColor].CGColor;
+                [self addSubview:block];
+            }
             break;
-=======
-        NSAssert(NO, @"Received an invalid class for cell state: %@", [state class]);
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
+
     }
 }
 
 -(void) showMP{
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
-    
-    if(cell.moveCost)
-    {
-        _cost.text = [NSString stringWithFormat:@"%d",cell.moveCost];
-        _cost.textColor = [UIColor blackColor];
+    int diff = [CoordPoint distanceFrom:_cell To:_grid.MyPlayer.Location];
+    _cost.text = [NSString stringWithFormat:@"%d", diff];
 
-    }
+    _cost.textColor = [_grid.MyPlayer checkDistance:_cell] ?
+                        [UIColor blackColor] : [UIColor redColor];
+    
 }
 
 -(void) showBP{
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+    int diff = [CoordPoint distanceFrom:_cell To:_grid.MyPlayer.Location];
+    _cost.text = [NSString stringWithFormat:@"%d", diff];
     
-    if(cell.bombCost)
-    {
-        _cost.text = [NSString stringWithFormat:@"%d",cell.bombCost];
-        _cost.textColor = player1Color;
-    }
+    _cost.textColor = [_grid.MyPlayer checkDistance:_cell] ?
+    [UIColor blackColor] : [UIColor redColor];
+    
 }
 
 @end

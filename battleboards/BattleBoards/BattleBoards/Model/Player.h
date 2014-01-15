@@ -11,24 +11,41 @@
 
 @interface Player : NSObject
 {
+    NSString* _name;
+    NSString* _userId;
+    
     CoordPoint* _location;
     int _points;
+    int _remainingPoints;
     CoordPoint* _move;
     NSMutableArray* _bombs;
+    UIColor* _playerColor;
+    BOOL _updated;
 }
 
--(id) initWithStart:(CoordPoint*)start andPoints:(int)points;
+-(id) initWithProperties:(NSDictionary*)props
+               withColor:(UIColor*)color
+               andPoints:(int)points;
 
-<<<<<<< HEAD
 // for updating user inputs
--(BOOL) setInitialPos:(CoordPoint *)pos;
-=======
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
 -(BOOL) addMove:(CoordPoint*) move;
 -(BOOL) addBomb:(CoordPoint*) bomb;
+// for updating from database
+-(BOOL) updateMove:(CoordPoint*)move andBombs:(NSArray*)bombs;
 -(void) reset;
+-(void) cancel;
 
 -(BOOL) checkDistance:(CoordPoint*) dest;
 
+-(void) getPointsFromBomb:(int) points;
+
+@property (readonly) int Points;
+@property (readwrite) BOOL Alive;
+@property (readonly) NSArray* Bombs;
+@property (readonly) CoordPoint* Move;
+@property (readonly) CoordPoint* Location;
+@property (readonly) NSString* Name;
+@property (readonly) NSString* Id;
+@property (readonly) UIColor* Color;
 
 @end

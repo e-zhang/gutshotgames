@@ -1,28 +1,32 @@
 //
-//  GSGViewController.m
+//  GameViewController.m
 //  BattleBoards
 //
 //  Created by Eric Zhang on 12/7/13.
 //  Copyright (c) 2013 GutShotGames. All rights reserved.
 //
 
-#import "GSGViewController.h"
+#import "GameViewController.h"
 
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
 
-@interface GSGViewController ()
+
+@interface GameViewController ()
 
 @end
 
-@implementation GSGViewController{
+@implementation GameViewController{
     int _bots;
     
 }
 
-- (id)initwithGameData:(GameInfo*)gI myid:(NSString *)myid{
+- (id)initWithGameInfo:(GameInfo*)gI playerId:(NSString *)myid{
     
-    _gI = gI;
+    if([super init])
+    {
+        _gridModel = [[GridModel alloc] initWithGame:gI andPlayer:myid andDelegate:self];
+    }
     return self;
 }
 
@@ -35,7 +39,7 @@ static const int MOVELBL = 2;
     
     //max grid size 9
     
-    _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,0,320,320) andGridSize:9];
+    _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,0,320,320) withGridModel:_gridModel];
     _gridView.backgroundColor = [UIColor yellowColor];
     _gridView.delegate = self;
     
@@ -60,6 +64,11 @@ static const int MOVELBL = 2;
     [self.view addSubview:_bomb];
     [self.view addSubview:_move];
     [self.view addSubview:_gridView];
+    
+}
+
+-(void)updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
+{
     
 }
 

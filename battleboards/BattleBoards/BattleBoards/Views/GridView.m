@@ -8,37 +8,26 @@
 
 #import "GridView.h"
 #import "CoordPoint.h"
-#import "GridModel.h"
 
 @implementation GridView
 
-- (id)initWithFrame:(CGRect)frame andGridSize:(int)size
+- (id)initWithFrame:(CGRect)frame withGridModel:(GridModel *)grid
 {
     
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _grid = [[GridModel alloc] initWithSize:size];
-        //_grid.delegate = self;
-        float width = frame.size.width / size;
-        float height = frame.size.height / size;
-        for(int r = 0; r < size; ++r)
+        _size = grid.GridSize;
+        float width = frame.size.width / _size;
+        float height = frame.size.height / _size;
+        for(int r = 0; r < _size; ++r)
         {
-            for(int c = 0; c < size; ++c)
+            for(int c = 0; c < _size; ++c)
             {
-<<<<<<< HEAD
-                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, width, height)
+                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, c, r)
                                                          andGrid:grid
                                                         andCoord:[CoordPoint coordWithX:r andY:c]];
-                cell.tag = (r+1)*_size + (c+1);
-                NSLog(@"cell.tag-%ld",(long)cell.tag);
-=======
-                
-                CoordPoint* cp = [[CoordPoint alloc] initWithX:r andY:c];
-                
-                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * width, r * height, width, height) andGrid:_grid andCoord:cp];
-                cell.delegate = self;
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
+                cell.tag = r*_size + c;
                 [self addSubview:cell];
             }
         }
@@ -46,44 +35,12 @@
     return self;
 }
 
-<<<<<<< HEAD
 -(void) updateCell:(CoordPoint *)cell
 {
-    int tag = (cell.x+1)*_size + (cell.y+1);
+    int tag = cell.x*_size + cell.y;
     GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
-=======
-- (void)cellTouched:(CoordPoint *)coord{
->>>>>>> 5ff438ca72e1e36df958fb0ab557aeb8682d4480
     
-}
-
--(void)startNR{
- 
-}
-
--(void)showMoveP{
-
-    for(int r = 0; r < _size; ++r)
-    {
-        for(int c = 0; c < _size; ++c)
-        {
-            int tag = (r+1)*_size + (c+1);
-            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
-            [gridCell showMP];
-        }
-    }
-}
-
--(void)showBombP{
-    for(int r = 0; r < _size; ++r)
-    {
-        for(int c = 0; c < _size; ++c)
-        {
-            int tag = (r+1)*_size + (c+1);
-            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
-            [gridCell showBP];
-        }
-    }
+    [gridCell update];
 }
 
 /*
