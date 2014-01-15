@@ -32,6 +32,12 @@
     return self;
 }
 
+-(BOOL) isEqual:(id)object
+{
+    CoordPoint* o = (CoordPoint*) object;
+    return _x == o.x && _y == o.y;
+}
+
 
 +(id) coordWithX:(int)x andY:(int)y
 {

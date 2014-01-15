@@ -11,24 +11,23 @@
 
 @implementation GridView
 
-- (id)initWithFrame:(CGRect)frame withSize:(int)size andGridModel:(GridModel *)grid;
+- (id)initWithFrame:(CGRect)frame withGridModel:(GridModel *)grid
 {
     
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _size = size;
+        _size = grid.GridSize;
         float width = frame.size.width / _size;
         float height = frame.size.height / _size;
         for(int r = 0; r < _size; ++r)
         {
             for(int c = 0; c < _size; ++c)
             {
-                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, width, height)
+                GridCell* cell = [[GridCell alloc] initWithFrame:CGRectMake(c * height, r * width, c, r)
                                                          andGrid:grid
                                                         andCoord:[CoordPoint coordWithX:r andY:c]];
-                cell.tag = (r+1)*_size + (c+1);
-                NSLog(@"cell.tag-%ld",(long)cell.tag);
+                cell.tag = r*_size + c;
                 [self addSubview:cell];
             }
         }
@@ -38,12 +37,13 @@
 
 -(void) updateCell:(CoordPoint *)cell
 {
-    int tag = (cell.x+1)*_size + (cell.y+1);
+    int tag = cell.x*_size + cell.y;
     GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
     NSLog(@"gridview cellupdate-%@",gridCell);
     [gridCell update];
 }
 
+<<<<<<< HEAD
 -(void)startNR{
  
 }
@@ -76,6 +76,8 @@
     }
 }
 
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

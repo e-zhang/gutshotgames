@@ -7,26 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "GridView.h"
 #import "GameInfo.h"
-#import "GridModel.h"
 
-@interface GameViewController : UIViewController<RoundUpdateDelegate>
-{
-    GridView* _gridView;
+@interface GameViewController : UIViewController<RoundUpdateDelegate,GridViewDelegate>{
+    
     GridModel* _gridModel;
+    GridView* _gridView;
     
-    UIActivityIndicatorView *_activityView;
-    
-    UIView *_sidePanel;
-    UIButton *_submitButton;
-
-    UILabel *_noticeMsg;
-    UILabel *_roundInfo;
+    UIButton *_bomb;
+    UIButton *_move;
 }
 
--(id) initWithGameInfo:(GameInfo*)game playerId:(NSString*)playerId;
 
+- (id)initWithGameInfo:(GameInfo*)gI playerId:(NSString *)myid;
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players;
 

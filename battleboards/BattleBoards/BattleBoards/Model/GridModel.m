@@ -13,6 +13,8 @@
 
 @implementation GridModel
 
+@synthesize Players=_players;
+
 
 -(id) initWithGame:(GameInfo *)game andPlayer:(NSString *)player andDelegate:(id)delegate
 {
@@ -21,12 +23,9 @@
     {
         _delegate = delegate;
         _gameInfo = game;
-        [_gameInfo setDelegate:self];
         _myPlayerId = player;
-        _players = [[NSMutableDictionary alloc] init];
-        int size = [game.gridSize intValue];
-      //  NSAssert(size < GONE && size > EMPTY, @"Invalid size of grid %d", size);
-        
+        int size = [_gameInfo.gridSize intValue];
+               
         NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
         for(int i = 0; i < size; ++i)
         {
@@ -34,12 +33,23 @@
             for(int i = 0; i < size; ++i)
             {
                 CellValue* cell = [[CellValue alloc] init];
-                cell.state = INIT;
+                cell.state = EMPTY;
                 [row addObject:cell];
             }
             [grid addObject:row];
         }
         _grid = grid;
+        
+        _charColors = [NSArray arrayWithObjects:
+                       [UIColor blueColor],
+                       [UIColor yellowColor],
+                       [UIColor greenColor],
+                       [UIColor purpleColor],
+                       [UIColor orangeColor],
+                       [UIColor brownColor],
+                       [UIColor cyanColor],
+                       [UIColor magentaColor],
+                       nil];
     }
     
     return self;
@@ -51,6 +61,7 @@
     return _grid[row][col];
 }
 
+<<<<<<< HEAD
 -(void)beginGame{
     NSLog(@"beginGame");
     init = YES;
@@ -83,12 +94,16 @@
 }
 
 -(BOOL) submitForMyPlayer
+=======
+-(void) submitForMyPlayer
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 {
     Player* myP = [_players objectForKey:_myPlayerId];
     NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:myP.Bombs.count];
     for (CoordPoint* b in myP.Bombs) {
         [bombs addObject:[b arrayFromCoord]];
     }
+<<<<<<< HEAD
     NSLog(@"move,%@",myP.Move);
     NSLog(@"player-%@",myP);
     
@@ -160,6 +175,14 @@
     NSLog(@"player-%@",myP);
     [myP setInitialPos:[CoordPoint coordWithX:row andY:col]];
 }
+=======
+    
+    NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : nil;
+    
+    [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
+}
+
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
 -(BOOL) onMove:(NSArray *)move andBombs:(NSArray *)bombs forPlayer:(NSString *)player
 {
@@ -182,20 +205,35 @@
     return [p updateMove:moveCoord andBombs:bombCoords];
 }
 
--(BOOL) onPlayerJoined:(NSString *)player
+-(BOOL) onPlayerJoined:(NSDictionary *)player
 {
+<<<<<<< HEAD
     NSLog(@"playerjoined-%@",player);
     Player* p = _players[player];
     NSLog(@"p-%@--%@",p,[_gameInfo.players objectForKey:player]);
 
     if(!p && [_gameInfo.players objectForKey:player])
+=======
+    NSString* userId = player[DB_USER_ID];
+    
+    Player* p = _players[userId];
+    
+    if(!p)
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     {
         NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
+<<<<<<< HEAD
         p = [[Player alloc] initWithProperties:[_gameInfo.players objectForKey:player] andPoints:points];
         _players[player] = p;
         [_delegate playerupdate:player newpoints:points withPlayers:_gameInfo.players];
 
+=======
+        p = [[Player alloc] initWithProperties:player
+                                     withColor:_charColors[_gameInfo.players.count]
+                                     andPoints:points];
+        _players[userId] = p;
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     }
     NSLog(@"players count-%d, _gameinfo.players count - %d", _players.count, _gameInfo.players.count);
     if(_players.count==_gameInfo.players.count)
@@ -206,6 +244,7 @@
 
 -(void) onRoundStart
 {
+<<<<<<< HEAD
     NSLog(@"R STARTS-%d",_gameInfo.GameRound);
     [_delegate startNextRound:_gameInfo.GameRound];
  
@@ -217,12 +256,23 @@
     // todo figure out how to check for equality
     NSMutableSet* updatedCells = [[NSMutableSet alloc] init];
     
+=======
+    
+}
+
+-(void) onRoundComplete
+{
+    // todo figure out how to check for equality
+    NSMutableSet* updatedCells = [[NSMutableSet alloc] init];
+    
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     // update moves
     NSArray* cells = [self checkMoves];
     [updatedCells addObjectsFromArray:cells];
     
     cells = [self checkBombs];
     [updatedCells addObjectsFromArray:cells];
+<<<<<<< HEAD
     
     if(_gameInfo.GameRound==0)
     {
@@ -242,11 +292,16 @@
             }
         }
     }
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
     
-    for(NSString* a in _players)
+    for(Player* player in _players)
     {
+<<<<<<< HEAD
         Player *player = _players[a];
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
         [player reset];
         if(_gameInfo.GameRound>0)
         {
@@ -258,21 +313,14 @@
         NSLog(@"resetting player-%@-%@",player.Id,player.Move);
     }
     
-    [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players andRound:_gameInfo.GameRound];
-    
-
-    [self populateMovePossibilities];
-    [self populateBombPossibilities];
+    [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
 }
 
 -(NSArray*) checkMoves
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
-    NSLog(@"players-%@",_players);
-    for(NSString* a in _players)
+    for(Player* p in _players)
     {
-        Player *p = [_players objectForKey:a];
-        NSLog(@"playa-%@,%@",p.Name,p.Location);
         if(!p.Move) continue;
         NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
         // update old location
@@ -299,9 +347,8 @@
 -(NSArray*) checkBombs
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
-    for(NSString* a in _players)
+    for(Player* p in _players)
     {
-        Player *p = [_players objectForKey:a];
         for(CoordPoint* bomb in p.Bombs)
         {
             // update old location
@@ -332,6 +379,7 @@
     return [cells allObjects];
 }
 
+<<<<<<< HEAD
 -(void)populateMovePossibilities{
     Player* myP = [_players objectForKey:_myPlayerId];
     int points = myP.Points , cost = 0;
@@ -568,13 +616,17 @@
 
 -(void)showBombPs{
     [_delegate showBombPossibilities];
+=======
+
+-(Player*) MyPlayer
+{
+    return _players[_myPlayerId];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }
 
--(void)startGame{
-    [_delegate startGame];
-    
-    [_gameInfo reset];
-    [_gameInfo startRound];
+-(int) GridSize
+{
+    return [_gameInfo.gridSize intValue];
 }
 
 @end

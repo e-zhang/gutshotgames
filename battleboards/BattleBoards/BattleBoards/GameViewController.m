@@ -7,39 +7,21 @@
 //
 
 #import "GameViewController.h"
-#import "CoordPoint.h"
-#include "DBDefs.h"
-#include "CharColors.h"
+
+static const int BOMBLBL = 1;
+static const int MOVELBL = 2;
+
 
 @interface GameViewController ()
 
 @end
 
-@implementation GameViewController
-
--(id) initWithGameInfo:(GameInfo *)game playerId:(NSString *)playerId
-{
-    if([super initWithNibName:nil bundle:nil])
-    {
-        _gridModel = [[GridModel alloc] initWithGame:game andPlayer:playerId andDelegate:self];
-        NSLog(@"initGVC - gridSize-%@",game.gridSize);
-        //screen bounds will make it a rect and not a square
-        _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,
-                                                               0,
-                                                               320.0f,
-                                                               320.0f)
-                                            withSize:[game.gridSize intValue]
-                                            andGridModel:_gridModel];
-    }
+@implementation GameViewController{
+    int _bots;
     
-    return self;
 }
 
--(void)startNextRound:(int)roundNum{
-    _roundInfo.text = [NSString stringWithFormat:@"Round %d",roundNum];
-    [_gridView startNR];
-}
-
+<<<<<<< HEAD
 -(void)showMovePossibilities{
     [_gridView showMoveP];
 }
@@ -68,107 +50,75 @@
     NSLog(@"ref called");
     CoordPoint *coord = [CoordPoint coordWithX:x andY:y];
     [_gridView updateCell:coord];
+=======
+- (id)initWithGameInfo:(GameInfo*)gI playerId:(NSString *)myid{
+    
+    if([super init])
+    {
+        _gridModel = [[GridModel alloc] initWithGame:gI andPlayer:myid andDelegate:self];
+    }
+    return self;
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.view.frame = CGRectMake(0.0f, 0.0f, 568.0f, 320.0f);
-    self.view.backgroundColor = [UIColor whiteColor];
     
-    _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 55.0f, 100.0f, 20.0f)];
-    _roundInfo.textColor = [UIColor blackColor];
-    _roundInfo.text = @"Round -";
-    _roundInfo.font = [UIFont systemFontOfSize:10.0f];
+    self.view.backgroundColor = [UIColor redColor];
     
-    _noticeMsg = [[UILabel alloc] initWithFrame:CGRectMake(50.0f, self.view.frame.size.height/2 - 40.0f, self.view.frame.size.width - 100.0f, 80.0f)];
-    _noticeMsg.textAlignment = NSTextAlignmentCenter;
-    _noticeMsg.backgroundColor = [UIColor blackColor];
-    _noticeMsg.textColor = [UIColor whiteColor];
+    //max grid size 9
     
-    _sidePanel = [[UIView alloc] initWithFrame:CGRectMake(320.0f, 0.0f, self.view.frame.size.width - 320.0f, self.view.frame.size.height)];
-    _sidePanel.backgroundColor = [UIColor lightGrayColor];
+    _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,0,320,320) withGridModel:_gridModel];
+    _gridView.backgroundColor = [UIColor yellowColor];
+    _gridView.delegate = self;
+    
+    _bomb = [UIButton buttonWithType:UIButtonTypeCustom];
+    _bomb.frame = CGRectMake(320.0f, 10.0f, 100.0f, 20.0f);
+    _bomb.tag = BOMBLBL;
+    [_bomb setTitle:@"Set Bombs" forState:UIControlStateNormal];
+    [_bomb setSelected:NO];
+    [_bomb setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_bomb setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    [_bomb addTarget:self action:@selector(toggleSelection:) forControlEvents:UIControlEventTouchUpInside];
 
-    _activityView =[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [_activityView setCenter:CGPointMake(_sidePanel.frame.size.width - 20.0f, 30.0f)];
-    
-    _submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _submitButton.backgroundColor = [UIColor blackColor];
-    _submitButton.frame = CGRectMake(10.0f, 10.0f, 100.0f, 40.0f);
-    [_submitButton setTitle:@"Submit" forState:UIControlStateNormal];
-    [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
+    _move = [UIButton buttonWithType:UIButtonTypeCustom];
+    _move.frame = CGRectMake(440.0f, 10.0f, 80.0f, 20.0f);
+    _move.tag = MOVELBL;
+    [_move setTitle:@"Set Move" forState:UIControlStateNormal];
+    [_move setSelected:YES];
+    [_move setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_move setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    [_move addTarget:self action:@selector(toggleSelection:) forControlEvents:UIControlEventTouchUpInside];
 
+    [self.view addSubview:_bomb];
+    [self.view addSubview:_move];
     [self.view addSubview:_gridView];
-    [self.view addSubview:_sidePanel];
-    [self.view addSubview:_noticeMsg];
     
-    [self showConnectingScreen];
-    [_gridModel beginGame];
-
 }
 
-- (void)startGame{
+-(void)updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
+{
     
-    [_noticeMsg removeFromSuperview];
-    [_sidePanel addSubview:_submitButton];
-    [_sidePanel addSubview:_roundInfo];
-    [_sidePanel addSubview:_activityView];
-
 }
 
-
-- (void)showConnectingScreen{
-    _noticeMsg.text = @"Waiting for all players to connect...";
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
-- (void)initplayers:(NSDictionary*)players{
-
-    int a = 0;
-    for (id player in players)
-    {
-        NSLog(@"initplayer");
-        NSDictionary *data = [players objectForKey:player];
-      
-        UIView *charView = [[UIView alloc] initWithFrame:CGRectMake(15.0f, 70.0f + 50 * a, 120.0f, 50.0f)];
-        charView.tag = [[data objectForKey:INGAMEID] integerValue];
+- (IBAction)toggleSelection:(id)sender
+{
+    if([_move isSelected]){
         
-        UIView *charCircle = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 15.0f, 20.0f, 20.0f)];
-        charCircle.layer.cornerRadius = 10.0f;
-        switch(charView.tag)
-        {
-            case 1:
-                charCircle.backgroundColor = player1Color;
-                break;
-            ;
-            case 2:
-                charCircle.backgroundColor = player2Color;
-                break;
-            ;
-            case 3:
-                charCircle.backgroundColor = player3Color;
-                break;
-            ;
-            case 4:
-                charCircle.backgroundColor = player4Color;
-                break;
-            ;
-            case 5:
-                charCircle.backgroundColor = player5Color;
-                break;
-            ;
-        }
-
-        UILabel *charName = [[UILabel alloc] initWithFrame:CGRectMake(25.0f, 0.0f, 120.0f, 50.0f)];
-        charName.text = [data objectForKey:@"name"];
-        charName.font = [UIFont systemFontOfSize:10.0f];
+        [_move setSelected:NO];
+        [_bomb setSelected:YES];
         
-        [charView addSubview:charCircle];
-        [charView addSubview:charName];
-        [_sidePanel addSubview:charView];
-        a++;
+        //do anything else you want to do.
     }
+<<<<<<< HEAD
 }
 
 -(void)playerupdate:(NSString *)pId newpoints:(int)points withPlayers:(NSDictionary *)players{
@@ -216,11 +166,15 @@
 
     
 }
+=======
+    else {
+        
+        [_move setSelected:YES];
+        [_bomb setSelected:NO];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+        //do anything you want to do.
+    }
 }
 
 @end

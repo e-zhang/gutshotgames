@@ -376,7 +376,6 @@
         GameInfo* game = [_gameServer getGameForRequest:request];
         self.gamewindow = [[GameViewController alloc] initWithGameInfo:game playerId:_gameServer.user.userid];
         //self.gamewindow.delegate = self;
-        
         [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
         [self presentViewController:self.gamewindow animated:YES completion:nil];
@@ -567,6 +566,7 @@
             
             [playerAccount setObject:userid forKey:DB_USER_ID];
             [playerAccount setObject:userresult[@"rows"][0][@"fields"][@"username"] forKey:DB_USER_NAME];
+
             [playerAccount setObject:@(a) forKey:INGAMEID];
         }
         
@@ -699,7 +699,9 @@
     NSDictionary* playerAccounts = [self getPlayerAccounts];
     newg.players = playerAccounts;
     
+
     [self sendRequests:newg.gameName toPlayers:playerAccounts];
+
     
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}
@@ -709,8 +711,10 @@
     UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
     [collection reloadData];
     
+
     //replace 1 with _gameServer.user.userid
     self.gamewindow = [[GameViewController alloc] initWithGameInfo:newg playerId:_gameServer.user.userid];
+
     //self.gamewindow.delegate = self;
     
     [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];

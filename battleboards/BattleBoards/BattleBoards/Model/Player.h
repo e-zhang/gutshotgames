@@ -19,13 +19,15 @@
     int _remainingPoints;
     CoordPoint* _move;
     NSMutableArray* _bombs;
+    UIColor* _playerColor;
     BOOL _updated;
 }
 
--(id) initWithProperties:(NSDictionary*)props andPoints:(int)points;
+-(id) initWithProperties:(NSDictionary*)props
+               withColor:(UIColor*)color
+               andPoints:(int)points;
 
 // for updating user inputs
--(BOOL) setInitialPos:(CoordPoint *)pos;
 -(BOOL) addMove:(CoordPoint*) move;
 -(BOOL) addBomb:(CoordPoint*) bomb;
 // for updating from database
@@ -44,5 +46,6 @@
 @property (readonly) CoordPoint* Location;
 @property (readonly) NSString* Name;
 @property (readonly) NSString* Id;
+@property (readonly) UIColor* Color;
 
 @end

@@ -7,20 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GridModel.h"
 #import "GridCell.h"
 
+@protocol GridViewDelegate <NSObject>
+@end
 
-@interface GridView : UIView
+@interface GridView : UIView<GridCellDelegate>
 {
     int _size;
 }
 
--(id) initWithFrame:(CGRect) frame withSize:(int)size andGridModel:(GridModel*)grid;
+@property (strong, nonatomic) id <GridViewDelegate> delegate;
+
 
 -(void) updateCell:(CoordPoint*)cell;
 -(void) startNR;
 -(void) showMoveP;
 -(void) showBombP;
+
+- (id)initWithFrame:(CGRect)frame withGridModel:(GridModel *)grid;
+
 
 @end

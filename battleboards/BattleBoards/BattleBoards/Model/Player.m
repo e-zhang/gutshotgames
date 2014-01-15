@@ -18,20 +18,22 @@
 @synthesize Location=_location;
 @synthesize Id=_userId;
 @synthesize Name=_name;
+@synthesize Color=_playerColor;
 
--(id) initWithProperties:(NSDictionary *)props andPoints:(int)points
+-(id) initWithProperties:(NSDictionary *)props
+               withColor:(UIColor *)color
+               andPoints:(int)points
 {
     if([super init])
     {
         _name = props[DB_USER_NAME];
         _userId = props[DB_USER_ID];
-       // _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
+        _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
         _points = points;
        // _remainingPoints = points;
         _updated = NO;
+        _playerColor = color;
         [self reset];
-        
-        NSLog(@"initializing-%@",_name);
     }
     
     return self;
@@ -54,12 +56,6 @@
   // _remainingPoints = _points;
 }
 
-//we need to add a different initial set because the interface is different. Click and place vs. click and drag.
--(BOOL) setInitialPos:(CoordPoint *)pos{
-    _move = pos;
-    _location = _move;
-    return YES;
-}
 
 -(BOOL) addMove:(CoordPoint *)move
 {
@@ -106,10 +102,15 @@
 -(BOOL) checkDistance:(CoordPoint *)dest
 {
     // check to see if player has enough points for distance;
+<<<<<<< HEAD
    // int distance = [CoordPoint distanceFrom:dest To:_location];
   //  NSLog(@"checking d-%d-%d",distance,_points);
+=======
+
+    int distance = [CoordPoint distanceFrom:dest To:_location];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     
-    //if(_points < distance) return NO;
+    if(_points < distance) return NO;
     
    // _remainingPoints -= distance;
     

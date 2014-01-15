@@ -7,8 +7,8 @@
 //
 
 #import "GridCell.h"
+#import "CellValue.h"
 #import <QuartzCore/QuartzCore.h>
-#include "CharColors.h"
 
 @implementation GridCell
 
@@ -37,10 +37,23 @@
     return self;
 }
 
+<<<<<<< HEAD
+=======
+- (void)drawMyDot
+{
+    UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, self.frame.size.width - 10.0f, self.frame.size.height - 10.0f)];
+    circle.tag = SELF;
+
+    circle.layer.cornerRadius = (self.frame.size.width - 10.0f) / 2;
+    [self addSubview:circle];
+}
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
+
     CellValue* cellV = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+<<<<<<< HEAD
     NSLog(@"displayCellState-%d%d--%d-MOVECOST%d",_cell.x,_cell.y,cellV.state,cellV.moveCost);
     NSLog(@"displayCellState-%d%d--%d-BOMBCOST%d",_cell.x,_cell.y,cellV.state,cellV.bombCost);
 
@@ -53,10 +66,16 @@
             _view.backgroundColor = player1Color;
             break;
         }
+=======
+    NSLog(@"displayCellState-%d%d--%d",_cell.x,_cell.y,cellV.state);
+    
+    switch (cellV.state)
+    {
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
         case OCCUPIED:
         {
             NSLog(@"occupied-occupants-%@",cellV.occupants);
-            if([cellV.occupants containsObject:_grid.myPlayerId])
+            if([_cell isEqual:_grid.MyPlayer.Location])
             {
                 [_grid showMovePs];
 
@@ -90,17 +109,22 @@
 
 -(void) update
 {
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
 
+<<<<<<< HEAD
     NSLog(@"update-called-%d%d-%d",_cell.x,_cell.y,cell.state);
     
+=======
+    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
     switch(cell.state)
     {
         case EMPTY:
-        case INIT:
         {
+<<<<<<< HEAD
             NSLog(@"removeView4321");
             [_view setHidden:YES];
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
             self.layer.borderColor = [UIColor blackColor].CGColor;
             self.backgroundColor = [UIColor whiteColor];
             break;
@@ -114,30 +138,54 @@
             self.layer.borderColor = [UIColor blackColor].CGColor;
             break;
         case OCCUPIED:
+<<<<<<< HEAD
             [_view setHidden:NO];
             _view.backgroundColor = player1Color;
+=======
+            [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            int w = self.bounds.size.width/cell.occupants.count;
+            int h = self.bounds.size.height/cell.occupants.count;
+            for(int i=0; i < cell.occupants.count; ++i)
+            {
+                Player* player = _grid.Players[cell.occupants[i]];
+                UIView* block = [[UIView alloc] initWithFrame:
+                                  CGRectMake(w*i, h*i, w, h)];
+                
+                block.backgroundColor=player.Color;
+                block.layer.borderColor = [UIColor grayColor].CGColor;
+                [self addSubview:block];
+            }
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
             break;
+
     }
 }
 
 -(void) showMP{
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
-    
-    if(cell.moveCost)
-    {
-        _cost.text = [NSString stringWithFormat:@"%d",cell.moveCost];
-        _cost.textColor = [UIColor blackColor];
+    int diff = [CoordPoint distanceFrom:_cell To:_grid.MyPlayer.Location];
+    _cost.text = [NSString stringWithFormat:@"%d", diff];
 
+<<<<<<< HEAD
     }
     else
     {
         _cost.text = @"";
     }
+=======
+    _cost.textColor = [_grid.MyPlayer checkDistance:_cell] ?
+                        [UIColor blackColor] : [UIColor redColor];
+    
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }
 
 -(void) showBP{
-    CellValue* cell = [_grid getCellAtRow:_cell.x andCol:_cell.y];
+    int diff = [CoordPoint distanceFrom:_cell To:_grid.MyPlayer.Location];
+    _cost.text = [NSString stringWithFormat:@"%d", diff];
     
+    _cost.textColor = [_grid.MyPlayer checkDistance:_cell] ?
+    [UIColor blackColor] : [UIColor redColor];
+    
+<<<<<<< HEAD
     if(cell.bombCost)
     {
         _cost.text = [NSString stringWithFormat:@"%d",cell.bombCost];
@@ -147,6 +195,8 @@
     {
         _cost.text = @"";
     }
+=======
+>>>>>>> 9eca385274a4ad10699a6e4ccce5b4b391b163ae
 }
 
 @end
