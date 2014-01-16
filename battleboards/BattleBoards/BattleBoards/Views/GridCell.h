@@ -17,13 +17,9 @@
 {
     GridModel* _grid;
     CoordPoint* _cell;
-    
-    BOOL positionChange;
-    
+        
     UILabel *_cost;
-    
-    float oldX, oldY;
-    BOOL dragging;
+    UIView *_view;
 }
 
 @property (strong, nonatomic) id <GridCellDelegate> delegate;

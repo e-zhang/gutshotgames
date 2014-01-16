@@ -11,7 +11,7 @@
 
 @protocol GameUpdateDelegate <NSObject>
 
-- (BOOL) onPlayerJoined:(NSDictionary*) player;
+- (BOOL) onPlayerJoined:(NSString*) player;
 - (BOOL) onMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;

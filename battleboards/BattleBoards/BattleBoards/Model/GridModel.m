@@ -33,7 +33,6 @@
             for(int i = 0; i < size; ++i)
             {
                 CellValue* cell = [[CellValue alloc] init];
-                cell.state = EMPTY;
                 [row addObject:cell];
             }
             [grid addObject:row];
@@ -50,6 +49,8 @@
                        [UIColor cyanColor],
                        [UIColor magentaColor],
                        nil];
+        
+        [_gameInfo initializeGame];
     }
     
     return self;
@@ -61,7 +62,9 @@
     return _grid[row][col];
 }
 
+
 -(void) submitForMyPlayer
+
 {
     Player* myP = [_players objectForKey:_myPlayerId];
     NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:myP.Bombs.count];
@@ -98,40 +101,52 @@
 
 -(BOOL) onPlayerJoined:(NSDictionary *)player
 {
+
     NSString* userId = player[DB_USER_ID];
     
     Player* p = _players[userId];
+
+    NSLog(@"playerjoined-%@",player);
     
-    if(!p)
+    if(!p && [_gameInfo.players objectForKey:userId])
     {
+        NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
         p = [[Player alloc] initWithProperties:player
                                      withColor:_charColors[_gameInfo.players.count]
+                                     withGameId:_gameInfo.players.count
                                      andPoints:points];
         _players[userId] = p;
+        [_delegate initPlayer:p];
     }
     
-    return _players.count == _gameInfo.players.count;
+    
+    BOOL startGame = _players.count == _gameInfo.players.count;
+    if(startGame)
+    {
+        [_delegate startGame];
+    }
+    return startGame;
 }
 
 -(void) onRoundStart
 {
-    
 }
 
 -(void) onRoundComplete
 {
     // todo figure out how to check for equality
     NSMutableSet* updatedCells = [[NSMutableSet alloc] init];
-    
+
+ 
     // update moves
     NSArray* cells = [self checkMoves];
     [updatedCells addObjectsFromArray:cells];
     
     cells = [self checkBombs];
     [updatedCells addObjectsFromArray:cells];
-
     
+
     for(Player* player in _players)
     {
         [player reset];
@@ -146,7 +161,7 @@
     for(Player* p in _players)
     {
         if(!p.Move) continue;
-        
+        NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
         // update old location
         CellValue* value = [self getCellAtRow:p.Location.x andCol:p.Location.y];
         
@@ -157,11 +172,13 @@
         // update new location
         value = [self getCellAtRow:p.Move.x andCol:p.Move.y];
         value.state = OCCUPIED;
+        NSLog(@"this one-%d%d,-%@",p.Move.x,p.Move.y,p.Id);
         [value.occupants addObject:p.Id];
+        NSLog(@"value.occupants-%@",value.occupants);
         [cells addObject:p.Move];
     
     }
-    
+    NSLog(@"cells-%@",cells);
     return [cells allObjects];
 }
 
@@ -205,6 +222,7 @@
 {
     return _players[_myPlayerId];
 }
+
 
 -(int) GridSize
 {

@@ -19,12 +19,14 @@
     int _remainingPoints;
     CoordPoint* _move;
     NSMutableArray* _bombs;
+    int _gameId;
     UIColor* _playerColor;
     BOOL _updated;
 }
 
 -(id) initWithProperties:(NSDictionary*)props
                withColor:(UIColor*)color
+              withGameId:(int)gameId
                andPoints:(int)points;
 
 // for updating user inputs
@@ -39,7 +41,7 @@
 
 -(void) getPointsFromBomb:(int) points;
 
-@property (readonly) int Points;
+@property (readwrite) int Points;
 @property (readwrite) BOOL Alive;
 @property (readonly) NSArray* Bombs;
 @property (readonly) CoordPoint* Move;
@@ -47,5 +49,6 @@
 @property (readonly) NSString* Name;
 @property (readonly) NSString* Id;
 @property (readonly) UIColor* Color;
+@property (readonly) int GameId;
 
 @end

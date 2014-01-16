@@ -172,8 +172,10 @@
 
 -(BOOL) getNextRound
 {
+    NSLog(@"nextround");
     [self willChangeValueForKey:@"GameRound"];
     _gameRound = [self.currentRound intValue] + 1;
+    NSLog(@"_gameRound-%d",_gameRound);
     [self didChangeValueForKey:@"GameRound"];
     BOOL isLast = _isLast;
     _isLast = NO;
@@ -281,11 +283,12 @@
             NSDictionary* player = [self.players objectForKey:playerId];
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
-                start = [_delegate onPlayerJoined:player];
+                start = [_delegate onPlayerJoined:playerId];
             }
             
             if(start)
             {
+                NSLog(@"start round");
                 [self startRound];
             }
             
@@ -294,7 +297,7 @@
     else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
         
-        if([self.currentRound intValue] >= _gameRound)
+        if([self.currentRound intValue] >= _gameRound && _gameRound >= 0)
         {
             NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
             NSDictionary* currentRound = [self.gameData objectAtIndex:_gameRound];

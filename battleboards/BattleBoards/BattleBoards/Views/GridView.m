@@ -11,7 +11,7 @@
 
 @implementation GridView
 
-- (id)initWithFrame:(CGRect)frame withGridModel:(GridModel *)grid
+- (id)initWithFrame:(CGRect)frame andGridModel:(GridModel *)grid
 {
     
     self = [super initWithFrame:frame];
@@ -39,8 +39,40 @@
 {
     int tag = cell.x*_size + cell.y;
     GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
-    
+    NSLog(@"gridview cellupdate-%@",gridCell);
     [gridCell update];
+}
+
+-(void)startNR{
+ 
+}
+
+-(void)showMoveP{
+
+    NSLog(@"show da moves");
+    for(int r = 0; r < _size; ++r)
+    {
+        for(int c = 0; c < _size; ++c)
+        {
+            int tag = (r+1)*_size + (c+1);
+            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
+            [gridCell showMP];
+        }
+    }
+}
+
+-(void)showBombP{
+    
+    NSLog(@"show da bombs");
+    for(int r = 0; r < _size; ++r)
+    {
+        for(int c = 0; c < _size; ++c)
+        {
+            int tag = (r+1)*_size + (c+1);
+            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
+            [gridCell showBP];
+        }
+    }
 }
 
 /*

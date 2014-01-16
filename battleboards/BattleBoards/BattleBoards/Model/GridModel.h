@@ -14,11 +14,16 @@
 
 
 @protocol RoundUpdateDelegate <NSObject>
+
 -(void) updateRoundForCells:(NSArray*)cells andPlayers:(NSDictionary*)players;
+-(void) initPlayer:(Player*)p;
+-(void) startGame;
+
 @end
 
 @interface GridModel : NSObject<GameUpdateDelegate>
 {
+
     NSArray* _grid;
     NSMutableDictionary* _players;
     GameInfo* _gameInfo;
@@ -33,7 +38,7 @@
 
 -(CellValue*) getCellAtRow:(int)row andCol:(int)col;
 
-// update database
+
 -(void) submitForMyPlayer;
 
 // gameupdate delegate

@@ -10,4 +10,16 @@
 
 @implementation CellValue
 
+-(id) init
+{
+    if([super init])
+    {
+        self.state = EMPTY;
+        self.occupants = [[NSMutableArray alloc] init];
+        self.bombers = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
+}
+
 @end

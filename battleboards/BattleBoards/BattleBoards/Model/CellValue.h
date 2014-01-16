@@ -20,8 +20,11 @@ typedef enum CellStates
 
 @interface CellValue : NSObject
 
+-(id) init;
+
 @property CellStates state;
 @property NSMutableArray* occupants;
 @property NSMutableArray* bombers;
+
 
 @end

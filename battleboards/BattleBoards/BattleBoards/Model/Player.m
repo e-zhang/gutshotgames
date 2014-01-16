@@ -11,7 +11,7 @@
 
 @implementation Player
 
-@synthesize Points=_remainingPoints;
+@synthesize Points=_points;
 @synthesize Alive;
 @synthesize Bombs=_bombs;
 @synthesize Move=_move;
@@ -19,6 +19,7 @@
 @synthesize Id=_userId;
 @synthesize Name=_name;
 @synthesize Color=_playerColor;
+@synthesize GameId=_gameId;
 
 -(id) initWithProperties:(NSDictionary *)props
                withColor:(UIColor *)color
@@ -30,7 +31,7 @@
         _userId = props[DB_USER_ID];
         _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
         _points = points;
-        _remainingPoints = points;
+       // _remainingPoints = points;
         _updated = NO;
         _playerColor = color;
         [self reset];
@@ -45,7 +46,7 @@
     _location = _move;
     _move = nil;
     [_bombs removeAllObjects];
-    _points = _remainingPoints;
+   // _points = _remainingPoints;
     _updated = NO;
 }
 
@@ -53,7 +54,7 @@
 {
     _move = nil;
     [_bombs removeAllObjects];
-    _remainingPoints = _points;
+  // _remainingPoints = _points;
 }
 
 
@@ -107,7 +108,7 @@
     
     if(_points < distance) return NO;
     
-    _remainingPoints -= distance;
+   // _remainingPoints -= distance;
     
     return YES;
 }
@@ -115,8 +116,8 @@
 
 -(void) getPointsFromBomb:(int)points
 {
-    _points += points;
-    _remainingPoints += points;
+   _points += points;
+   _remainingPoints += points;
 }
 
 @end

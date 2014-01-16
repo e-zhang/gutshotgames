@@ -25,7 +25,7 @@
 -(void) showMoveP;
 -(void) showBombP;
 
-- (id)initWithFrame:(CGRect)frame withGridModel:(GridModel *)grid;
+- (id)initWithFrame:(CGRect)frame andGridModel:(GridModel *)grid;
 
 
 @end
