@@ -36,8 +36,12 @@
 }
 
 -(void)startNextRound:(int)roundNum{
+    
+    [_gridView setUserInteractionEnabled:YES];
+    [_submitButton setUserInteractionEnabled:YES];
+    
     _roundInfo.text = [NSString stringWithFormat:@"Round %d",roundNum];
-    [_gridView startNR];
+  //  [_gridView startNR];
 }
 
 -(void)showMovePossibilities{

@@ -45,7 +45,17 @@
 }
 
 -(void)startNR{
- 
+    NSLog(@"startNR");
+    for(int r = 0; r < _size; ++r)
+    {
+        for(int c = 0; c < _size; ++c)
+        {
+            int tag = (r+1)*_size + (c+1);
+            GridCell* gridCell = (GridCell*)[self viewWithTag:tag];
+            [gridCell update];
+        }
+    }
+
 }
 
 -(void)showMoveP{
