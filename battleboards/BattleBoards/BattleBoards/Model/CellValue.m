@@ -10,13 +10,15 @@
 
 @implementation CellValue
 
--(id) init
+-(id) initWithCoord:(CoordPoint *)coord
 {
     if([super init])
     {
+        self.coord = coord;
         self.state = EMPTY;
         self.occupants = [[NSMutableArray alloc] init];
         self.bombers = [[NSMutableArray alloc] init];
+        self.cost = 0;
     }
     
     return self;

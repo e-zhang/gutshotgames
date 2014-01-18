@@ -11,7 +11,7 @@
 
 @implementation Player
 
-@synthesize Points=_points;
+@synthesize Points=_remainingPoints;
 @synthesize Alive;
 @synthesize Bombs=_bombs;
 @synthesize Move=_move;
@@ -23,6 +23,7 @@
 
 -(id) initWithProperties:(NSDictionary *)props
                withColor:(UIColor *)color
+               withGameId:(int)gameId
                andPoints:(int)points
 {
     if([super init])
@@ -31,8 +32,9 @@
         _userId = props[DB_USER_ID];
         _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
         _points = points;
-       // _remainingPoints = points;
+        _remainingPoints = points;
         _updated = NO;
+        _gameId = gameId;
         _playerColor = color;
         [self reset];
     }
@@ -46,7 +48,7 @@
     _location = _move;
     _move = nil;
     [_bombs removeAllObjects];
-   // _points = _remainingPoints;
+    _points = _remainingPoints;
     _updated = NO;
 }
 
@@ -54,30 +56,32 @@
 {
     _move = nil;
     [_bombs removeAllObjects];
-  // _remainingPoints = _points;
+    [self willChangeValueForKey:@"Points"];
+    _remainingPoints = _points;
+    [self didChangeValueForKey:@"Points"];
 }
 
 
--(BOOL) addMove:(CoordPoint *)move
+-(BOOL) addMove:(CellValue*)move
 {
     if(![self checkDistance:move]) return NO;
     
-    _move = move;
+    _move = [move.coord copy];
     return YES;
 }
 
 
--(BOOL) addBomb:(CoordPoint *)bomb
+-(BOOL) addBomb:(CellValue*)bomb
 {
     if(![self checkDistance:bomb]) return NO;
     
-    [_bombs addObject:bomb];
+    [_bombs addObject:bomb.coord];
     
     return YES;
 }
 
 
--(BOOL) updateMove:(CoordPoint *)move andBombs:(NSArray *)bombs
+-(BOOL) updateMove:(CoordPoint *)move Bombs:(NSArray *)bombs andPoints:(int) points
 {
     BOOL hasUpdate = _updated;
     
@@ -85,31 +89,25 @@
     [self cancel];
     if(move)
     {
-        BOOL check = [self addMove:move];
-        NSAssert(check, @"move update from database has invalid move");
+        _move = move;
     }
     
-    for(CoordPoint* b in bombs)
-    {
-        BOOL check = [self addBomb:b];
-        NSAssert(check, @"bomb update from database has invalid bomb");
-    }
+    [_bombs addObjectsFromArray:bombs];
+    
+    _remainingPoints = points;
     
     _updated = YES;
     return hasUpdate;
 }
 
 
--(BOOL) checkDistance:(CoordPoint *)dest
+-(BOOL) checkDistance:(CellValue*)dest
 {
-    // check to see if player has enough points for distance;
+    if(_points < dest.cost) return NO;
 
-    int distance = [CoordPoint distanceFrom:dest To:_location];
-    
-    if(_points < distance) return NO;
-    
-   // _remainingPoints -= distance;
-    
+    [self willChangeValueForKey:@"Points"];
+    _remainingPoints -= dest.cost;
+    [self didChangeValueForKey:@"Points"];
     return YES;
 }
 

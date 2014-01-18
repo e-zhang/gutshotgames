@@ -7,6 +7,7 @@
 //
 
 #import "GridModel.h"
+
 #import "DBDefs.h"
 
 #define START_POINTS 5
@@ -23,16 +24,19 @@
     {
         _delegate = delegate;
         _gameInfo = game;
+        [_gameInfo setDelegate:self];
         _myPlayerId = player;
+        _players = [[NSMutableDictionary alloc] initWithCapacity:game.players.count];
         int size = [_gameInfo.gridSize intValue];
                
         NSMutableArray* grid = [NSMutableArray arrayWithCapacity:size];
         for(int i = 0; i < size; ++i)
         {
             NSMutableArray* row = [NSMutableArray arrayWithCapacity:size];
-            for(int i = 0; i < size; ++i)
+            for(int j = 0; j < size; ++j)
             {
-                CellValue* cell = [[CellValue alloc] init];
+                CellValue* cell = [[CellValue alloc] initWithCoord:
+                                   [CoordPoint coordWithX:i andY:j]];
                 [row addObject:cell];
             }
             [grid addObject:row];
@@ -49,19 +53,92 @@
                        [UIColor cyanColor],
                        [UIColor magentaColor],
                        nil];
-        
-        [_gameInfo initializeGame];
+
     }
     
     return self;
 }
 
-
--(CellValue*) getCellAtRow:(int)row andCol:(int)col
+-(void) beginGameAtCoord:(CoordPoint *)coord
 {
-    return _grid[row][col];
+    [_gameInfo initializeGame];
+    [_gameInfo joinGame:_myPlayerId withLocation:[coord arrayFromCoord]];
 }
 
+
+-(CellValue*) getCellWithCoord:(CoordPoint *)coord
+{
+    return _grid[coord.x][coord.y];
+}
+
+-(BOOL) isCoordInBounds:(CoordPoint *)coord
+{
+    return coord.x < self.GridSize && coord.y < self.GridSize &&
+           coord.x >= 0 && coord.y >= 0;
+}
+
+-(BOOL) playerMoved:(CoordPoint *)coord
+{
+    Player* player = _players[_myPlayerId];
+    
+    return [player addMove:[self getCellWithCoord:coord]];
+}
+
+-(BOOL) bombPlaced:(CoordPoint *)coord
+{
+    Player* player = _players[_myPlayerId];
+    
+    return [player addBomb:[self getCellWithCoord:coord]];
+}
+
+-(void) calculateGridPossibilities
+{
+    // algorithm: do a breadth first search
+    
+    // reset cost for next
+    NSMutableArray* seen = [[NSMutableArray alloc] initWithCapacity:self.GridSize];
+    for(int row=0; row < self.GridSize; ++row)
+    {
+        NSMutableArray* seenRow = [[NSMutableArray alloc] initWithCapacity:self.GridSize];
+        for(int col=0; col < self.GridSize; ++col)
+        {
+            CellValue* cell = _grid[row][col];
+            cell.cost = 0;
+            [seenRow addObject:[NSNumber numberWithBool:NO]];
+        }
+        
+        [seen addObject:seenRow];
+    }
+    
+
+    NSMutableArray* cells = [[NSMutableArray alloc] initWithObjects:self.MyPlayer.Location, nil];
+    [self getCellWithCoord:self.MyPlayer.Location].cost = 0;
+    // initialize first set of cells
+
+    while(cells.count > 0)
+    {
+        CoordPoint* coord = [cells lastObject];
+        [cells removeLastObject];
+        
+        CellValue* cell = [self getCellWithCoord:coord];
+        
+        if(cell.cost >= self.MyPlayer.Points) continue;
+        
+        for(CoordPoint* n in [coord getSurroundingCoord])
+        {
+            if(![self isCoordInBounds:n] ) continue;// || [seen[n.x][n.y] boolValue]) continue;
+            CellValue* neighbor = [self getCellWithCoord:n];
+            if(neighbor.state == GONE) continue;
+            if(neighbor.cost == 0 || neighbor.cost > cell.cost + 1)
+            {
+                neighbor.cost = cell.cost + 1;
+                [cells addObject:n];
+            }
+            seen[n.x][n.y] = [NSNumber numberWithBool:YES];
+
+        };
+    }
+}
 
 -(void) submitForMyPlayer
 
@@ -74,11 +151,11 @@
     
     NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : nil;
     
-    [_gameInfo submitMove:move andBombs:bombs forPlayer:_myPlayerId];
+    [_gameInfo submitMove:move Bombs:bombs andPoints:myP.Points forPlayer:_myPlayerId];
 }
 
 
--(BOOL) onMove:(NSArray *)move andBombs:(NSArray *)bombs forPlayer:(NSString *)player
+-(BOOL) onMove:(NSArray *)move Bombs:(NSArray *)bombs andPoints:(int)points forPlayer:(NSString *)player
 {
     CoordPoint* moveCoord = nil;
     if(move)
@@ -96,7 +173,7 @@
     
     Player* p = [_players objectForKey:player];
     
-    return [p updateMove:moveCoord andBombs:bombCoords];
+    return [p updateMove:moveCoord Bombs:bombCoords andPoints:points];
 }
 
 -(BOOL) onPlayerJoined:(NSDictionary *)player
@@ -113,10 +190,15 @@
         NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
         p = [[Player alloc] initWithProperties:player
-                                     withColor:_charColors[_gameInfo.players.count]
-                                     withGameId:_gameInfo.players.count
+                                     withColor:_charColors[_players.count]
+                                     withGameId:_players.count
                                      andPoints:points];
         _players[userId] = p;
+        
+        CellValue* start = [self getCellWithCoord:p.Location];
+        [start.occupants addObject:userId];
+        start.state = OCCUPIED;
+        
         [_delegate initPlayer:p];
     }
     
@@ -152,6 +234,7 @@
         [player reset];
     }
     
+
     [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
 }
 
@@ -163,14 +246,14 @@
         if(!p.Move) continue;
         NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
         // update old location
-        CellValue* value = [self getCellAtRow:p.Location.x andCol:p.Location.y];
+        CellValue* value = [self getCellWithCoord:p.Location];
         
         value.state = value.occupants.count <= 1 ? EMPTY : OCCUPIED;
         [value.occupants removeObject:p.Id];
         [cells addObject:p.Location];
         
         // update new location
-        value = [self getCellAtRow:p.Move.x andCol:p.Move.y];
+        value = [self getCellWithCoord:p.Move];
         value.state = OCCUPIED;
         NSLog(@"this one-%d%d,-%@",p.Move.x,p.Move.y,p.Id);
         [value.occupants addObject:p.Id];
@@ -190,8 +273,8 @@
         for(CoordPoint* bomb in p.Bombs)
         {
             // update old location
-            CellValue* value = [self getCellAtRow:bomb.x andCol:bomb.y];
-            value.state = BOMB;
+            CellValue* value = [self getCellWithCoord:bomb];
+            value.state = GONE;
             [value.bombers addObject:p.Id];
             [cells addObject:bomb];
         }
@@ -200,7 +283,7 @@
     // update points to bombers
     for(CoordPoint* cell in cells)
     {
-        CellValue* value = [self getCellAtRow:cell.x andCol:cell.y];
+        CellValue* value = [self getCellWithCoord:cell];
         for(NSString* occupantId in value.occupants)
         {
             Player* player = _players[occupantId];

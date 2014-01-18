@@ -16,10 +16,8 @@ static NSString * const DB_CONNECTED = @"connected";
 
 static NSString * const DB_MOVE = @"move";
 static NSString * const DB_BOMBS = @"bombs";
+static NSString * const DB_POINTS = @"points";
 static NSString * const DB_START_LOC = @"startlocation";
-
-//select start location when game loads
-//static NSString * const DB_START_LOC = @"start_location";
 
 static NSString * const DB_PROFILES = @"battleboards_users";
 static NSString * const DB_UPDATES = @"battleboards_gameinvites";

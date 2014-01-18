@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CoordPoint.h"
+#import "CellValue.h"
 
 @interface Player : NSObject
 {
@@ -30,14 +30,14 @@
                andPoints:(int)points;
 
 // for updating user inputs
--(BOOL) addMove:(CoordPoint*) move;
--(BOOL) addBomb:(CoordPoint*) bomb;
+-(BOOL) addMove:(CellValue*) move;
+-(BOOL) addBomb:(CellValue*) bomb;
 // for updating from database
--(BOOL) updateMove:(CoordPoint*)move andBombs:(NSArray*)bombs;
+-(BOOL) updateMove:(CoordPoint*)move Bombs:(NSArray*)bombs andPoints:(int)points;
 -(void) reset;
 -(void) cancel;
 
--(BOOL) checkDistance:(CoordPoint*) dest;
+-(BOOL) checkDistance:(CellValue*) dest;
 
 -(void) getPointsFromBomb:(int) points;
 

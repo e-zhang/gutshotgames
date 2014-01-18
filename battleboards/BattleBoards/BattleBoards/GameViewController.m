@@ -24,7 +24,7 @@ static const int MOVELBL = 2;
 
 - (id)initWithGameInfo:(GameInfo*)game playerId:(NSString *)playerId{
     
-    if(self = [super initWithNibName:Nil bundle:Nil])
+    if([super initWithNibName:Nil bundle:Nil])
     {
         _gridModel = [[GridModel alloc] initWithGame:game andPlayer:playerId andDelegate:self];
         NSLog(@"initGVC - gridSize-%@",game.gridSize);
@@ -34,14 +34,17 @@ static const int MOVELBL = 2;
                                                                320.0f,
                                                                320.0f)
                                        andGridModel:_gridModel];
-
-        self.view.backgroundColor = [UIColor clearColor];
+        
+        [self.view addSubview:_gridView];
+        
     }
     return self;
 }
 
--(void)showGridPossibilities{
-    [_gridView showMoveP];
+-(void)refreshGridPossibilities{
+
+    [_gridModel calculateGridPossibilities];
+    [_gridView refreshCosts];
 }
 
 -(void) startGame
@@ -50,6 +53,8 @@ static const int MOVELBL = 2;
     [_sidePanel addSubview:_submitButton];
     [_sidePanel addSubview:_roundInfo];
     [_sidePanel addSubview:_activityView];
+    
+    [self refreshGridPossibilities];
 }
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
@@ -68,16 +73,12 @@ static const int MOVELBL = 2;
     }
 }
 
--(void) refreshCellatRow:(int)x andCol:(int)y{
-    NSLog(@"ref called");
-    CoordPoint *coord = [CoordPoint coordWithX:x andY:y];
-    [_gridView updateCell:coord];
-}
 
-- (void)viewDidLoad
+- (void)loadView
 {
-    [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.view = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 320, 480)];
+    self.view.backgroundColor = [UIColor whiteColor];
     
     _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 55.0f, 100.0f, 20.0f)];
     _roundInfo.textColor = [UIColor blackColor];
@@ -88,7 +89,7 @@ static const int MOVELBL = 2;
     _noticeMsg.textAlignment = NSTextAlignmentCenter;
     _noticeMsg.backgroundColor = [UIColor blackColor];
     _noticeMsg.textColor = [UIColor whiteColor];
-    _noticeMsg.text = @"Waiting for players to connect...";
+    _noticeMsg.text = @"Select a starting location";
     
     _sidePanel = [[UIView alloc] initWithFrame:CGRectMake(320.0f, 0.0f, self.view.frame.size.width - 320.0f, self.view.frame.size.height)];
     _sidePanel.backgroundColor = [UIColor lightGrayColor];
@@ -103,7 +104,7 @@ static const int MOVELBL = 2;
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:_gridView];
+
     [self.view addSubview:_sidePanel];
     [self.view addSubview:_noticeMsg];
 
@@ -138,7 +139,7 @@ static const int MOVELBL = 2;
     [charView addSubview:charName];
     [_sidePanel addSubview:charView];
     
-    if([p.Name isEqualToString:_gridModel.MyPlayer.Name])
+    if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
     {
         UILabel *a = (UILabel *)[_sidePanel viewWithTag:p.GameId + 100];
         
@@ -154,8 +155,13 @@ static const int MOVELBL = 2;
             a.text = [NSString stringWithFormat:@"%d",p.Points];
             [_sidePanel addSubview:a];
         }
+        
+        [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
+        
+        _noticeMsg.text = @"Waiting for players to connect...";
     }
     
+    [_gridView updateCell:p.Location];
 }
 
 - (void)submitPlay:(id)sender{
@@ -168,7 +174,14 @@ static const int MOVELBL = 2;
     
     [_gridModel submitForMyPlayer];
 
-    
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if([keyPath isEqualToString:@"Points"])
+    {
+        [self refreshGridPossibilities];
+    }
 }
 
 

@@ -39,6 +39,16 @@
 }
 
 
+-(NSArray*) getSurroundingCoord
+{
+    return [NSArray arrayWithObjects:[CoordPoint coordWithX:_x+1 andY:_y],
+                                     [CoordPoint coordWithX:_x-1 andY:_y],
+                                     [CoordPoint coordWithX:_x andY:_y+1],
+                                     [CoordPoint coordWithX:_x andY:_y-1],
+                                      nil];
+}
+
+
 +(id) coordWithX:(int)x andY:(int)y
 {
     return [[self alloc] initWithX:x andY:y];

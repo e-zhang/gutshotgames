@@ -34,10 +34,15 @@
 }
 
 -(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
+-(void) beginGameAtCoord:(CoordPoint*)coord;
 
+-(CellValue*) getCellWithCoord:(CoordPoint*)coord;
+-(BOOL) isCoordInBounds:(CoordPoint*)coord;
 
--(CellValue*) getCellAtRow:(int)row andCol:(int)col;
+-(BOOL) playerMoved:(CoordPoint*)coord;
+-(BOOL) bombPlaced:(CoordPoint*)coord;
 
+-(void) calculateGridPossibilities;
 
 -(void) submitForMyPlayer;
 
