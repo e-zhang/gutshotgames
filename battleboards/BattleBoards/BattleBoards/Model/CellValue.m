@@ -8,6 +8,13 @@
 
 #import "CellValue.h"
 
+
+@interface CellValue()
+
+@property (readwrite) CoordPoint* coord;
+
+@end
+
 @implementation CellValue
 
 -(id) initWithCoord:(CoordPoint *)coord

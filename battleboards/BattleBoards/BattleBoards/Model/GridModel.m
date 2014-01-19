@@ -81,14 +81,44 @@
 {
     Player* player = _players[_myPlayerId];
     
-    return [player addMove:[self getCellWithCoord:coord]];
+    CellValue* value = [self getCellWithCoord:coord];
+    
+    if(value.state == GONE) return NO;
+    
+    // has a previous move, we need to update
+    if(player.Move)
+    {
+        CellValue* prev = [self getCellWithCoord:player.Move];
+        
+        prev.state = prev.occupants.count <= 1 ? EMPTY : OCCUPIED;
+        [prev.occupants removeObject:player.Id];
+    }
+    
+    BOOL canMove = [player addMove:[self getCellWithCoord:coord]];
+    
+    if(canMove)
+    {
+        [self movePlayer:player];
+    }
+    
+    return canMove;
 }
 
 -(BOOL) bombPlaced:(CoordPoint *)coord
 {
     Player* player = _players[_myPlayerId];
+    CellValue* value = [self getCellWithCoord:coord];
+
+    if(value.state == GONE) return NO;
     
-    return [player addBomb:[self getCellWithCoord:coord]];
+    BOOL canBomb = [player addBomb:[self getCellWithCoord:coord]];
+
+    if(canBomb)
+    {
+        value.state = BOMB;
+    }
+    
+    return canBomb;
 }
 
 -(void) calculateGridPossibilities
@@ -238,26 +268,35 @@
     [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
 }
 
+-(void) movePlayer:(Player*)p
+{
+    NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
+    // update old location
+    CellValue* value = [self getCellWithCoord:p.Location];
+    
+    value.state = value.occupants.count <= 1 ? EMPTY : OCCUPIED;
+    [value.occupants removeObject:p.Id];
+
+    
+    // update new location
+    value = [self getCellWithCoord:p.Move];
+    value.state = OCCUPIED;
+    NSLog(@"this one-%d%d,-%@",p.Move.x,p.Move.y,p.Id);
+    [value.occupants addObject:p.Id];
+    NSLog(@"value.occupants-%@",value.occupants);
+}
+
+
 -(NSArray*) checkMoves
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
     for(Player* p in _players)
     {
         if(!p.Move) continue;
-        NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
-        // update old location
-        CellValue* value = [self getCellWithCoord:p.Location];
         
-        value.state = value.occupants.count <= 1 ? EMPTY : OCCUPIED;
-        [value.occupants removeObject:p.Id];
+        [self movePlayer:p];
+        
         [cells addObject:p.Location];
-        
-        // update new location
-        value = [self getCellWithCoord:p.Move];
-        value.state = OCCUPIED;
-        NSLog(@"this one-%d%d,-%@",p.Move.x,p.Move.y,p.Id);
-        [value.occupants addObject:p.Id];
-        NSLog(@"value.occupants-%@",value.occupants);
         [cells addObject:p.Move];
     
     }

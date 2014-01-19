@@ -66,7 +66,7 @@
 {
     if(![self checkDistance:move]) return NO;
     
-    _move = [move.coord copy];
+    _move = move.coord;
     return YES;
 }
 

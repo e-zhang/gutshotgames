@@ -351,7 +351,11 @@
         }
         NSLog(@"round complete!");
         [_delegate onRoundComplete];
-        [self startRound];
+        if(_isLast)
+        {
+            [self startRound];
+        }
+
     }
     else if([currentRound count] == 0)
     {

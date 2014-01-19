@@ -67,7 +67,7 @@
                 Player* player = _grid.Players[cell.occupants[i]];
                 UIView* block = [[UIView alloc] initWithFrame:
                                   CGRectMake(w*i, h*i, w, h)];
-                
+                block.layer.cornerRadius = MIN(w, h) / 2.0;
                 block.backgroundColor=player.Color;
                 block.layer.borderColor = [UIColor grayColor].CGColor;
                 [self addSubview:block];

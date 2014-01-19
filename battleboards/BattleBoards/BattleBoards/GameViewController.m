@@ -181,6 +181,13 @@ static const int MOVELBL = 2;
     if([keyPath isEqualToString:@"Points"])
     {
         [self refreshGridPossibilities];
+        
+
+        UILabel *a = (UILabel *)[_sidePanel viewWithTag:((Player*)object).GameId + 100];
+        if(a)
+        {
+            a.text = [NSString stringWithFormat:@"%d",((Player*)object).Points];
+        }
     }
 }
 

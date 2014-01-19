@@ -75,7 +75,27 @@
         
         CoordPoint* coord = [self getCoordAtPoint:point];
         
-        [_grid playerMoved:coord];
+        CoordPoint* move = _grid.MyPlayer.Move;
+        
+        if(![_grid playerMoved:coord])
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid move"
+                                                            message:@"Cannot move player to that location"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else
+        {
+            if(move)
+            {
+                [self updateCell:move];
+            }
+            
+            [self updateCell:_grid.MyPlayer.Location];
+            [self updateCell:coord];
+        }
         
 	}
 }
@@ -116,7 +136,19 @@
         CGPoint point = [sender locationInView:self];
         CoordPoint* coord = [self getCoordAtPoint:point];
         
-        [_grid bombPlaced:coord];
+        if(![_grid bombPlaced:coord])
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid bomb"
+                                                            message:@"Cannot place bomb at that location"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else
+        {
+            [self updateCell:coord];
+        }
     }
 }
 
@@ -142,7 +174,6 @@
     
     return [CoordPoint coordWithX:x andY:y];
 }
-
 
 /*
 // Only override drawRect: if you perform custom drawing.
