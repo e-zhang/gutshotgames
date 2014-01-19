@@ -66,7 +66,10 @@
 {
     if(![self checkDistance:move]) return NO;
     
+    // trigger the points after the move has actually been moved
+    [self willChangeValueForKey:@"Points"];
     _move = move.coord;
+    [self didChangeValueForKey:@"Points"];
     return YES;
 }
 
@@ -75,7 +78,9 @@
 {
     if(![self checkDistance:bomb]) return NO;
     
+    [self willChangeValueForKey:@"Points"];
     [_bombs addObject:bomb.coord];
+    [self didChangeValueForKey:@"Points"];
     
     return YES;
 }
@@ -103,11 +108,10 @@
 
 -(BOOL) checkDistance:(CellValue*)dest
 {
-    if(_points < dest.cost) return NO;
+    if(dest.cost < 0) return NO;
 
-    [self willChangeValueForKey:@"Points"];
     _remainingPoints -= dest.cost;
-    [self didChangeValueForKey:@"Points"];
+
     return YES;
 }
 

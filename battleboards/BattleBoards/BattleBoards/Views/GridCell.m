@@ -41,13 +41,14 @@
 
     NSLog(@"update-called-%d%d-%d",_cell.x,_cell.y,cell.state);
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    _cost.text = cell.cost > 0 ? [NSString stringWithFormat:@"%d", cell.cost] : @"";
+
     switch(cell.state)
     {
         case EMPTY:
         {
             self.layer.borderColor = [UIColor blackColor].CGColor;
-            self.backgroundColor = [UIColor whiteColor];
+            self.backgroundColor = [UIColor clearColor];
+            [self addSubview:_cost];
             break;
         }
         case BOMB:
@@ -76,12 +77,15 @@
         }
 
     }
+    
+    _cost.text = cell.cost > 0 ? [NSString stringWithFormat:@"%d", cell.cost] : @"";
+
 }
 
 -(void) showCost
 {
     CellValue* cell = [_grid getCellWithCoord:_cell];
-    _cost.text = cell.cost == 0 ? @"" : [NSString stringWithFormat:@"%d",cell.cost];
+    _cost.text = cell.cost <= 0 ? @"" : [NSString stringWithFormat:@"%d",cell.cost];
 }
 
 

@@ -125,24 +125,19 @@
 {
     // algorithm: do a breadth first search
     
-    // reset cost for next
-    NSMutableArray* seen = [[NSMutableArray alloc] initWithCapacity:self.GridSize];
+    //reset all the cells
     for(int row=0; row < self.GridSize; ++row)
     {
-        NSMutableArray* seenRow = [[NSMutableArray alloc] initWithCapacity:self.GridSize];
         for(int col=0; col < self.GridSize; ++col)
         {
             CellValue* cell = _grid[row][col];
-            cell.cost = 0;
-            [seenRow addObject:[NSNumber numberWithBool:NO]];
+            cell.cost = -1;
         }
-        
-        [seen addObject:seenRow];
     }
     
-
-    NSMutableArray* cells = [[NSMutableArray alloc] initWithObjects:self.MyPlayer.Location, nil];
-    [self getCellWithCoord:self.MyPlayer.Location].cost = 0;
+    CoordPoint* loc = self.MyPlayer.Move ? self.MyPlayer.Move : self.MyPlayer.Location;
+    NSMutableArray* cells = [[NSMutableArray alloc] initWithObjects:loc, nil];
+    [self getCellWithCoord:loc].cost = 0;
     // initialize first set of cells
 
     while(cells.count > 0)
@@ -156,15 +151,14 @@
         
         for(CoordPoint* n in [coord getSurroundingCoord])
         {
-            if(![self isCoordInBounds:n] ) continue;// || [seen[n.x][n.y] boolValue]) continue;
+            if(![self isCoordInBounds:n] ) continue;
             CellValue* neighbor = [self getCellWithCoord:n];
             if(neighbor.state == GONE) continue;
-            if(neighbor.cost == 0 || neighbor.cost > cell.cost + 1)
+            if(neighbor.cost <= 0 || neighbor.cost > cell.cost + 1)
             {
                 neighbor.cost = cell.cost + 1;
                 [cells addObject:n];
             }
-            seen[n.x][n.y] = [NSNumber numberWithBool:YES];
 
         };
     }
