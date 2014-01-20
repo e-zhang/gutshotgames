@@ -86,19 +86,14 @@
     if(value.state == GONE) return NO;
     
     // has a previous move, we need to update
-    if(player.Move)
-    {
-        CellValue* prev = [self getCellWithCoord:player.Move];
-        
-        prev.state = prev.occupants.count <= 1 ? EMPTY : OCCUPIED;
-        [prev.occupants removeObject:player.Id];
-    }
+    CoordPoint* prev = player.Move;
     
     BOOL canMove = [player addMove:[self getCellWithCoord:coord]];
     
     if(canMove)
     {
-        [self movePlayer:player];
+        prev = prev ? prev : player.Location;
+        [self movePlayer:player.Id from:prev to:player.Move];
     }
     
     return canMove;
@@ -167,7 +162,7 @@
 -(void) submitForMyPlayer
 
 {
-    Player* myP = [_players objectForKey:_myPlayerId];
+    Player* myP = self.MyPlayer;
     NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:myP.Bombs.count];
     for (CoordPoint* b in myP.Bombs) {
         [bombs addObject:[b arrayFromCoord]];
@@ -178,6 +173,46 @@
     [_gameInfo submitMove:move Bombs:bombs andPoints:myP.Points forPlayer:_myPlayerId];
 }
 
+
+-(NSArray*) cancelForMyPlayer
+{
+    Player* myP = self.MyPlayer;
+    
+    NSMutableArray* updatedCells = [[NSMutableArray alloc] init];
+    
+    [updatedCells addObject:myP.Location];
+    if(myP.Move)
+    {
+        [updatedCells addObject:myP.Move];
+        // undo move
+        [self movePlayer:myP.Id from:myP.Move to:myP.Location];
+    }
+    
+    [updatedCells addObjectsFromArray:myP.Bombs];
+    
+    for(CoordPoint* bomb in myP.Bombs)
+    {
+        CellValue* value = [self getCellWithCoord:bomb];
+        [value.bombers removeObject:myP.Id];
+        
+        if(value.bombers.count > 0)
+        {
+            value.state = BOMB;
+        }
+        else if (value.occupants.count > 0)
+        {
+            value.state = OCCUPIED;
+        }
+        else
+        {
+            value.state = EMPTY;
+        }
+    }
+    
+    [myP cancel];
+    
+    return updatedCells;
+}
 
 -(BOOL) onMove:(NSArray *)move Bombs:(NSArray *)bombs andPoints:(int)points forPlayer:(NSString *)player
 {
@@ -263,21 +298,20 @@
     [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
 }
 
--(void) movePlayer:(Player*)p
+-(void) movePlayer:(NSString*)name from:(CoordPoint*)src to:(CoordPoint*)dst
 {
-    NSLog(@"plocation-%@,move-%@",p.Location,p.Move);
+    NSLog(@"move %@ from %@ - to %@",name, src, dst);
     // update old location
-    CellValue* value = [self getCellWithCoord:p.Location];
+    CellValue* value = [self getCellWithCoord:src];
     
     value.state = value.occupants.count <= 1 ? EMPTY : OCCUPIED;
-    [value.occupants removeObject:p.Id];
+    [value.occupants removeObject:name];
 
     
     // update new location
-    value = [self getCellWithCoord:p.Move];
+    value = [self getCellWithCoord:dst];
     value.state = OCCUPIED;
-    NSLog(@"this one-%d%d,-%@",p.Move.x,p.Move.y,p.Id);
-    [value.occupants addObject:p.Id];
+    [value.occupants addObject:name];
     NSLog(@"value.occupants-%@",value.occupants);
 }
 
@@ -289,7 +323,7 @@
     {
         if(!p.Move) continue;
         
-        [self movePlayer:p];
+        [self movePlayer:p.Id from:p.Location to:p.Move];
         
         [cells addObject:p.Location];
         [cells addObject:p.Move];

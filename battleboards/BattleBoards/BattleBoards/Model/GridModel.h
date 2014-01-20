@@ -46,6 +46,7 @@
 -(void) calculateGridPossibilities;
 
 -(void) submitForMyPlayer;
+-(NSArray*) cancelForMyPlayer;
 
 // gameupdate delegate
 -(BOOL) onPlayerJoined:(NSDictionary *)player;

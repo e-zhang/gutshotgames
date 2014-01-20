@@ -54,6 +54,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_noticeMsg removeFromSuperview];
     
     [_sidePanel addSubview:_submitButton];
+    [_sidePanel addSubview:_cancelButton];
     [_sidePanel addSubview:_roundInfo];
     [_sidePanel addSubview:_activityView];
  
@@ -82,7 +83,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     self.view = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 480, 320)];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 55.0f, 100.0f, 20.0f)];
+    _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 100.0f, 20.0f)];
     _roundInfo.textColor = [UIColor blackColor];
     _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING,0];
     _roundInfo.font = [UIFont systemFontOfSize:10.0f];
@@ -106,8 +107,12 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
     
-    _sidePanel.userInteractionEnabled = YES;
-    [_submitButton setUserInteractionEnabled:YES];
+    _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _cancelButton.backgroundColor = [UIColor blackColor];
+    _cancelButton.frame = CGRectMake(10.0f, 55.0f, 100.0f, 40.0f);
+    [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_cancelButton addTarget:self action:@selector(cancelPlay:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:_sidePanel];
     [self.view addSubview:_noticeMsg];
@@ -134,7 +139,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void)initPlayer:(Player *)p
 {
     NSLog(@"playerupdate-%@",p);
-    UIView *charView = [[UIView alloc] initWithFrame:CGRectMake(15.0f, 70.0f + 50 * p.GameId, 120.0f, 50.0f)];
+    UIView *charView = [[UIView alloc] initWithFrame:CGRectMake(15.0f, 120.0f + 50 * p.GameId, 120.0f, 50.0f)];
     charView.tag = p.GameId;
     
     UIView *charCircle = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 15.0f, 20.0f, 20.0f)];
@@ -159,11 +164,11 @@ static NSString* FORMAT_STRING = @"Round - %d";
         }
         else
         {
-            UILabel *a = [[UILabel alloc] initWithFrame:CGRectMake(150.0f, 70.0f + 50*p.GameId, 25.0f, 50.0f)];
+            UILabel *a = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 0.0f, 25.0f, 50.0f)];
             a.font = [UIFont systemFontOfSize:10.0f];
             a.tag = p.GameId + 100;
             a.text = [NSString stringWithFormat:@"%d",p.Points];
-            [_sidePanel addSubview:a];
+            [charView addSubview:a];
         }
         
         [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
@@ -184,6 +189,17 @@ static NSString* FORMAT_STRING = @"Round - %d";
     
     [_gridModel submitForMyPlayer];
 
+}
+
+
+-(void)cancelPlay:(id)sender
+{
+    NSArray* cells = [_gridModel cancelForMyPlayer];
+    
+    for(CoordPoint* cell in cells)
+    {
+        [_gridView updateCell:cell];
+    }
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

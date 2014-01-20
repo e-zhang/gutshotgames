@@ -21,6 +21,7 @@
     
     UIView *_sidePanel;
     UIButton *_submitButton;
+    UIButton* _cancelButton;
     
     UILabel *_noticeMsg;
     UILabel *_roundInfo;
