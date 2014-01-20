@@ -173,7 +173,7 @@
         [bombs addObject:[b arrayFromCoord]];
     }
     
-    NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : nil;
+    NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : [[NSArray alloc] init];
     
     [_gameInfo submitMove:move Bombs:bombs andPoints:myP.Points forPlayer:_myPlayerId];
 }
@@ -182,7 +182,7 @@
 -(BOOL) onMove:(NSArray *)move Bombs:(NSArray *)bombs andPoints:(int)points forPlayer:(NSString *)player
 {
     CoordPoint* moveCoord = nil;
-    if(move)
+    if(move.count > 0)
     {
         moveCoord = [CoordPoint coordWithArray:move];
         
@@ -253,7 +253,7 @@
     [updatedCells addObjectsFromArray:cells];
     
 
-    for(Player* player in _players)
+    for(Player* player in [_players allValues])
     {
         [player reset];
     }
@@ -284,7 +284,7 @@
 -(NSArray*) checkMoves
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
-    for(Player* p in _players)
+    for(Player* p in [_players allValues])
     {
         if(!p.Move) continue;
         
@@ -301,7 +301,7 @@
 -(NSArray*) checkBombs
 {
     NSMutableSet* cells = [[NSMutableSet alloc] init];
-    for(Player* p in _players)
+    for(Player* p in [_players allValues])
     {
         for(CoordPoint* bomb in p.Bombs)
         {

@@ -31,6 +31,7 @@
         _name = props[DB_USER_NAME];
         _userId = props[DB_USER_ID];
         _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
+        _bombs = [[NSMutableArray alloc] init];
         _points = points;
         _remainingPoints = points;
         _updated = NO;
@@ -99,7 +100,9 @@
     
     [_bombs addObjectsFromArray:bombs];
     
+    [self willChangeValueForKey:@"Points"];
     _remainingPoints = points;
+    [self didChangeValueForKey:@"Points"];
     
     _updated = YES;
     return hasUpdate;

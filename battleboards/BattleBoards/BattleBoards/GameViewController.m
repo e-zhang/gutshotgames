@@ -54,6 +54,7 @@ static const int MOVELBL = 2;
     [_sidePanel addSubview:_roundInfo];
     [_sidePanel addSubview:_activityView];
     
+    
     [self refreshGridPossibilities];
 }
 
@@ -77,7 +78,7 @@ static const int MOVELBL = 2;
 - (void)loadView
 {
     // Do any additional setup after loading the view, typically from a nib.
-    self.view = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 320, 480)];
+    self.view = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 480, 320)];
     self.view.backgroundColor = [UIColor whiteColor];
     
     _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 55.0f, 100.0f, 20.0f)];
@@ -104,6 +105,8 @@ static const int MOVELBL = 2;
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
     
+    _sidePanel.userInteractionEnabled = YES;
+    [_submitButton setUserInteractionEnabled:YES];
 
     [self.view addSubview:_sidePanel];
     [self.view addSubview:_noticeMsg];

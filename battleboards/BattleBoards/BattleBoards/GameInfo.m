@@ -246,7 +246,7 @@
         _isLast = ([currentRound count] == _charsLeft - 1) && ![currentRound objectForKey:player];
         
         
-        NSDictionary* playerData = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects: move, bombs, points, nil]
+        NSDictionary* playerData = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects: move, bombs, [NSNumber numberWithInt:points], nil]
                                                            forKeys:[NSArray arrayWithObjects: DB_MOVE, DB_BOMBS, DB_POINTS, nil]];
         [currentRound setObject:playerData forKey:player];
 
