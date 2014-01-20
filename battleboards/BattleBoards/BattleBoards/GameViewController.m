@@ -11,6 +11,8 @@
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
 
+static NSString* FORMAT_STRING = @"Round - %d";
+
 
 @interface GameViewController ()
 
@@ -50,12 +52,11 @@ static const int MOVELBL = 2;
 -(void) startGame
 {
     [_noticeMsg removeFromSuperview];
+    
     [_sidePanel addSubview:_submitButton];
     [_sidePanel addSubview:_roundInfo];
     [_sidePanel addSubview:_activityView];
-    
-    
-    [self refreshGridPossibilities];
+ 
 }
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
@@ -83,7 +84,7 @@ static const int MOVELBL = 2;
     
     _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 55.0f, 100.0f, 20.0f)];
     _roundInfo.textColor = [UIColor blackColor];
-    _roundInfo.text = @"Round -";
+    _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING,0];
     _roundInfo.font = [UIFont systemFontOfSize:10.0f];
     
     _noticeMsg = [[UILabel alloc] initWithFrame:CGRectMake(50.0f, self.view.frame.size.height/2 - 40.0f, self.view.frame.size.width - 100.0f, 80.0f)];
@@ -122,6 +123,12 @@ static const int MOVELBL = 2;
 }
 
 
+-(void) onRoundStart:(int)round
+{
+    _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round+1];
+    
+    [self refreshGridPossibilities];
+}
 
 
 -(void)initPlayer:(Player *)p

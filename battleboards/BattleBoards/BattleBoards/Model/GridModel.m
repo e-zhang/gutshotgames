@@ -237,6 +237,7 @@
 
 -(void) onRoundStart
 {
+    [_delegate onRoundStart:_gameInfo.GameRound];
 }
 
 -(void) onRoundComplete

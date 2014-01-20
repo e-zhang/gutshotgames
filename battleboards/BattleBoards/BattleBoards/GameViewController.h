@@ -31,6 +31,7 @@
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players;
 -(void) startGame;
+-(void) onRoundStart:(int)round;
 -(void) initPlayer:(Player *)p;
 
 @end

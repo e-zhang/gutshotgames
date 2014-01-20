@@ -89,18 +89,20 @@
     _charsLeft=self.players.count;
     _gameRound = -1;
     
-    [self willChangeValueForKey:@"GameRound"];
-    for( int i = 0; i < [self.gameData count]; ++i )
-    {
-        _gameRound = i;
-        NSLog(@" replaying round %d / %d", _gameRound, [self.gameData count]);
-        [self checkRound:[self.gameData objectAtIndex:i]];
-        if([[self.gameData objectAtIndex:i] count] < [self.players count])
-        {
-            break;
-        }
-    }
-    [self didChangeValueForKey:@"GameRound"];
+    [self reset];
+    
+//    [self willChangeValueForKey:@"GameRound"];
+//    for( int i = 0; i < [self.gameData count]; ++i )
+//    {
+//        _gameRound = i;
+//        NSLog(@" replaying round %d / %d", _gameRound, [self.gameData count]);
+//        [self checkRound:[self.gameData objectAtIndex:i]];
+//        if([[self.gameData objectAtIndex:i] count] < [self.players count])
+//        {
+//            break;
+//        }
+//    }
+//    [self didChangeValueForKey:@"GameRound"];
 }
 
 - (void) setDelegate:(id<GameUpdateDelegate>)delegate
