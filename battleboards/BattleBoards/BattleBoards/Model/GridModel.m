@@ -104,7 +104,7 @@
     Player* player = _players[_myPlayerId];
     CellValue* value = [self getCellWithCoord:coord];
 
-    if(value.state == GONE) return NO;
+    if(value.state == GONE || value.state == BOMB) return NO;
     
     BOOL canBomb = [player addBomb:[self getCellWithCoord:coord]];
 

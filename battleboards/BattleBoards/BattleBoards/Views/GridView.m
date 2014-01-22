@@ -67,13 +67,12 @@
     if([sender state] == UIGestureRecognizerStateEnded)
     {
         
-        CGPoint start = [sender locationInView:self];
-        CGPoint translation = [sender translationInView:self];
-        
-        CGPoint point = CGPointMake(start.x + translation.x,
-                                    start.y + translation.y);
+        CGPoint point = [sender locationInView:self];
         
         CoordPoint* coord = [self getCoordAtPoint:point];
+        
+        
+        NSLog(@"dragged to (%f,%f) - %@", point.x, point.y, coord);
         
         CoordPoint* move = _grid.MyPlayer.Move;
         
@@ -106,6 +105,8 @@
     {
         CGPoint point = [sender locationInView:self];
         CoordPoint* coord = [self getCoordAtPoint:point];
+        
+        NSLog(@"Init at (%f,%f) - %@", point.x, point.y, coord);
         
         [_grid beginGameAtCoord:coord];
         
@@ -161,6 +162,9 @@
 
     CoordPoint* coord = [self getCoordAtPoint:location];
 
+    NSLog(@"drag detected at (%f,%f) - %@", location.x, location.y, coord);
+
+    
     return [coord isEqual:_grid.MyPlayer.Location];
 }
 
