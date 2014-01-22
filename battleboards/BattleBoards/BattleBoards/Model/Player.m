@@ -37,6 +37,7 @@
         _updated = NO;
         _gameId = gameId;
         _playerColor = color;
+        self.Alive = YES;
         [self reset];
     }
     

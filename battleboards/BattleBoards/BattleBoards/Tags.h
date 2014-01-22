@@ -25,4 +25,6 @@
 
 #define INVITE_BUTTON 11
 
+#define CHAR_LABEL 100
+
 #endif

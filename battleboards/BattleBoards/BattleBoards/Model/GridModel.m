@@ -321,7 +321,8 @@
     NSMutableSet* cells = [[NSMutableSet alloc] init];
     for(Player* p in [_players allValues])
     {
-        if(!p.Move) continue;
+        // we've already updated the current player
+        if(p.Id == _myPlayerId || !p.Move) continue;
         
         [self movePlayer:p.Id from:p.Location to:p.Move];
         
@@ -338,6 +339,8 @@
     NSMutableSet* cells = [[NSMutableSet alloc] init];
     for(Player* p in [_players allValues])
     {
+        // we've already updated for the current player
+        if(p.Id == _myPlayerId) continue;
         for(CoordPoint* bomb in p.Bombs)
         {
             // update old location

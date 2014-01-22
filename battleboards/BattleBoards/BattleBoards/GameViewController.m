@@ -7,6 +7,7 @@
 //
 
 #import "GameViewController.h"
+#import "Tags.h"
 
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
@@ -69,11 +70,21 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_submitButton setUserInteractionEnabled:YES];
     NSLog(@"...");
     
-    for (CoordPoint *p in cells)
+    for(CoordPoint *p in cells)
     {
         //update cell
         [_gridView updateCell:p];
     }
+    
+    for(Player* p in [players allValues])
+    {
+        if(!p.Alive)
+        {
+            UILabel* label = (UILabel*)[self.view viewWithTag:p.GameId+CHAR_LABEL];
+            label.text = @"dead";
+        }
+    }
+    
 }
 
 
@@ -154,28 +165,21 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [charView addSubview:charName];
     [_sidePanel addSubview:charView];
     
+    UILabel *a = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 0.0f, 25.0f, 50.0f)];
+    a.font = [UIFont systemFontOfSize:10.0f];
+    a.tag = p.GameId + CHAR_LABEL;
+    a.text = [NSString stringWithFormat:@"%d",p.Points];
+    [charView addSubview:a];
+
+    
     if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
     {
-        UILabel *a = (UILabel *)[_sidePanel viewWithTag:p.GameId + 100];
-        
-        if(a)
-        {
-            a.text = [NSString stringWithFormat:@"%d",p.Points];
-        }
-        else
-        {
-            UILabel *a = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 0.0f, 25.0f, 50.0f)];
-            a.font = [UIFont systemFontOfSize:10.0f];
-            a.tag = p.GameId + 100;
-            a.text = [NSString stringWithFormat:@"%d",p.Points];
-            [charView addSubview:a];
-        }
-        
         [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
         
         _noticeMsg.text = @"Waiting for players to connect...";
     }
     
+    NSLog(@"%@ init at %@", p.Name, p.Location);
     [_gridView updateCell:p.Location];
 }
 
@@ -209,7 +213,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         [self refreshGridPossibilities];
         
 
-        UILabel *a = (UILabel *)[_sidePanel viewWithTag:((Player*)object).GameId + 100];
+        UILabel *a = (UILabel *)[_sidePanel viewWithTag:((Player*)object).GameId + CHAR_LABEL];
         if(a)
         {
             a.text = [NSString stringWithFormat:@"%d",((Player*)object).Points];
