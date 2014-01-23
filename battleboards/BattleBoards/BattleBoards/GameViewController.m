@@ -68,6 +68,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     
     [_gridView setUserInteractionEnabled:YES];
     [_submitButton setUserInteractionEnabled:YES];
+    [_cancelButton setUserInteractionEnabled:YES];
     NSLog(@"...");
     
     for(CoordPoint *p in cells)
@@ -171,11 +172,10 @@ static NSString* FORMAT_STRING = @"Round - %d";
     a.text = [NSString stringWithFormat:@"%d",p.Points];
     [charView addSubview:a];
 
+    [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
     
     if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
     {
-        [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
-        
         _noticeMsg.text = @"Waiting for players to connect...";
     }
     
@@ -190,6 +190,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     });
     [_gridView setUserInteractionEnabled:NO];
     [_submitButton setUserInteractionEnabled:NO];
+    [_cancelButton setUserInteractionEnabled:NO];
     
     [_gridModel submitForMyPlayer];
 

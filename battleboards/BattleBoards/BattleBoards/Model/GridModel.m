@@ -45,12 +45,12 @@
         
         _charColors = [NSArray arrayWithObjects:
                        [UIColor blueColor],
-                       [UIColor yellowColor],
                        [UIColor greenColor],
                        [UIColor purpleColor],
                        [UIColor orangeColor],
                        [UIColor brownColor],
                        [UIColor cyanColor],
+                       [UIColor yellowColor],
                        [UIColor magentaColor],
                        nil];
 

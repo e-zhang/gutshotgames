@@ -61,14 +61,15 @@
             break;
         case OCCUPIED:
         {
+            self.backgroundColor = [UIColor clearColor];
             int w = self.bounds.size.width/cell.occupants.count;
             int h = self.bounds.size.height/cell.occupants.count;
             for(int i=0; i < cell.occupants.count; ++i)
             {
                 Player* player = _grid.Players[cell.occupants[i]];
                 UIView* block = [[UIView alloc] initWithFrame:
-                                  CGRectMake(w*i, h*i, w, h)];
-                block.layer.cornerRadius = MIN(w, h) / 2.0;
+                                  CGRectMake(w/2*i, h/2*i, w, h)];
+                block.layer.cornerRadius = MIN(w/2, h/2);
                 block.backgroundColor=player.Color;
                 block.layer.borderColor = [UIColor grayColor].CGColor;
                 [self addSubview:block];

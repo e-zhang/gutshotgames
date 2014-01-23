@@ -307,16 +307,16 @@
             {
                 start = [_delegate onPlayerJoined:player];
             }
-            
-            if(start)
-            {
-                NSLog(@"start round");
-                [self startRound];
-            }
-            
+        }
+        
+        if(start)
+        {
+            NSLog(@"start round");
+            [self startRound];
         }
     }
-    else if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
+    
+    if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
         
         if([self.currentRound intValue] >= _gameRound && _gameRound >= 0)
