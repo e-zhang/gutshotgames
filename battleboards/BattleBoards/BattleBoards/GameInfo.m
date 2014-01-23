@@ -128,17 +128,18 @@
 
 - (void) joinGame:(NSString*) userId withLocation:(NSArray *)start
 {
+    _isLast = YES;
     for(NSString* playerId in self.players)
     {
         NSDictionary* player = [self.players objectForKey:playerId];
         if([[player objectForKey:DB_CONNECTED] boolValue])
         {
             [_delegate onPlayerJoined:player];
-            _isLast = YES;
+            _isLast &= YES;
         }
         else
         {
-            _isLast = [playerId isEqualToString:userId];
+            _isLast &= [playerId isEqualToString:userId];
         }
     }
     
@@ -297,7 +298,7 @@
         return;
     }
     
-    if([self.currentRound intValue] < 0)
+    if([self.currentRound intValue] <= 0)
     {
         BOOL start = NO;
         for(NSString* playerId in self.players)
@@ -345,18 +346,15 @@
         for(NSString* playerId in currentRound)
         {
             NSDictionary* player = [currentRound objectForKey:playerId];
-            _isLast = ![_delegate onMove:[player objectForKey:DB_MOVE]
-                                   Bombs:[player objectForKey:DB_BOMBS]
-                               andPoints:[[player objectForKey:DB_POINTS] intValue]
-                               forPlayer:playerId];
+            [_delegate onMove:[player objectForKey:DB_MOVE]
+                        Bombs:[player objectForKey:DB_BOMBS]
+                    andPoints:[[player objectForKey:DB_POINTS] intValue]
+                    forPlayer:playerId];
           //  NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
         }
         NSLog(@"round complete!");
         [_delegate onRoundComplete];
-        if(_isLast)
-        {
-            [self startRound];
-        }
+        [self startRound];
 
     }
     else if([currentRound count] == 0)

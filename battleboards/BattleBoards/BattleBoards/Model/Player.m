@@ -47,8 +47,12 @@
 
 -(void) reset
 {
-    _location = _move;
-    _move = nil;
+    if(_move)
+    {
+        _location = _move;
+        _move = nil;
+    }
+
     [_bombs removeAllObjects];
     _points = _remainingPoints;
     _updated = NO;

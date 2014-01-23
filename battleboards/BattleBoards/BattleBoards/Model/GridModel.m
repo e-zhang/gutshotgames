@@ -237,14 +237,17 @@
 
 -(BOOL) onPlayerJoined:(NSDictionary *)player
 {
+    if(_players.count == _gameInfo.players.count) return NO;
 
     NSString* userId = player[DB_USER_ID];
     
     Player* p = _players[userId];
 
     NSLog(@"playerjoined-%@",player);
+
+    BOOL newPlayer = !p && [_gameInfo.players objectForKey:userId];
     
-    if(!p && [_gameInfo.players objectForKey:userId])
+    if( newPlayer )
     {
         NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
