@@ -68,6 +68,14 @@
 }
 
 
+-(void) addRoundBonus:(int)points
+{
+    [self willChangeValueForKey:@"Points"];
+    _remainingPoints += points;
+    _points += points;
+    [self didChangeValueForKey:@"Points"];
+}
+
 -(BOOL) addMove:(CellValue*)move
 {
     if(![self checkDistance:move]) return NO;

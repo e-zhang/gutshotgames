@@ -32,10 +32,13 @@
 // for updating user inputs
 -(BOOL) addMove:(CellValue*) move;
 -(BOOL) addBomb:(CellValue*) bomb;
+
 // for updating from database
 -(BOOL) updateMove:(CoordPoint*)move Bombs:(NSArray*)bombs andPoints:(int)points;
 -(void) reset;
 -(void) cancel;
+
+-(void) addRoundBonus:(int) points;
 
 -(BOOL) checkDistance:(CellValue*) dest;
 

@@ -299,6 +299,11 @@
     
 
     [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
+    
+    for(Player* player in [_players allValues])
+    {
+        [player addRoundBonus:_players.count];
+    }
 }
 
 -(void) movePlayer:(NSString*)name from:(CoordPoint*)src to:(CoordPoint*)dst
@@ -325,7 +330,7 @@
     for(Player* p in [_players allValues])
     {
         // we've already updated the current player
-        if(p.Id == _myPlayerId || !p.Move) continue;
+        if([p.Id isEqualToString:_myPlayerId]|| !p.Move) continue;
         
         [self movePlayer:p.Id from:p.Location to:p.Move];
         
