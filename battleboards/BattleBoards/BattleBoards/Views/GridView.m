@@ -56,14 +56,25 @@
 
 -(void) refreshCosts
 {
+    [self.dragView removeFromSuperview];
+    self.dragView = nil;
     for(GridCell* cell in self.subviews)
     {
-        [cell showCost];
+        NSLog(@"cell-%@",cell);
+            [cell showCost];
     }
 }
 
 -(void) cellDragged:(UIPanGestureRecognizer*) sender
 {
+    //move dragview
+    CGPoint point = [sender locationInView:self];
+    
+    CGRect myFrame = self.dragView.frame;
+    myFrame.origin.x = point.x;
+    myFrame.origin.y = point.y;
+    [self.dragView setFrame:myFrame];
+    
     if([sender state] == UIGestureRecognizerStateEnded)
     {
         
@@ -101,6 +112,7 @@
 
 -(void) initLocation:(UITapGestureRecognizer*)sender
 {
+    
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         CGPoint point = [sender locationInView:self];
@@ -153,8 +165,6 @@
     }
 }
 
-
-
 -(BOOL) gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     if(![gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) return YES;
@@ -162,9 +172,19 @@
 
     CoordPoint* coord = [self getCoordAtPoint:location];
 
-    NSLog(@"drag detected at (%f,%f) - %@", location.x, location.y, coord);
-
+    if(!self.dragView || self.dragView == nil)
+    {
+        int size = _grid.GridSize;
+        float width = self.frame.size.width / size;
+        float height = self.frame.size.height / size;
+        
+        self.dragView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
+        self.dragView.layer.cornerRadius = width / 2;
+        self.dragView.backgroundColor = [UIColor darkGrayColor];
+        [self.dragView setCenter:location];
     
+        [self addSubview:self.dragView];
+    }
     return [coord isEqual:_grid.MyPlayer.Location];
 }
 

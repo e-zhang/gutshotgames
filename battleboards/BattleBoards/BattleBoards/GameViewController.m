@@ -47,6 +47,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void)refreshGridPossibilities{
 
     [_gridModel calculateGridPossibilities];
+    [_gridView.dragView removeFromSuperview];
     [_gridView refreshCosts];
 }
 
