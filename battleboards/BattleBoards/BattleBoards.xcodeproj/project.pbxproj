@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58108A5918953E1100106D3C /* GestureSubClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 58108A5818953E1100106D3C /* GestureSubClass.m */; };
 		586EEA551856DCA100A5D3A5 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA521856DCA100A5D3A5 /* MenuView.m */; };
 		586EEA561856DCA100A5D3A5 /* InvitationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */; };
 		586EEA5E1856DDB100A5D3A5 /* MenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 586EEA591856DDB100A5D3A5 /* MenuView.xib */; };
@@ -65,6 +66,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		58108A5718953E1100106D3C /* GestureSubClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureSubClass.h; sourceTree = "<group>"; };
+		58108A5818953E1100106D3C /* GestureSubClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureSubClass.m; sourceTree = "<group>"; };
 		586EEA511856DCA100A5D3A5 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
 		586EEA521856DCA100A5D3A5 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
 		586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvitationsViewController.h; sourceTree = "<group>"; };
@@ -339,6 +342,8 @@
 				E7850D7018539E4C0076C518 /* GridCell.m */,
 				E7850D791853D2E20076C518 /* GridView.h */,
 				E7850D7A1853D2E20076C518 /* GridView.m */,
+				58108A5718953E1100106D3C /* GestureSubClass.h */,
+				58108A5818953E1100106D3C /* GestureSubClass.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -449,6 +454,7 @@
 				586EEA6B1856DEA400A5D3A5 /* Server.m in Sources */,
 				586EEA641856DDFA00A5D3A5 /* createaccount.m in Sources */,
 				586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */,
+				58108A5918953E1100106D3C /* GestureSubClass.m in Sources */,
 				586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */,
 				586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */,
 				586EEA771856E0F800A5D3A5 /* GameInfo.m in Sources */,

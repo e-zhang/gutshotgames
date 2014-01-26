@@ -16,8 +16,11 @@
 @interface GridView : UIView<UIGestureRecognizerDelegate>
 {
     GridModel* _grid;
+    CGPoint lastLocation;
 }
 
+@property CGPoint startTouchPosition;
+@property UIView *dragView;
 
 -(void) updateCell:(CoordPoint*)cell;
 -(void) refreshCosts;
