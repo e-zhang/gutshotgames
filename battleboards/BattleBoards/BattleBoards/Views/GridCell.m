@@ -85,8 +85,13 @@
 
 -(void) showCost
 {
-    CellValue* cell = [_grid getCellWithCoord:_cell];
-    _cost.text = cell.cost <= 0 ? @"" : [NSString stringWithFormat:@"%d",cell.cost];
+    // CellValue* cell = [_grid getCellWithCoord:_cell];
+    //_cost.text = cell.cost <= 0 ? @"" : [NSString stringWithFormat:@"%d",cell.cost];
+    
+    Player* p = _grid.MyPlayer;
+    int cost = [CoordPoint distanceFrom:p.Location To:_cell];
+    
+    _cost.text = cost <= p.Points ? [NSString stringWithFormat:@"%d",cost] : @"";
 }
 
 

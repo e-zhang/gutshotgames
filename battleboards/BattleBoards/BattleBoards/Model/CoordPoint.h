@@ -26,6 +26,7 @@
 
 -(NSArray*) getSurroundingCoord;
 
+
 +(id) coordWithX:(int)x andY:(int)y;
 +(id) coordWithArray:(NSArray*) array;
 +(int) distanceFrom:(CoordPoint*)p1 To:(CoordPoint*)p2;

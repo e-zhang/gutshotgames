@@ -130,7 +130,7 @@
         }
     }
     
-    CoordPoint* loc = self.MyPlayer.Move ? self.MyPlayer.Move : self.MyPlayer.Location;
+    CoordPoint* loc = self.MyPlayer.Location;
     NSMutableArray* cells = [[NSMutableArray alloc] initWithObjects:loc, nil];
     [self getCellWithCoord:loc].cost = 0;
     // initialize first set of cells
@@ -149,7 +149,7 @@
             if(![self isCoordInBounds:n] ) continue;
             CellValue* neighbor = [self getCellWithCoord:n];
             if(neighbor.state == GONE) continue;
-            if(neighbor.cost <= 0 || neighbor.cost > cell.cost + 1)
+            if(neighbor.cost < 0 || neighbor.cost > cell.cost + 1)
             {
                 neighbor.cost = cell.cost + 1;
                 [cells addObject:n];
