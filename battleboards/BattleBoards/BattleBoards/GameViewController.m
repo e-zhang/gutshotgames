@@ -48,7 +48,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
     [_gridModel calculateGridPossibilities];
     [_gridView.dragView removeFromSuperview];
-    [_gridView refreshCosts];
+    // shows bomb costs
+    [_gridView refreshCosts:NO];
 }
 
 -(void) startGame

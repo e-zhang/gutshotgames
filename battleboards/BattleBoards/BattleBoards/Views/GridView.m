@@ -54,14 +54,18 @@
     [gridCell update];
 }
 
--(void) refreshCosts
+-(void) refreshCosts:(BOOL) showMoves
 {
-    [self.dragView removeFromSuperview];
-    self.dragView = nil;
+    if(!showMoves)
+    {
+        [self.dragView removeFromSuperview];
+        self.dragView = nil;
+    }
+
     for(GridCell* cell in self.subviews)
     {
         NSLog(@"cell-%@",cell);
-            [cell showCost];
+        [cell showCost:showMoves];
     }
 }
 
@@ -106,6 +110,8 @@
             [self updateCell:_grid.MyPlayer.Location];
             [self updateCell:coord];
         }
+        
+        [self.dragView removeFromSuperview];
         
 	}
 }
@@ -172,7 +178,9 @@
 
     CoordPoint* coord = [self getCoordAtPoint:location];
 
-    if(!self.dragView || self.dragView == nil)
+    BOOL shouldBegin = [coord isEqual:_grid.MyPlayer.Location];
+    
+    if(!self.dragView && shouldBegin)
     {
         int size = _grid.GridSize;
         float width = self.frame.size.width / size;
@@ -182,10 +190,12 @@
         self.dragView.layer.cornerRadius = width / 2;
         self.dragView.backgroundColor = [UIColor darkGrayColor];
         [self.dragView setCenter:location];
-    
+        
+        [self refreshCosts:YES];
         [self addSubview:self.dragView];
     }
-    return [coord isEqual:_grid.MyPlayer.Location];
+    
+    return shouldBegin;
 }
 
 

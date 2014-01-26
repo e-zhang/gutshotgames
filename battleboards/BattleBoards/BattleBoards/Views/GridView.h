@@ -23,7 +23,7 @@
 @property UIView *dragView;
 
 -(void) updateCell:(CoordPoint*)cell;
--(void) refreshCosts;
+-(void) refreshCosts:(BOOL) showMoves;
 
 - (id)initWithFrame:(CGRect)frame andGridModel:(GridModel *)grid;
 

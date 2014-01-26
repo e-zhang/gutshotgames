@@ -21,7 +21,7 @@
 -(id) initWithFrame:(CGRect)frame andGrid:(GridModel*)grid andCoord:(CoordPoint*)coord;
 
 -(void) update;
--(void) showCost;
+-(void) showCost:(BOOL) showMoves;
 
 
 

@@ -83,15 +83,25 @@
 
 }
 
--(void) showCost
+-(void) showCost:(BOOL) showMoves
 {
-    // CellValue* cell = [_grid getCellWithCoord:_cell];
-    //_cost.text = cell.cost <= 0 ? @"" : [NSString stringWithFormat:@"%d",cell.cost];
+    int cost = 0;
+
+    if(!showMoves)
+    {
+        Player* p = _grid.MyPlayer;
+        int dist = [CoordPoint distanceFrom:p.Location To:_cell];
+        cost = dist <= p.Points ? dist : -1;
+    }
+    else
+    {
+        
+        CellValue* cell = [_grid getCellWithCoord:_cell];
+        cost = cell.cost;
+    }
+
     
-    Player* p = _grid.MyPlayer;
-    int cost = [CoordPoint distanceFrom:p.Location To:_cell];
-    
-    _cost.text = cost <= p.Points ? [NSString stringWithFormat:@"%d",cost] : @"";
+    _cost.text = cost > 0 ? [NSString stringWithFormat:@"%d",cost] : @"";
 }
 
 
