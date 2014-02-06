@@ -9,12 +9,12 @@
 #import "GridModel.h"
 
 #import "DBDefs.h"
-
-#define START_POINTS 5
+#import "GameDefinitions.h"
 
 @implementation GridModel
 
 @synthesize Players=_players;
+@synthesize CharColors=_charColors;
 
 
 -(id) initWithGame:(GameInfo *)game andPlayer:(NSString *)player andDelegate:(id)delegate
@@ -54,15 +54,34 @@
                        [UIColor magentaColor],
                        nil];
 
+        [_gameInfo reset:_myPlayerId];
+        
+        [self initializePlayer];
     }
     
     return self;
 }
 
--(void) beginGameAtCoord:(CoordPoint *)coord
+-(void) initializePlayer
 {
-    [_gameInfo initializeGame];
-    [_gameInfo joinGame:_myPlayerId withLocation:[coord arrayFromCoord]];
+    NSDictionary* player = _gameInfo.players[_myPlayerId];
+
+    int points = START_POINTS + _gameInfo.players.count;
+        
+    Player* p = [[Player alloc] initWithProperties:player
+                                         andPoints:points];
+        
+    _players[_myPlayerId] = p;
+}
+
+
+-(BOOL) beginGameAtCoord:(CoordPoint *)coord
+{
+    BOOL begin = [_gameInfo joinGame:_myPlayerId
+                        withLocation:[coord arrayFromCoord]];
+    
+    [self movePlayer:_myPlayerId from:coord to:coord];
+    return begin;
 }
 
 
@@ -79,21 +98,23 @@
 
 -(BOOL) playerMoved:(CoordPoint *)coord
 {
-    Player* player = _players[_myPlayerId];
-    
+
     CellValue* value = [self getCellWithCoord:coord];
     
     if(value.state == GONE) return NO;
     
     // has a previous move, we need to update
-    CoordPoint* prev = player.Move;
+    Player* player = self.MyPlayer;
+    Unit* unit = player.SelectedUnit;
+    
+    CoordPoint* prev = unit.Move;
     
     BOOL canMove = [player addMove:[self getCellWithCoord:coord]];
     
     if(canMove)
     {
-        prev = prev ? prev : player.Location;
-        [self movePlayer:player.Id from:prev to:player.Move];
+        prev = prev ? prev : unit.Location;
+        [self movePlayer:player.Id from:prev to:unit.Move];
     }
     
     return canMove;
@@ -130,7 +151,12 @@
         }
     }
     
-    CoordPoint* loc = self.MyPlayer.Location;
+    Unit* selected = self.MyPlayer.SelectedUnit;
+    
+    if(!selected) return;
+    
+    CoordPoint* loc = selected.Location;
+    
     NSMutableArray* cells = [[NSMutableArray alloc] initWithObjects:loc, nil];
     [self getCellWithCoord:loc].cost = 0;
     // initialize first set of cells
@@ -159,113 +185,85 @@
     }
 }
 
+
 -(void) submitForMyPlayer
 
 {
     Player* myP = self.MyPlayer;
-    NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:myP.Bombs.count];
-    for (CoordPoint* b in myP.Bombs) {
-        [bombs addObject:[b arrayFromCoord]];
-    }
-    
-    NSArray* move = myP.Move ? [myP.Move arrayFromCoord] : [[NSArray alloc] init];
-    
-    [_gameInfo submitMove:move Bombs:bombs andPoints:myP.Points forPlayer:_myPlayerId];
+ 
+    [_gameInfo submitUnits:[myP getUnitsForDB] andPoints:myP.Points forPlayer:_myPlayerId];
 }
 
 
--(NSArray*) cancelForMyPlayer
+-(CoordPoint*) undoForMyPlayer
 {
     Player* myP = self.MyPlayer;
+    CoordPoint* play = [myP undoLastPlay];
     
-    NSMutableArray* updatedCells = [[NSMutableArray alloc] init];
+    CellValue* cell = [self getCellWithCoord:play];
     
-    [updatedCells addObject:myP.Location];
-    if(myP.Move)
+    if([cell.occupants containsObject:myP.Id])
     {
-        [updatedCells addObject:myP.Move];
-        // undo move
-        [self movePlayer:myP.Id from:myP.Move to:myP.Location];
+        [self movePlayer:myP.Id from:play to:myP.SelectedUnit.Location];
     }
-    
-    [updatedCells addObjectsFromArray:myP.Bombs];
-    
-    for(CoordPoint* bomb in myP.Bombs)
+    else if([cell.bombers containsObject:myP.Id])
     {
-        CellValue* value = [self getCellWithCoord:bomb];
-        [value.bombers removeObject:myP.Id];
-        
-        if(value.bombers.count > 0)
+        [cell.bombers removeObject:myP.Id];
+        if(cell.bombers.count == 0)
         {
-            value.state = BOMB;
-        }
-        else if (value.occupants.count > 0)
-        {
-            value.state = OCCUPIED;
-        }
-        else
-        {
-            value.state = EMPTY;
+            cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
         }
     }
     
-    [myP cancel];
-    
-    return updatedCells;
+    return play;
 }
 
--(BOOL) onMove:(NSArray *)move Bombs:(NSArray *)bombs andPoints:(int)points forPlayer:(NSString *)player
+
+-(void) updateWithUnits:(NSArray *)units andPoints:(int)points forPlayer:(NSString *)playerId
 {
-    CoordPoint* moveCoord = nil;
-    if(move.count > 0)
-    {
-        moveCoord = [CoordPoint coordWithArray:move];
-        
-    }
-    
-    NSMutableArray* bombCoords = [NSMutableArray arrayWithCapacity:bombs.count];
-    for(NSArray* b in bombs)
-    {
-        CoordPoint* bombCoord = [CoordPoint coordWithArray:b];
-        [bombCoords addObject:bombCoord];
-    }
-    
-    Player* p = [_players objectForKey:player];
-    
-    return [p updateMove:moveCoord Bombs:bombCoords andPoints:points];
+    Player* p = _players[playerId];
+    [p updateWithUnits:units andPoints:points];
 }
+
 
 -(BOOL) onPlayerJoined:(NSDictionary *)player
 {
-    if(_players.count == _gameInfo.players.count) return NO;
-
+    BOOL startGame = NO;
     NSString* userId = player[DB_USER_ID];
     
     Player* p = _players[userId];
 
     NSLog(@"playerjoined-%@",player);
 
-    BOOL newPlayer = !p && [_gameInfo.players objectForKey:userId];
+    BOOL newPlayer = !p && _gameInfo.players[userId];
     
-    if( newPlayer )
+    if(newPlayer)
     {
         NSLog(@"OPJ-INIT");
         int points = START_POINTS + _gameInfo.players.count;
+
         p = [[Player alloc] initWithProperties:player
-                                     withColor:_charColors[_players.count]
-                                     withGameId:_players.count
                                      andPoints:points];
+
         _players[userId] = p;
-        
-        CellValue* start = [self getCellWithCoord:p.Location];
-        [start.occupants addObject:userId];
-        start.state = OCCUPIED;
-        
-        [_delegate initPlayer:p];
+        startGame = YES;
     }
     
+    if(p.Units.count == 0)
+    {
+        [p addUnits:player[DB_START_LOC]];
+        for(Unit* unit in p.Units)
+        {
+            [self movePlayer:userId from:unit.Location to:unit.Location];
+        }
+        
+        [_delegate initPlayer:p];
+        startGame = YES;
+    }
+
     
-    BOOL startGame = _players.count == _gameInfo.players.count;
+    startGame = startGame && _players.count == _gameInfo.players.count &&
+                self.MyPlayer.Units.count == NUMBER_OF_UNITS;
     if(startGame)
     {
         [_delegate startGame];
@@ -294,7 +292,12 @@
 
     for(Player* player in [_players allValues])
     {
-        [player reset];
+        for(Unit* unit in player.Units)
+        {
+            [unit reset];
+        }
+        
+        [player setSelected:-1];
     }
     
 
@@ -330,13 +333,20 @@
     for(Player* p in [_players allValues])
     {
         // we've already updated the current player
-        if([p.Id isEqualToString:_myPlayerId]|| !p.Move) continue;
+        if([p.Id isEqualToString:_myPlayerId]) continue;
         
-        [self movePlayer:p.Id from:p.Location to:p.Move];
-        
-        [cells addObject:p.Location];
-        [cells addObject:p.Move];
-    
+        for(Unit* u in p.Units)
+        {
+            if(!u.Move) continue;
+
+            [self movePlayer:[self composePlayerId:p.Id withTag:u.GameTag]
+                        from:u.Location
+                          to:u.Move];
+            
+            [cells addObject:u.Location];
+            [cells addObject:u.Move];
+        }
+
     }
     NSLog(@"cells-%@",cells);
     return [cells allObjects];
@@ -348,14 +358,18 @@
     for(Player* p in [_players allValues])
     {
         // we've already updated for the current player
-        if(p.Id == _myPlayerId) continue;
-        for(CoordPoint* bomb in p.Bombs)
+        if([p.Id isEqualToString:_myPlayerId]) continue;
+        
+        for(Unit* unit in p.Units)
         {
-            // update old location
-            CellValue* value = [self getCellWithCoord:bomb];
-            value.state = GONE;
-            [value.bombers addObject:p.Id];
-            [cells addObject:bomb];
+            for(CoordPoint* bomb in unit.Bombs)
+            {
+                // update old location
+                CellValue* value = [self getCellWithCoord:bomb];
+                value.state = GONE;
+                [value.bombers addObject:[self composePlayerId:p.Id withTag:unit.GameTag]];
+                [cells addObject:bomb];
+            }
         }
     }
 
@@ -365,18 +379,32 @@
         CellValue* value = [self getCellWithCoord:cell];
         for(NSString* occupantId in value.occupants)
         {
-            Player* player = _players[occupantId];
-            player.Alive = NO;
+            NSArray* ids = [self decomposeId:occupantId];
+            Player* player = _players[ids[0]];
+            Unit* unit = player.Units[[ids[1] intValue]];
+            unit.Alive = NO;
             
-            for(NSString* bomberId in value.bombers)
-            {
-                Player* bomber = _players[occupantId];
-                [bomber getPointsFromBomb:player.Points/value.bombers.count];
-            }
+//            for(NSString* bomberId in value.bombers)
+//            {
+//                Unit* bomber = _players[occupantId];
+//                [bomber getPointsFromBomb:player.Points/value.bombers.count];
+//            }
         }
     }
     
     return [cells allObjects];
+}
+
+-(NSString*) composePlayerId:(NSString *)userid withTag:(int)tag
+{
+    return[NSString stringWithFormat:@"%@|%d",
+                userid,
+                tag & UNIT_TAG_MASK];
+}
+
+-(NSArray*) decomposeId:(NSString*)composite
+{
+    return [composite componentsSeparatedByString:@"|"];
 }
 
 
@@ -390,5 +418,6 @@
 {
     return [_gameInfo.gridSize intValue];
 }
+
 
 @end

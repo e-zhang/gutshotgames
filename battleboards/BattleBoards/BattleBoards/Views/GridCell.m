@@ -52,13 +52,25 @@
             break;
         }
         case BOMB:
-            self.backgroundColor = _grid.MyPlayer.Color;
+            self.backgroundColor = _grid.CharColors[_grid.MyPlayer.GameId];
             self.layer.borderColor = [UIColor blackColor].CGColor;
             break;
         case GONE:
-            self.backgroundColor = [UIColor blackColor];
-            self.layer.borderColor = [UIColor blackColor].CGColor;
+        {
+            self.backgroundColor = [UIColor clearColor];
+            int w = self.bounds.size.width/cell.bombers.count;
+            int h = self.bounds.size.height/cell.bombers.count;
+            for(int i=0; i < cell.bombers.count; ++i)
+            {
+                Player* player = [_grid.Players allValues][0];
+                UIView* block = [[UIView alloc] initWithFrame:
+                                 CGRectMake(w/2*i, h/2*i, w, h)];
+                block.backgroundColor=_grid.CharColors[player.GameId];
+                block.layer.borderColor = [UIColor blackColor].CGColor;
+                [self addSubview:block];
+            }
             break;
+        }
         case OCCUPIED:
         {
             self.backgroundColor = [UIColor clearColor];
@@ -66,11 +78,11 @@
             int h = self.bounds.size.height/cell.occupants.count;
             for(int i=0; i < cell.occupants.count; ++i)
             {
-                Player* player = _grid.Players[cell.occupants[i]];
+                Player* player = [_grid.Players allValues][0];
                 UIView* block = [[UIView alloc] initWithFrame:
                                   CGRectMake(w/2*i, h/2*i, w, h)];
                 block.layer.cornerRadius = MIN(w/2, h/2);
-                block.backgroundColor=player.Color;
+                block.backgroundColor=_grid.CharColors[player.GameId];
                 block.layer.borderColor = [UIColor grayColor].CGColor;
                 [self addSubview:block];
             }
@@ -89,9 +101,9 @@
 
     if(!showMoves)
     {
-        Player* p = _grid.MyPlayer;
-        int dist = [CoordPoint distanceFrom:p.Location To:_cell];
-        cost = dist <= p.Points ? dist : -1;
+        Player* player = _grid.MyPlayer;
+        int dist = [CoordPoint distanceFrom:player.SelectedUnit.Location To:_cell];
+        cost = dist <= player.Points ? dist : -1;
     }
     else
     {

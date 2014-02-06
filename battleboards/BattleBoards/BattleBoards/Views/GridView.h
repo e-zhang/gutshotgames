@@ -11,12 +11,14 @@
 #import "GridModel.h"
 
 @protocol GridViewDelegate <NSObject>
+-(void) onUnitSelected:(int)unit;
 @end
 
 @interface GridView : UIView<UIGestureRecognizerDelegate>
 {
     GridModel* _grid;
     CGPoint lastLocation;
+    id<GridViewDelegate> _delegate;
 }
 
 @property CGPoint startTouchPosition;
@@ -25,6 +27,6 @@
 -(void) updateCell:(CoordPoint*)cell;
 -(void) refreshCosts:(BOOL) showMoves;
 
-- (id)initWithFrame:(CGRect)frame andGridModel:(GridModel *)grid;
+- (id)initWithFrame:(CGRect)frame gridModel:(GridModel *)grid andDelegate:(id)delegate;
 
 @end

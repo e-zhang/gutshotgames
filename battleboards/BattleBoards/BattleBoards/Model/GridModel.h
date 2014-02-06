@@ -35,7 +35,7 @@
 }
 
 -(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
--(void) beginGameAtCoord:(CoordPoint*)coord;
+-(BOOL) beginGameAtCoord:(CoordPoint*)coord;
 
 -(CellValue*) getCellWithCoord:(CoordPoint*)coord;
 -(BOOL) isCoordInBounds:(CoordPoint*)coord;
@@ -46,16 +46,21 @@
 -(void) calculateGridPossibilities;
 
 -(void) submitForMyPlayer;
--(NSArray*) cancelForMyPlayer;
+-(CoordPoint*) undoForMyPlayer;
+
+
+-(NSString*) composePlayerId:(NSString*)userid withTag:(int)tag;
+
 
 // gameupdate delegate
 -(BOOL) onPlayerJoined:(NSDictionary *)player;
--(BOOL) onMove:(NSArray*)move andBombs:(NSArray*)bombs forPlayer:(NSString*)player;
+-(void) updateWithUnits:(NSArray *)units andPoints:(int)points forPlayer:(NSString *)playerId;
 -(void) onRoundComplete;
 -(void) onRoundStart;
 
 @property (readonly) Player* MyPlayer;
 @property (readonly) int GridSize;
 @property (readonly) NSDictionary* Players;
+@property (readonly) NSArray* CharColors;
 
 @end
