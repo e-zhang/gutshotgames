@@ -144,6 +144,7 @@
 
 -(CoordPoint*) undoLastPlay
 {
+    if(_lastPlays.count == 0) return nil;
     NSArray* last = [_lastPlays lastObject];
     [_lastPlays removeLastObject];
     
@@ -162,7 +163,7 @@
     [self.SelectedUnit addMove:move];
     
     [_lastPlays addObject:[NSArray arrayWithObjects:
-                           move.coord, move.cost, nil]];
+                           move.coord, @(move.cost), nil]];
     
     return YES;
 }
@@ -173,7 +174,7 @@
     
     [self.SelectedUnit addBomb:bomb];
     
-    [_lastPlays addObject:[NSArray arrayWithObjects:bomb.coord, bomb.cost, nil]];
+    [_lastPlays addObject:[NSArray arrayWithObjects:bomb.coord, @(bomb.cost), nil]];
     
     return YES;
 }

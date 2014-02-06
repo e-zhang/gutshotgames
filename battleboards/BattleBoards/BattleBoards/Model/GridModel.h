@@ -46,7 +46,7 @@
 -(void) calculateGridPossibilities;
 
 -(void) submitForMyPlayer;
--(CoordPoint*) undoForMyPlayer;
+-(NSArray*) undoForMyPlayer;
 
 
 -(NSString*) composePlayerId:(NSString*)userid withTag:(int)tag;

@@ -271,7 +271,7 @@
         
         NSDictionary* playerData = [NSDictionary dictionaryWithObjectsAndKeys:
                                     units,DB_UNITS,
-                                    points,DB_POINTS, nil];
+                                    @(points),DB_POINTS, nil];
         
         [currentRound setObject:playerData forKey:player];
 

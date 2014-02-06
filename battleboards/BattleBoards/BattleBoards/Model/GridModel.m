@@ -132,6 +132,7 @@
     if(canBomb)
     {
         value.state = BOMB;
+        [value.bombers addObject:_myPlayerId];
     }
     
     return canBomb;
@@ -195,16 +196,19 @@
 }
 
 
--(CoordPoint*) undoForMyPlayer
+-(NSArray*) undoForMyPlayer
 {
     Player* myP = self.MyPlayer;
     CoordPoint* play = [myP undoLastPlay];
+    
+    if(!play) return nil;
     
     CellValue* cell = [self getCellWithCoord:play];
     
     if([cell.occupants containsObject:myP.Id])
     {
         [self movePlayer:myP.Id from:play to:myP.SelectedUnit.Location];
+        return [NSArray arrayWithObjects:play, myP.SelectedUnit.Location,nil];
     }
     else if([cell.bombers containsObject:myP.Id])
     {
@@ -213,9 +217,10 @@
         {
             cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
         }
+        return [NSArray arrayWithObject:play];
     }
     
-    return play;
+    return nil;
 }
 
 

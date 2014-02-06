@@ -50,6 +50,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_gridModel calculateGridPossibilities];
     [_gridView.dragView removeFromSuperview];
     // shows bomb costs
+    if(!_gridModel.MyPlayer.SelectedUnit) return;
     [_gridView refreshCosts:NO];
 }
 
@@ -196,9 +197,16 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
 -(void) undoPlay:(id) sender
 {
-    CoordPoint* play = [_gridModel undoForMyPlayer];
+    NSArray* play = [_gridModel undoForMyPlayer];
     
-    [_gridView updateCell:play];
+    if(play)
+    {
+        for(CoordPoint* point in play)
+        {
+            [_gridView updateCell:point];
+        }
+    }
+
 }
 
 
