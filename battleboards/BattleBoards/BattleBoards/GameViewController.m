@@ -126,7 +126,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     _undoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _undoButton.backgroundColor = [UIColor blackColor];
     _undoButton.frame = CGRectMake(10.0f, 55.0f, 100.0f, 40.0f);
-    [_undoButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [_undoButton setTitle:@"Undo" forState:UIControlStateNormal];
     [_undoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_undoButton addTarget:self action:@selector(undoPlay:) forControlEvents:UIControlEventTouchUpInside];
 
