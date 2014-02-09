@@ -291,7 +291,7 @@
 
 -(void) onRoundStart
 {
-    [_delegate onRoundStart:_gameInfo.GameRound];
+    [_delegate onRoundStart:[_gameInfo.currentRound intValue]];
 }
 
 -(void) onRoundComplete

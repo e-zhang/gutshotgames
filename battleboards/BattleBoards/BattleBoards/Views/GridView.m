@@ -49,6 +49,23 @@
     return self;
 }
 
+-(void) startGame
+{
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self action:@selector(cellTapped:)];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    [self addGestureRecognizer:tap];
+
+
+    UIPanGestureRecognizer* pan = [[UIPanGestureRecognizer alloc]
+                                   initWithTarget:self action:@selector(cellDragged:)];
+    pan.delegate = self;
+    pan.minimumNumberOfTouches = 1;
+    pan.maximumNumberOfTouches = 2;
+    [self addGestureRecognizer:pan];
+}
+
 -(void) updateCell:(CoordPoint *)cell
 {
     int tag = cell.x*_grid.GridSize + cell.y;
@@ -133,20 +150,7 @@
             // reset tap gesture recognizer
             sender.enabled = NO;
             [self removeGestureRecognizer:sender];
-            
-            UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
-                                           initWithTarget:self action:@selector(cellTapped:)];
-            tap.numberOfTapsRequired = 1;
-            tap.numberOfTouchesRequired = 1;
-            [self addGestureRecognizer:tap];
-            
-            
-            UIPanGestureRecognizer* pan = [[UIPanGestureRecognizer alloc]
-                                           initWithTarget:self action:@selector(cellDragged:)];
-            pan.delegate = self;
-            pan.minimumNumberOfTouches = 1;
-            pan.maximumNumberOfTouches = 2;
-            [self addGestureRecognizer:pan];
+
         }
         
         [self updateCell:coord];

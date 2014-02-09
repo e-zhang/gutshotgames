@@ -27,6 +27,8 @@
 -(void) updateCell:(CoordPoint*)cell;
 -(void) refreshCosts:(BOOL) showMoves;
 
+-(void) startGame;
+
 - (id)initWithFrame:(CGRect)frame gridModel:(GridModel *)grid andDelegate:(id)delegate;
 
 @end

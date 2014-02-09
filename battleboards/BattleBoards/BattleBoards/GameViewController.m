@@ -42,6 +42,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
                                                                300.0f) gridModel:_gridModel andDelegate:self];
         
         [self.view addSubview:_gridView];
+
         
         [self displayPlayerInfo:game.players];
 
@@ -66,6 +67,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [self.view addSubview:_undoButton];
     [self.view addSubview:_roundInfo];
     [self.view addSubview:_activityView];
+    
+    [_gridView startGame];
 
     
     // show locations

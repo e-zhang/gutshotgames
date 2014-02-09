@@ -217,7 +217,7 @@
 {
     NSLog(@"nextround");
     [self willChangeValueForKey:@"GameRound"];
-    _gameRound = [self.currentRound intValue] + 1;
+    _gameRound = [self.currentRound intValue]+1;
     NSLog(@"_gameRound-%d",_gameRound);
     [self didChangeValueForKey:@"GameRound"];
     BOOL isLast = _isLast;
@@ -260,7 +260,11 @@
             error = nil;
         }
         
-        if(_gameRound >= [self.gameData count]) break;
+        if(_gameRound >= [self.gameData count])
+        {
+            NSLog(@"GAME ROUND IS TOO LARGE %d", _gameRound);
+            break;
+        }
         
         NSMutableDictionary* currentRound = [[self.gameData objectAtIndex:_gameRound] mutableCopy];
         NSMutableArray* data = [self.gameData mutableCopy];
