@@ -80,7 +80,9 @@
     BOOL begin = [_gameInfo joinGame:_myPlayerId
                         withLocation:[coord arrayFromCoord]];
     
-    [self movePlayer:_myPlayerId from:coord to:coord];
+    
+    
+    [self movePlayer:[self composePlayerId:_myPlayerId withTag:begin] from:coord to:coord];
     return begin;
 }
 
@@ -114,7 +116,7 @@
     if(canMove)
     {
         prev = prev ? prev : unit.Location;
-        [self movePlayer:player.Id from:prev to:unit.Move];
+        [self movePlayer:[self composePlayerId:_myPlayerId withTag:unit.GameTag ] from:prev to:unit.Move];
     }
     
     return canMove;
@@ -132,7 +134,8 @@
     if(canBomb)
     {
         value.state = BOMB;
-        [value.bombers addObject:_myPlayerId];
+        [value.bombers addObject:[self composePlayerId:_myPlayerId
+                                               withTag:player.SelectedUnit.GameTag]];
     }
     
     return canBomb;
@@ -204,15 +207,16 @@
     if(!play) return nil;
     
     CellValue* cell = [self getCellWithCoord:play];
+    NSString* pId = [self composePlayerId:myP.Id withTag:myP.SelectedUnit.GameTag];
     
-    if([cell.occupants containsObject:myP.Id])
+    if([cell.occupants containsObject:pId])
     {
-        [self movePlayer:myP.Id from:play to:myP.SelectedUnit.Location];
+        [self movePlayer:pId from:play to:myP.SelectedUnit.Location];
         return [NSArray arrayWithObjects:play, myP.SelectedUnit.Location,nil];
     }
-    else if([cell.bombers containsObject:myP.Id])
+    else if([cell.bombers containsObject:pId])
     {
-        [cell.bombers removeObject:myP.Id];
+        [cell.bombers removeObject:pId];
         if(cell.bombers.count == 0)
         {
             cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
