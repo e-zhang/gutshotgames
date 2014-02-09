@@ -7,8 +7,10 @@
 //
 
 #import "GameInfo.h"
-//#import "Character.h"
-#include "DBDefs.h"
+
+#import "DBDefs.h"
+#import "GameDefinitions.h"
+
 #import <Foundation/Foundation.h>
 
 @implementation GameInfo
@@ -21,7 +23,7 @@
 
 
 
--(void) reset
+-(void) reset:(NSString*)playerId
 {
     _charsLeft = self.players.count;
     _gameRound = -1;
@@ -36,6 +38,12 @@
        
         self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
         self.currentRound = [NSNumber numberWithInt:_gameRound];
+        NSMutableDictionary* players = [self.players mutableCopy];
+        NSMutableDictionary* player = [[players objectForKey:playerId] mutableCopy];
+        [player setObject:[[NSArray alloc] init] forKey:DB_START_LOC];
+        [player setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+        [players setObject:player forKey:playerId];
+        self.players = players;
         [[self save] wait:&error];
         
     } while ([error.domain isEqual: @"CouchDB"] &&
@@ -86,10 +94,6 @@
 
 -(void) initializeGame
 {
-    _charsLeft=self.players.count;
-    _gameRound = -1;
-    
-    [self reset];
     
 //    [self willChangeValueForKey:@"GameRound"];
 //    for( int i = 0; i < [self.gameData count]; ++i )
@@ -126,7 +130,7 @@
     return _isGameOver;
 }
 
-- (void) joinGame:(NSString*) userId withLocation:(NSArray *)start
+- (BOOL) joinGame:(NSString*) userId withLocation:(NSArray *)start
 {
     _isLast = YES;
     for(NSString* playerId in self.players)
@@ -143,6 +147,7 @@
         }
     }
     
+    BOOL allUnits=NO;
     NSError* error = nil;
     do
     {
@@ -153,21 +158,36 @@
         }
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
-        [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
-        [player setObject:start forKey:DB_START_LOC];
+        NSMutableArray* unitStarts = [[player objectForKey:DB_START_LOC] mutableCopy];
+
+        [unitStarts addObject:start];
+        
+        [player setObject:unitStarts forKey:DB_START_LOC];
         [joinedPlayers setObject:player forKey:userId];
+        
+        allUnits = unitStarts.count == NUMBER_OF_UNITS;
+        
+        if(allUnits)
+        {
+            [player setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
+        }
+        
         self.players = joinedPlayers;
         [[self save] wait:&error];
         
     } while ([error.domain isEqual: @"CouchDB"] &&
              error.code == 409);
     
-    [_delegate onPlayerJoined:[self.players objectForKey:userId]];
-    if(_isLast)
+    if(allUnits)
     {
-        [self startRound];
+        [_delegate onPlayerJoined:[self.players objectForKey:userId]];
+        if(_isLast)
+        {
+            [self startRound];
+        }
     }
 
+    return allUnits;
 }
 
 - (void) leaveGame:(NSString*) userId
@@ -229,7 +249,7 @@
     return isLast;
 }
 
-- (void) submitMove:(NSArray*)move Bombs:(NSArray*)bombs andPoints:(int)points forPlayer:(NSString *)player
+- (void) submitUnits:(NSArray*)units andPoints:(int)points forPlayer:(NSString *)player
 {
     NSError* error = nil;
     do
@@ -249,8 +269,10 @@
         _isLast = ([currentRound count] == _charsLeft - 1) && ![currentRound objectForKey:player];
         
         
-        NSDictionary* playerData = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects: move, bombs, [NSNumber numberWithInt:points], nil]
-                                                           forKeys:[NSArray arrayWithObjects: DB_MOVE, DB_BOMBS, DB_POINTS, nil]];
+        NSDictionary* playerData = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    units,DB_UNITS,
+                                    @(points),DB_POINTS, nil];
+        
         [currentRound setObject:playerData forKey:player];
 
         [data setObject:currentRound atIndexedSubscript:_gameRound];
@@ -301,16 +323,18 @@
     if([self.currentRound intValue] <= 0)
     {
         BOOL start = NO;
+        int connected = 0;
         for(NSString* playerId in self.players)
         {
             NSDictionary* player = [self.players objectForKey:playerId];
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
+                connected++;
                 start = [_delegate onPlayerJoined:player];
             }
         }
         
-        if(start)
+        if(connected == self.players.count && _gameRound < 0)
         {
             NSLog(@"start round");
             [self startRound];
@@ -346,8 +370,7 @@
         for(NSString* playerId in currentRound)
         {
             NSDictionary* player = [currentRound objectForKey:playerId];
-            [_delegate onMove:[player objectForKey:DB_MOVE]
-                        Bombs:[player objectForKey:DB_BOMBS]
+            [_delegate updateWithUnits:[player objectForKey:DB_UNITS]
                     andPoints:[[player objectForKey:DB_POINTS] intValue]
                     forPlayer:playerId];
           //  NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);

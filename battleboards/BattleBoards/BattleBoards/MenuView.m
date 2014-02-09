@@ -617,10 +617,10 @@
     NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
     [userAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
     [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
-    [userAccount setObject:@1 forKey:INGAMEID];
+    [userAccount setObject:@0 forKey:INGAMEID];
 
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
-    int a = 2;
+    int a = 1;
     for(id<FBGraphUser> userFB in _players)
     {
         NSString* user = [@"fb-" stringByAppendingString:userFB.id];

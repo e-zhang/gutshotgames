@@ -20,7 +20,7 @@
     UIActivityIndicatorView *_activityView;
     
     UIButton *_submitButton;
-    UIButton* _cancelButton;
+    UIButton* _undoButton;
     
     UILabel *_noticeMsg;
     UILabel *_roundInfo;

@@ -35,11 +35,14 @@ static NSString* FORMAT_STRING = @"Round - %d";
         _gridModel = [[GridModel alloc] initWithGame:game andPlayer:playerId andDelegate:self];
         NSLog(@"initGVC - gridSize-%@",game.gridSize);
         //screen bounds will make it a rect and not a square
+
         _gridView = [[GridView alloc] initWithFrame:CGRectMake(10,
                                                                100.0f,
                                                                300.0f,
                                                                300.0f)
-                                       andGridModel:_gridModel];
+                                       andGridModel:_gridModel
+                                        andDelegate:self];
+
         
         [self.view addSubview:_gridView];
         
@@ -55,6 +58,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_gridModel calculateGridPossibilities];
     [_gridView.dragView removeFromSuperview];
     // shows bomb costs
+    if(!_gridModel.MyPlayer.SelectedUnit) return;
     [_gridView refreshCosts:NO];
 }
 
@@ -63,9 +67,10 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_noticeMsg removeFromSuperview];
     
     [self.view addSubview:_submitButton];
-    [self.view addSubview:_cancelButton];
+    [self.view addSubview:_undoButton];
     [self.view addSubview:_roundInfo];
     [self.view addSubview:_activityView];
+
  
 }
 
@@ -76,7 +81,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     
     [_gridView setUserInteractionEnabled:YES];
     [_submitButton setUserInteractionEnabled:YES];
-    [_cancelButton setUserInteractionEnabled:YES];
+    [_undoButton setUserInteractionEnabled:YES];
     NSLog(@"...");
     
     for(CoordPoint *p in cells)
@@ -124,13 +129,12 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
     
-    _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _cancelButton.backgroundColor = [UIColor blackColor];
-    _cancelButton.frame = CGRectMake(self.view.frame.size.width/2, 440.0f, self.view.frame.size.width/2, 40.0f);
-    [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [_cancelButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_cancelButton addTarget:self action:@selector(cancelPlay:) forControlEvents:UIControlEventTouchUpInside];
+    _undoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _undoButton.backgroundColor = [UIColor blackColor];
+    _undoButton.frame = CGRectMake(self.view.frame.size.width/2, 440.0f, self.view.frame.size.width/2, 40.0f);
+    [_undoButton setTitle:@"Undo" forState:UIControlStateNormal];
+    [_undoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_undoButton addTarget:self action:@selector(undoPlay:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:_noticeMsg];
 
@@ -190,13 +194,12 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void) onRoundStart:(int)round
 {
     _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round+1];
-    
-    [self refreshGridPossibilities];
 }
 
 
 -(void)initPlayer:(Player *)p
 {
+
     [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
     
     if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
@@ -211,7 +214,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         _noticeMsg.text = @"Waiting for players to connect...";
         
         UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:PLAYER1TAG];
-        player1Image.layer.borderColor = p.Color.CGColor;
+        player1Image.layer.borderColor = _gridModel.CharColors[p.GameId].CGColor;
         player1Image.layer.borderWidth = 2.0f;
     }
     else
@@ -224,13 +227,37 @@ static NSString* FORMAT_STRING = @"Round - %d";
         [self.view addSubview:player2points];
         
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:PLAYER2TAG];
-        player2Image.layer.borderColor = p.Color.CGColor;
+        player2Image.layer.borderColor = _gridModel.CharColors[p.GameId].CGColor;
         player2Image.layer.borderWidth = 2.0f;
     }
     
-    NSLog(@"%@ init at %@", p.Name, p.Location);
-    [_gridView updateCell:p.Location];
+    for(Unit* unit in p.Units)
+    {
+        [_gridView updateCell:unit.Location];
+    }
 }
+
+-(void) onUnitSelected:(int)unit
+{
+    [_gridModel.MyPlayer setSelected:unit];
+    [self refreshGridPossibilities];
+}
+
+
+-(void) undoPlay:(id) sender
+{
+    NSArray* play = [_gridModel undoForMyPlayer];
+    
+    if(play)
+    {
+        for(CoordPoint* point in play)
+        {
+            [_gridView updateCell:point];
+        }
+    }
+
+}
+
 
 - (void)submitPlay:(id)sender{
     NSLog(@"submit Play");
@@ -239,34 +266,32 @@ static NSString* FORMAT_STRING = @"Round - %d";
     });
     [_gridView setUserInteractionEnabled:NO];
     [_submitButton setUserInteractionEnabled:NO];
-    [_cancelButton setUserInteractionEnabled:NO];
+    [_undoButton setUserInteractionEnabled:NO];
     
     [_gridModel submitForMyPlayer];
 
 }
 
 
--(void)cancelPlay:(id)sender
-{
-    NSArray* cells = [_gridModel cancelForMyPlayer];
-    
-    for(CoordPoint* cell in cells)
-    {
-        [_gridView updateCell:cell];
-    }
-}
-
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if([keyPath isEqualToString:@"Points"])
     {
-        [self refreshGridPossibilities];
         
+        Player* player = (Player*) object;
+        
+        if([player.Id isEqualToString:_gridModel.MyPlayer.Id])
+        {
+            [self refreshGridPossibilities];
+        }
 
-        UILabel *a = (UILabel *)[self.view viewWithTag:((Player*)object).GameId + CHAR_LABEL];
+
+
+        UILabel *a = (UILabel *)[self.view viewWithTag:player.GameId + CHAR_LABEL];
+
         if(a)
         {
-            a.text = [NSString stringWithFormat:@"%d",((Player*)object).Points];
+            a.text = [NSString stringWithFormat:@"%d",player.Points];
         }
     }
 }

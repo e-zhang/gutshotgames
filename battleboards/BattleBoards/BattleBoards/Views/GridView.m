@@ -9,10 +9,12 @@
 #import "GridView.h"
 #import "GridCell.h"
 
+#import "GameDefinitions.h"
+
 
 @implementation GridView
 
-- (id)initWithFrame:(CGRect)frame andGridModel:(GridModel *)grid
+- (id)initWithFrame:(CGRect)frame gridModel:(GridModel *)grid andDelegate:(id)delegate
 {
     
     self = [super initWithFrame:frame];
@@ -20,6 +22,7 @@
         self.tag = -1;
         // Initialization code
         _grid = grid;
+        _delegate = delegate;
         int size = grid.GridSize;
         float width = frame.size.width / size;
         float height = frame.size.height / size;
@@ -64,7 +67,6 @@
 
     for(GridCell* cell in self.subviews)
     {
-        NSLog(@"cell-%@",cell);
         [cell showCost:showMoves];
     }
 }
@@ -89,7 +91,7 @@
         
         NSLog(@"dragged to (%f,%f) - %@", point.x, point.y, coord);
         
-        CoordPoint* move = _grid.MyPlayer.Move;
+        CoordPoint* move = _grid.MyPlayer.SelectedUnit.Move;
         
         if(![_grid playerMoved:coord])
         {
@@ -107,7 +109,7 @@
                 [self updateCell:move];
             }
             
-            [self updateCell:_grid.MyPlayer.Location];
+            [self updateCell:_grid.MyPlayer.SelectedUnit.Location];
             [self updateCell:coord];
         }
         
@@ -126,25 +128,30 @@
         
         NSLog(@"Init at (%f,%f) - %@", point.x, point.y, coord);
         
-        [_grid beginGameAtCoord:coord];
-        
-        // reset tap gesture recognizer
-        sender.enabled = NO;
-        [self removeGestureRecognizer:sender];
-
-        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
-                                       initWithTarget:self action:@selector(cellTapped:)];
-        tap.numberOfTapsRequired = 1;
-        tap.numberOfTouchesRequired = 1;
-        [self addGestureRecognizer:tap];
-        
-        
-        UIPanGestureRecognizer* pan = [[UIPanGestureRecognizer alloc]
-                                       initWithTarget:self action:@selector(cellDragged:)];
-        pan.delegate = self;
-        pan.minimumNumberOfTouches = 1;
-        pan.maximumNumberOfTouches = 2;
-        [self addGestureRecognizer:pan];
+        if([_grid beginGameAtCoord:coord])
+        {
+            // reset tap gesture recognizer
+            sender.enabled = NO;
+            [self removeGestureRecognizer:sender];
+            
+            UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
+                                           initWithTarget:self action:@selector(cellTapped:)];
+            tap.numberOfTapsRequired = 1;
+            tap.numberOfTouchesRequired = 1;
+            [self addGestureRecognizer:tap];
+            
+            
+            UIPanGestureRecognizer* pan = [[UIPanGestureRecognizer alloc]
+                                           initWithTarget:self action:@selector(cellDragged:)];
+            pan.delegate = self;
+            pan.minimumNumberOfTouches = 1;
+            pan.maximumNumberOfTouches = 2;
+            [self addGestureRecognizer:pan];
+        }
+        else
+        {
+            [self updateCell:coord];
+        }
     }
 }
 
@@ -154,6 +161,20 @@
     {
         CGPoint point = [sender locationInView:self];
         CoordPoint* coord = [self getCoordAtPoint:point];
+        
+        Player* player = _grid.MyPlayer;
+        Unit* selected = player.SelectedUnit;
+        
+        for(Unit* unit in player.Units)
+        {
+            if([unit.Location isEqual:coord] && (!selected || selected.GameTag != unit.GameTag))
+            {
+                [_delegate onUnitSelected:unit.GameTag & UNIT_TAG_MASK];
+                return;
+            }
+        }
+        
+        if(!selected) return;
         
         if(![_grid bombPlaced:coord])
         {
@@ -176,9 +197,13 @@
     if(![gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) return YES;
     CGPoint location = [gestureRecognizer locationInView:self];
 
+    Unit* selected = _grid.MyPlayer.SelectedUnit;
+    
+    if(!selected) return NO;
+    
     CoordPoint* coord = [self getCoordAtPoint:location];
 
-    BOOL shouldBegin = [coord isEqual:_grid.MyPlayer.Location];
+    BOOL shouldBegin = [coord isEqual:selected.Location];
     
     if(!self.dragView && shouldBegin)
     {

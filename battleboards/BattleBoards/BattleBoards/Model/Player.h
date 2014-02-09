@@ -2,58 +2,61 @@
 //  Player.h
 //  BattleBoards
 //
-//  Created by Eric Zhang on 12/7/13.
-//  Copyright (c) 2013 GutShotGames. All rights reserved.
+//  Created by Eric Zhang on 1/29/14.
+//  Copyright (c) 2014 GutShotGames. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CellValue.h"
+#import "Unit.h"
+
+
 
 @interface Player : NSObject
 {
     NSString* _name;
     NSString* _userId;
     NSString* _fbId;
-
+    
     CoordPoint* _location;
+    
+    NSMutableArray* _units;
+    int _selectedUnit;
     int _points;
-    int _remainingPoints;
-    CoordPoint* _move;
-    NSMutableArray* _bombs;
-    int _gameId;
-    UIColor* _playerColor;
-    BOOL _updated;
+    
+    NSMutableArray* _lastPlays;
 }
 
 -(id) initWithProperties:(NSDictionary*)props
-               withColor:(UIColor*)color
-              withGameId:(int)gameId
                andPoints:(int)points;
+
+
+-(NSArray*) getUnitsForDB;
+
+-(void) updateWithUnits:(NSArray*)units andPoints:(int)points;
+
+-(void) addRoundBonus:(int) bonus;
+-(void) setSelected:(int) selected;
+
 
 // for updating user inputs
 -(BOOL) addMove:(CellValue*) move;
 -(BOOL) addBomb:(CellValue*) bomb;
-
-// for updating from database
--(BOOL) updateMove:(CoordPoint*)move Bombs:(NSArray*)bombs andPoints:(int)points;
--(void) reset;
--(void) cancel;
-
--(void) addRoundBonus:(int) points;
+-(void) addUnits:(NSArray*) units;
+-(CoordPoint*) undoLastPlay;
 
 -(BOOL) checkDistance:(CellValue*) dest;
 
--(void) getPointsFromBomb:(int) points;
 
-@property (readwrite) int Points;
-@property (readwrite) BOOL Alive;
-@property (readonly) NSArray* Bombs;
-@property (readonly) CoordPoint* Move;
-@property (readonly) CoordPoint* Location;
 @property (readonly) NSString* Name;
 @property (readonly) NSString* FacebookId;
 @property (readonly) NSString* Id;
-@property (readonly) UIColor* Color;
+
+@property (readonly) NSArray* Units;
+
+@property (readonly) Unit* SelectedUnit;
+
+@property (readonly) int Points;
 @property (readonly) int GameId;
+@property (readonly) BOOL Alive;
 
 @end

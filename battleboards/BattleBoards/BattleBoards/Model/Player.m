@@ -2,38 +2,41 @@
 //  Player.m
 //  BattleBoards
 //
-//  Created by Eric Zhang on 12/7/13.
-//  Copyright (c) 2013 GutShotGames. All rights reserved.
+//  Created by Eric Zhang on 1/29/14.
+//  Copyright (c) 2014 GutShotGames. All rights reserved.
 //
 
 #import "Player.h"
 #import "DBDefs.h"
 
+#import "GameDefinitions.h"
+
+
 @implementation Player
 
-@synthesize Points=_remainingPoints;
-@synthesize Alive;
-@synthesize Bombs=_bombs;
-@synthesize Move=_move;
-@synthesize Location=_location;
 @synthesize Id=_userId;
 @synthesize FacebookId=_fbId;
 @synthesize Name=_name;
-@synthesize Color=_playerColor;
 @synthesize GameId=_gameId;
+@synthesize Units=_units;
+@synthesize Points=_points;
+
 
 -(id) initWithProperties:(NSDictionary *)props
-               withColor:(UIColor *)color
-               withGameId:(int)gameId
                andPoints:(int)points
 {
     if([super init])
     {
         _name = props[DB_USER_NAME];
         _userId = props[DB_USER_ID];
-        _move = [CoordPoint coordWithArray:props[DB_START_LOC]];
-        _bombs = [[NSMutableArray alloc] init];
+        
+        _gameId = [props[INGAMEID] intValue];
+        
+        _units = [NSMutableArray arrayWithCapacity:NUMBER_OF_UNITS];
+        _selectedUnit = -1;
+        
         _points = points;
+
         _remainingPoints = points;
         _updated = NO;
         _gameId = gameId;
@@ -42,103 +45,161 @@
         
         self.Alive = YES;
         [self reset];
+        
+        _lastPlays = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
 
--(void) reset
+-(void) addUnits:(NSArray*)units
 {
-    if(_move)
+    for(int i = 0; i < NUMBER_OF_UNITS; ++i)
     {
-        _location = _move;
-        _move = nil;
+        int tag = _gameId << 1 | i;
+        Unit* unit = [[Unit alloc] initWithStart:[CoordPoint coordWithArray:units[i]]
+                                      withGameId:tag];
+        [_units addObject:unit];
     }
-
-    [_bombs removeAllObjects];
-    _points = _remainingPoints;
-    _updated = NO;
 }
 
--(void) cancel
+
+-(void) updateWithUnits:(NSArray *)units andPoints:(int)points
 {
-    _move = nil;
-    [_bombs removeAllObjects];
-    [self willChangeValueForKey:@"Points"];
-    _remainingPoints = _points;
-    [self didChangeValueForKey:@"Points"];
+    NSAssert(units.count == _units.count, @"Unequal number of units in update");
+    
+    _points = points;
+    for(int i = 0; i < units.count; ++i)
+    {
+        Unit* unit = _units[i];
+        NSDictionary* unitDB = units[i];
+        
+        CoordPoint* moveCoord = nil;
+        NSArray* move = unitDB[DB_MOVE];
+        if(move.count > 0)
+        {
+            moveCoord = [CoordPoint coordWithArray:move];
+        }
+        NSArray* bombs = unitDB[DB_BOMBS];
+        NSMutableArray* bombCoords = [NSMutableArray arrayWithCapacity:bombs.count];
+        for(NSArray* b in bombs)
+        {
+            CoordPoint* bombCoord = [CoordPoint coordWithArray:b];
+            [bombCoords addObject:bombCoord];
+        }
+        
+        [unit updateMove:moveCoord Bombs:bombCoords];
+    }
 }
 
 
--(void) addRoundBonus:(int)points
+-(NSArray*) getUnitsForDB
+{
+    NSMutableArray* units = [NSMutableArray arrayWithCapacity:_units.count];
+    for(Unit* unit in _units)
+    {
+        NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:unit.Bombs.count];
+        for (CoordPoint* b in unit.Bombs)
+        {
+            [bombs addObject:[b arrayFromCoord]];
+        }
+        
+        NSArray* move = unit.Move ? [unit.Move arrayFromCoord] : [[NSArray alloc] init];
+        
+        NSDictionary* unitDB = [NSDictionary dictionaryWithObjectsAndKeys:
+                               move, DB_MOVE,
+                               bombs, DB_BOMBS, nil];
+        [units addObject:unitDB];
+    }
+    
+    return units;
+}
+
+
+-(void) addRoundBonus:(int)bonus
 {
     [self willChangeValueForKey:@"Points"];
-    _remainingPoints += points;
-    _points += points;
+    _points += bonus;
     [self didChangeValueForKey:@"Points"];
+    
+    [_lastPlays removeAllObjects];
 }
 
--(BOOL) addMove:(CellValue*)move
+-(void) setSelected:(int)selected
+{
+    _selectedUnit = selected;
+    
+    [_lastPlays removeAllObjects];
+}
+
+-(BOOL) getAlive
+{
+    BOOL unitsAlive = NO;
+    for(Unit* unit in _units)
+    {
+        unitsAlive = unitsAlive || unit.Alive;
+    }
+    
+    return unitsAlive;
+}
+
+-(Unit*) SelectedUnit
+{
+    if(_selectedUnit < 0 || _selectedUnit > _units.count) return nil;
+    
+    return _units[_selectedUnit];
+}
+
+
+-(CoordPoint*) undoLastPlay
+{
+    if(_lastPlays.count == 0) return nil;
+    NSArray* last = [_lastPlays lastObject];
+    [_lastPlays removeLastObject];
+    
+    [self willChangeValueForKey:@"Points"];
+    _points += [last[1] intValue];
+    [self didChangeValueForKey:@"Points"];
+    
+    return last[0];
+}
+
+
+-(BOOL) addMove:(CellValue *)move
 {
     if(![self checkDistance:move]) return NO;
     
-    // trigger the points after the move has actually been moved
-    [self willChangeValueForKey:@"Points"];
-    _move = move.coord;
-    [self didChangeValueForKey:@"Points"];
+    [self.SelectedUnit addMove:move];
+    
+    [_lastPlays addObject:[NSArray arrayWithObjects:
+                           move.coord, @(move.cost), nil]];
+    
     return YES;
 }
 
-
--(BOOL) addBomb:(CellValue*)bomb
+-(BOOL) addBomb:(CellValue *)bomb
 {
     if(![self checkDistance:bomb]) return NO;
     
-    [self willChangeValueForKey:@"Points"];
-    [_bombs addObject:bomb.coord];
-    [self didChangeValueForKey:@"Points"];
+    [self.SelectedUnit addBomb:bomb];
+    
+    [_lastPlays addObject:[NSArray arrayWithObjects:bomb.coord, @(bomb.cost), nil]];
     
     return YES;
-}
-
-
--(BOOL) updateMove:(CoordPoint *)move Bombs:(NSArray *)bombs andPoints:(int) points
-{
-    BOOL hasUpdate = _updated;
-    
-    // cancel previous update, and apply new one
-    [self cancel];
-    if(move)
-    {
-        _move = move;
-    }
-    
-    [_bombs addObjectsFromArray:bombs];
-    
-    [self willChangeValueForKey:@"Points"];
-    _remainingPoints = points;
-    [self didChangeValueForKey:@"Points"];
-    
-    _updated = YES;
-    return hasUpdate;
 }
 
 
 -(BOOL) checkDistance:(CellValue*)dest
 {
     if(dest.cost < 0) return NO;
-
-    _remainingPoints -= dest.cost;
-
+    
+    [self willChangeValueForKey:@"Points"];
+    _points -= dest.cost;
+    [self didChangeValueForKey:@"Points"];
+    
     return YES;
 }
 
-
--(void) getPointsFromBomb:(int)points
-{
-   _points += points;
-   _remainingPoints += points;
-}
 
 @end

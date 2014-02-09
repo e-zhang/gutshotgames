@@ -34,6 +34,8 @@
 		58E8E10E1856263900526640 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E10D1856263900526640 /* libxml2.dylib */; };
 		E772219C1886190F00FEA8D8 /* CellValue.m in Sources */ = {isa = PBXBuildFile; fileRef = E772219B1886190F00FEA8D8 /* CellValue.m */; };
 		E77221A2188781DE00FEA8D8 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77221A1188781DE00FEA8D8 /* GameViewController.m */; };
+		E77221B11899CF2300FEA8D8 /* Unit.m in Sources */ = {isa = PBXBuildFile; fileRef = E77221B01899CF2300FEA8D8 /* Unit.m */; };
+		E77221B41899CF8500FEA8D8 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = E77221B31899CF8500FEA8D8 /* Player.m */; };
 		E7850D24185382C70076C518 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D23185382C70076C518 /* Foundation.framework */; };
 		E7850D26185382C70076C518 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D25185382C70076C518 /* CoreGraphics.framework */; };
 		E7850D28185382C70076C518 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D27185382C70076C518 /* UIKit.framework */; };
@@ -46,7 +48,6 @@
 		E7850D48185382C80076C518 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D27185382C70076C518 /* UIKit.framework */; };
 		E7850D50185382C80076C518 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7850D4E185382C80076C518 /* InfoPlist.strings */; };
 		E7850D52185382C80076C518 /* BattleBoardsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D51185382C80076C518 /* BattleBoardsTests.m */; };
-		E7850D6918539DD40076C518 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D6818539DD40076C518 /* Player.m */; };
 		E7850D6C18539E2D0076C518 /* GridModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D6B18539E2D0076C518 /* GridModel.m */; };
 		E7850D7218539E4C0076C518 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7850D7018539E4C0076C518 /* GridCell.m */; };
 		E7850D7618539EE90076C518 /* CouchCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7850D7318539EE90076C518 /* CouchCocoa.framework */; };
@@ -109,6 +110,11 @@
 		E772219B1886190F00FEA8D8 /* CellValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CellValue.m; path = Model/CellValue.m; sourceTree = "<group>"; };
 		E77221A0188781DE00FEA8D8 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		E77221A1188781DE00FEA8D8 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		E77221AF1899CF2300FEA8D8 /* Unit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Unit.h; path = Model/Unit.h; sourceTree = "<group>"; };
+		E77221B01899CF2300FEA8D8 /* Unit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Unit.m; path = Model/Unit.m; sourceTree = "<group>"; };
+		E77221B21899CF8500FEA8D8 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Model/Player.h; sourceTree = "<group>"; };
+		E77221B31899CF8500FEA8D8 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Model/Player.m; sourceTree = "<group>"; };
+		E77221B518A0784A00FEA8D8 /* GameDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameDefinitions.h; path = Model/GameDefinitions.h; sourceTree = "<group>"; };
 		E7850D20185382C70076C518 /* BattleBoards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BattleBoards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7850D23185382C70076C518 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E7850D25185382C70076C518 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -125,8 +131,6 @@
 		E7850D4D185382C80076C518 /* BattleBoardsTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BattleBoardsTests-Info.plist"; sourceTree = "<group>"; };
 		E7850D4F185382C80076C518 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E7850D51185382C80076C518 /* BattleBoardsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BattleBoardsTests.m; sourceTree = "<group>"; };
-		E7850D6718539DD40076C518 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Model/Player.h; sourceTree = "<group>"; };
-		E7850D6818539DD40076C518 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Model/Player.m; sourceTree = "<group>"; };
 		E7850D6A18539E2D0076C518 /* GridModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridModel.h; path = Model/GridModel.h; sourceTree = "<group>"; };
 		E7850D6B18539E2D0076C518 /* GridModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridModel.m; path = Model/GridModel.m; sourceTree = "<group>"; };
 		E7850D6F18539E4C0076C518 /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridCell.h; path = Views/GridCell.h; sourceTree = "<group>"; };
@@ -309,12 +313,15 @@
 				586EEA881857323E00A5D3A5 /* Server Com Related */,
 				E772219A1886190F00FEA8D8 /* CellValue.h */,
 				E772219B1886190F00FEA8D8 /* CellValue.m */,
+				E77221B21899CF8500FEA8D8 /* Player.h */,
+				E77221B31899CF8500FEA8D8 /* Player.m */,
+				E77221AF1899CF2300FEA8D8 /* Unit.h */,
+				E77221B01899CF2300FEA8D8 /* Unit.m */,
 				E7850D6A18539E2D0076C518 /* GridModel.h */,
 				E7850D6B18539E2D0076C518 /* GridModel.m */,
-				E7850D6718539DD40076C518 /* Player.h */,
-				E7850D6818539DD40076C518 /* Player.m */,
 				E7850D7F1854DB790076C518 /* CoordPoint.h */,
 				E7850D801854DB790076C518 /* CoordPoint.m */,
+				E77221B518A0784A00FEA8D8 /* GameDefinitions.h */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -455,6 +462,7 @@
 				586EEA641856DDFA00A5D3A5 /* createaccount.m in Sources */,
 				586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */,
 				58108A5918953E1100106D3C /* GestureSubClass.m in Sources */,
+				E77221B41899CF8500FEA8D8 /* Player.m in Sources */,
 				586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */,
 				586EEA711856DEE400A5D3A5 /* GameRequest.m in Sources */,
 				586EEA771856E0F800A5D3A5 /* GameInfo.m in Sources */,
@@ -468,7 +476,7 @@
 				586EEA7F1856E28000A5D3A5 /* GameChat.m in Sources */,
 				E7850D30185382C70076C518 /* main.m in Sources */,
 				E7850D7218539E4C0076C518 /* GridCell.m in Sources */,
-				E7850D6918539DD40076C518 /* Player.m in Sources */,
+				E77221B11899CF2300FEA8D8 /* Unit.m in Sources */,
 				E7850D6C18539E2D0076C518 /* GridModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

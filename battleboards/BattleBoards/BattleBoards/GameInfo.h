@@ -12,7 +12,7 @@
 @protocol GameUpdateDelegate <NSObject>
 
 - (BOOL) onPlayerJoined:(NSDictionary*) player;
-- (BOOL) onMove:(NSArray*)move Bombs:(NSArray*)bombs andPoints:(int)points forPlayer:(NSString*) playerId;
+- (void) updateWithUnits:(NSArray*)units andPoints:(int)points forPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;
 
@@ -48,7 +48,7 @@
 -(void) initializeGame;
 - (void) setDelegate:(id<GameUpdateDelegate>) delegate;
 
-- (void) reset;
+- (void) reset:(NSString*)playerId;
 - (void) startRound;
 - (void) endRound;
 
@@ -58,9 +58,9 @@
 
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
 
-- (void) joinGame:(NSString*) userId withLocation:(NSArray*)start;
+- (BOOL) joinGame:(NSString*) userId withLocation:(NSArray*)start;
 - (void) leaveGame:(NSString*) userId;
-- (void) submitMove:(NSArray*)move Bombs:(NSArray*)bombs andPoints:(int)points forPlayer:(NSString*)player;
+- (void) submitUnits:(NSArray*)units andPoints:(int)points forPlayer:(NSString*)player;
 
 
 
