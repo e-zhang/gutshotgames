@@ -90,6 +90,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_undoButton setUserInteractionEnabled:YES];
     NSLog(@"...");
     
+    [self refreshGridPossibilities];
+    
     for(CoordPoint *p in cells)
     {
         //update cell
@@ -199,7 +201,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
 -(void) onRoundStart:(int)round
 {
-    _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round];
+    _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round+1];
 }
 
 

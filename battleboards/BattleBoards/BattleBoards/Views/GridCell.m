@@ -54,7 +54,7 @@
         }
         case BOMB:
             self.backgroundColor = _grid.CharColors[_grid.MyPlayer.GameId];
-            self.layer.borderColor = [UIColor blackColor].CGColor;
+            self.layer.borderColor = [UIColor whiteColor].CGColor;
             break;
         case GONE:
         {
@@ -68,7 +68,7 @@
                 UIView* block = [[UIView alloc] initWithFrame:
                                  CGRectMake(w/2*i, h/2*i, w, h)];
                 block.backgroundColor=_grid.CharColors[player.GameId];
-                block.layer.borderColor = [UIColor blackColor].CGColor;
+                block.layer.borderColor = [UIColor whiteColor].CGColor;
                 [self addSubview:block];
             }
             break;

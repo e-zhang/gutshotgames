@@ -122,8 +122,6 @@
     [self willChangeValueForKey:@"Points"];
     _points += bonus;
     [self didChangeValueForKey:@"Points"];
-    
-    [_lastPlays removeAllObjects];
 }
 
 -(void) setSelected:(int)selected

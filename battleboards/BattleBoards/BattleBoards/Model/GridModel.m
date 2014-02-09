@@ -278,7 +278,8 @@
 
             for(Unit* unit in player.Units)
             {
-                [self movePlayer:player.Id from:unit.Location to:unit.Location];
+                [self movePlayer:[self composePlayerId:player.Id withTag:unit.GameTag]
+                            from:unit.Location to:unit.Location];
             }
         }
         [_delegate startGame];

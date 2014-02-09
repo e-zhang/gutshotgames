@@ -44,6 +44,7 @@
     }
 
     [_bombs removeAllObjects];
+    
     _updated = NO;
 }
 
