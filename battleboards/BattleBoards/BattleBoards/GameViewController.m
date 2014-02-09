@@ -12,8 +12,8 @@
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
 
-static const int PLAYER1TAG = 101;
-static const int PLAYER2TAG = 102;
+static const int PLAYER1TAG = 1001;
+static const int PLAYER2TAG = 1002;
 
 static NSString* FORMAT_STRING = @"Round - %d";
 
