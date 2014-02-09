@@ -54,9 +54,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
     [_gridModel calculateGridPossibilities];
     [_gridView.dragView removeFromSuperview];
-    // shows bomb costs
-    if(!_gridModel.MyPlayer.SelectedUnit) return;
-    [_gridView refreshCosts:NO];
+
+    [_gridView refreshCosts:_gridModel.MyPlayer.SelectedUnit == nil];
 }
 
 -(void) startGame
@@ -89,9 +88,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_submitButton setUserInteractionEnabled:YES];
     [_undoButton setUserInteractionEnabled:YES];
     NSLog(@"...");
-    
-    [self refreshGridPossibilities];
-    
+
     for(CoordPoint *p in cells)
     {
         //update cell
@@ -277,6 +274,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     
     [_gridModel submitForMyPlayer];
 
+    [self refreshGridPossibilities];
 }
 
 

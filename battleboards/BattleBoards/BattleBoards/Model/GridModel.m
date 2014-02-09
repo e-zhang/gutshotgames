@@ -196,6 +196,8 @@
     Player* myP = self.MyPlayer;
  
     [_gameInfo submitUnits:[myP getUnitsForDB] andPoints:myP.Points forPlayer:_myPlayerId];
+    
+    [myP setSelected:-1];
 }
 
 
@@ -312,8 +314,6 @@
         {
             [unit reset];
         }
-        
-        [player setSelected:-1];
     }
     
 
