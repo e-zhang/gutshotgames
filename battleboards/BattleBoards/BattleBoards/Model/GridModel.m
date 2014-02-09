@@ -257,11 +257,7 @@
     if(p.Units.count == 0)
     {
         [p addUnits:player[DB_START_LOC]];
-        for(Unit* unit in p.Units)
-        {
-            [self movePlayer:userId from:unit.Location to:unit.Location];
-        }
-        
+
         [_delegate initPlayer:p];
         startGame = YES;
     }
@@ -271,6 +267,16 @@
                 self.MyPlayer.Units.count == NUMBER_OF_UNITS;
     if(startGame)
     {
+        // initialize the rest of the players
+        for(Player* player in [_players allValues])
+        {
+            if([player.Id isEqualToString:_myPlayerId]) continue;
+
+            for(Unit* unit in player.Units)
+            {
+                [self movePlayer:player.Id from:unit.Location to:unit.Location];
+            }
+        }
         [_delegate startGame];
     }
     return startGame;
@@ -384,7 +390,7 @@
         CellValue* value = [self getCellWithCoord:cell];
         for(NSString* occupantId in value.occupants)
         {
-            NSArray* ids = [self decomposeId:occupantId];
+            NSArray* ids = [self decomposePlayerId:occupantId];
             Player* player = _players[ids[0]];
             Unit* unit = player.Units[[ids[1] intValue]];
             unit.Alive = NO;
@@ -407,7 +413,7 @@
                 tag & UNIT_TAG_MASK];
 }
 
--(NSArray*) decomposeId:(NSString*)composite
+-(NSArray*) decomposePlayerId:(NSString*)composite
 {
     return [composite componentsSeparatedByString:@"|"];
 }

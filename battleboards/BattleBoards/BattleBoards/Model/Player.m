@@ -158,6 +158,20 @@
     NSArray* last = [_lastPlays lastObject];
     [_lastPlays removeLastObject];
     
+    CellStates state = [[last lastObject] intValue];
+    switch(state)
+    {
+        case OCCUPIED:
+            [self.SelectedUnit undoMove:last[0]];
+            break;
+        case BOMB:
+            [self.SelectedUnit undoBomb:last[0]];
+            break;
+        default:
+            NSLog(@"invalid last play state %d", state);
+            return nil;
+    }
+    
     [self willChangeValueForKey:@"Points"];
     _points += [last[1] intValue];
     [self didChangeValueForKey:@"Points"];
@@ -172,9 +186,12 @@
     
     [self.SelectedUnit addMove:move];
     
+    [self willChangeValueForKey:@"Points"];
     [_lastPlays addObject:[NSArray arrayWithObjects:
-                           move.coord, @(move.cost), nil]];
+                           move.coord, @(move.cost), @(OCCUPIED), nil]];
     
+
+    [self didChangeValueForKey:@"Points"];
     return YES;
 }
 
@@ -184,8 +201,11 @@
     
     [self.SelectedUnit addBomb:bomb];
     
-    [_lastPlays addObject:[NSArray arrayWithObjects:bomb.coord, @(bomb.cost), nil]];
+    [self willChangeValueForKey:@"Points"];
+    [_lastPlays addObject:[NSArray arrayWithObjects:bomb.coord, @(bomb.cost), @(BOMB), nil]];
     
+
+    [self didChangeValueForKey:@"Points"];
     return YES;
 }
 
@@ -193,10 +213,9 @@
 -(BOOL) checkDistance:(CellValue*)dest
 {
     if(dest.cost < 0) return NO;
-    
-    [self willChangeValueForKey:@"Points"];
+
     _points -= dest.cost;
-    [self didChangeValueForKey:@"Points"];
+
     
     return YES;
 }

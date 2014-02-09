@@ -50,13 +50,33 @@
 -(void) addMove:(CellValue*)move
 {
     _move = move.coord;
+}
 
+-(void) undoMove:(CoordPoint *)move
+{
+    if([move isEqual:_move])
+    {
+        _move = nil;
+    }
 }
 
 
 -(void) addBomb:(CellValue*)bomb
 {
     [_bombs addObject:bomb.coord];
+}
+
+
+-(void) undoBomb:(CoordPoint *)bomb
+{
+    for(CoordPoint* point in _bombs)
+    {
+        if([point isEqual:bomb])
+        {
+            [_bombs removeObject:point];
+            break;
+        }
+    }
 }
 
 

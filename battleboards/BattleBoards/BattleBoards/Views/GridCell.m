@@ -47,7 +47,7 @@
     {
         case EMPTY:
         {
-            self.layer.borderColor = [UIColor blackColor].CGColor;
+            self.layer.borderColor = [UIColor whiteColor].CGColor;
             self.backgroundColor = [UIColor clearColor];
             [self addSubview:_cost];
             break;
@@ -63,7 +63,8 @@
             int h = self.bounds.size.height/cell.bombers.count;
             for(int i=0; i < cell.bombers.count; ++i)
             {
-                Player* player = [_grid.Players objectForKey:[cell.bombers objectAtIndex:i]];
+                NSString* playerId = [[_grid decomposePlayerId:[cell.bombers objectAtIndex:i]] firstObject];
+                Player* player = [_grid.Players objectForKey:playerId];
                 UIView* block = [[UIView alloc] initWithFrame:
                                  CGRectMake(w/2*i, h/2*i, w, h)];
                 block.backgroundColor=_grid.CharColors[player.GameId];
@@ -79,9 +80,11 @@
             int h = self.bounds.size.height/cell.occupants.count;
             for(int i=0; i < cell.occupants.count; ++i)
             {
-                Player* player = [_grid.Players objectForKey:[cell.occupants objectAtIndex:i]];
+                NSString* playerId = [[_grid decomposePlayerId:[cell.occupants objectAtIndex:i]] firstObject];
+                Player* player = [_grid.Players objectForKey:playerId];
                 
-                UIView* block = [[UIView alloc] initWithFrame:CGRectMake((w*0.75)/2*i + (w*0.25/2), (h*0.75)/2*i + (h*0.25/2), w *0.75, h * 0.75)];
+                UIView* block = [[UIView alloc] initWithFrame:CGRectMake((i*w*0.75) + w*0.25/2, (i*h*0.75)+h*0.25/2,
+                                                                         w *0.75, h * 0.75)];
                 
                 block.layer.cornerRadius = MIN((w*0.75)/2, (h*0.75)/2);
                 

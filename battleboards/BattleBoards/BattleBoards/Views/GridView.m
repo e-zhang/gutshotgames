@@ -148,10 +148,8 @@
             pan.maximumNumberOfTouches = 2;
             [self addGestureRecognizer:pan];
         }
-        else
-        {
-            [self updateCell:coord];
-        }
+        
+        [self updateCell:coord];
     }
 }
 

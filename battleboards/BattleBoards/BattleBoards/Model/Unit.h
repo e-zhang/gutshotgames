@@ -23,7 +23,10 @@
 
 // for updating user inputs
 -(void) addMove:(CellValue*) move;
+-(void) undoMove:(CoordPoint*)move;
 -(void) addBomb:(CellValue*) bomb;
+-(void) undoBomb:(CoordPoint*)move;
+
 -(void) setLocation:(CoordPoint*)coord;
 
 // for updating from database

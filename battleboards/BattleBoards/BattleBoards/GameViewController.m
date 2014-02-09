@@ -68,6 +68,15 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [self.view addSubview:_roundInfo];
     [self.view addSubview:_activityView];
 
+    
+    // show locations
+    for(Player* player in [_gridModel.Players allValues])
+    {
+        for(Unit* unit in player.Units)
+        {
+            [_gridView updateCell:unit.Location];
+        }
+    }
  
 }
 
@@ -230,11 +239,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:PLAYER2TAG];
         player2Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player2Image.layer.borderWidth = 2.0f;
-    }
-    
-    for(Unit* unit in p.Units)
-    {
-        [_gridView updateCell:unit.Location];
     }
 }
 

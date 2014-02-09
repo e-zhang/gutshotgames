@@ -50,6 +50,7 @@
 
 
 -(NSString*) composePlayerId:(NSString*)userid withTag:(int)tag;
+-(NSArray*) decomposePlayerId:(NSString*)composite;
 
 
 // gameupdate delegate
