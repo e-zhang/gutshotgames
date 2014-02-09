@@ -20,12 +20,13 @@
         _cell = coord;
         _grid = grid;
         
-        self.layer.borderColor = [UIColor blackColor].CGColor;
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 1.0f;
         
         _cost = [[UILabel alloc] initWithFrame:CGRectMake(0.0f,0.0f,self.frame.size.width, self.frame.size.height)];
         _cost.textAlignment = NSTextAlignmentCenter;
-        _cost.textColor = [UIColor blackColor];
+        _cost.textColor = [UIColor whiteColor];
+        _cost.font = [UIFont fontWithName:@"GillSans" size:14.0f];
         _cost.text = @"";
 
         [self addSubview:_cost];
@@ -68,8 +69,8 @@
             {
                 Player* player = _grid.Players[cell.occupants[i]];
                 UIView* block = [[UIView alloc] initWithFrame:
-                                  CGRectMake(w/2*i, h/2*i, w, h)];
-                block.layer.cornerRadius = MIN(w/2, h/2);
+                                  CGRectMake((w*0.75)/2*i + (w*0.25/2), (h*0.75)/2*i + (h*0.25/2), w *0.75, h * 0.75)];
+                block.layer.cornerRadius = MIN((w*0.75)/2, (h*0.75)/2);
                 block.backgroundColor=player.Color;
                 block.layer.borderColor = [UIColor grayColor].CGColor;
                 [self addSubview:block];

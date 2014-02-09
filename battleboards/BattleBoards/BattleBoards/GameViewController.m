@@ -12,6 +12,9 @@
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
 
+static const int PLAYER1TAG = 101;
+static const int PLAYER2TAG = 102;
+
 static NSString* FORMAT_STRING = @"Round - %d";
 
 
@@ -32,13 +35,16 @@ static NSString* FORMAT_STRING = @"Round - %d";
         _gridModel = [[GridModel alloc] initWithGame:game andPlayer:playerId andDelegate:self];
         NSLog(@"initGVC - gridSize-%@",game.gridSize);
         //screen bounds will make it a rect and not a square
-        _gridView = [[GridView alloc] initWithFrame:CGRectMake(0,
-                                                               0,
-                                                               320.0f,
-                                                               320.0f)
+        _gridView = [[GridView alloc] initWithFrame:CGRectMake(10,
+                                                               100.0f,
+                                                               300.0f,
+                                                               300.0f)
                                        andGridModel:_gridModel];
         
         [self.view addSubview:_gridView];
+        
+        [self displayPlayerInfo:game.players];
+
         
     }
     return self;
@@ -56,10 +62,10 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
     [_noticeMsg removeFromSuperview];
     
-    [_sidePanel addSubview:_submitButton];
-    [_sidePanel addSubview:_cancelButton];
-    [_sidePanel addSubview:_roundInfo];
-    [_sidePanel addSubview:_activityView];
+    [self.view addSubview:_submitButton];
+    [self.view addSubview:_cancelButton];
+    [self.view addSubview:_roundInfo];
+    [self.view addSubview:_activityView];
  
 }
 
@@ -94,46 +100,85 @@ static NSString* FORMAT_STRING = @"Round - %d";
 - (void)loadView
 {
     // Do any additional setup after loading the view, typically from a nib.
-    self.view = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 480, 320)];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.view.backgroundColor = [UIColor colorWithRed:205.0/255.0f green:205.0/255.0f blue:205.0/255.0f alpha:1];
     
     _roundInfo = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 100.0f, 20.0f)];
     _roundInfo.textColor = [UIColor blackColor];
     _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING,0];
-    _roundInfo.font = [UIFont systemFontOfSize:10.0f];
+    _roundInfo.font = [UIFont fontWithName:@"GillSans" size:12.0f];
     
-    _noticeMsg = [[UILabel alloc] initWithFrame:CGRectMake(50.0f, self.view.frame.size.height/2 - 40.0f, self.view.frame.size.width - 100.0f, 80.0f)];
+    _noticeMsg = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 440.0f, self.view.frame.size.width, 40.0f)];
     _noticeMsg.textAlignment = NSTextAlignmentCenter;
-    _noticeMsg.backgroundColor = [UIColor blackColor];
-    _noticeMsg.textColor = [UIColor whiteColor];
+    _noticeMsg.backgroundColor = [UIColor clearColor];
+    _noticeMsg.textColor = [UIColor blackColor];
+    _noticeMsg.font = [UIFont fontWithName:@"GillSans" size:16.0f];
     _noticeMsg.text = @"Select a starting location";
     
-    _sidePanel = [[UIView alloc] initWithFrame:CGRectMake(320.0f, 0.0f, self.view.frame.size.width - 320.0f, self.view.frame.size.height)];
-    _sidePanel.backgroundColor = [UIColor lightGrayColor];
-    
-    _activityView =[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [_activityView setCenter:CGPointMake(_sidePanel.frame.size.width - 20.0f, 30.0f)];
     
     _submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _submitButton.backgroundColor = [UIColor blackColor];
-    _submitButton.frame = CGRectMake(10.0f, 10.0f, 100.0f, 40.0f);
+    _submitButton.frame = CGRectMake(0.0f, 440.0f, self.view.frame.size.width/2, 40.0f);
     [_submitButton setTitle:@"Submit" forState:UIControlStateNormal];
+    [_submitButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
     
     _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _cancelButton.backgroundColor = [UIColor blackColor];
-    _cancelButton.frame = CGRectMake(10.0f, 55.0f, 100.0f, 40.0f);
+    _cancelButton.frame = CGRectMake(self.view.frame.size.width/2, 440.0f, self.view.frame.size.width/2, 40.0f);
     [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [_cancelButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_cancelButton addTarget:self action:@selector(cancelPlay:) forControlEvents:UIControlEventTouchUpInside];
 
-    [self.view addSubview:_sidePanel];
     [self.view addSubview:_noticeMsg];
 
 }
 
+- (void)displayPlayerInfo:(NSDictionary*)players{
+    
+    NSDictionary *player1 = [[players allValues] objectAtIndex:0];
+    NSDictionary *player2 = [[players allValues] objectAtIndex:1];
+    
+    if([[[[players allValues] objectAtIndex:0] objectForKey:@"playerId"]isEqualToString:_gridModel.MyPlayer.Id])
+    {
+        player1 = [[players allValues] objectAtIndex:0];
+        player2 = [[players allValues] objectAtIndex:1];
+    }
+    else
+    {
+        player1 = [[players allValues] objectAtIndex:1];
+        player2 = [[players allValues] objectAtIndex:0];
+    }
+    
+    NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [player1 objectForKey:@"fb_id"]];
+    NSString *path2 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",[player2 objectForKey:@"fb_id"]];
+    
+    NSURL *url1 = [NSURL URLWithString:path1];
+    NSData *data1 = [NSData dataWithContentsOfURL:url1];
+    NSData *userPic1 = [NSData dataWithData:data1];
 
+    NSURL *url2 = [NSURL URLWithString:path2];
+    NSData *data2 = [NSData dataWithContentsOfURL:url2];
+    NSData *userPic2 = [NSData dataWithData:data2];
+    
+    UIImageView *player1Image = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 40.0f, 40.0f, 40.0f)];
+    player1Image.tag = PLAYER1TAG;
+    player1Image.image = [UIImage imageWithData:userPic1];
+    player1Image.layer.cornerRadius = 20.0f;
+    player1Image.layer.masksToBounds = YES;
+    
+    UIImageView *player2Image = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 + 10.0f, 40.0f, 40.0f, 40.0f)];
+    player2Image.tag = PLAYER2TAG;
+    player2Image.image = [UIImage imageWithData:userPic2];
+    player2Image.layer.cornerRadius = 20.0f;
+    player2Image.layer.masksToBounds = YES;
+    
+    [self.view addSubview:player1Image];
+    [self.view addSubview:player2Image];
+    
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -152,33 +197,35 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
 -(void)initPlayer:(Player *)p
 {
-    NSLog(@"playerupdate-%@",p);
-    UIView *charView = [[UIView alloc] initWithFrame:CGRectMake(15.0f, 120.0f + 50 * p.GameId, 120.0f, 50.0f)];
-    charView.tag = p.GameId;
-    
-    UIView *charCircle = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 15.0f, 20.0f, 20.0f)];
-    charCircle.layer.cornerRadius = 10.0f;
-    charCircle.backgroundColor = p.Color;
-    
-    UILabel *charName = [[UILabel alloc] initWithFrame:CGRectMake(25.0f, 0.0f, 120.0f, 50.0f)];
-    charName.text = p.Name;
-    charName.font = [UIFont systemFontOfSize:10.0f];
-    
-    [charView addSubview:charCircle];
-    [charView addSubview:charName];
-    [_sidePanel addSubview:charView];
-    
-    UILabel *a = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 0.0f, 25.0f, 50.0f)];
-    a.font = [UIFont systemFontOfSize:10.0f];
-    a.tag = p.GameId + CHAR_LABEL;
-    a.text = [NSString stringWithFormat:@"%d",p.Points];
-    [charView addSubview:a];
-
     [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
     
     if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
     {
+        UILabel *player1points = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 160.0f, 40.0f, 100.0f, 40.0f)];
+        player1points.text = [NSString stringWithFormat:@"%d",p.Points];
+        player1points.font = [UIFont fontWithName:@"GillSans" size:16.0f];
+        player1points.textAlignment = NSTextAlignmentRight;
+        player1points.textColor = [UIColor blackColor];
+        [self.view addSubview:player1points];
+
         _noticeMsg.text = @"Waiting for players to connect...";
+        
+        UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:PLAYER1TAG];
+        player1Image.layer.borderColor = p.Color.CGColor;
+        player1Image.layer.borderWidth = 2.0f;
+    }
+    else
+    {
+        UILabel *player2points = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 + 60.0f, 40.0f, 100.0f, 40.0f)];
+        player2points.text = [NSString stringWithFormat:@"%d",p.Points];
+        player2points.font = [UIFont fontWithName:@"GillSans" size:16.0f];
+        player2points.textAlignment = NSTextAlignmentLeft;
+        player2points.textColor = [UIColor blackColor];
+        [self.view addSubview:player2points];
+        
+        UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:PLAYER2TAG];
+        player2Image.layer.borderColor = p.Color.CGColor;
+        player2Image.layer.borderWidth = 2.0f;
     }
     
     NSLog(@"%@ init at %@", p.Name, p.Location);
@@ -216,7 +263,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         [self refreshGridPossibilities];
         
 
-        UILabel *a = (UILabel *)[_sidePanel viewWithTag:((Player*)object).GameId + CHAR_LABEL];
+        UILabel *a = (UILabel *)[self.view viewWithTag:((Player*)object).GameId + CHAR_LABEL];
         if(a)
         {
             a.text = [NSString stringWithFormat:@"%d",((Player*)object).Points];

@@ -13,7 +13,8 @@
 {
     NSString* _name;
     NSString* _userId;
-    
+    NSString* _fbId;
+
     CoordPoint* _location;
     int _points;
     int _remainingPoints;
@@ -50,6 +51,7 @@
 @property (readonly) CoordPoint* Move;
 @property (readonly) CoordPoint* Location;
 @property (readonly) NSString* Name;
+@property (readonly) NSString* FacebookId;
 @property (readonly) NSString* Id;
 @property (readonly) UIColor* Color;
 @property (readonly) int GameId;

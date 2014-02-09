@@ -322,12 +322,12 @@
 		E7850D5C18539C000076C518 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				586EEA511856DCA100A5D3A5 /* MenuView.h */,
+				586EEA521856DCA100A5D3A5 /* MenuView.m */,
 				E77221A0188781DE00FEA8D8 /* GameViewController.h */,
 				E77221A1188781DE00FEA8D8 /* GameViewController.m */,
 				586EEA621856DDFA00A5D3A5 /* createaccount.h */,
 				586EEA631856DDFA00A5D3A5 /* createaccount.m */,
-				586EEA511856DCA100A5D3A5 /* MenuView.h */,
-				586EEA521856DCA100A5D3A5 /* MenuView.m */,
 				586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */,
 				586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */,
 				586EEA7B1856E19600A5D3A5 /* Tags.h */,

@@ -52,46 +52,37 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:204 green:204 blue:204 alpha:1];
-    // Do any additional setup after loading the view from its nib.
-       
+    
     [self createAccountLabels];
     
-//    _cab.hidden = userType == NONE ? NO : YES;
 
     _players = [[NSMutableArray alloc] init];
-//    [_gameinvitations setContentSize:CGSizeMake(450,1400)];
-
     
-    UIView* inviteView = [self.view viewWithTag:INVITATIONS_VIEW];
-    CGRect frame = CGRectMake(inviteView.bounds.origin.x + 5, inviteView.bounds.origin.y + 50,
-                              inviteView.bounds.size.width - 10, inviteView.bounds.size.height - 50);
+    UIView* inviteView = [[UIView alloc] init];
+    inviteView.tag = INVITATIONS_VIEW;
+    inviteView.frame = CGRectMake(0.0f, 150.0f, self.view.frame.size.width, self.view.frame.size.height - 150.0f);
+    
+    [self.view addSubview:inviteView];
+    
+    CGRect frame = CGRectMake(inviteView.bounds.origin.x + 5, inviteView.bounds.origin.y + 25,
+                              inviteView.bounds.size.width - 10, inviteView.bounds.size.height - 25);
     InvitationsViewController* invites = [[InvitationsViewController alloc]
                                           initWithFrame:frame
                                           invitations:_gameServer.gameInvitations
                                           target:self
                                           selector:@selector(gotogame:)];
+
     [self addChildViewController:invites];
     [inviteView addSubview:invites.view];
-    
+
     UICollectionView* collection = (UICollectionView*)[self.view viewWithTag:SAVED_GAMES];
     
     [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"game_cell"];
 }
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if (interfaceOrientation==UIInterfaceOrientationLandscapeLeft || interfaceOrientation==UIInterfaceOrientationLandscapeRight)
-        return YES;
-    
-    return NO;
-}
-
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
@@ -111,15 +102,27 @@
             UILabel* label1 = [[UILabel alloc] init];
             label1.textColor = [UIColor darkGrayColor];
             label1.backgroundColor = [UIColor clearColor];
+            label1.textAlignment = NSTextAlignmentCenter;
+            label1.textColor = [UIColor whiteColor];
             
             myImageView.image = [[UIImage alloc]initWithData:userPic];
             label1.text = username;
             
-            myImageView.frame = CGRectMake(10,15,35,35);
-            label1.frame = CGRectMake(55,15,100,40);
+            myImageView.frame = CGRectMake(self.view.frame.size.width / 2 - 20.0f, 40.0f, 40.0f, 40.0f);
+            myImageView.layer.cornerRadius = 20.0f;
+            myImageView.layer.masksToBounds = YES;
+            label1.frame = CGRectMake(self.view.frame.size.width / 2 - 50.0f, 80.0f, 100.0f, 20.0f);
             label1.font = [UIFont fontWithName:@"GillSans" size:16.0f];
             [view addSubview:myImageView];
             [view addSubview:label1];
+            
+            UIButton* newGamebutton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 120.0f, 100.0f, 50.0f)];
+            [newGamebutton.titleLabel setTextColor:[UIColor whiteColor]];
+            [newGamebutton setTitle:@"Create Game" forState:UIControlStateNormal];
+            [newGamebutton.titleLabel setFont:[UIFont fontWithName:@"GillSans" size:16.0f]];
+            [newGamebutton addTarget:self action:@selector(addplayer:) forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:newGamebutton];
+            
             break;
         }
         case GSG:
@@ -135,7 +138,7 @@
         }
         case NONE:
         {
-            UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(20, 40, 150, 40)];
+            UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 100.0f, 100.0f, 40.0f)];
             [login setTitle:@"Log In" forState:UIControlStateNormal];
             [login addTarget:self action:@selector(createviafb:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:login];
@@ -222,7 +225,7 @@
         self.friendPickerController = [[FBFriendPickerViewController alloc] init];
         self.friendPickerController.title = @"Select a Friend";
         self.friendPickerController.delegate = self;
-        self.friendPickerController.allowsMultipleSelection = YES;
+        self.friendPickerController.allowsMultipleSelection = NO;
     }
     
     NSSet *fields = [NSSet setWithObjects:@"installed", nil];
@@ -517,7 +520,15 @@
 
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *uuidStr = (__bridge_transfer NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuidObject);
+    CFRelease(uuidObject);
+    
+    GameInfo* newg = [_gameServer createNewGame:uuidStr];
+    newg.gameName = uuidStr;
+    
+    [self startNewGame:newg];
 
 }
 
@@ -672,20 +683,6 @@
     
 }
 
-
-- (IBAction)onCreateNewGame:(id)sender
-{
-    CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *uuidStr = (__bridge_transfer NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuidObject);
-    CFRelease(uuidObject);
-    
-    GameInfo* newg = [_gameServer createNewGame:uuidStr];
-    newg.gameName = uuidStr;
-
-    [self startNewGame:newg];
-}
-
-
 -(void) startNewGame:(GameInfo*) newg
 {
     newg.hostId = _gameServer.user.userid;
@@ -707,8 +704,8 @@
     
     [_gameServer saveCreatedGame:newg];
     
-    UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
-    [collection reloadData];
+  //  UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
+  //  [collection reloadData];
     
 
     //replace 1 with _gameServer.user.userid
@@ -718,7 +715,10 @@
     
     [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     
-    [self presentViewController:self.gamewindow animated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^(void){
+        [self presentViewController:self.gamewindow animated:YES completion:nil];
+    }];
+    
 }
 
 

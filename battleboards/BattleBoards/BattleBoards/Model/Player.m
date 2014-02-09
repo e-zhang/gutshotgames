@@ -17,6 +17,7 @@
 @synthesize Move=_move;
 @synthesize Location=_location;
 @synthesize Id=_userId;
+@synthesize FacebookId=_fbId;
 @synthesize Name=_name;
 @synthesize Color=_playerColor;
 @synthesize GameId=_gameId;
@@ -37,6 +38,8 @@
         _updated = NO;
         _gameId = gameId;
         _playerColor = color;
+        _fbId = props[@"fb_id"];
+        
         self.Alive = YES;
         [self reset];
     }

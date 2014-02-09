@@ -19,7 +19,6 @@
     
     UIActivityIndicatorView *_activityView;
     
-    UIView *_sidePanel;
     UIButton *_submitButton;
     UIButton* _cancelButton;
     
