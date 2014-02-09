@@ -45,7 +45,7 @@
         
         _charColors = [NSArray arrayWithObjects:
                        [UIColor blueColor],
-                       [UIColor greenColor],
+                       [UIColor redColor],
                        [UIColor purpleColor],
                        [UIColor orangeColor],
                        [UIColor brownColor],

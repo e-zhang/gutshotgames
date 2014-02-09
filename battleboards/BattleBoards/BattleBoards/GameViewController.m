@@ -36,13 +36,10 @@ static NSString* FORMAT_STRING = @"Round - %d";
         NSLog(@"initGVC - gridSize-%@",game.gridSize);
         //screen bounds will make it a rect and not a square
 
-        _gridView = [[GridView alloc] initWithFrame:CGRectMake(10,
-                                                               100.0f,
-                                                               300.0f,
-                                                               300.0f)
-                                       andGridModel:_gridModel
-                                        andDelegate:self];
-
+        _gridView = [[GridView alloc] initWithFrame:CGRectMake(10.0f,
+                                                              100.0f,
+                                                              300.0f,
+                                                               300.0f) gridModel:_gridModel andDelegate:self];
         
         [self.view addSubview:_gridView];
         
@@ -214,7 +211,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         _noticeMsg.text = @"Waiting for players to connect...";
         
         UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:PLAYER1TAG];
-        player1Image.layer.borderColor = _gridModel.CharColors[p.GameId].CGColor;
+        player1Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player1Image.layer.borderWidth = 2.0f;
     }
     else
@@ -227,7 +224,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         [self.view addSubview:player2points];
         
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:PLAYER2TAG];
-        player2Image.layer.borderColor = _gridModel.CharColors[p.GameId].CGColor;
+        player2Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player2Image.layer.borderWidth = 2.0f;
     }
     

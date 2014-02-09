@@ -37,14 +37,14 @@
         
         _points = points;
 
-        _remainingPoints = points;
-        _updated = NO;
-        _gameId = gameId;
-        _playerColor = color;
+      //  _remainingPoints = points;
+      //  _updated = NO;
+      //  _gameId = gameId;
+     //   _playerColor = color;
         _fbId = props[@"fb_id"];
         
-        self.Alive = YES;
-        [self reset];
+      //  self.Alive = YES;
+      //  [self reset];
         
         _lastPlays = [[NSMutableArray alloc] init];
     }
