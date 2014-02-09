@@ -206,6 +206,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
         player1points.font = [UIFont fontWithName:@"GillSans" size:16.0f];
         player1points.textAlignment = NSTextAlignmentRight;
         player1points.textColor = [UIColor blackColor];
+        player1points.tag = p.GameId + CHAR_LABEL;
+
         [self.view addSubview:player1points];
 
         _noticeMsg.text = @"Waiting for players to connect...";
@@ -221,6 +223,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
         player2points.font = [UIFont fontWithName:@"GillSans" size:16.0f];
         player2points.textAlignment = NSTextAlignmentLeft;
         player2points.textColor = [UIColor blackColor];
+        player2points.tag = p.GameId + CHAR_LABEL;
+        
         [self.view addSubview:player2points];
         
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:PLAYER2TAG];
