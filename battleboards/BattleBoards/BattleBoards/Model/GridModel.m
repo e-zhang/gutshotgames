@@ -204,17 +204,19 @@
 -(NSArray*) undoForMyPlayer
 {
     Player* myP = self.MyPlayer;
-    CoordPoint* play = [myP undoLastPlay];
+    NSArray* play = [myP undoLastPlay];
     
     if(!play) return nil;
     
-    CellValue* cell = [self getCellWithCoord:play];
-    NSString* pId = [self composePlayerId:myP.Id withTag:myP.SelectedUnit.GameTag];
+    CoordPoint* playCoord = play[0];
+    Unit* selected = myP.Units[[play[1] intValue]];
+    CellValue* cell = [self getCellWithCoord:playCoord];
+    NSString* pId = [self composePlayerId:myP.Id withTag:selected.GameTag];
     
     if([cell.occupants containsObject:pId])
     {
-        [self movePlayer:pId from:play to:myP.SelectedUnit.Location];
-        return [NSArray arrayWithObjects:play, myP.SelectedUnit.Location,nil];
+        [self movePlayer:pId from:playCoord to:selected.Location];
+        return [NSArray arrayWithObjects:playCoord, selected.Location,nil];
     }
     else if([cell.bombers containsObject:pId])
     {
@@ -223,7 +225,7 @@
         {
             cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
         }
-        return [NSArray arrayWithObject:play];
+        return [NSArray arrayWithObject:playCoord];
     }
     
     return nil;
@@ -314,15 +316,13 @@
         {
             [unit reset];
         }
+
+        [player addRoundBonus:_players.count];
     }
     
 
     [_delegate updateRoundForCells:[updatedCells allObjects] andPlayers:_players];
-    
-    for(Player* player in [_players allValues])
-    {
-        [player addRoundBonus:_players.count];
-    }
+
 }
 
 -(void) movePlayer:(NSString*)name from:(CoordPoint*)src to:(CoordPoint*)dst
@@ -331,7 +331,7 @@
     // update old location
     CellValue* value = [self getCellWithCoord:src];
     
-    value.state = value.occupants.count <= 1 ? EMPTY : OCCUPIED;
+    value.state = value.occupants.count <= 1 ? (value.bombers.count > 0 ? BOMB : EMPTY) : OCCUPIED;
     [value.occupants removeObject:name];
 
     

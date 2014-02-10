@@ -37,14 +37,7 @@
         
         _points = points;
 
-      //  _remainingPoints = points;
-      //  _updated = NO;
-      //  _gameId = gameId;
-     //   _playerColor = color;
         _fbId = props[@"fb_id"];
-        
-      //  self.Alive = YES;
-      //  [self reset];
         
         _lastPlays = [[NSMutableArray alloc] init];
     }
@@ -122,13 +115,13 @@
     [self willChangeValueForKey:@"Points"];
     _points += bonus;
     [self didChangeValueForKey:@"Points"];
+    
+    [_lastPlays removeAllObjects];
 }
 
 -(void) setSelected:(int)selected
 {
     _selectedUnit = selected;
-    
-    [_lastPlays removeAllObjects];
 }
 
 -(BOOL) getAlive
@@ -150,20 +143,21 @@
 }
 
 
--(CoordPoint*) undoLastPlay
+-(NSArray*) undoLastPlay
 {
     if(_lastPlays.count == 0) return nil;
     NSArray* last = [_lastPlays lastObject];
     [_lastPlays removeLastObject];
     
-    CellStates state = [[last lastObject] intValue];
+    CellStates state = [last[2] intValue];
+    int selected = [last[3] intValue];
     switch(state)
     {
         case OCCUPIED:
-            [self.SelectedUnit undoMove:last[0]];
+            [_units[selected] undoMove:last[0]];
             break;
         case BOMB:
-            [self.SelectedUnit undoBomb:last[0]];
+            [_units[selected] undoBomb:last[0]];
             break;
         default:
             NSLog(@"invalid last play state %d", state);
@@ -174,7 +168,7 @@
     _points += [last[1] intValue];
     [self didChangeValueForKey:@"Points"];
     
-    return last[0];
+    return [NSArray arrayWithObjects:last[0], last[3], nil];
 }
 
 
@@ -186,7 +180,7 @@
     
     [self willChangeValueForKey:@"Points"];
     [_lastPlays addObject:[NSArray arrayWithObjects:
-                           move.coord, @(move.cost), @(OCCUPIED), nil]];
+                           move.coord, @(move.cost), @(OCCUPIED), @(_selectedUnit), nil]];
     
 
     [self didChangeValueForKey:@"Points"];
@@ -200,7 +194,8 @@
     [self.SelectedUnit addBomb:bomb];
     
     [self willChangeValueForKey:@"Points"];
-    [_lastPlays addObject:[NSArray arrayWithObjects:bomb.coord, @(bomb.cost), @(BOMB), nil]];
+    [_lastPlays addObject:[NSArray arrayWithObjects:
+                           bomb.coord, @(bomb.cost), @(BOMB), @(_selectedUnit),  nil]];
     
 
     [self didChangeValueForKey:@"Points"];
