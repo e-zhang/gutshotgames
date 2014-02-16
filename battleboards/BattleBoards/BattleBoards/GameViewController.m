@@ -143,8 +143,16 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_undoButton setTitle:@"Undo" forState:UIControlStateNormal];
     [_undoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_undoButton addTarget:self action:@selector(undoPlay:) forControlEvents:UIControlEventTouchUpInside];
-
+    
+    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [dismissButton setTitle:@"Back" forState:UIControlStateNormal];
+    dismissButton.backgroundColor = [UIColor clearColor];
+    dismissButton.frame = CGRectMake(self.view.frame.size.width - 70.0f, 10.0f, 70.0f, 50.0f);
+    [dismissButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [dismissButton addTarget:self action:@selector(dismissVC:) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.view addSubview:_noticeMsg];
+    [self.view addSubview:dismissButton];
 
 }
 
@@ -263,6 +271,10 @@ static NSString* FORMAT_STRING = @"Round - %d";
         }
     }
 
+}
+
+-(void) dismissVC:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

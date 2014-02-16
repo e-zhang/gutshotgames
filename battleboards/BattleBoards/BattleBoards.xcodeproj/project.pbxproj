@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5802634818B0D46000DF79DA /* FeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5802634718B0D46000DF79DA /* FeedCell.m */; };
 		58108A5918953E1100106D3C /* GestureSubClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 58108A5818953E1100106D3C /* GestureSubClass.m */; };
 		586EEA551856DCA100A5D3A5 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA521856DCA100A5D3A5 /* MenuView.m */; };
 		586EEA561856DCA100A5D3A5 /* InvitationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */; };
@@ -67,6 +68,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5802634618B0D46000DF79DA /* FeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCell.h; sourceTree = "<group>"; };
+		5802634718B0D46000DF79DA /* FeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedCell.m; sourceTree = "<group>"; };
 		58108A5718953E1100106D3C /* GestureSubClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureSubClass.h; sourceTree = "<group>"; };
 		58108A5818953E1100106D3C /* GestureSubClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureSubClass.m; sourceTree = "<group>"; };
 		586EEA511856DCA100A5D3A5 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
@@ -337,6 +340,8 @@
 				586EEA631856DDFA00A5D3A5 /* createaccount.m */,
 				586EEA531856DCA100A5D3A5 /* InvitationsViewController.h */,
 				586EEA541856DCA100A5D3A5 /* InvitationsViewController.m */,
+				5802634618B0D46000DF79DA /* FeedCell.h */,
+				5802634718B0D46000DF79DA /* FeedCell.m */,
 				586EEA7B1856E19600A5D3A5 /* Tags.h */,
 			);
 			name = ViewControllers;
@@ -461,6 +466,7 @@
 				586EEA6B1856DEA400A5D3A5 /* Server.m in Sources */,
 				586EEA641856DDFA00A5D3A5 /* createaccount.m in Sources */,
 				586EEA741856DFB600A5D3A5 /* UserAccount.m in Sources */,
+				5802634818B0D46000DF79DA /* FeedCell.m in Sources */,
 				58108A5918953E1100106D3C /* GestureSubClass.m in Sources */,
 				E77221B41899CF8500FEA8D8 /* Player.m in Sources */,
 				586EEA6E1856DEB700A5D3A5 /* GameInvitations.m in Sources */,

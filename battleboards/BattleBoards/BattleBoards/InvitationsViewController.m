@@ -9,10 +9,13 @@
 #import "InvitationsViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GameRequest.h"
+#import "FeedCell.h"
 
 #import "Tags.h"
 
 @interface InvitationsViewController ()
+
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
@@ -26,24 +29,38 @@
     self = [super init];
     if (self) {
         // Custom initialization
-        UICollectionViewFlowLayout* layout = [[UICollectionViewFlowLayout alloc] init];
-        [layout setItemSize:CGSizeMake(CELL_SIZE, CELL_SIZE)];
-        [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        UICollectionView* collection = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
-        collection.backgroundColor = [UIColor clearColor];
-        collection.tag = INVITATIONS_VIEW;
+     //   UICollectionViewFlowLayout* layout = [[UICollectionViewFlowLayout alloc] init];
+     //   [layout setItemSize:CGSizeMake(CELL_SIZE, CELL_SIZE)];
+     //   [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+     //   UICollectionView* collection = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
+     //   collection.backgroundColor = [UIColor clearColor];
+     //   collection.tag = INVITATIONS_VIEW;
         
         _selector = selector;
         _target = target;
         
         _invites = invites;
-        NSLog(@"%d", [_invites.gameRequests count]);
-        collection.dataSource = self;
-        [collection registerClass:[UICollectionViewCell class]
-                                   forCellWithReuseIdentifier:@"game_cell"];
+      //  NSLog(@"%d", [_invites.gameRequests count]);
+      //  collection.dataSource = self;
+     //   [collection registerClass:[UICollectionViewCell class]
+     //                              forCellWithReuseIdentifier:@"game_cell"];
         [invites setDelegate:self];
-        [collection reloadData];
-        self.view = collection;
+      //  [collection reloadData];
+      //  self.view = collection;
+        
+        
+        self.tableView = [[UITableView alloc] init];
+        self.tableView.tag = INVITATIONS_VIEW;
+        self.tableView.frame = frame;
+        self.tableView.scrollsToTop = YES;
+        self.tableView.userInteractionEnabled = YES;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.showsVerticalScrollIndicator = NO;
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.dataSource = self;
+        self.tableView.delegate = self;
+        
+        self.view = self.tableView;
     }
     
     return self;
@@ -83,10 +100,10 @@
 
 }
 
--(void) gotogame:(UIButton*)sender
+-(void) gotogame:(NSInteger)i
 {
     GameRequest* game = [[GameRequest alloc] initWithProperties:
-                         [_invites.gameRequests objectAtIndex:sender.tag]];
+                         [_invites.gameRequests objectAtIndex:i]];
     
     [_target performSelector:_selector withObject:game];
 }
@@ -94,15 +111,15 @@
 // UICollectionViewDataSource
 
 // 1
-- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-    return [_invites.gameRequests count];
-}
+//- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
+//    return [_invites.gameRequests count];
+//}
 // 2
-- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
-    return 1;
-}
+//- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
+//    return 1;
+//}
 // 0
-- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+/*- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"game_cell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
     UIButton* web;
@@ -134,6 +151,60 @@
     [web setTitle:game.game_id forState:UIControlStateNormal];
     
     return cell;
+}*/
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section{
+    return [_invites.gameRequests count];
+}
+
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
+    return 60;
+}
+
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
+    
+    FeedCell *cell = (FeedCell*)[tableView dequeueReusableCellWithIdentifier:@"Cell-ID"];
+    
+    if (cell == nil) {
+        
+        cell = [[FeedCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell-ID"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.contentView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor clearColor];
+    }
+    NSLog(@"dprw-%@",_invites.gameRequests);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"hostfbid"]];
+       
+        NSData *name = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@", [[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"hostfbid"]]]];
+        
+        NSURL *url1 = [NSURL URLWithString:path1];
+        NSData *data1 = [NSData dataWithContentsOfURL:url1];
+        NSData *userPic1 = [NSData dataWithData:data1];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            cell.profileImageView.image = [UIImage imageWithData:userPic1];
+        });
+    });
+    
+    cell.topText.text = @"Host Name?";
+    
+    if([[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"dateCreated"])
+        cell.bottomText.text = [[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"dateCreated"];
+    else
+        cell.bottomText.text = @"";
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+    [self gotogame:indexPath.row];
 }
 
 @end

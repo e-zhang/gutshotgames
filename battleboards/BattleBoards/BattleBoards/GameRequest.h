@@ -14,6 +14,7 @@ const static NSString* GAME_ID = @"game_id";
 @property (nonatomic) NSString* hostuserid;
 @property (nonatomic) NSString* hostfbid;
 @property (nonatomic) NSString* hostname;
+@property (nonatomic) NSDate* dateCreated;
 
 -(NSDictionary*) getRequest;
 -(id) initWithProperties:(NSDictionary*)properties;
