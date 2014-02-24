@@ -84,7 +84,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
 {
-    NSLog(@"upadteRoundforCells-cells-%@,players-%@",cells,players);
+    NSLog(@"updateRoundforCells-cells-%@,players-%@",cells,players);
     [_activityView stopAnimating];
     
     [_gridView setUserInteractionEnabled:YES];
@@ -209,6 +209,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
 
     [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
+    [p addObserver:self forKeyPath:@"SelectedUnit" options:NSKeyValueObservingOptionNew context:nil];
     
     if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
     {
@@ -226,6 +227,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:PLAYER1TAG];
         player1Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player1Image.layer.borderWidth = 2.0f;
+        
     }
     else
     {
@@ -247,7 +249,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void) onUnitSelected:(int)unit
 {
     [_gridModel.MyPlayer setSelected:unit];
-    [self refreshGridPossibilities];
 }
 
 
@@ -263,6 +264,34 @@ static NSString* FORMAT_STRING = @"Round - %d";
         }
     }
 
+}
+
+
+-(void) onUndoBomb:(CoordPoint *)bomb forUnit:(int)unit
+{
+    NSArray* play = [_gridModel undoBomb:bomb forUnit:unit];
+    
+    if(play)
+    {
+        for(CoordPoint* point in play)
+        {
+            [_gridView updateCell:point];
+        }
+    }
+}
+
+
+-(void) onUndoMove:(CoordPoint *)move forUnit:(int)unit
+{
+    NSArray* play = [_gridModel undoMove:move forUnit:unit];
+    
+    if(play)
+    {
+        for(CoordPoint* point in play)
+        {
+            [_gridView updateCell:point];
+        }
+    }
 }
 
 
@@ -285,7 +314,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
     if([keyPath isEqualToString:@"Points"])
     {
-        
         Player* player = (Player*) object;
         
         if([player.Id isEqualToString:_gridModel.MyPlayer.Id])
@@ -293,13 +321,20 @@ static NSString* FORMAT_STRING = @"Round - %d";
             [self refreshGridPossibilities];
         }
 
-
-
         UILabel *a = (UILabel *)[self.view viewWithTag:player.GameId + CHAR_LABEL];
 
         if(a)
         {
             a.text = [NSString stringWithFormat:@"%d",player.Points];
+        }
+    }
+    else if([keyPath isEqualToString:@"SelectedUnit"])
+    {
+        Player* player = (Player*) object;
+        
+        if([player.Id isEqualToString:_gridModel.MyPlayer.Id])
+        {
+            [self refreshGridPossibilities];
         }
     }
 }

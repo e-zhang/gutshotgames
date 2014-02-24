@@ -12,6 +12,11 @@
 #import "GameDefinitions.h"
 
 
+#define COORD_IDX 0
+#define COST_IDX 1
+#define STATE_IDX 2
+#define UNIT_IDX 3
+
 @implementation Player
 
 @synthesize Id=_userId;
@@ -121,7 +126,9 @@
 
 -(void) setSelected:(int)selected
 {
+    [self willChangeValueForKey:@"SelectedUnit"];
     _selectedUnit = selected;
+    [self didChangeValueForKey:@"SelectedUnit"];
 }
 
 -(BOOL) getAlive
@@ -149,15 +156,17 @@
     NSArray* last = [_lastPlays lastObject];
     [_lastPlays removeLastObject];
     
-    CellStates state = [last[2] intValue];
-    int selected = [last[3] intValue];
+    CellStates state = [last[STATE_IDX] intValue];
+    [self didChangeValueForKey:@"SelectedUnit"];
+    _selectedUnit = [last[UNIT_IDX] intValue];
+    [self didChangeValueForKey:@"SelectedUnit"];
     switch(state)
     {
         case OCCUPIED:
-            [_units[selected] undoMove:last[0]];
+            [self.SelectedUnit undoMove:last[COORD_IDX]];
             break;
         case BOMB:
-            [_units[selected] undoBomb:last[0]];
+            [self.SelectedUnit undoBomb:last[COORD_IDX]];
             break;
         default:
             NSLog(@"invalid last play state %d", state);
@@ -165,10 +174,45 @@
     }
     
     [self willChangeValueForKey:@"Points"];
-    _points += [last[1] intValue];
+    _points += [last[COST_IDX] intValue];
     [self didChangeValueForKey:@"Points"];
     
-    return [NSArray arrayWithObjects:last[0], last[3], nil];
+    return [NSArray arrayWithObjects:last[COORD_IDX], last[UNIT_IDX], nil];
+}
+
+-(void) undoMove:(CoordPoint *)move forUnit:(int)unit
+{
+    for(NSArray* last in _lastPlays)
+    {
+        if([last[COORD_IDX] isEqual:move])
+        {
+            [self willChangeValueForKey:@"Points"];
+            _points += [last[COST_IDX] intValue];
+            [self didChangeValueForKey:@"Points"];
+            
+            [_units[unit] undoMove:move];
+            [_lastPlays removeObject:last];
+            break;
+        }
+    }
+}
+
+
+-(void) undoBomb:(CoordPoint *)bomb forUnit:(int)unit
+{
+    for(NSArray* last in _lastPlays)
+    {
+        if([last[COORD_IDX] isEqual:bomb])
+        {
+            [self willChangeValueForKey:@"Points"];
+            _points += [last[COST_IDX] intValue];
+            [self didChangeValueForKey:@"Points"];
+            
+            [_units[unit] undoBomb:bomb];
+            [_lastPlays removeObject:last];
+            break;
+        }
+    }
 }
 
 

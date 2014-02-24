@@ -231,6 +231,35 @@
     return nil;
 }
 
+-(NSArray*) undoBomb:(CoordPoint *)bomb forUnit:(int)unit
+{
+    Player* myP = self.MyPlayer;
+    
+    [myP undoBomb:bomb forUnit:unit];
+    CellValue* cell = [self getCellWithCoord:bomb];
+    NSString* pId = [self composePlayerId:myP.Id withTag:((Unit*)myP.Units[unit]).GameTag];
+    
+    [cell.bombers removeObject:pId];
+    if(cell.bombers.count == 0)
+    {
+        cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
+    }
+    return [NSArray arrayWithObject:bomb];
+}
+
+
+-(NSArray*) undoMove:(CoordPoint *)move forUnit:(int)unit
+{
+    Player* myP = self.MyPlayer;
+    
+    [myP undoMove:move forUnit:unit];
+    Unit* selected = myP.Units[unit];
+    NSString* pId = [self composePlayerId:myP.Id withTag:selected.GameTag];
+    
+    [self movePlayer:pId from:move to:selected.Location];
+    return [NSArray arrayWithObjects:move, selected.Location,nil];
+}
+
 
 -(void) updateWithUnits:(NSArray *)units andPoints:(int)points forPlayer:(NSString *)playerId
 {

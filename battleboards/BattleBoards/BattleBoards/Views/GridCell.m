@@ -53,9 +53,6 @@
             break;
         }
         case BOMB:
-            self.backgroundColor = _grid.CharColors[_grid.MyPlayer.GameId];
-            self.layer.borderColor = [UIColor whiteColor].CGColor;
-            break;
         case GONE:
         {
             self.backgroundColor = [UIColor clearColor];
@@ -80,17 +77,10 @@
             int h = self.bounds.size.height/cell.occupants.count;
             for(int i=0; i < cell.occupants.count; ++i)
             {
-                NSString* playerId = [[_grid decomposePlayerId:[cell.occupants objectAtIndex:i]] firstObject];
-                Player* player = [_grid.Players objectForKey:playerId];
-                
-                UIView* block = [[UIView alloc] initWithFrame:CGRectMake((i*w*0.75) + w*0.25/2, (i*h*0.75)+h*0.25/2,
-                                                                         w *0.75, h * 0.75)];
-                
-                block.layer.cornerRadius = MIN((w*0.75)/2, (h*0.75)/2);
-                
-                block.backgroundColor=_grid.CharColors[player.GameId];
-                block.layer.borderColor = [UIColor grayColor].CGColor;
-                [self addSubview:block];
+                [self drawOccupant:cell.occupants[i]
+                         withFrame:CGRectMake((i*w*0.75) + w*0.25/2, (i*h*0.75)+h*0.25/2,
+                                              w *0.75, h * 0.75)
+                   andCornerRadius:MIN((w*0.75)/2, (h*0.75)/2)];
             }
             break;
         }
@@ -99,6 +89,58 @@
     
     _cost.text = cell.cost > 0 ? [NSString stringWithFormat:@"%d", cell.cost] : @"";
 
+}
+
+-(void) drawOccupant:(NSString*) occupant withFrame:(CGRect)frame andCornerRadius:(float)radius
+{
+    NSArray* ids = [_grid decomposePlayerId:occupant];
+    NSString* playerId = [ids firstObject];
+    int unitId = [[ids lastObject] intValue];
+    Player* player = [_grid.Players objectForKey:playerId];
+    
+    UIView* block = [[UIView alloc] initWithFrame:frame];
+    
+    block.layer.cornerRadius = radius;
+    
+    block.backgroundColor=_grid.CharColors[player.GameId];
+    block.layer.borderColor = [UIColor grayColor].CGColor;
+    [self addSubview:block];
+    
+    Player* myPlayer = _grid.MyPlayer;
+    if([playerId isEqualToString:myPlayer.Id] && myPlayer.Units.count > 1)
+    {
+        if(!myPlayer.SelectedUnit)
+        {
+            block.layer.shadowColor = [UIColor yellowColor].CGColor;
+            block.layer.shadowRadius = 10.0f;
+            block.layer.shadowOpacity=1.0f;
+            block.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+            
+            CABasicAnimation* glow = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
+            glow.fromValue = @(5.0f);
+            glow.toValue = @(0.0f);
+            glow.duration = 0.5;
+            glow.repeatCount = 10;
+            glow.autoreverses = YES;
+            
+            [block.layer addAnimation:glow forKey:@"shadowOpacity"];
+        }
+        else if (myPlayer.SelectedUnit.GameTag != unitId)
+        {
+            block.layer.shadowColor = nil;
+            block.layer.shadowRadius = 0;
+            block.layer.shadowOpacity = 0;
+            block.layer.shadowOffset = CGSizeZero;
+        }
+        else
+        {
+            block.layer.shadowColor = [UIColor yellowColor].CGColor;
+            block.layer.shadowRadius = 10.0f;
+            block.layer.shadowOpacity=1.0f;
+            block.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+            [block.layer removeAllAnimations];
+        }
+    }
 }
 
 -(void) showCost:(BOOL) showMoves
@@ -120,6 +162,7 @@
 
     
     _cost.text = cost > 0 ? [NSString stringWithFormat:@"%d",cost] : @"";
+    [self.layer removeAllAnimations];
 }
 
 

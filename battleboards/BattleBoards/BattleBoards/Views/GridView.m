@@ -178,6 +178,22 @@
         
         if(!selected) return;
         
+        // check to see if we are undoing move
+        for(Unit* unit in player.Units)
+        {
+            if([unit.Move isEqual:coord])
+            {
+                [_delegate onUndoMove:coord forUnit:unit.GameTag & UNIT_TAG_MASK];
+                return;
+            }
+            else if([unit.Bombs containsObject:coord])
+            {
+                [_delegate onUndoBomb:coord forUnit:unit.GameTag & UNIT_TAG_MASK];
+                return;
+            }
+        }
+        
+        
         if(![_grid bombPlaced:coord])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid bomb"

@@ -47,6 +47,8 @@
 
 -(void) submitForMyPlayer;
 -(NSArray*) undoForMyPlayer;
+-(NSArray*) undoMove:(CoordPoint*)move forUnit:(int)unit;
+-(NSArray*) undoBomb:(CoordPoint*)bomb forUnit:(int)unit;
 
 
 -(NSString*) composePlayerId:(NSString*)userid withTag:(int)tag;

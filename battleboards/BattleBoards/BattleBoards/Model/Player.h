@@ -43,6 +43,8 @@
 -(BOOL) addBomb:(CellValue*) bomb;
 -(void) addUnits:(NSArray*) units;
 -(NSArray*) undoLastPlay;
+-(void) undoMove:(CoordPoint*)move forUnit:(int)unit;
+-(void) undoBomb:(CoordPoint*)bomb forUnit:(int)unit;
 
 -(BOOL) checkDistance:(CellValue*) dest;
 

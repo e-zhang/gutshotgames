@@ -12,6 +12,8 @@
 
 @protocol GridViewDelegate <NSObject>
 -(void) onUnitSelected:(int)unit;
+-(void) onUndoMove:(CoordPoint*)move forUnit:(int)unit;
+-(void) onUndoBomb:(CoordPoint*)bomb forUnit:(int)unit;
 @end
 
 @interface GridView : UIView<UIGestureRecognizerDelegate>
