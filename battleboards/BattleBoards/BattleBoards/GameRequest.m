@@ -10,7 +10,7 @@
 
 @implementation GameRequest
 
-@synthesize game_id, hostuserid, hostfbid, hostname;
+@synthesize game_id, hostuserid, hostfbid, hostname, dateCreated;
 
 -(id) initWithProperties:(NSDictionary *)properties
 {
@@ -22,6 +22,7 @@
         // optional fields
         self.hostfbid = [properties objectForKey:@"hostfbid"];
         self.hostname = [properties objectForKey:@"hostname"];
+        self.dateCreated = [properties objectForKey:@"dateCreated"];
     }
     
     return self;
@@ -32,11 +33,12 @@
     NSMutableDictionary* request = [[NSMutableDictionary alloc] init];
     [request setObject:self.game_id forKey:GAME_ID];
     [request setObject:self.hostuserid forKey:@"hostuserid"];
-    
+    [request setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"dateCreated"];
+
     // optional fields
     if( hostfbid ) [request setObject:self.hostfbid forKey:@"hostfbid"];
     if( hostname ) [request setObject:self.hostname forKey:@"hostname"];
-    
+
     return request;
 }
 

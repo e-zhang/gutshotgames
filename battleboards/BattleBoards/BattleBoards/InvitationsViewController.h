@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GameInvitations.h"
 
-@interface InvitationsViewController : UIViewController<UICollectionViewDataSource,
-                                                        InvitationUpdateDelegate>
+@interface InvitationsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,InvitationUpdateDelegate>
 {
     id _target;
     SEL _selector;
