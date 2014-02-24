@@ -283,7 +283,7 @@
     if(newPlayer)
     {
         NSLog(@"OPJ-INIT");
-        int points = START_POINTS + _gameInfo.players.count;
+        int points = START_POINTS*2;
 
         p = [[Player alloc] initWithProperties:player
                                      andPoints:points];
@@ -347,7 +347,7 @@
             [unit reset];
         }
 
-        [player addRoundBonus:_players.count];
+        [player addRoundBonus:START_POINTS];
     }
     
 
