@@ -131,7 +131,7 @@
     [self didChangeValueForKey:@"SelectedUnit"];
 }
 
--(BOOL) getAlive
+-(BOOL) Alive
 {
     BOOL unitsAlive = NO;
     for(Unit* unit in _units)
@@ -177,7 +177,7 @@
     _points += [last[COST_IDX] intValue];
     [self didChangeValueForKey:@"Points"];
     
-    return [NSArray arrayWithObjects:last[COORD_IDX], last[UNIT_IDX], nil];
+    return [NSArray arrayWithObjects:last[COORD_IDX], last[UNIT_IDX], last[STATE_IDX], nil];
 }
 
 -(void) undoMove:(CoordPoint *)move forUnit:(int)unit

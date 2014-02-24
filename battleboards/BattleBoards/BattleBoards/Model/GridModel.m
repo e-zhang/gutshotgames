@@ -211,24 +211,25 @@
     CoordPoint* playCoord = play[0];
     Unit* selected = myP.Units[[play[1] intValue]];
     CellValue* cell = [self getCellWithCoord:playCoord];
+    CellStates state = [play[2] intValue];
     NSString* pId = [self composePlayerId:myP.Id withTag:selected.GameTag];
     
-    if([cell.occupants containsObject:pId])
+    switch(state)
     {
-        [self movePlayer:pId from:playCoord to:selected.Location];
-        return [NSArray arrayWithObjects:playCoord, selected.Location,nil];
+        case OCCUPIED:
+            [self movePlayer:pId from:playCoord to:selected.Location];
+            return[NSArray arrayWithObjects:playCoord, selected.Location,nil];
+        case BOMB:
+            [cell.bombers removeObject:pId];
+            if(cell.bombers.count == 0)
+            {
+                cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
+            }
+            return [NSArray arrayWithObject:playCoord];
+        default:
+            return nil;
     }
-    else if([cell.bombers containsObject:pId])
-    {
-        [cell.bombers removeObject:pId];
-        if(cell.bombers.count == 0)
-        {
-            cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
-        }
-        return [NSArray arrayWithObject:playCoord];
-    }
-    
-    return nil;
+
 }
 
 -(NSArray*) undoBomb:(CoordPoint *)bomb forUnit:(int)unit
