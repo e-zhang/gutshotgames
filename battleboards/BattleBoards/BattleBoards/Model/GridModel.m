@@ -66,7 +66,7 @@
 {
     NSDictionary* player = _gameInfo.players[_myPlayerId];
 
-    int points = START_POINTS + _gameInfo.players.count;
+    int points = START_POINTS*2;
         
     Player* p = [[Player alloc] initWithProperties:player
                                          andPoints:points];
