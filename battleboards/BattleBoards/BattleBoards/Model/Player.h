@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "Unit.h"
 
+// defs for undo array
+#define COORD_IDX 0
+#define COST_IDX 1
+#define STATE_IDX 2
+#define UNIT_IDX 3
 
 
 @interface Player : NSObject

@@ -208,10 +208,10 @@
     
     if(!play) return nil;
     
-    CoordPoint* playCoord = play[0];
-    Unit* selected = myP.Units[[play[1] intValue]];
+    CoordPoint* playCoord = play[COORD_IDX];
+    Unit* selected = myP.Units[[play[UNIT_IDX] intValue]];
     CellValue* cell = [self getCellWithCoord:playCoord];
-    CellStates state = [play[2] intValue];
+    CellStates state = [play[STATE_IDX] intValue];
     NSString* pId = [self composePlayerId:myP.Id withTag:selected.GameTag];
     
     switch(state)

@@ -12,10 +12,6 @@
 #import "GameDefinitions.h"
 
 
-#define COORD_IDX 0
-#define COST_IDX 1
-#define STATE_IDX 2
-#define UNIT_IDX 3
 
 @implementation Player
 
@@ -177,7 +173,7 @@
     _points += [last[COST_IDX] intValue];
     [self didChangeValueForKey:@"Points"];
     
-    return [NSArray arrayWithObjects:last[COORD_IDX], last[UNIT_IDX], last[STATE_IDX], nil];
+    return last;
 }
 
 -(void) undoMove:(CoordPoint *)move forUnit:(int)unit
