@@ -95,7 +95,7 @@
 {
     NSArray* ids = [_grid decomposePlayerId:occupant];
     NSString* playerId = [ids firstObject];
-    int unitId = [[ids lastObject] intValue];
+
     Player* player = [_grid.Players objectForKey:playerId];
     
     UIView* block = [[UIView alloc] initWithFrame:frame];
@@ -105,42 +105,6 @@
     block.backgroundColor=_grid.CharColors[player.GameId];
     block.layer.borderColor = [UIColor grayColor].CGColor;
     [self addSubview:block];
-    
-    Player* myPlayer = _grid.MyPlayer;
-    if([playerId isEqualToString:myPlayer.Id] && myPlayer.Units.count > 1)
-    {
-        if(!myPlayer.SelectedUnit)
-        {
-            block.layer.shadowColor = [UIColor yellowColor].CGColor;
-            block.layer.shadowRadius = 10.0f;
-            block.layer.shadowOpacity=1.0f;
-            block.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
-            
-            CABasicAnimation* glow = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            glow.fromValue = @(5.0f);
-            glow.toValue = @(0.0f);
-            glow.duration = 0.5;
-            glow.repeatCount = 10;
-            glow.autoreverses = YES;
-            
-            [block.layer addAnimation:glow forKey:@"shadowOpacity"];
-        }
-        else if (myPlayer.SelectedUnit.GameTag != unitId)
-        {
-            block.layer.shadowColor = nil;
-            block.layer.shadowRadius = 0;
-            block.layer.shadowOpacity = 0;
-            block.layer.shadowOffset = CGSizeZero;
-        }
-        else
-        {
-            block.layer.shadowColor = [UIColor yellowColor].CGColor;
-            block.layer.shadowRadius = 10.0f;
-            block.layer.shadowOpacity=1.0f;
-            block.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
-            [block.layer removeAllAnimations];
-        }
-    }
 }
 
 -(void) showCost:(BOOL) showMoves

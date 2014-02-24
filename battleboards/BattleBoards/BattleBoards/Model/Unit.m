@@ -27,7 +27,7 @@
         _bombs = [[NSMutableArray alloc] init];
         _updated = NO;
         _gameTag = gameId;
-        self.Alive = NO;
+        self.Alive = YES;
         [self reset];
     }
     
