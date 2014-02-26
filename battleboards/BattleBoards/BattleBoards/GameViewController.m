@@ -93,6 +93,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         [_gridView updateCell:p];
     }
     
+    NSMutableArray* alive = [[NSMutableArray alloc] initWithCapacity:players.count];
     for(Player* p in [players allValues])
     {
         if(!p.Alive)
@@ -100,6 +101,25 @@ static NSString* FORMAT_STRING = @"Round - %d";
             UILabel* label = (UILabel*)[self.view viewWithTag:p.GameId+CHAR_LABEL];
             label.text = @"dead";
         }
+        else
+        {
+            [alive addObject:p];
+        }
+    }
+    
+    if(alive.count <= 1)
+    {
+
+        NSMutableString* notice = [NSMutableString stringWithFormat:@"Game Over...%@",
+                           (alive.count > 0 ? @" Winner is " : @" Draw Between ")];
+        
+        for(Player* p in alive)
+        {
+            [notice appendString:p.Name];
+            [notice appendString:@" "];
+        }
+        [self.view addSubview:_noticeMsg];
+        _gridView.userInteractionEnabled = NO;
     }
     
 }
