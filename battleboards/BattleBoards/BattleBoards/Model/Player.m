@@ -59,55 +59,59 @@
 }
 
 
--(void) updateWithUnits:(NSArray *)units andPoints:(int)points
+-(void) updateWithUnits:(NSDictionary *)units andPoints:(int)points
 {
-    NSAssert(units.count == _units.count, @"Unequal number of units in update");
+
+    NSArray* moves = units[DB_MOVE];
+    NSAssert(moves.count == _units.count, @"Unequal number of units in update");
     
-    _points = points;
-    for(int i = 0; i < units.count; ++i)
+    for(int i = 0; i < moves.count; ++i)
     {
         Unit* unit = _units[i];
-        NSDictionary* unitDB = units[i];
+        NSArray* move = moves[i];
         
         CoordPoint* moveCoord = nil;
-        NSArray* move = unitDB[DB_MOVE];
+
         if(move.count > 0)
         {
             moveCoord = [CoordPoint coordWithArray:move];
         }
-        NSArray* bombs = unitDB[DB_BOMBS];
-        NSMutableArray* bombCoords = [NSMutableArray arrayWithCapacity:bombs.count];
-        for(NSArray* b in bombs)
-        {
-            CoordPoint* bombCoord = [CoordPoint coordWithArray:b];
-            [bombCoords addObject:bombCoord];
-        }
-        
-        [unit updateMove:moveCoord Bombs:bombCoords];
+
+        [unit updateMove:moveCoord];
     }
+    
+    NSArray* bombs = units[DB_BOMBS];
+    for(NSArray* b in bombs)
+    {
+        CoordPoint* bombCoord = [CoordPoint coordWithArray:b];
+        [_bombs addObject:bombCoord];
+    }
+    
+    _points = points;
+    
 }
 
 
--(NSArray*) getUnitsForDB
+-(NSDictionary*) getInfoForDB
 {
     NSMutableArray* units = [NSMutableArray arrayWithCapacity:_units.count];
     for(Unit* unit in _units)
     {
-        NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:unit.Bombs.count];
-        for (CoordPoint* b in unit.Bombs)
-        {
-            [bombs addObject:[b arrayFromCoord]];
-        }
-        
         NSArray* move = unit.Move ? [unit.Move arrayFromCoord] : [[NSArray alloc] init];
-        
-        NSDictionary* unitDB = [NSDictionary dictionaryWithObjectsAndKeys:
-                               move, DB_MOVE,
-                               bombs, DB_BOMBS, nil];
-        [units addObject:unitDB];
+
+        [units addObject:move];
     }
     
-    return units;
+    NSMutableArray* bombs = [[NSMutableArray alloc] initWithCapacity:_bombs.count];
+    for (CoordPoint* b in _bombs)
+    {
+        [bombs addObject:[b arrayFromCoord]];
+    }
+    
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+                            units, DB_MOVE,
+                            bombs, DB_BOMBS, nil];
 }
 
 
@@ -122,9 +126,7 @@
 
 -(void) setSelected:(int)selected
 {
-    [self willChangeValueForKey:@"SelectedUnit"];
     _selectedUnit = selected;
-    [self didChangeValueForKey:@"SelectedUnit"];
 }
 
 -(BOOL) Alive
@@ -153,16 +155,13 @@
     [_lastPlays removeLastObject];
     
     CellStates state = [last[STATE_IDX] intValue];
-    [self didChangeValueForKey:@"SelectedUnit"];
-    _selectedUnit = [last[UNIT_IDX] intValue];
-    [self didChangeValueForKey:@"SelectedUnit"];
     switch(state)
     {
         case OCCUPIED:
-            [self.SelectedUnit undoMove:last[COORD_IDX]];
+            [_units[[last[UNIT_IDX] intValue]] undoMove:last[COORD_IDX]];
             break;
         case BOMB:
-            [self.SelectedUnit undoBomb:last[COORD_IDX]];
+            [self undoBomb:last[COORD_IDX]];
             break;
         default:
             NSLog(@"invalid last play state %d", state);
@@ -194,7 +193,7 @@
 }
 
 
--(void) undoBomb:(CoordPoint *)bomb forUnit:(int)unit
+-(void) undoBomb:(CoordPoint *)bomb
 {
     for(NSArray* last in _lastPlays)
     {
@@ -204,7 +203,7 @@
             _points += [last[COST_IDX] intValue];
             [self didChangeValueForKey:@"Points"];
             
-            [_units[unit] undoBomb:bomb];
+            [_bombs removeObject:bomb];
             [_lastPlays removeObject:last];
             break;
         }
@@ -231,11 +230,11 @@
 {
     if(![self checkDistance:bomb]) return NO;
     
-    [self.SelectedUnit addBomb:bomb];
+    [_bombs addObject:bomb];
     
     [self willChangeValueForKey:@"Points"];
     [_lastPlays addObject:[NSArray arrayWithObjects:
-                           bomb.coord, @(bomb.cost), @(BOMB), @(_selectedUnit),  nil]];
+                           bomb.coord, @(bomb.cost), @(BOMB),  nil]];
     
 
     [self didChangeValueForKey:@"Points"];

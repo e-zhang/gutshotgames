@@ -12,7 +12,7 @@
 @protocol GameUpdateDelegate <NSObject>
 
 - (BOOL) onPlayerJoined:(NSDictionary*) player;
-- (void) updateWithUnits:(NSArray*)units andPoints:(int)points forPlayer:(NSString*) playerId;
+- (void) updateWithUnits:(NSDictionary*)units andPoints:(int)points forPlayer:(NSString*) playerId;
 - (void) onRoundComplete;
 - (void) onRoundStart;
 
@@ -60,7 +60,7 @@
 
 - (BOOL) joinGame:(NSString*) userId withLocation:(NSArray*)start;
 - (void) leaveGame:(NSString*) userId;
-- (void) submitUnits:(NSArray*)units andPoints:(int)points forPlayer:(NSString*)player;
+- (void) submitUnits:(NSDictionary*)units andPoints:(int)points forPlayer:(NSString*)player;
 
 
 

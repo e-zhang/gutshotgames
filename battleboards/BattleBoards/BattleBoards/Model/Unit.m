@@ -13,7 +13,6 @@
 
 
 @synthesize Alive;
-@synthesize Bombs=_bombs;
 @synthesize Move=_move;
 @synthesize Location=_location;
 @synthesize GameTag=_gameTag;
@@ -24,7 +23,6 @@
     if([super init])
     {
         _move = loc;
-        _bombs = [[NSMutableArray alloc] init];
         _updated = NO;
         _gameTag = gameId;
         self.Alive = YES;
@@ -43,8 +41,6 @@
         _move = nil;
     }
 
-    [_bombs removeAllObjects];
-    
     _updated = NO;
 }
 
@@ -62,37 +58,15 @@
 }
 
 
--(void) addBomb:(CellValue*)bomb
-{
-    [_bombs addObject:bomb.coord];
-}
-
-
--(void) undoBomb:(CoordPoint *)bomb
-{
-    for(CoordPoint* point in _bombs)
-    {
-        if([point isEqual:bomb])
-        {
-            [_bombs removeObject:point];
-            break;
-        }
-    }
-}
-
-
--(void) updateMove:(CoordPoint *)move Bombs:(NSArray *)bombs
+-(void) updateMove:(CoordPoint *)move
 {
     // cancel previous update, and apply new one
     _move = nil;
-    [_bombs removeAllObjects];
     
     if(move)
     {
         _move = move;
     }
-    
-    [_bombs addObjectsFromArray:bombs];
 }
 
 

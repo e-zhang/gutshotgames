@@ -109,14 +109,11 @@
     Player* player = self.MyPlayer;
     Unit* unit = player.SelectedUnit;
     
-    CoordPoint* prev = unit.Move;
-    
     BOOL canMove = [player addMove:[self getCellWithCoord:coord]];
     
     if(canMove)
     {
-        prev = prev ? prev : unit.Location;
-        [self movePlayer:[self composePlayerId:_myPlayerId withTag:unit.GameTag ] from:prev to:unit.Move];
+        [self movePlayer:[self composePlayerId:_myPlayerId withTag:unit.GameTag ] from:unit.Location to:unit.Move];
     }
     
     return canMove;
@@ -134,8 +131,7 @@
     if(canBomb)
     {
         value.state = BOMB;
-        [value.bombers addObject:[self composePlayerId:_myPlayerId
-                                               withTag:player.SelectedUnit.GameTag]];
+        [value.bombers addObject:_myPlayerId];
     }
     
     return canBomb;
@@ -195,7 +191,7 @@
 {
     Player* myP = self.MyPlayer;
  
-    [_gameInfo submitUnits:[myP getUnitsForDB] andPoints:myP.Points forPlayer:_myPlayerId];
+    [_gameInfo submitUnits:[myP getInfoForDB] andPoints:myP.Points forPlayer:_myPlayerId];
     
     [myP setSelected:-1];
 }
@@ -209,23 +205,27 @@
     if(!play) return nil;
     
     CoordPoint* playCoord = play[COORD_IDX];
-    Unit* selected = myP.Units[[play[UNIT_IDX] intValue]];
     CellValue* cell = [self getCellWithCoord:playCoord];
     CellStates state = [play[STATE_IDX] intValue];
-    NSString* pId = [self composePlayerId:myP.Id withTag:selected.GameTag];
     
     switch(state)
     {
         case OCCUPIED:
+        {
+            Unit* selected = myP.Units[[play[UNIT_IDX] intValue]];
+            NSString* pId = [self composePlayerId:myP.Id withTag:selected.GameTag];
             [self movePlayer:pId from:playCoord to:selected.Location];
-            return[NSArray arrayWithObjects:playCoord, selected.Location,nil];
+            return[NSArray arrayWithObjects:playCoord, selected.Location, nil];
+        }
         case BOMB:
-            [cell.bombers removeObject:pId];
+        {
+            [cell.bombers removeObject:myP.Id];
             if(cell.bombers.count == 0)
             {
                 cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
             }
             return [NSArray arrayWithObject:playCoord];
+        }
         default:
             return nil;
     }
@@ -236,11 +236,10 @@
 {
     Player* myP = self.MyPlayer;
     
-    [myP undoBomb:bomb forUnit:unit];
+    [myP undoBomb:bomb];
     CellValue* cell = [self getCellWithCoord:bomb];
-    NSString* pId = [self composePlayerId:myP.Id withTag:((Unit*)myP.Units[unit]).GameTag];
     
-    [cell.bombers removeObject:pId];
+    [cell.bombers removeObject:myP.Id];
     if(cell.bombers.count == 0)
     {
         cell.state = cell.occupants.count > 0 ? OCCUPIED : EMPTY;
@@ -262,7 +261,9 @@
 }
 
 
--(void) updateWithUnits:(NSArray *)units andPoints:(int)points forPlayer:(NSString *)playerId
+-(void) updateWithUnits:(NSDictionary*)units
+              andPoints:(int)points
+              forPlayer:(NSString *)playerId
 {
     Player* p = _players[playerId];
     [p updateWithUnits:units andPoints:points];
@@ -403,19 +404,20 @@
     NSMutableSet* cells = [[NSMutableSet alloc] init];
     for(Player* p in [_players allValues])
     {
-        // we've already updated for the current player
-        if([p.Id isEqualToString:_myPlayerId]) continue;
-        
-        for(Unit* unit in p.Units)
+        BOOL myP = [p.Id isEqualToString:_myPlayerId];
+        for(CoordPoint* bomb in p.Bombs)
         {
-            for(CoordPoint* bomb in unit.Bombs)
+            // update old location
+            CellValue* value = [self getCellWithCoord:bomb];
+            value.state = GONE;
+            
+            // we've already updated for the current player
+            if(!myP)
             {
-                // update old location
-                CellValue* value = [self getCellWithCoord:bomb];
-                value.state = GONE;
-                [value.bombers addObject:[self composePlayerId:p.Id withTag:unit.GameTag]];
+                [value.bombers addObject:p.Id];
                 [cells addObject:bomb];
             }
+
         }
     }
 

@@ -249,7 +249,7 @@
     return isLast;
 }
 
-- (void) submitUnits:(NSArray*)units andPoints:(int)points forPlayer:(NSString *)player
+- (void) submitUnits:(NSDictionary*)units andPoints:(int)points forPlayer:(NSString *)player
 {
     NSError* error = nil;
     do

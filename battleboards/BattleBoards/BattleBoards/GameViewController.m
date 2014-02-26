@@ -51,13 +51,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     return self;
 }
 
--(void)refreshGridPossibilities{
 
-    [_gridModel calculateGridPossibilities];
-    [_gridView.dragView removeFromSuperview];
-
-    [_gridView refreshCosts:_gridModel.MyPlayer.SelectedUnit == nil];
-}
 
 -(void) startGame
 {
@@ -79,7 +73,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
             [_gridView updateCell:unit.Location];
         }
     }
- 
+    
+    [_gridView refreshCosts:NO];
 }
 
 -(void) updateRoundForCells:(NSArray *)cells andPlayers:(NSDictionary *)players
@@ -210,6 +205,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void) onRoundStart:(int)round
 {
     _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round+1];
+    
+    [_gridView refreshCosts:NO];
 }
 
 
@@ -257,6 +254,17 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void) onUnitSelected:(int)unit
 {
     [_gridModel.MyPlayer setSelected:unit];
+    
+    if(unit < 0)
+    {
+        [_gridView refreshCosts:NO];
+    }
+    else
+    {
+        [_gridModel calculateGridPossibilities];
+        
+        [_gridView refreshCosts:YES];
+    }
 }
 
 
@@ -318,7 +326,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
     
     [_gridModel submitForMyPlayer];
 
-    [self refreshGridPossibilities];
 }
 
 
@@ -330,7 +337,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         
         if([player.Id isEqualToString:_gridModel.MyPlayer.Id])
         {
-            [self refreshGridPossibilities];
+            [_gridView refreshCosts:NO];
         }
 
         UILabel *a = (UILabel *)[self.view viewWithTag:player.GameId + CHAR_LABEL];
@@ -338,15 +345,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
         if(a)
         {
             a.text = [NSString stringWithFormat:@"%d",player.Points];
-        }
-    }
-    else if([keyPath isEqualToString:@"SelectedUnit"])
-    {
-        Player* player = (Player*) object;
-        
-        if([player.Id isEqualToString:_gridModel.MyPlayer.Id])
-        {
-            [self refreshGridPossibilities];
         }
     }
 }

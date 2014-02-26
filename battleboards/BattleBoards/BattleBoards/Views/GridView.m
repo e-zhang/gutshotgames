@@ -108,8 +108,6 @@
         
         NSLog(@"dragged to (%f,%f) - %@", point.x, point.y, coord);
         
-        CoordPoint* move = _grid.MyPlayer.SelectedUnit.Move;
-        
         if(![_grid playerMoved:coord])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid move"
@@ -121,17 +119,12 @@
         }
         else
         {
-            if(move)
-            {
-                [self updateCell:move];
-            }
-            
             [self updateCell:_grid.MyPlayer.SelectedUnit.Location];
             [self updateCell:coord];
         }
         
         [self.dragView removeFromSuperview];
-        
+        [_delegate onUnitSelected:-1];
 	}
 }
 
@@ -165,19 +158,7 @@
         CoordPoint* coord = [self getCoordAtPoint:point];
         
         Player* player = _grid.MyPlayer;
-        Unit* selected = player.SelectedUnit;
-        
-        for(Unit* unit in player.Units)
-        {
-            if([unit.Location isEqual:coord] && (!selected || selected.GameTag != unit.GameTag))
-            {
-                [_delegate onUnitSelected:unit.GameTag & UNIT_TAG_MASK];
-                return;
-            }
-        }
-        
-        if(!selected) return;
-        
+
         // check to see if we are undoing move
         for(Unit* unit in player.Units)
         {
@@ -186,7 +167,7 @@
                 [_delegate onUndoMove:coord forUnit:unit.GameTag & UNIT_TAG_MASK];
                 return;
             }
-            else if([unit.Bombs containsObject:coord])
+            else if([player.Bombs containsObject:coord])
             {
                 [_delegate onUndoBomb:coord forUnit:unit.GameTag & UNIT_TAG_MASK];
                 return;
@@ -215,13 +196,21 @@
     if(![gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) return YES;
     CGPoint location = [gestureRecognizer locationInView:self];
 
-    Unit* selected = _grid.MyPlayer.SelectedUnit;
-    
-    if(!selected) return NO;
-    
     CoordPoint* coord = [self getCoordAtPoint:location];
-
-    BOOL shouldBegin = [coord isEqual:selected.Location];
+    
+    BOOL shouldBegin = NO;
+    for(Unit* unit in _grid.MyPlayer.Units)
+    {
+        if([unit.Location isEqual:coord])
+        {
+            if(!self.dragView)
+            {
+                [_delegate onUnitSelected:unit.GameTag & UNIT_TAG_MASK];
+            }
+            shouldBegin = YES;
+            break;
+        }
+    }
     
     if(!self.dragView && shouldBegin)
     {
@@ -234,7 +223,6 @@
         self.dragView.backgroundColor = [UIColor darkGrayColor];
         [self.dragView setCenter:location];
         
-        [self refreshCosts:YES];
         [self addSubview:self.dragView];
     }
     

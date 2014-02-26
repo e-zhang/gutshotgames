@@ -114,7 +114,13 @@
     if(!showMoves)
     {
         Player* player = _grid.MyPlayer;
-        int dist = [CoordPoint distanceFrom:player.SelectedUnit.Location To:_cell];
+        
+        int dist = INT_MAX;
+        for(Unit* unit in player.Units)
+        {
+            dist = MIN(dist, [CoordPoint distanceFrom:unit.Location To:_cell]);
+        }
+
         cost = dist <= player.Points ? dist : -1;
     }
     else
@@ -126,7 +132,6 @@
 
     
     _cost.text = cost > 0 ? [NSString stringWithFormat:@"%d",cost] : @"";
-    [self.layer removeAllAnimations];
 }
 
 

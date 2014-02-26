@@ -21,9 +21,8 @@
     NSString* _name;
     NSString* _userId;
     NSString* _fbId;
-    
-    CoordPoint* _location;
-    
+
+    NSMutableArray* _bombs;
     NSMutableArray* _units;
     int _selectedUnit;
     int _points;
@@ -35,33 +34,33 @@
                andPoints:(int)points;
 
 
--(NSArray*) getUnitsForDB;
+-(NSDictionary*) getInfoForDB;
 
--(void) updateWithUnits:(NSArray*)units andPoints:(int)points;
+-(void) updateWithUnits:(NSDictionary*)units andPoints:(int)points;
 
 -(void) addRoundBonus:(int) bonus;
 -(void) setSelected:(int) selected;
-
 
 // for updating user inputs
 -(BOOL) addMove:(CellValue*) move;
 -(BOOL) addBomb:(CellValue*) bomb;
 -(void) addUnits:(NSArray*) units;
+
+
 -(NSArray*) undoLastPlay;
 -(void) undoMove:(CoordPoint*)move forUnit:(int)unit;
--(void) undoBomb:(CoordPoint*)bomb forUnit:(int)unit;
+-(void) undoBomb:(CoordPoint*)bomb;
 
 -(BOOL) checkDistance:(CellValue*) dest;
-
 
 @property (readonly) NSString* Name;
 @property (readonly) NSString* FacebookId;
 @property (readonly) NSString* Id;
 
 @property (readonly) NSArray* Units;
-
 @property (readonly) Unit* SelectedUnit;
 
+@property (readonly) NSArray* Bombs;
 @property (readonly) int Points;
 @property (readonly) int GameId;
 @property (readonly) BOOL Alive;
