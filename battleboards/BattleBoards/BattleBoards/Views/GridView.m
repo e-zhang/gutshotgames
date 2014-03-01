@@ -167,7 +167,8 @@
                 [_delegate onUndoMove:coord forUnit:unit.GameTag & UNIT_TAG_MASK];
                 return;
             }
-            else if([player.Bombs containsObject:coord])
+            
+            if([player.Bombs containsObject:coord])
             {
                 [_delegate onUndoBomb:coord forUnit:unit.GameTag & UNIT_TAG_MASK];
                 return;

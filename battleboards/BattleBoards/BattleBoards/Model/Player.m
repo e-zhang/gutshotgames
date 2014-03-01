@@ -21,6 +21,7 @@
 @synthesize GameId=_gameId;
 @synthesize Units=_units;
 @synthesize Points=_points;
+@synthesize Bombs = _bombs;
 
 
 -(id) initWithProperties:(NSDictionary *)props
@@ -41,6 +42,8 @@
         _fbId = props[@"fb_id"];
         
         _lastPlays = [[NSMutableArray alloc] init];
+        
+        _bombs = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -152,13 +155,13 @@
 {
     if(_lastPlays.count == 0) return nil;
     NSArray* last = [_lastPlays lastObject];
-    [_lastPlays removeLastObject];
-    
+
     CellStates state = [last[STATE_IDX] intValue];
     switch(state)
     {
         case OCCUPIED:
             [_units[[last[UNIT_IDX] intValue]] undoMove:last[COORD_IDX]];
+            [_lastPlays removeLastObject];
             break;
         case BOMB:
             [self undoBomb:last[COORD_IDX]];
@@ -230,7 +233,7 @@
 {
     if(![self checkDistance:bomb]) return NO;
     
-    [_bombs addObject:bomb];
+    [_bombs addObject:bomb.coord];
     
     [self willChangeValueForKey:@"Points"];
     [_lastPlays addObject:[NSArray arrayWithObjects:
