@@ -194,6 +194,8 @@
     [_gameInfo submitUnits:[myP getInfoForDB] andPoints:myP.Points forPlayer:_myPlayerId];
     
     [myP setSelected:-1];
+    
+    [_delegate onPlayerSubmitted:myP.GameId];
 }
 
 
@@ -267,6 +269,8 @@
 {
     Player* p = _players[playerId];
     [p updateWithUnits:units andPoints:points];
+    
+    [_delegate onPlayerSubmitted:p.GameId];
 }
 
 

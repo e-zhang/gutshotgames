@@ -123,6 +123,7 @@
             block.textColor = _grid.CharColors[player.GameId];
             block.backgroundColor = [UIColor clearColor];
             block.opaque = NO;
+            [self addSubview:block];
         }
 
     }

@@ -134,7 +134,7 @@
 
 -(BOOL) Alive
 {
-    BOOL unitsAlive = NO;
+    BOOL unitsAlive = _units.count == 0;
     for(Unit* unit in _units)
     {
         unitsAlive = unitsAlive || unit.Alive;

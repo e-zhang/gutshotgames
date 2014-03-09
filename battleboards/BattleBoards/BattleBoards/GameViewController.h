@@ -33,5 +33,6 @@
 -(void) startGame;
 -(void) onRoundStart:(int)round;
 -(void) initPlayer:(Player *)p;
+-(void) onPlayerSubmitted:(int)gameId;
 
 @end

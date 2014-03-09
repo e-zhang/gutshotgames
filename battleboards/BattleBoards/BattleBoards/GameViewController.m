@@ -8,12 +8,11 @@
 
 #import "GameViewController.h"
 #import "Tags.h"
+#import "DBDefs.h"
 
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
 
-static const int PLAYER1TAG = 1001;
-static const int PLAYER2TAG = 1002;
 
 static NSString* FORMAT_STRING = @"Round - %d";
 
@@ -105,6 +104,9 @@ static NSString* FORMAT_STRING = @"Round - %d";
         {
             [alive addObject:p];
         }
+        
+        UIImageView *playerImage = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
+        [playerImage.layer removeAllAnimations];
     }
     
     if(alive.count <= 1)
@@ -187,8 +189,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
         player2 = [[players allValues] objectAtIndex:0];
     }
     
-    NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [player1 objectForKey:@"fb_id"]];
-    NSString *path2 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",[player2 objectForKey:@"fb_id"]];
+    NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [player1 objectForKey:DB_FB_ID]];
+    NSString *path2 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square",[player2 objectForKey:DB_FB_ID]];
     
     NSURL *url1 = [NSURL URLWithString:path1];
     NSData *data1 = [NSData dataWithContentsOfURL:url1];
@@ -199,13 +201,13 @@ static NSString* FORMAT_STRING = @"Round - %d";
     NSData *userPic2 = [NSData dataWithData:data2];
     
     UIImageView *player1Image = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 40.0f, 40.0f, 40.0f)];
-    player1Image.tag = PLAYER1TAG;
+    player1Image.tag = CHAR_IMAGE_LABEL + [[player1 objectForKey:INGAMEID] intValue];
     player1Image.image = [UIImage imageWithData:userPic1];
     player1Image.layer.cornerRadius = 20.0f;
     player1Image.layer.masksToBounds = YES;
     
     UIImageView *player2Image = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 + 10.0f, 40.0f, 40.0f, 40.0f)];
-    player2Image.tag = PLAYER2TAG;
+    player2Image.tag = CHAR_IMAGE_LABEL + [[player2 objectForKey:INGAMEID] intValue];
     player2Image.image = [UIImage imageWithData:userPic2];
     player2Image.layer.cornerRadius = 20.0f;
     player2Image.layer.masksToBounds = YES;
@@ -249,10 +251,10 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
         _noticeMsg.text = @"Waiting for players to connect...";
         
-        UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:PLAYER1TAG];
+        UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
         player1Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player1Image.layer.borderWidth = 2.0f;
-        
+
     }
     else
     {
@@ -264,12 +266,26 @@ static NSString* FORMAT_STRING = @"Round - %d";
         player2points.tag = p.GameId + CHAR_LABEL;
         
         [self.view addSubview:player2points];
-        
-        UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:PLAYER2TAG];
+        UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
         player2Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player2Image.layer.borderWidth = 2.0f;
     }
 }
+
+-(void) onPlayerSubmitted:(int)gameId
+{
+    UIImageView *playerImage = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+gameId];
+
+    
+    CABasicAnimation* glow = [CABasicAnimation animationWithKeyPath:@"borderWidth"];
+    glow.fromValue = @(0.0f);
+    glow.toValue = @(5.0f);
+    glow.duration = 0.5;
+    glow.repeatCount = HUGE_VALF;
+    glow.autoreverses = YES;
+    [playerImage.layer addAnimation:glow forKey:@"borderColor"];
+}
+
 
 -(void) onUnitSelected:(int)unit
 {
