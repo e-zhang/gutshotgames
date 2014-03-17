@@ -103,7 +103,8 @@
         
         Player* player = [_grid.Players objectForKey:playerId];
         
-        BOOL drawUnit = player.Units.count < unitId || ((Unit*)player.Units[unitId]).Alive;
+        BOOL drawUnit = player.Units.count == 0 || player.Units.count < unitId||
+                        ((Unit*)player.Units[unitId]).Alive;
     
         CGRect frame = CGRectMake(w*0.5 - h*0.75/2, h*(i+0.25/2),
                                   h *0.75, h * 0.75);
