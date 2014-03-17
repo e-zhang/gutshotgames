@@ -99,12 +99,16 @@
         NSString* occupant = cell.occupants[i];
         NSArray* ids = [_grid decomposePlayerId:occupant];
         NSString* playerId = [ids firstObject];
+        int unitId = [[ids lastObject] intValue];
         
         Player* player = [_grid.Players objectForKey:playerId];
+        
+        BOOL drawUnit = player.Units.count < unitId || ((Unit*)player.Units[unitId]).Alive;
+    
         CGRect frame = CGRectMake(w*0.5 - h*0.75/2, h*(i+0.25/2),
                                   h *0.75, h * 0.75);
         
-        if(player.Alive)
+        if(drawUnit)
         {
             UIView* block = [[UIView alloc] initWithFrame:frame];
             
@@ -133,24 +137,19 @@
 -(void) showCost:(BOOL) showMoves
 {
     int cost = 0;
+    CellValue* cell = [_grid getCellWithCoord:_cell];
 
     if(!showMoves)
     {
         Player* player = _grid.MyPlayer;
-        
-        int dist = INT_MAX;
-        for(Unit* unit in player.Units)
-        {
-            dist = MIN(dist, [CoordPoint distanceFrom:unit.Location To:_cell]);
-        }
 
-        cost = dist <= player.Points ? dist : -1;
+
+        cost = cell.bombCost <= player.Points ? cell.bombCost : -1;
     }
     else
     {
         
-        CellValue* cell = [_grid getCellWithCoord:_cell];
-        cost = cell.cost;
+        cost = cell.moveCost;
     }
 
     

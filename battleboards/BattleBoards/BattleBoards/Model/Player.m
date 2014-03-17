@@ -216,13 +216,13 @@
 
 -(BOOL) addMove:(CellValue *)move
 {
-    if(![self checkDistance:move]) return NO;
+    if(![self checkDistance:move forMove:YES]) return NO;
     
     [self.SelectedUnit addMove:move];
     
     [self willChangeValueForKey:@"Points"];
     [_lastPlays addObject:[NSArray arrayWithObjects:
-                           move.coord, @(move.cost), @(OCCUPIED), @(_selectedUnit), nil]];
+                           move.coord, @(move.moveCost), @(OCCUPIED), @(_selectedUnit), nil]];
     
 
     [self didChangeValueForKey:@"Points"];
@@ -231,13 +231,13 @@
 
 -(BOOL) addBomb:(CellValue *)bomb
 {
-    if(![self checkDistance:bomb]) return NO;
+    if(![self checkDistance:bomb forMove:NO]) return NO;
     
     [_bombs addObject:bomb.coord];
     
     [self willChangeValueForKey:@"Points"];
     [_lastPlays addObject:[NSArray arrayWithObjects:
-                           bomb.coord, @(bomb.cost), @(BOMB),  nil]];
+                           bomb.coord, @(bomb.bombCost), @(BOMB),  nil]];
     
 
     [self didChangeValueForKey:@"Points"];
@@ -245,13 +245,12 @@
 }
 
 
--(BOOL) checkDistance:(CellValue*)dest
+-(BOOL) checkDistance:(CellValue*)dest forMove:(BOOL)move
 {
-    if(dest.cost < 0) return NO;
-
-    _points -= dest.cost;
-
+    if(move && dest.moveCost < 0) return NO;
     
+    _points -= move ? dest.moveCost : dest.bombCost;
+
     return YES;
 }
 

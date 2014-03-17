@@ -25,7 +25,8 @@
         self.state = EMPTY;
         self.occupants = [[NSMutableArray alloc] init];
         self.bombers = [[NSMutableArray alloc] init];
-        self.cost = 0;
+        self.bombCost = 0;
+        self.moveCost = 0;
     }
     
     return self;

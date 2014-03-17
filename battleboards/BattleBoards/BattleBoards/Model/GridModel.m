@@ -147,7 +147,14 @@
         for(int col=0; col < self.GridSize; ++col)
         {
             CellValue* cell = _grid[row][col];
-            cell.cost = -1;
+            cell.moveCost = -1;
+            
+            int dist = INT_MAX;
+            for(Unit* unit in self.MyPlayer.Units)
+            {
+                dist = MIN(dist, [CoordPoint distanceFrom:unit.Location To:cell.coord]);
+            }
+            cell.bombCost = dist;
         }
     }
     
@@ -158,7 +165,7 @@
     CoordPoint* loc = selected.Location;
     
     NSMutableArray* cells = [[NSMutableArray alloc] initWithObjects:loc, nil];
-    [self getCellWithCoord:loc].cost = 0;
+    [self getCellWithCoord:loc].moveCost = 0;
     // initialize first set of cells
 
     while(cells.count > 0)
@@ -168,16 +175,16 @@
         
         CellValue* cell = [self getCellWithCoord:coord];
         
-        if(cell.cost >= self.MyPlayer.Points) continue;
+        if(cell.moveCost >= self.MyPlayer.Points) continue;
         
         for(CoordPoint* n in [coord getSurroundingCoord])
         {
             if(![self isCoordInBounds:n] ) continue;
             CellValue* neighbor = [self getCellWithCoord:n];
             if(neighbor.state == GONE) continue;
-            if(neighbor.cost < 0 || neighbor.cost > cell.cost + 1)
+            if(neighbor.moveCost < 0 || neighbor.moveCost > cell.moveCost + 1)
             {
-                neighbor.cost = cell.cost + 1;
+                neighbor.moveCost = cell.moveCost + 1;
                 [cells addObject:n];
             }
 

@@ -51,7 +51,7 @@
 -(void) undoMove:(CoordPoint*)move forUnit:(int)unit;
 -(void) undoBomb:(CoordPoint*)bomb;
 
--(BOOL) checkDistance:(CellValue*) dest;
+-(BOOL) checkDistance:(CellValue*) dest forMove:(BOOL)move;
 
 @property (readonly) NSString* Name;
 @property (readonly) NSString* FacebookId;
