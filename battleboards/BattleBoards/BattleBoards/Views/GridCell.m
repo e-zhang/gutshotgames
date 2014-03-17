@@ -77,7 +77,7 @@
     int h = self.bounds.size.height;
     for(int i=0; i < cell.bombers.count; ++i)
     {
-        NSString* playerId = [[_grid decomposePlayerId:[cell.bombers objectAtIndex:i]] firstObject];
+        NSString* playerId = [[_grid decomposePlayerId:[[cell.bombers allObjects] objectAtIndex:i]] firstObject];
         Player* player = [_grid.Players objectForKey:playerId];
         UIView* block = [[UIView alloc] initWithFrame:
                          CGRectMake(w/2*i, 0, w, h)];
@@ -96,7 +96,7 @@
     int h = self.bounds.size.height/cell.occupants.count;
     for(int i=0; i < cell.occupants.count; ++i)
     {
-        NSString* occupant = cell.occupants[i];
+        NSString* occupant = cell.occupants.allObjects[i];
         NSArray* ids = [_grid decomposePlayerId:occupant];
         NSString* playerId = [ids firstObject];
         int unitId = [[ids lastObject] intValue];
@@ -143,7 +143,6 @@
     if(!showMoves)
     {
         Player* player = _grid.MyPlayer;
-
 
         cost = cell.bombCost <= player.Points ? cell.bombCost : -1;
     }

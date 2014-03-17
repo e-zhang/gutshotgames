@@ -23,8 +23,8 @@
     {
         self.coord = coord;
         self.state = EMPTY;
-        self.occupants = [[NSMutableArray alloc] init];
-        self.bombers = [[NSMutableArray alloc] init];
+        self.occupants = [[NSMutableSet alloc] init];
+        self.bombers = [[NSMutableSet alloc] init];
         self.bombCost = 0;
         self.moveCost = 0;
     }

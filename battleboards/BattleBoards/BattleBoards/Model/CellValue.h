@@ -24,8 +24,8 @@ typedef enum CellStates
 -(id) initWithCoord:(CoordPoint*) coord;
 
 @property CellStates state;
-@property NSMutableArray* occupants;
-@property NSMutableArray* bombers;
+@property NSMutableSet* occupants;
+@property NSMutableSet* bombers;
 @property int bombCost;
 @property int moveCost;
 @property (readonly) CoordPoint* coord;

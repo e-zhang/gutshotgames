@@ -228,6 +228,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
     _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round+1];
     
+    [_gridModel calculateGridPossibilities];
+
     [_gridView refreshCosts:NO];
 }
 
@@ -290,17 +292,9 @@ static NSString* FORMAT_STRING = @"Round - %d";
 -(void) onUnitSelected:(int)unit
 {
     [_gridModel.MyPlayer setSelected:unit];
-    
-    if(unit < 0)
-    {
-        [_gridView refreshCosts:NO];
-    }
-    else
-    {
-        [_gridModel calculateGridPossibilities];
-        
-        [_gridView refreshCosts:YES];
-    }
+    [_gridModel calculateGridPossibilities];
+
+    [_gridView refreshCosts:unit < 0 ];
 }
 
 
@@ -373,6 +367,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
         
         if([player.Id isEqualToString:_gridModel.MyPlayer.Id])
         {
+            [_gridModel calculateGridPossibilities];
+
             [_gridView refreshCosts:NO];
         }
 
