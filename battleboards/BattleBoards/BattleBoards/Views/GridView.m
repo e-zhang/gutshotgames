@@ -235,8 +235,8 @@
 {
     int width = self.frame.size.width / _grid.GridSize;
     int height = self.frame.size.height / _grid.GridSize;
-    int x = point.x / width;
-    int y = point.y / height;
+    int x = floor(point.x / width);
+    int y = floor(point.y / height);
     
     return [CoordPoint coordWithX:x andY:y];
 }

@@ -215,7 +215,7 @@
 
 -(BOOL) getNextRound
 {
-    NSLog(@"nextround, isLast - %d", _isLast);
+    NSLog(@"nextround, isLast - %d, currentround - %d ", _isLast, [self.currentRound intValue]);
     [self willChangeValueForKey:@"GameRound"];
     _gameRound = [self.currentRound intValue];
     BOOL isLast = _isLast;
@@ -289,14 +289,14 @@
         
     } while([error.domain isEqual:@"CouchDB"] && error.code == 409);
     
-    
-    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
-    if([self.currentRound intValue] >= _gameRound)
-    {
-        NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
-        [self checkRound:[self.gameData objectAtIndex:_gameRound]];
-
-    }
+//    
+//    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
+//    if([self.currentRound intValue] >= _gameRound)
+//    {
+//        NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
+//        [self checkRound:[self.gameData objectAtIndex:_gameRound]];
+//
+//    }
 }
 
 

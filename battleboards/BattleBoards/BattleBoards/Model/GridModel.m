@@ -100,7 +100,8 @@
 
 -(BOOL) playerMoved:(CoordPoint *)coord
 {
-
+    if(coord.x >= _grid.count || coord.y >= _grid.count) return NO;
+    
     CellValue* value = [self getCellWithCoord:coord];
     
     if(value.state == GONE) return NO;
@@ -121,6 +122,8 @@
 
 -(BOOL) bombPlaced:(CoordPoint *)coord
 {
+    if(coord.x >= _grid.count || coord.y >= _grid.count) return NO;
+
     Player* player = _players[_myPlayerId];
     CellValue* value = [self getCellWithCoord:coord];
 
