@@ -274,6 +274,8 @@
               andPoints:(int)points
               forPlayer:(NSString *)playerId
 {
+    if([playerId isEqualToString:_myPlayerId]) return;
+    
     Player* p = _players[playerId];
     if([p updateWithUnits:units andPoints:points])
     {
@@ -423,12 +425,12 @@
             // update old location
             CellValue* value = [self getCellWithCoord:bomb];
             value.state = GONE;
+            [cells addObject:bomb];
             
             // we've already updated for the current player
             if(!myP)
             {
                 [value.bombers addObject:p.Id];
-                [cells addObject:bomb];
             }
 
         }
