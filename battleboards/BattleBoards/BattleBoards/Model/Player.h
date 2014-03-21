@@ -27,6 +27,8 @@
     int _selectedUnit;
     int _points;
     
+    BOOL _updated;
+    
     NSMutableArray* _lastPlays;
 }
 
@@ -36,7 +38,7 @@
 
 -(NSDictionary*) getInfoForDB;
 
--(void) updateWithUnits:(NSDictionary*)units andPoints:(int)points;
+-(BOOL) updateWithUnits:(NSDictionary*)units andPoints:(int)points;
 
 -(void) addRoundBonus:(int) bonus;
 -(void) setSelected:(int) selected;

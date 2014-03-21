@@ -86,8 +86,7 @@
 
 -(void) onInviteReceived:(NSArray *)invites
 {
-    UICollectionView* collection = (UICollectionView*)self.view;
-    int numRows = [collection numberOfItemsInSection:0];
+    int numRows = [self.tableView numberOfRowsInSection:0];
     int count = [invites count];
     NSMutableArray* paths = [[NSMutableArray alloc] initWithCapacity:count-numRows];
     
@@ -96,7 +95,7 @@
         [paths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
     }
     
-    [collection insertItemsAtIndexPaths:paths ];
+    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationLeft];
 
 }
 
@@ -179,10 +178,12 @@
     }
     NSLog(@"dprw-%@",_invites.gameRequests);
     
+    NSDictionary* request = [_invites.gameRequests objectAtIndex:indexPath.row];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"hostfbid"]];
+        NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [request objectForKey:@"hostfbid"]];
        
-        NSData *name = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@", [[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"hostfbid"]]]];
+        NSData *name = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@", [request objectForKey:@"hostfbid"]]]];
         
         NSURL *url1 = [NSURL URLWithString:path1];
         NSData *data1 = [NSData dataWithContentsOfURL:url1];
@@ -193,10 +194,21 @@
         });
     });
     
-    cell.topText.text = @"Host Name?";
+    cell.topText.text = [request objectForKey:@"game_id"];
     
-    if([[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"dateCreated"])
-        cell.bottomText.text = [[_invites.gameRequests objectAtIndex:indexPath.row] objectForKey:@"dateCreated"];
+    NSString* dateString = [request objectForKey:@"dateCreated"];
+    if([request objectForKey:@"dateCreated"])
+    {
+        
+        NSTimeZone* tz = [NSTimeZone defaultTimeZone];
+        NSDateFormatter* format = [[NSDateFormatter alloc] init];
+
+        [format setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+
+        NSDate* date = [format dateFromString:dateString];
+        [format setTimeZone:tz];
+        cell.bottomText.text = [format stringFromDate:date];
+    }
     else
         cell.bottomText.text = @"";
     

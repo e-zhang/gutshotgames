@@ -75,9 +75,10 @@
     self.backgroundColor = [UIColor clearColor];
     int w = self.bounds.size.width/cell.bombers.count;
     int h = self.bounds.size.height;
+    NSArray* bombers = [cell.bombers allObjects];
     for(int i=0; i < cell.bombers.count; ++i)
     {
-        NSString* playerId = [[_grid decomposePlayerId:[[cell.bombers allObjects] objectAtIndex:i]] firstObject];
+        NSString* playerId = [[_grid decomposePlayerId:[bombers objectAtIndex:i]] firstObject];
         Player* player = [_grid.Players objectForKey:playerId];
         UIView* block = [[UIView alloc] initWithFrame:
                          CGRectMake(w/2*i, 0, w, h)];
@@ -94,9 +95,10 @@
     self.backgroundColor = [UIColor clearColor];
     int w = self.bounds.size.width;
     int h = self.bounds.size.height/cell.occupants.count;
+    NSArray* occupants = cell.occupants.allObjects;
     for(int i=0; i < cell.occupants.count; ++i)
     {
-        NSString* occupant = cell.occupants.allObjects[i];
+        NSString* occupant = occupants[i];
         NSArray* ids = [_grid decomposePlayerId:occupant];
         NSString* playerId = [ids firstObject];
         int unitId = [[ids lastObject] intValue];

@@ -369,7 +369,7 @@
 {
     NSLog(@"currentround-%d,players-%d,charsleft-%d",[currentRound count],[self.players count],_charsLeft);
 
-    if ([currentRound count] == _charsLeft)
+    if ([currentRound count] <= _charsLeft)
     {
         for(NSString* playerId in currentRound)
         {
@@ -379,10 +379,13 @@
                     forPlayer:playerId];
           //  NSLog(@"player: %@ using move %@", playerId, MoveStrings[move.Type]);
         }
-        NSLog(@"round complete!");
-        [_delegate onRoundComplete];
-        [self startRound];
-
+        
+        if([currentRound count] == _charsLeft)
+        {
+            NSLog(@"round complete!");
+            [_delegate onRoundComplete];
+            [self startRound];
+        }
     }
     else if([currentRound count] == 0)
     {

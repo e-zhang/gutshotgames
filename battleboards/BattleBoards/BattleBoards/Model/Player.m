@@ -44,6 +44,8 @@
         _lastPlays = [[NSMutableArray alloc] init];
         
         _bombs = [[NSMutableArray alloc] init];
+        
+        _updated = NO;
     }
     
     return self;
@@ -62,9 +64,10 @@
 }
 
 
--(void) updateWithUnits:(NSDictionary *)units andPoints:(int)points
+-(BOOL) updateWithUnits:(NSDictionary *)units andPoints:(int)points
 {
-
+    if(_updated) return NO;
+    
     NSArray* moves = units[DB_MOVE];
     NSAssert(moves.count == _units.count, @"Unequal number of units in update");
     
@@ -92,6 +95,9 @@
     
     _points = points;
     
+    _updated = YES;
+    
+    return YES;
 }
 
 
@@ -125,6 +131,7 @@
     [self didChangeValueForKey:@"Points"];
     
     [_lastPlays removeAllObjects];
+    _updated = NO;
 }
 
 -(void) setSelected:(int)selected

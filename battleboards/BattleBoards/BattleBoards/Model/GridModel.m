@@ -275,9 +275,11 @@
               forPlayer:(NSString *)playerId
 {
     Player* p = _players[playerId];
-    [p updateWithUnits:units andPoints:points];
-    
-    [_delegate onPlayerSubmitted:p.GameId];
+    if([p updateWithUnits:units andPoints:points])
+    {
+        [_delegate onPlayerSubmitted:p.GameId];
+    }
+
 }
 
 

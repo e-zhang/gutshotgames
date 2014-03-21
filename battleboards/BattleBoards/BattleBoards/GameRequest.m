@@ -33,6 +33,7 @@
     NSMutableDictionary* request = [[NSMutableDictionary alloc] init];
     [request setObject:self.game_id forKey:GAME_ID];
     [request setObject:self.hostuserid forKey:@"hostuserid"];
+    
     [request setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"dateCreated"];
 
     // optional fields
