@@ -152,6 +152,7 @@
             int dist = INT_MAX;
             for(Unit* unit in self.MyPlayer.Units)
             {
+                if(!unit.Alive) continue;
                 dist = MIN(dist, [CoordPoint distanceFrom:unit.Location To:cell.coord]);
             }
             cell.bombCost = dist;
@@ -197,12 +198,11 @@
 
 {
     Player* myP = self.MyPlayer;
+    [_delegate onPlayerSubmitted:myP.GameId];
  
     [_gameInfo submitUnits:[myP getInfoForDB] andPoints:myP.Points forPlayer:_myPlayerId];
     
     [myP setSelected:-1];
-    
-    [_delegate onPlayerSubmitted:myP.GameId];
 }
 
 
