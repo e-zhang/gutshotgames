@@ -215,11 +215,9 @@
 
 -(BOOL) getNextRound
 {
-    NSLog(@"nextround");
+    NSLog(@"nextround, isLast - %d", _isLast);
     [self willChangeValueForKey:@"GameRound"];
-    _gameRound = [self.currentRound intValue]+1;
-    NSLog(@"_gameRound-%d",_gameRound);
-    [self didChangeValueForKey:@"GameRound"];
+    _gameRound = [self.currentRound intValue];
     BOOL isLast = _isLast;
     _isLast = NO;
     
@@ -233,7 +231,7 @@
                 [self resolveConflicts:self];
             }
             
-            self.currentRound = [NSNumber numberWithInt:_gameRound];
+            self.currentRound = [NSNumber numberWithInt:++_gameRound];
             NSMutableArray* rounds = [self.gameData mutableCopy];
             if(_gameRound >= [rounds count])
             {
@@ -246,6 +244,10 @@
             
     }
     
+    NSLog(@"_gameRound-%d",_gameRound);
+
+    [self didChangeValueForKey:@"GameRound"];
+
     return isLast;
 }
 
