@@ -294,7 +294,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_gridModel.MyPlayer setSelected:unit];
     [_gridModel calculateGridPossibilities];
 
-    [_gridView refreshCosts:unit < 0 ];
+    [_gridView refreshCosts:unit >=0 ];
 }
 
 
