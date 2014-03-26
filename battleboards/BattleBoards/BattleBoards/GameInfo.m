@@ -216,8 +216,8 @@
 -(BOOL) getNextRound
 {
     NSLog(@"nextround, isLast - %d, currentround - %d ", _isLast, [self.currentRound intValue]);
-    [self willChangeValueForKey:@"GameRound"];
-    _gameRound = [self.currentRound intValue];
+
+
     BOOL isLast = _isLast;
     _isLast = NO;
     
@@ -231,23 +231,25 @@
                 [self resolveConflicts:self];
             }
             
-            self.currentRound = [NSNumber numberWithInt:++_gameRound];
+
             NSMutableArray* rounds = [self.gameData mutableCopy];
-            if(_gameRound >= [rounds count])
-            {
-                [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
-            }
+            [rounds addObject:[NSMutableDictionary dictionaryWithCapacity:[self.players count]]];
+            self.currentRound = [NSNumber numberWithInt:[rounds count]-1];
             self.gameData = rounds;
             [[self save] wait:&error];
         }while ([error.domain isEqual: @"CouchDB"] &&
                 error.code == 409);
             
     }
-    
-    NSLog(@"_gameRound-%d",_gameRound);
 
+    [self willChangeValueForKey:@"GameRound"];
+    _gameRound = [self.currentRound intValue];
     [self didChangeValueForKey:@"GameRound"];
+    
+    
+    NSAssert(_gameRound == [self.gameData count], @"game round and current round OUT OF SYNC");
 
+    NSLog(@"_gameRound-%d",_gameRound);
     return isLast;
 }
 
@@ -289,14 +291,14 @@
         
     } while([error.domain isEqual:@"CouchDB"] && error.code == 409);
     
-//    
-//    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
-//    if([self.currentRound intValue] >= _gameRound)
-//    {
-//        NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
-//        [self checkRound:[self.gameData objectAtIndex:_gameRound]];
-//
-//    }
+    
+    NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
+    if([self.currentRound intValue] == _gameRound)
+    {
+        NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
+        [self checkRound:[self.gameData objectAtIndex:_gameRound]];
+
+    }
 }
 
 
