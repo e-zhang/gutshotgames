@@ -353,17 +353,22 @@
     
     if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
-        
-        if([self.currentRound intValue] >= _gameRound && _gameRound >= 0)
+        NSDictionary* currentRound = [self.gameData objectAtIndex:[self.currentRound intValue]];
+        if([self.currentRound intValue] == _gameRound && _gameRound >= 0)
         {
             NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
-            NSDictionary* currentRound = [self.gameData objectAtIndex:_gameRound];
-            
+
             if(!currentRound) return;
             
             NSLog(@"current round is: %d, game round is %d", [self.currentRound intValue], _gameRound);
             NSAssert([self.currentRound intValue] == _gameRound || [self.currentRound intValue] == _gameRound+1, @"gameround out of sync");
             [self checkRound:currentRound];
+        }
+        else if([self.currentRound intValue] > _gameRound && [currentRound count] == 0 )
+        {
+            // if not last player, this is when we update to latest
+            [self startRound];
+            [_delegate onRoundStart];
         }
 
     }
@@ -390,13 +395,11 @@
         {
             NSLog(@"round complete!");
             [_delegate onRoundComplete];
+            // if last player to submit, this will increment on db
             [self startRound];
         }
     }
-    else if([currentRound count] == 0)
-    {
-        [_delegate onRoundStart];
-    }
+
 }
 
 -(void) resolveConflicts:(CouchModel*) model
