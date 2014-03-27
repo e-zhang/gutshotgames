@@ -266,7 +266,7 @@
         
         if(_gameRound >= [self.gameData count])
         {
-            NSLog(@"GAME ROUND IS TOO LARGE %d", _gameRound);
+            NSLog(@"GAME ROUND IS TOO LARGE: %d", _gameRound);
             break;
         }
         
@@ -328,7 +328,7 @@
         return;
     }
     
-    if([self.currentRound intValue] <= 0)
+    if([self.currentRound intValue] < 0)
     {
         BOOL start = NO;
         int connected = 0;
@@ -341,18 +341,20 @@
                 start = [_delegate onPlayerJoined:player];
             }
         }
-        
-        if(connected == self.players.count && _gameRound < 0)
-        {
-            NSLog(@"start round");
-            [self startRound];
-        }
     }
+    
+    
+    if(_gameRound < 0 && self.currentRound == 0)
+    {
+        NSLog(@"start round");
+        [self startRound];
+    }
+    
     
     if ([self.currentRound intValue] >= 0 && [self.gameData count] > 0)
     {
         
-        if([self.currentRound intValue] == _gameRound && _gameRound >= 0)
+        if([self.currentRound intValue] >= _gameRound && _gameRound >= 0)
         {
             NSLog(@"round data: %d, round number: %d", [self.gameData count], [self.currentRound intValue]);
             NSDictionary* currentRound = [self.gameData objectAtIndex:_gameRound];
