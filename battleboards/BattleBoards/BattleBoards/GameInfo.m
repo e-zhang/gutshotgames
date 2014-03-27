@@ -247,7 +247,7 @@
     [self didChangeValueForKey:@"GameRound"];
     
     
-    NSAssert(_gameRound == [self.gameData count], @"game round and current round OUT OF SYNC");
+    NSAssert(_gameRound<0 || _gameRound == [self.gameData count], @"game round and current round OUT OF SYNC");
 
     NSLog(@"_gameRound-%d",_gameRound);
     return isLast;
@@ -371,7 +371,7 @@
 
 -(void) checkRound:(NSDictionary*) currentRound
 {
-    NSLog(@"currentround-%d,players-%d,charsleft-%d",[currentRound count],[self.players count],_charsLeft);
+    NSLog(@"currentround-%d, players-%d,charsleft-%d",[currentRound count],[self.players count],_charsLeft);
 
     if ([currentRound count] <= _charsLeft)
     {

@@ -658,6 +658,8 @@
     NSDictionary* requestDoc = [request getRequest];
     
     RESTOperation* op24 = [gameRequest putProperties:requestDoc];
+    
+
     if (![op24 wait]){}
 
     for (NSString* player in [players allKeys]) {
@@ -679,8 +681,15 @@
         
         RESTOperation* op2 = [invites save];
         if (![op2 wait]){}
+        
+        if([player isEqualToString:_gameServer.user.userid])
+        {
+            InvitationsViewController* inviteVC = [self.childViewControllers firstObject];
+            [inviteVC onInviteReceived:invites.gameRequests];
+        }
+
     }
-    
+
 }
 
 -(void) startNewGame:(GameInfo*) newg
@@ -697,7 +706,7 @@
     
 
     [self sendRequests:newg.gameName toPlayers:playerAccounts];
-
+  
     
     RESTOperation* op2 = [newg save];
     if (![op2 wait]){}
