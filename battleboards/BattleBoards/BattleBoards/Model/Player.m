@@ -131,6 +131,7 @@
     [self didChangeValueForKey:@"Points"];
     
     [_lastPlays removeAllObjects];
+    [_bombs removeAllObjects];
     _updated = NO;
 }
 
