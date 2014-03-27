@@ -179,9 +179,6 @@
             return nil;
     }
     
-    [self willChangeValueForKey:@"Points"];
-    _points += [last[COST_IDX] intValue];
-    [self didChangeValueForKey:@"Points"];
     
     return last;
 }
