@@ -256,6 +256,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
         UIImageView *player1Image = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
         player1Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player1Image.layer.borderWidth = 2.0f;
+        
+        // don't have to update locations here because we set them already
 
     }
     else
@@ -271,6 +273,11 @@ static NSString* FORMAT_STRING = @"Round - %d";
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
         player2Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player2Image.layer.borderWidth = 2.0f;
+        
+        for(Unit* unit in p.Units)
+        {
+            [_gridView updateCell:unit.Location];
+        }
     }
 }
 
