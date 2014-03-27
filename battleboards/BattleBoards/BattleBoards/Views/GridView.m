@@ -202,7 +202,7 @@
     BOOL shouldBegin = NO;
     for(Unit* unit in _grid.MyPlayer.Units)
     {
-        if([unit.Location isEqual:coord] && unit.Alive)
+        if([unit.Location isEqual:coord] && unit.Alive && !unit.Move)
         {
             if(!self.dragView)
             {
