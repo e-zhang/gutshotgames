@@ -273,11 +273,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
         player2Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player2Image.layer.borderWidth = 2.0f;
-        
-        for(Unit* unit in p.Units)
-        {
-            [_gridView updateCell:unit.Location];
-        }
     }
 }
 
