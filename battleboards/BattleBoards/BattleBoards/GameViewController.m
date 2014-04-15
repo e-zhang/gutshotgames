@@ -117,10 +117,11 @@ static NSString* FORMAT_STRING = @"Round - %d";
             [notice appendString:p.Name];
             [notice appendString:@" "];
         }
+        
         [self.view addSubview:_noticeMsg];
-        _gridView.userInteractionEnabled = NO;
-        _submitButton.userInteractionEnabled = NO;
-        _undoButton.userInteractionEnabled = NO;
+        [_gridView setUserInteractionEnabled:NO];
+        [_submitButton setUserInteractionEnabled:NO];
+        [_undoButton setUserInteractionEnabled:NO];
     }
     
 }
@@ -137,7 +138,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING,0];
     _roundInfo.font = [UIFont fontWithName:@"GillSans" size:12.0f];
     
-    _noticeMsg = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 440.0f, self.view.frame.size.width, 40.0f)];
+    _noticeMsg = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 480.0f, self.view.frame.size.width, 40.0f)];
     _noticeMsg.textAlignment = NSTextAlignmentCenter;
     _noticeMsg.backgroundColor = [UIColor clearColor];
     _noticeMsg.textColor = [UIColor blackColor];
