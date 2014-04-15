@@ -168,8 +168,7 @@
     switch(state)
     {
         case OCCUPIED:
-            [_units[[last[UNIT_IDX] intValue]] undoMove:last[COORD_IDX]];
-            [_lastPlays removeLastObject];
+            [self undoMove:last[COORD_IDX] forUnit:[last[UNIT_IDX] intValue]];
             break;
         case BOMB:
             [self undoBomb:last[COORD_IDX]];
