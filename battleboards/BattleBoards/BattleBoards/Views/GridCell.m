@@ -81,7 +81,7 @@
         NSString* playerId = [[_grid decomposePlayerId:[bombers objectAtIndex:i]] firstObject];
         Player* player = [_grid.Players objectForKey:playerId];
         UIView* block = [[UIView alloc] initWithFrame:
-                         CGRectMake(w/2*i, 0, w, h)];
+                         CGRectMake(w*i, 0, w, h)];
         block.backgroundColor=_grid.CharColors[player.GameId];
         block.layer.borderColor = [UIColor whiteColor].CGColor;
         [self addSubview:block];

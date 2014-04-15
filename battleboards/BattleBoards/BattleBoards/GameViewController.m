@@ -119,6 +119,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
         }
         [self.view addSubview:_noticeMsg];
         _gridView.userInteractionEnabled = NO;
+        _submitButton.userInteractionEnabled = NO;
+        _undoButton.userInteractionEnabled = NO;
     }
     
 }
