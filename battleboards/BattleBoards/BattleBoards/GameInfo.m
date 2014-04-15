@@ -22,11 +22,30 @@
 @synthesize GameRound=_gameRound;
 
 
+-(void) checkPlayersConnected:(NSString*)playerId
+{
+    int connected = 0;
+    for(NSString* pId in self.players)
+    {
+        if([playerId isEqualToString:pId]) continue;
+        NSDictionary* player = [self.players objectForKey:pId];
+        if([[player objectForKey:DB_CONNECTED] boolValue])
+        {
+            connected++;
+            [_delegate onPlayerJoined:player];
+        }
+    }
+    _isLast = connected == self.players.count - 1;
+}
 
 -(void) reset:(NSString*)playerId
 {
     _charsLeft = self.players.count;
     _gameRound = -1;
+    
+    _isLast = YES;
+
+    [self checkPlayersConnected:playerId];
     
     NSError* error = nil;
     do
@@ -132,26 +151,12 @@
 
 - (BOOL) joinGame:(NSString*) userId withLocation:(NSArray *)start
 {
-    _isLast = YES;
-    for(NSString* playerId in self.players)
-    {
-        NSDictionary* player = [self.players objectForKey:playerId];
-        if([[player objectForKey:DB_CONNECTED] boolValue])
-        {
-            [_delegate onPlayerJoined:player];
-            _isLast &= YES;
-        }
-        else
-        {
-            _isLast &= [playerId isEqualToString:userId];
-        }
-    }
-    
+    [self checkPlayersConnected:userId];
+
     BOOL allUnits=NO;
     NSError* error = nil;
     do
     {
-
         if(error)
         {
             [self resolveConflicts:self];
@@ -180,8 +185,8 @@
     
     if(allUnits)
     {
-        [_delegate onPlayerJoined:[self.players objectForKey:userId]];
-        if(_isLast)
+        
+        if([_delegate onPlayerJoined:[self.players objectForKey:userId]])
         {
             [self startRound];
         }
@@ -342,7 +347,6 @@
             }
         }
     }
-    
     
     if(_gameRound < 0 && self.currentRound == 0)
     {

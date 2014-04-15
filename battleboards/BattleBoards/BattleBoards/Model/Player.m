@@ -254,7 +254,7 @@
 {
     if(move && dest.moveCost < 0) return NO;
     
-    if(!move && dest.bombCost >= _points) return NO;
+    if(!move && dest.bombCost > _points) return NO;
     
     _points -= move ? dest.moveCost : dest.bombCost;
 

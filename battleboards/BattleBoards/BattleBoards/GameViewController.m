@@ -42,9 +42,9 @@ static NSString* FORMAT_STRING = @"Round - %d";
         
         [self.view addSubview:_gridView];
 
-        
         [self displayPlayerInfo:game.players];
-
+        
+        [_gridModel reset];
         
     }
     return self;
@@ -80,10 +80,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
     NSLog(@"updateRoundforCells-cells-%@,players-%@",cells,players);
     [_activityView stopAnimating];
-    
-    [_gridView setUserInteractionEnabled:YES];
-    [_submitButton setUserInteractionEnabled:YES];
-    [_undoButton setUserInteractionEnabled:YES];
+
     NSLog(@"...");
 
     for(CoordPoint *p in cells)
@@ -146,19 +143,21 @@ static NSString* FORMAT_STRING = @"Round - %d";
     _noticeMsg.text = @"Select a starting location";
     
     
-    _submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _submitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _submitButton.backgroundColor = [UIColor blackColor];
     _submitButton.frame = CGRectMake(0.0f, 440.0f, self.view.frame.size.width/2, 40.0f);
     [_submitButton setTitle:@"Submit" forState:UIControlStateNormal];
     [_submitButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_submitButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
     [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
     
-    _undoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _undoButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _undoButton.backgroundColor = [UIColor blackColor];
     _undoButton.frame = CGRectMake(self.view.frame.size.width/2, 440.0f, self.view.frame.size.width/2, 40.0f);
     [_undoButton setTitle:@"Undo" forState:UIControlStateNormal];
     [_undoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_undoButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
     [_undoButton addTarget:self action:@selector(undoPlay:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -178,7 +177,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     NSDictionary *player1 = [[players allValues] objectAtIndex:0];
     NSDictionary *player2 = [[players allValues] objectAtIndex:1];
     
-    if([[[[players allValues] objectAtIndex:0] objectForKey:@"playerId"]isEqualToString:_gridModel.MyPlayer.Id])
+    if([[[[players allValues] objectAtIndex:0] objectForKey:@"playerId"] isEqualToString:_gridModel.MyPlayer.Id])
     {
         player1 = [[players allValues] objectAtIndex:0];
         player2 = [[players allValues] objectAtIndex:1];
@@ -200,6 +199,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     NSData *data2 = [NSData dataWithContentsOfURL:url2];
     NSData *userPic2 = [NSData dataWithData:data2];
     
+
     UIImageView *player1Image = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 40.0f, 40.0f, 40.0f)];
     player1Image.tag = CHAR_IMAGE_LABEL + [[player1 objectForKey:INGAMEID] intValue];
     player1Image.image = [UIImage imageWithData:userPic1];
@@ -231,6 +231,13 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_gridModel calculateGridPossibilities];
 
     [_gridView refreshCosts:NO];
+    
+    
+    [_gridView setUserInteractionEnabled:YES];
+    [_submitButton setUserInteractionEnabled:YES];
+    [_undoButton setUserInteractionEnabled:YES];
+    [_submitButton setSelected:NO];
+    [_undoButton setSelected:NO];
 }
 
 
@@ -355,6 +362,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_gridView setUserInteractionEnabled:NO];
     [_submitButton setUserInteractionEnabled:NO];
     [_undoButton setUserInteractionEnabled:NO];
+    [_submitButton setSelected:YES];
+    [_undoButton setSelected:YES];
     
     [_gridModel submitForMyPlayer];
 

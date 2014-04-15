@@ -54,12 +54,16 @@
                        [UIColor magentaColor],
                        nil];
 
-        [_gameInfo reset:_myPlayerId];
         
         [self initializePlayer];
     }
     
     return self;
+}
+
+-(void) reset
+{
+    [_gameInfo reset:_myPlayerId];
 }
 
 -(void) initializePlayer
