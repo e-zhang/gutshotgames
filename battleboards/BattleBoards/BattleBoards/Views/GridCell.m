@@ -111,13 +111,16 @@
         CGRect frame = CGRectMake(w*0.5 - h*0.75/2, h*(i+0.25/2),
                                   h *0.75, h * 0.75);
         
+
         if(drawUnit)
         {
             UIView* block = [[UIView alloc] initWithFrame:frame];
             
             block.layer.cornerRadius = MIN((w*0.75)/2, (h*0.75)/2);
             
-            block.backgroundColor=_grid.CharColors[player.GameId];
+            block.backgroundColor= [cell.bombers containsObject:playerId] ?
+                                    [UIColor grayColor] :
+                                    _grid.CharColors[player.GameId];
             block.layer.borderColor = [UIColor whiteColor].CGColor;
             [self addSubview:block];
         }
