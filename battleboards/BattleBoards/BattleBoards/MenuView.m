@@ -39,8 +39,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        _gameServer = [[Server alloc] init];
-
     }
     return self;
 }
@@ -53,31 +51,13 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:204 green:204 blue:204 alpha:1];
     
-    [self createAccountLabels];
-    
-
     _players = [[NSMutableArray alloc] init];
     
-    UIView* inviteView = [[UIView alloc] init];
-    inviteView.tag = INVITATIONS_VIEW;
-    inviteView.frame = CGRectMake(0.0f, 150.0f, self.view.frame.size.width, self.view.frame.size.height - 150.0f);
-    
-    [self.view addSubview:inviteView];
-    
-    CGRect frame = CGRectMake(inviteView.bounds.origin.x + 5, inviteView.bounds.origin.y + 25,
-                              inviteView.bounds.size.width - 10, inviteView.bounds.size.height - 25);
-    InvitationsViewController* invites = [[InvitationsViewController alloc]
-                                          initWithFrame:frame
-                                          invitations:_gameServer.gameInvitations
-                                          target:self
-                                          selector:@selector(gotogame:)];
-
-    [self addChildViewController:invites];
-    [inviteView addSubview:invites.view];
-
-    UICollectionView* collection = (UICollectionView*)[self.view viewWithTag:SAVED_GAMES];
-    
-    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"game_cell"];
+    if ([PFUser currentUser])
+    {
+        [self loadAccountData];
+        [self createAccountLabels];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,16 +68,14 @@
 
 -(void) createAccountLabels
 {
-    NSString* username; NSString* userId; NSData* userPic;
-    UserType userType = [_gameServer.user GetUserName:&username Pic:&userPic Id:&userId];
-    
-    UIView* view = [self.view viewWithTag:PLAYER_VIEW];
-    [view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    switch (userType)
+    if ([PFUser currentUser])
     {
-        case FACEBOOK:
-        {
-            UIImageView *myImageView = [[UIImageView alloc] init];
+        NSString* username = [PFUser currentUser][@"fb_name"]; NSString* userId = [PFUser currentUser].objectId;
+    
+        UIView* view = [self.view viewWithTag:PLAYER_VIEW];
+        [view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
+            PFImageView *myImageView = [[PFImageView alloc] init];
             
             UILabel* label1 = [[UILabel alloc] init];
             label1.textColor = [UIColor darkGrayColor];
@@ -105,7 +83,9 @@
             label1.textAlignment = NSTextAlignmentCenter;
             label1.textColor = [UIColor whiteColor];
             
-            myImageView.image = [[UIImage alloc]initWithData:userPic];
+            myImageView.file = [PFUser currentUser][@"pp"];
+            [myImageView loadInBackground];
+        
             label1.text = username;
             
             myImageView.frame = CGRectMake(self.view.frame.size.width / 2 - 20.0f, 40.0f, 40.0f, 40.0f);
@@ -122,30 +102,8 @@
             [newGamebutton.titleLabel setFont:[UIFont fontWithName:@"GillSans" size:16.0f]];
             [newGamebutton addTarget:self action:@selector(addplayer:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:newGamebutton];
-            
-            break;
-        }
-        case GSG:
-        {
-            UILabel* label1 = [[UILabel alloc] init];
-            label1.textColor = [UIColor darkGrayColor];
-            label1.backgroundColor = [UIColor clearColor];
-            label1.text = username;
-            label1.frame = CGRectMake(85,self.view.frame.size.height-40,400,40);
-            label1.font = [UIFont fontWithName:@"GillSans" size:24.0f];
-            [view addSubview:label1];
-            break;
-        }
-        case NONE:
-        {
-            UIButton* login = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 100.0f, 100.0f, 40.0f)];
-            [login setTitle:@"Log In" forState:UIControlStateNormal];
-            [login addTarget:self action:@selector(createviafb:) forControlEvents:UIControlEventTouchUpInside];
-            [view addSubview:login];
-            break;
-        }
+        
     }
-    
 }
 
 - (void)updateView1 {
@@ -272,7 +230,7 @@
         bottombar.frame = CGRectMake(0,self.friendPickerController.canvasView.frame.size.height-55,self.view.frame.size.width,55);
         web.frame = CGRectMake(self.friendPickerController.canvasView.frame.size.width-180, 0, 180, 55);
   }
-
+/*
 - (IBAction)createaccsubmit:(id)sender {
     
   
@@ -344,11 +302,11 @@
     }
 
 }
-
+*/
 - (IBAction)createviafb:(id)sender {
     //fb
     
-    if (FBSession.activeSession.isOpen) {
+   /* if (FBSession.activeSession.isOpen) {
         // if a user logs out explicitly, we delete any cached token information, and next
         // time they run the applicaiton they will be presented with log in UX again; most
         // users will simply close the app or switch away, without logging out; this will
@@ -366,7 +324,30 @@
                                           [self updateView1];
                                       }];
     }
+*/
+    
+    //Accounts will be created and managed via Parse (need for notification).. live games will be handled via cloudant (need for real-time)
+    
+    NSArray *permissionsArray = nil;
 
+    [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
+        
+        if (!user) {
+            if (!error) {
+                NSLog(@"cancelled");
+            } else {
+                NSLog(@"error");
+            }
+        } else if (user.isNew) {
+            //new acc
+            [self loadAccountData];
+            [self createAccountLabels];
+        } else {
+            //logged in
+            [self loadAccountData];
+            [self createAccountLabels];
+        }
+    }];
 }
 
 
@@ -377,7 +358,7 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         GameInfo* game = [_gameServer getGameForRequest:request];
-        self.gamewindow = [[GameViewController alloc] initWithGameInfo:game playerId:_gameServer.user.userid];
+        self.gamewindow = [[GameViewController alloc] initWithGameInfo:game playerId:[PFUser currentUser].objectId];
         //self.gamewindow.delegate = self;
         [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
@@ -652,9 +633,9 @@
     CouchDocument* gameRequest = [_gameServer createNewGameRequest:gameId];
     GameRequest* request = [[GameRequest alloc] init];
     request.game_id = gameId;
-    request.hostuserid = _gameServer.user.userid;
-    request.hostfbid= _gameServer.user.fb_id;
-    request.hostname= _gameServer.user.username;
+    request.hostuserid = [PFUser currentUser].objectId;
+    request.hostfbid= [PFUser currentUser][@"fb_id"];
+    request.hostname= [PFUser currentUser][@"fb_name"];
     NSDictionary* requestDoc = [request getRequest];
     
     RESTOperation* op24 = [gameRequest putProperties:requestDoc];
@@ -682,19 +663,22 @@
         RESTOperation* op2 = [invites save];
         if (![op2 wait]){}
         
-        if([player isEqualToString:_gameServer.user.userid])
+        if([player isEqualToString:[PFUser currentUser].objectId])
         {
             InvitationsViewController* inviteVC = [self.childViewControllers firstObject];
             [inviteVC onInviteReceived:invites.gameRequests];
         }
 
     }
+    
+    
+    //parse send notif
 
 }
 
 -(void) startNewGame:(GameInfo*) newg
 {
-    newg.hostId = _gameServer.user.userid;
+    newg.hostId = [PFUser currentUser].objectId;
     newg.currentRound = [NSNumber numberWithInt:-1];
     newg.gameData = [[NSArray alloc] init];
     newg.roundBuffer = [NSNumber numberWithInt:5];
@@ -854,4 +838,31 @@
     NSString *newText = [[NSString alloc] initWithFormat:@"%f",_gridSlider.value];
     _gridVal.text = newText;
 }
+
+- (void)loadAccountData{
+    
+    _gameServer = [[Server alloc] init];
+
+    UIView* inviteView = [[UIView alloc] init];
+    inviteView.tag = INVITATIONS_VIEW;
+    inviteView.frame = CGRectMake(0.0f, 150.0f, self.view.frame.size.width, self.view.frame.size.height - 150.0f);
+    
+    [self.view addSubview:inviteView];
+    
+    CGRect frame = CGRectMake(inviteView.bounds.origin.x + 5, inviteView.bounds.origin.y + 25,
+                              inviteView.bounds.size.width - 10, inviteView.bounds.size.height - 25);
+    InvitationsViewController* invites = [[InvitationsViewController alloc]
+                                          initWithFrame:frame
+                                          invitations:_gameServer.gameInvitations
+                                          target:self
+                                          selector:@selector(gotogame:)];
+    
+    [self addChildViewController:invites];
+    [inviteView addSubview:invites.view];
+    
+    UICollectionView* collection = (UICollectionView*)[self.view viewWithTag:SAVED_GAMES];
+    
+    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"game_cell"];
+}
+
 @end

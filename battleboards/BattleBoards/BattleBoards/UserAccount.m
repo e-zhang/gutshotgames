@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 gutshotgames. All rights reserved.
 //
 
+
 #import "UserAccount.h"
 #include "DBDefs.h"
 
 @implementation UserAccount
-
+/*
 @dynamic fb_id, fb_name, userid, username, password, email, default_move;
 
 -(UserType) GetUserName:(NSString *__autoreleasing *)username Pic:(NSData *__autoreleasing *) userPic Id:(NSString *__autoreleasing *) userId
@@ -60,6 +61,6 @@
     [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
     return userAccount;
 }
-
+*/
 
 @end

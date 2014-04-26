@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 gutshotgames. All rights reserved.
 //
 
+
 #import <CouchCocoa/CouchCocoa.h>
 
 typedef enum {
@@ -27,8 +28,8 @@ typedef enum {
 
 @property (nonatomic) NSDictionary* default_move;
 
-- (UserType) GetUserName:(NSString**) username Pic:(NSData**)userPic Id:(NSString**) userId;
+//- (UserType) GetUserName:(NSString**) username Pic:(NSData**)userPic Id:(NSString**) userId;
 
-- (NSDictionary*) getUserPlayer;
+//- (NSDictionary*) getUserPlayer;
 
 @end

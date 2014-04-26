@@ -27,12 +27,10 @@
     CouchDatabase* _invites;
     CouchDatabase* _localGames;
     
-    UserAccount* _user;
     GameInvitations* _userInvitations;
     SavedGames* _savedGames;
 }
 
-@property (nonatomic, readonly) UserAccount* user;
 @property (nonatomic, readonly) GameInvitations* gameInvitations;
 @property (nonatomic, readonly) SavedGames* savedGames;
 

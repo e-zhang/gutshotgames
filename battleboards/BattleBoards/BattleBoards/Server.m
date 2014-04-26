@@ -100,14 +100,10 @@ const int SERVER_PORT = 443;
 
 -(void) initUser
 {
-    CouchDocument *sup = [_localInfo documentWithID:@"maininfo"];
-    _user = [UserAccount modelForDocument:sup];
-    NSLog(@"whereyouat-%@",_user.document.properties);
-    
-    if(!self.user.userid) return;
+    if(![PFUser currentUser]) return;
     
     _userInvitations = [GameInvitations modelForDocument:
-                        [_gameInvites documentWithID:self.user.userid]];
+                        [_gameInvites documentWithID:[PFUser currentUser].objectId]];
     
     if(_userInvitations && !_userInvitations.gameRequests)
     {

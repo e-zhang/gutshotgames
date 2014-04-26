@@ -25,6 +25,9 @@
 		586EEA7F1856E28000A5D3A5 /* GameChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA7E1856E28000A5D3A5 /* GameChat.m */; };
 		586EEA821856E2DA00A5D3A5 /* SavedGames.m in Sources */ = {isa = PBXBuildFile; fileRef = 586EEA811856E2DA00A5D3A5 /* SavedGames.m */; };
 		586EEA871856EBC500A5D3A5 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */; };
+		58AD4F63190C49DB00874F45 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F62190C49DB00874F45 /* Parse.framework */; };
+		58AD4F65190C4FEE00874F45 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F64190C4FEE00874F45 /* MobileCoreServices.framework */; };
+		58AD4F67190C4FFA00874F45 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F66190C4FFA00874F45 /* CoreTelephony.framework */; };
 		58CB9A4318824D2800AB0369 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58CB9A4218824D2800AB0369 /* Social.framework */; };
 		58CB9A4518824D2C00AB0369 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58CB9A4418824D2C00AB0369 /* Accounts.framework */; };
 		58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E103185625F900526640 /* CFNetwork.framework */; };
@@ -101,6 +104,9 @@
 		586EEA801856E2DA00A5D3A5 /* SavedGames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGames.h; sourceTree = "<group>"; };
 		586EEA811856E2DA00A5D3A5 /* SavedGames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGames.m; sourceTree = "<group>"; };
 		586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		58AD4F62190C49DB00874F45 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		58AD4F64190C4FEE00874F45 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		58AD4F66190C4FFA00874F45 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		58CB9A4218824D2800AB0369 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		58CB9A4418824D2C00AB0369 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		58E8E103185625F900526640 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -151,10 +157,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58AD4F67190C4FFA00874F45 /* CoreTelephony.framework in Frameworks */,
+				58AD4F65190C4FEE00874F45 /* MobileCoreServices.framework in Frameworks */,
 				58CB9A4518824D2C00AB0369 /* Accounts.framework in Frameworks */,
 				58CB9A4318824D2800AB0369 /* Social.framework in Frameworks */,
 				58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */,
 				58E8E10E1856263900526640 /* libxml2.dylib in Frameworks */,
+				58AD4F63190C49DB00874F45 /* Parse.framework in Frameworks */,
 				58E8E10C1856262700526640 /* SystemConfiguration.framework in Frameworks */,
 				58E8E10A1856261000526640 /* libsqlite3.dylib in Frameworks */,
 				58E8E1081856260900526640 /* libz.dylib in Frameworks */,
@@ -245,6 +254,9 @@
 		E7850D22185382C70076C518 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				58AD4F66190C4FFA00874F45 /* CoreTelephony.framework */,
+				58AD4F64190C4FEE00874F45 /* MobileCoreServices.framework */,
+				58AD4F62190C49DB00874F45 /* Parse.framework */,
 				58CB9A4418824D2C00AB0369 /* Accounts.framework */,
 				58CB9A4218824D2800AB0369 /* Social.framework */,
 				586EEA861856EBC500A5D3A5 /* FacebookSDK.framework */,
@@ -613,6 +625,7 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 					"\\\"${DEVELOPER_LIBRARY_DIR}/Frameworks\\\"",
 					/Users/dannywitters/Documents/gutshotgames/battleboards/BattleBoards,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BattleBoards/BattleBoards-Prefix.pch";
@@ -640,6 +653,7 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 					"\\\"${DEVELOPER_LIBRARY_DIR}/Frameworks\\\"",
 					/Users/dannywitters/Documents/gutshotgames/battleboards/BattleBoards,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BattleBoards/BattleBoards-Prefix.pch";
