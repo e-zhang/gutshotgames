@@ -7,12 +7,11 @@
 //
 
 #import "Server.h"
-
 #include "DBDefs.h"
 
 @implementation Server
 
-@synthesize user=_user, gameInvitations=_userInvitations, savedGames = _savedGames;
+@synthesize gameInvitations=_userInvitations, savedGames = _savedGames;
 
 NSString* const SERVER_HOST = @"sumowars.cloudant.com";
 const int SERVER_PORT = 443;

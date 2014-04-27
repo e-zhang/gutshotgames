@@ -28,6 +28,9 @@
 		58AD4F63190C49DB00874F45 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F62190C49DB00874F45 /* Parse.framework */; };
 		58AD4F65190C4FEE00874F45 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F64190C4FEE00874F45 /* MobileCoreServices.framework */; };
 		58AD4F67190C4FFA00874F45 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F66190C4FFA00874F45 /* CoreTelephony.framework */; };
+		58AD4F69190D395300874F45 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F68190D395300874F45 /* MessageUI.framework */; };
+		58AD4F6B190D397200874F45 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F6A190D397200874F45 /* AudioToolbox.framework */; };
+		58AD4F6D190D397E00874F45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AD4F6C190D397E00874F45 /* AVFoundation.framework */; };
 		58CB9A4318824D2800AB0369 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58CB9A4218824D2800AB0369 /* Social.framework */; };
 		58CB9A4518824D2C00AB0369 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58CB9A4418824D2C00AB0369 /* Accounts.framework */; };
 		58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E8E103185625F900526640 /* CFNetwork.framework */; };
@@ -107,6 +110,9 @@
 		58AD4F62190C49DB00874F45 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		58AD4F64190C4FEE00874F45 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		58AD4F66190C4FFA00874F45 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		58AD4F68190D395300874F45 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		58AD4F6A190D397200874F45 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		58AD4F6C190D397E00874F45 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		58CB9A4218824D2800AB0369 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		58CB9A4418824D2C00AB0369 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		58E8E103185625F900526640 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -157,6 +163,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58AD4F6D190D397E00874F45 /* AVFoundation.framework in Frameworks */,
+				58AD4F6B190D397200874F45 /* AudioToolbox.framework in Frameworks */,
+				58E8E10C1856262700526640 /* SystemConfiguration.framework in Frameworks */,
+				58AD4F69190D395300874F45 /* MessageUI.framework in Frameworks */,
 				58AD4F67190C4FFA00874F45 /* CoreTelephony.framework in Frameworks */,
 				58AD4F65190C4FEE00874F45 /* MobileCoreServices.framework in Frameworks */,
 				58CB9A4518824D2C00AB0369 /* Accounts.framework in Frameworks */,
@@ -164,7 +174,6 @@
 				58E8E104185625F900526640 /* CFNetwork.framework in Frameworks */,
 				58E8E10E1856263900526640 /* libxml2.dylib in Frameworks */,
 				58AD4F63190C49DB00874F45 /* Parse.framework in Frameworks */,
-				58E8E10C1856262700526640 /* SystemConfiguration.framework in Frameworks */,
 				58E8E10A1856261000526640 /* libsqlite3.dylib in Frameworks */,
 				58E8E1081856260900526640 /* libz.dylib in Frameworks */,
 				586EEA871856EBC500A5D3A5 /* FacebookSDK.framework in Frameworks */,
@@ -254,6 +263,9 @@
 		E7850D22185382C70076C518 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				58AD4F6C190D397E00874F45 /* AVFoundation.framework */,
+				58AD4F6A190D397200874F45 /* AudioToolbox.framework */,
+				58AD4F68190D395300874F45 /* MessageUI.framework */,
 				58AD4F66190C4FFA00874F45 /* CoreTelephony.framework */,
 				58AD4F64190C4FEE00874F45 /* MobileCoreServices.framework */,
 				58AD4F62190C49DB00874F45 /* Parse.framework */,
@@ -618,6 +630,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Danny Witters (38E6SL2Z4J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"./**",
@@ -634,6 +647,8 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3E846D88-6482-4B2E-9C67-285A77FD743A";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -646,6 +661,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Danny Witters (38E6SL2Z4J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"./**",
@@ -662,6 +678,8 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3E846D88-6482-4B2E-9C67-285A77FD743A";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

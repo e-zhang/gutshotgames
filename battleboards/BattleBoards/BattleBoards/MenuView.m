@@ -22,6 +22,8 @@
 #define EXPAND_SIZE 0
 #define WINDOW_SIZE 480
 
+static const int FBLOGIN = 1;
+
 @interface MenuView ()
 
 @property (nonatomic, strong)GameViewController *gamewindow;
@@ -58,6 +60,17 @@
         [self loadAccountData];
         [self createAccountLabels];
     }
+    else
+    {
+        NSLog(@"why are we here..");
+        UIButton* cA = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 100.0f, 120.0f, 200.0f, 50.0f)];
+        cA.tag = FBLOGIN;
+        [cA.titleLabel setTextColor:[UIColor whiteColor]];
+        [cA setTitle:@"Log In With Facebook" forState:UIControlStateNormal];
+        [cA.titleLabel setFont:[UIFont fontWithName:@"GillSans" size:16.0f]];
+        [cA addTarget:self action:@selector(createviafb:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:cA];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,34 +88,38 @@
         UIView* view = [self.view viewWithTag:PLAYER_VIEW];
         [view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
-            PFImageView *myImageView = [[PFImageView alloc] init];
+        PFImageView *myImageView = [[PFImageView alloc] init];
             
-            UILabel* label1 = [[UILabel alloc] init];
-            label1.textColor = [UIColor darkGrayColor];
-            label1.backgroundColor = [UIColor clearColor];
-            label1.textAlignment = NSTextAlignmentCenter;
-            label1.textColor = [UIColor whiteColor];
+        UILabel* label1 = [[UILabel alloc] init];
+        label1.textColor = [UIColor darkGrayColor];
+        label1.backgroundColor = [UIColor clearColor];
+        label1.textAlignment = NSTextAlignmentCenter;
+        label1.textColor = [UIColor whiteColor];
             
-            myImageView.file = [PFUser currentUser][@"pp"];
-            [myImageView loadInBackground];
+        myImageView.file = [PFUser currentUser][@"pp"];
+        [myImageView loadInBackground];
         
-            label1.text = username;
+        label1.text = username;
             
-            myImageView.frame = CGRectMake(self.view.frame.size.width / 2 - 20.0f, 40.0f, 40.0f, 40.0f);
-            myImageView.layer.cornerRadius = 20.0f;
-            myImageView.layer.masksToBounds = YES;
-            label1.frame = CGRectMake(self.view.frame.size.width / 2 - 50.0f, 80.0f, 100.0f, 20.0f);
-            label1.font = [UIFont fontWithName:@"GillSans" size:16.0f];
-            [view addSubview:myImageView];
-            [view addSubview:label1];
-            
-            UIButton* newGamebutton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 120.0f, 100.0f, 50.0f)];
-            [newGamebutton.titleLabel setTextColor:[UIColor whiteColor]];
-            [newGamebutton setTitle:@"Create Game" forState:UIControlStateNormal];
-            [newGamebutton.titleLabel setFont:[UIFont fontWithName:@"GillSans" size:16.0f]];
-            [newGamebutton addTarget:self action:@selector(addplayer:) forControlEvents:UIControlEventTouchUpInside];
-            [view addSubview:newGamebutton];
+        myImageView.frame = CGRectMake(self.view.frame.size.width / 2 - 20.0f, 40.0f, 40.0f, 40.0f);
+        myImageView.layer.cornerRadius = 20.0f;
+        myImageView.layer.masksToBounds = YES;
+        label1.frame = CGRectMake(self.view.frame.size.width / 2 - 50.0f, 80.0f, 100.0f, 20.0f);
+        label1.font = [UIFont fontWithName:@"GillSans" size:16.0f];
+        [view addSubview:myImageView];
+        [view addSubview:label1];
         
+        UIButton* newGamebutton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 50.0f, 120.0f, 100.0f, 50.0f)];
+        [newGamebutton.titleLabel setTextColor:[UIColor whiteColor]];
+        [newGamebutton setTitle:@"Create Game" forState:UIControlStateNormal];
+        [newGamebutton.titleLabel setFont:[UIFont fontWithName:@"GillSans" size:16.0f]];
+        [newGamebutton addTarget:self action:@selector(addplayer:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:newGamebutton];
+    
+        UIButton *cA = (UIButton*)[self.view viewWithTag:FBLOGIN];
+        
+        if (cA)
+            [cA removeFromSuperview];
     }
 }
 
@@ -303,7 +320,7 @@
 
 }
 */
-- (IBAction)createviafb:(id)sender {
+- (void)createviafb:(id)sender {
     //fb
     
    /* if (FBSession.activeSession.isOpen) {
@@ -327,11 +344,11 @@
 */
     
     //Accounts will be created and managed via Parse (need for notification).. live games will be handled via cloudant (need for real-time)
-    
+    NSLog(@"here we go");
     NSArray *permissionsArray = nil;
 
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
-        
+        NSLog(@"error-%@",error);
         if (!user) {
             if (!error) {
                 NSLog(@"cancelled");
@@ -339,11 +356,64 @@
                 NSLog(@"error");
             }
         } else if (user.isNew) {
-            //new acc
-            [self loadAccountData];
-            [self createAccountLabels];
+            
+            NSLog(@"abc");
+            [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                if (!error)
+                {
+                    NSLog(@"oi oi");
+                    user[@"notif"] = [NSNumber numberWithBool:YES];
+                    user[@"fb_id"] = [result objectForKey:@"id"];
+                    user[@"fb_name"] = [result objectForKey:@"name"];
+                    user[@"currentInstallation"] = [PFInstallation currentInstallation].installationId;
+                    
+                    [[PFInstallation currentInstallation] setObject:user.objectId forKey:@"User"];
+                    [[PFInstallation currentInstallation] saveEventually];
+                    
+                    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                        if(succeeded)
+                        {
+                            [self loadAccountData];
+                            [self createAccountLabels];
+                        }
+                        else
+                        {
+                            [user deleteEventually];
+                            [PFUser logOut];
+                            
+                            if (self.isViewLoaded && self.view.window)
+                            {
+                                UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:@"Register Error"
+                                                                                  message:@"An unexpected error occured."
+                                                                                 delegate:self
+                                                                        cancelButtonTitle:@"OK"
+                                                                        otherButtonTitles:nil];
+                                
+                                [myAlert1 show];
+                            }
+                            
+                        }
+                    }];
+                }
+                else
+                {
+                    [user deleteEventually];
+                    
+                    if (self.isViewLoaded && self.view.window)
+                    {
+                        UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:@"Register Error"
+                                                                          message:@"An unexpected error occured."
+                                                                         delegate:self
+                                                                cancelButtonTitle:@"OK"
+                                                                otherButtonTitles:nil];
+                        
+                        [myAlert1 show];
+                    }
+                }
+            }];
         } else {
             //logged in
+            NSLog(@"logged in");
             [self loadAccountData];
             [self createAccountLabels];
         }
@@ -594,39 +664,65 @@
 - (NSDictionary*) getPlayerAccounts
 {
     NSMutableDictionary* playerAccounts = [[NSMutableDictionary alloc]init];
-   
-    NSMutableDictionary* userAccount = [[_gameServer.user getUserPlayer] mutableCopy];
-    [userAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+    
+    NSMutableDictionary* userAccount = [[NSMutableDictionary alloc] init];
+    
+    [userAccount setObject:[PFUser currentUser][@"fb_name"] forKey:DB_USER_NAME];
+    [userAccount setObject:[PFUser currentUser][@"fb_id"]  forKey:DB_FB_ID];
+    [userAccount setObject:[PFUser currentUser].objectId forKey:DB_USER_ID];
+    [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
     [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
     [userAccount setObject:@0 forKey:INGAMEID];
 
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
     int a = 1;
+    
     for(id<FBGraphUser> userFB in _players)
     {
-        NSString* user = [@"fb-" stringByAppendingString:userFB.id];
-        NSDictionary* player = [self getPlayer:user setId:a];
+        PFQuery *findPlayer = [self queryForPlayer:userFB.id];
         
-        if([player count] == 0)
-        {
-            UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
-                                                              message:@"yo dog, someone you added doesn't fucking exist."
-                                                             delegate:self
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:nil];
+        [findPlayer getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             
-            [myAlert1 show];
-            break;
-        }
-        
-        
-        [playerAccounts setObject:player forKey:[player objectForKey:DB_USER_ID]];
-        a++;
+           if (!error && object != nil)
+           {
+               PFUser *opp = (PFUser*)object;
+               
+               NSMutableDictionary* playerAccount = [[NSMutableDictionary alloc] init];
+
+               [playerAccount setObject:opp.objectId forKey:DB_USER_ID];
+               [playerAccount setObject:opp[@"fb_name"] forKey:DB_USER_NAME];
+               [playerAccount setObject:opp[@"fb_id"] forKey:DB_FB_ID];
+               [playerAccount setObject:@1 forKey:INGAMEID];
+               [playerAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+               [playerAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
+               
+               [playerAccounts setObject:playerAccount forKey:[playerAccount objectForKey:DB_USER_ID]];
+
+           }
+           else
+           {
+               UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
+                                                                 message:@"yo dog, someone you added doesn't fucking exist."
+                                                                delegate:self
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles:nil];
+               
+               [myAlert1 show];
+           }
+        }];
     }
+    
     NSLog(@"playerAccounts-%@",playerAccounts);
     return playerAccounts;
 }
 
+- (PFQuery *)queryForPlayer:(NSString *)fbid{
+    
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"fb_id" equalTo:fbid];
+
+    return query;
+}
 
 - (void) sendRequests:(NSString*) gameId toPlayers:(NSDictionary*)players
 {
@@ -668,12 +764,16 @@
             InvitationsViewController* inviteVC = [self.childViewControllers firstObject];
             [inviteVC onInviteReceived:invites.gameRequests];
         }
+        else
+        {
+        
+        }
 
     }
     
     
     //parse send notif
-
+    
 }
 
 -(void) startNewGame:(GameInfo*) newg
@@ -685,32 +785,80 @@
     newg.timeInterval = [NSNumber numberWithInt:10];
     newg.gridSize = [NSNumber numberWithInt:9];
     
-    NSDictionary* playerAccounts = [self getPlayerAccounts];
-    newg.players = playerAccounts;
+    NSMutableDictionary* playerAccounts = [[NSMutableDictionary alloc]init];
     
-
-    [self sendRequests:newg.gameName toPlayers:playerAccounts];
-  
+    NSMutableDictionary* userAccount = [[NSMutableDictionary alloc] init];
     
-    RESTOperation* op2 = [newg save];
-    if (![op2 wait]){}
+    [userAccount setObject:[PFUser currentUser][@"fb_name"] forKey:DB_USER_NAME];
+    [userAccount setObject:[PFUser currentUser][@"fb_id"]  forKey:DB_FB_ID];
+    [userAccount setObject:[PFUser currentUser].objectId forKey:DB_USER_ID];
+    [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
+    [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
+    [userAccount setObject:@0 forKey:INGAMEID];
     
-    [_gameServer saveCreatedGame:newg];
+    [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
     
-  //  UICollectionView* collection = (UICollectionView*)[[self.view viewWithTag:CREATE_VIEW] viewWithTag:SAVED_GAMES];
-  //  [collection reloadData];
-    
-
-    //replace 1 with _gameServer.user.userid
-    self.gamewindow = [[GameViewController alloc] initWithGameInfo:newg playerId:_gameServer.user.userid];
-
-    //self.gamewindow.delegate = self;
-    
-    [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-    
-    [self dismissViewControllerAnimated:YES completion:^(void){
-        [self presentViewController:self.gamewindow animated:YES completion:nil];
-    }];
+    for(id<FBGraphUser> userFB in _players)
+    {
+        PFQuery *findPlayer = [self queryForPlayer:userFB.id];
+        
+        [findPlayer getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            
+            if (!error && object != nil)
+            {
+                PFUser *opp = (PFUser*)object;
+                
+                NSMutableDictionary* playerAccount = [[NSMutableDictionary alloc] init];
+                
+                [playerAccount setObject:opp.objectId forKey:DB_USER_ID];
+                [playerAccount setObject:opp[@"fb_name"] forKey:DB_USER_NAME];
+                [playerAccount setObject:opp[@"fb_id"] forKey:DB_FB_ID];
+                [playerAccount setObject:@1 forKey:INGAMEID];
+                [playerAccount setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+                [playerAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
+                
+                [playerAccounts setObject:playerAccount forKey:[playerAccount objectForKey:DB_USER_ID]];
+                
+                newg.players = playerAccounts;
+                
+                // Create our Installation query
+                PFQuery *pushQuery = [PFInstallation query];
+                [pushQuery whereKey:@"installationId" equalTo:opp[@"currentInstallation"]]; // Set channel
+                
+                // Send push notification to query
+                PFPush *push = [[PFPush alloc] init];
+                [push setQuery:pushQuery];
+                NSString *a = [NSString stringWithFormat:@"YO YO YO dog, %@ thinks he can kick your ass.",[PFUser currentUser][@"fb_name"]];
+                [push setMessage:a];
+                [push sendPushInBackground];
+                
+                [self sendRequests:newg.gameName toPlayers:playerAccounts];
+                
+                
+                RESTOperation* op2 = [newg save];
+                if (![op2 wait]){}
+                
+                [_gameServer saveCreatedGame:newg];
+                
+                self.gamewindow = [[GameViewController alloc] initWithGameInfo:newg playerId:[PFUser currentUser].objectId];
+                [self.gamewindow setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+                
+                [self dismissViewControllerAnimated:YES completion:^(void){
+                    [self presentViewController:self.gamewindow animated:YES completion:nil];
+                }];
+            }
+            else
+            {
+                UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:nil
+                                                                  message:@"yo dog, someone you added doesn't fucking exist."
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"OK"
+                                                        otherButtonTitles:nil];
+                
+                [myAlert1 show];
+            }
+        }];
+    }
     
 }
 
