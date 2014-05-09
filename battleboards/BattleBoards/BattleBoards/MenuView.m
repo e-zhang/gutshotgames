@@ -413,9 +413,25 @@ static const int FBLOGIN = 1;
             }];
         } else {
             //logged in
-            NSLog(@"logged in");
-            [self loadAccountData];
-            [self createAccountLabels];
+            user[@"currentInstallation"] = [PFInstallation currentInstallation].installationId;
+
+            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                if(succeeded)
+                {
+                    [self loadAccountData];
+                    [self createAccountLabels];
+                }
+                else
+                {
+                    UIAlertView *myAlert1 = [[UIAlertView alloc]initWithTitle:@"Register Error"
+                                                                      message:@"An unexpected error occured."
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                    
+                    [myAlert1 show];
+                }
+            }];
         }
     }];
 }
@@ -670,7 +686,7 @@ static const int FBLOGIN = 1;
     [userAccount setObject:[PFUser currentUser][@"fb_name"] forKey:DB_USER_NAME];
     [userAccount setObject:[PFUser currentUser][@"fb_id"]  forKey:DB_FB_ID];
     [userAccount setObject:[PFUser currentUser].objectId forKey:DB_USER_ID];
-    [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
+    [userAccount setObject:[NSNumber numberWithBool:NO] forKey:@"connected"];
     [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
     [userAccount setObject:@0 forKey:INGAMEID];
 
@@ -792,7 +808,7 @@ static const int FBLOGIN = 1;
     [userAccount setObject:[PFUser currentUser][@"fb_name"] forKey:DB_USER_NAME];
     [userAccount setObject:[PFUser currentUser][@"fb_id"]  forKey:DB_FB_ID];
     [userAccount setObject:[PFUser currentUser].objectId forKey:DB_USER_ID];
-    [userAccount setObject:[NSNumber numberWithBool:YES] forKey:@"connected"];
+    [userAccount setObject:[NSNumber numberWithBool:YES] forKey:DB_CONNECTED];
     [userAccount setObject:[[NSArray alloc] init] forKey:DB_TEAM_INVITES];
     [userAccount setObject:@0 forKey:INGAMEID];
     
@@ -821,11 +837,9 @@ static const int FBLOGIN = 1;
                 
                 newg.players = playerAccounts;
                 
-                // Create our Installation query
                 PFQuery *pushQuery = [PFInstallation query];
                 [pushQuery whereKey:@"installationId" equalTo:opp[@"currentInstallation"]]; // Set channel
                 
-                // Send push notification to query
                 PFPush *push = [[PFPush alloc] init];
                 [push setQuery:pushQuery];
                 NSString *a = [NSString stringWithFormat:@"YO YO YO dog, %@ thinks he can kick your ass.",[PFUser currentUser][@"fb_name"]];
