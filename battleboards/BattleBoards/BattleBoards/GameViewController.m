@@ -229,7 +229,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
 -(void) onRoundStart:(int)round
 {
-    _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round+1];
+    _roundInfo.text = [NSString stringWithFormat:FORMAT_STRING, round];
     
     [_gridModel calculateGridPossibilities];
 

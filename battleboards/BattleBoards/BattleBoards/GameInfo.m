@@ -27,15 +27,16 @@
     int connected = 0;
     for(NSString* pId in self.players)
     {
-        if([playerId isEqualToString:pId]) continue;
         NSDictionary* player = [self.players objectForKey:pId];
         if([[player objectForKey:DB_CONNECTED] boolValue])
         {
+            
             connected++;
             [_delegate onPlayerJoined:player];
         }
     }
-    _isLast = connected == self.players.count - 1;
+    _isLast = [[self.players objectForKey:playerId] objectForKey:DB_CONNECTED] &&
+                connected == self.players.count - 1;
 }
 
 -(void) reset:(NSString*)playerId
@@ -46,27 +47,27 @@
     _isLast = YES;
 
     [self checkPlayersConnected:playerId];
-    
-    NSError* error = nil;
-    do
-    {
-        if(error)
-        {
-            [self resolveConflicts:self];
-        }
-       
-        self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
-        self.currentRound = [NSNumber numberWithInt:_gameRound];
-        NSMutableDictionary* players = [self.players mutableCopy];
-        NSMutableDictionary* player = [[players objectForKey:playerId] mutableCopy];
-        [player setObject:[[NSArray alloc] init] forKey:DB_START_LOC];
-        [player setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
-        [players setObject:player forKey:playerId];
-        self.players = players;
-        [[self save] wait:&error];
-        
-    } while ([error.domain isEqual: @"CouchDB"] &&
-             error.code == 409);
+//    
+//    NSError* error = nil;
+//    do
+//    {
+//        if(error)
+//        {
+//            [self resolveConflicts:self];
+//        }
+//       
+//        self.gameData = [NSArray arrayWithObject:[[NSDictionary alloc] init]];
+//        self.currentRound = [NSNumber numberWithInt:_gameRound];
+//        NSMutableDictionary* players = [self.players mutableCopy];
+//        NSMutableDictionary* player = [[players objectForKey:playerId] mutableCopy];
+//        [player setObject:[[NSArray alloc] init] forKey:DB_START_LOC];
+//        [player setObject:[NSNumber numberWithBool:NO] forKey:DB_CONNECTED];
+//        [players setObject:player forKey:playerId];
+//        self.players = players;
+//        [[self save] wait:&error];
+//        
+//    } while ([error.domain isEqual: @"CouchDB"] &&
+//             error.code == 409);
 }
 
 -(void) startRound
@@ -113,19 +114,17 @@
 
 -(void) initializeGame
 {
-    
-//    [self willChangeValueForKey:@"GameRound"];
-//    for( int i = 0; i < [self.gameData count]; ++i )
-//    {
-//        _gameRound = i;
-//        NSLog(@" replaying round %d / %d", _gameRound, [self.gameData count]);
-//        [self checkRound:[self.gameData objectAtIndex:i]];
-//        if([[self.gameData objectAtIndex:i] count] < [self.players count])
-//        {
-//            break;
-//        }
-//    }
-//    [self didChangeValueForKey:@"GameRound"];
+    [self willChangeValueForKey:@"GameRound"];
+    for( int i = 1; i < [self.gameData count]; ++i )
+    {
+        NSLog(@" replaying round %d / %d  -- current = %d", _gameRound, [self.gameData count], [self.currentRound intValue]);
+        if([[self.gameData objectAtIndex:i] count] < [self.players count]) break;
+        _gameRound = i;
+
+        [self checkRound:[self.gameData objectAtIndex:i]];
+    }
+    NSAssert(_gameRound == [self.currentRound intValue], @"Replay rounds don't add up");
+    [self didChangeValueForKey:@"GameRound"];
 }
 
 - (void) setDelegate:(id<GameUpdateDelegate>)delegate
@@ -253,8 +252,6 @@
     
     NSLog(@"_gameRound-%d, currentRound-%d, gamedata-%d",_gameRound, [self.currentRound intValue], [self.gameData count]);
     
-    NSAssert(_gameRound<0 || _gameRound == [self.gameData count]-1, @"game round and current round OUT OF SYNC");
-
     return isLast;
 }
 

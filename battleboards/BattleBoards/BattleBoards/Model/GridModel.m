@@ -64,6 +64,9 @@
 -(void) reset
 {
     [_gameInfo reset:_myPlayerId];
+    [_gameInfo initializeGame];
+    
+    
 }
 
 -(void) initializePlayer
@@ -205,7 +208,6 @@
 
 {
     Player* myP = self.MyPlayer;
-    [_delegate onPlayerSubmitted:myP.GameId];
  
     [_gameInfo submitUnits:[myP getInfoForDB] andPoints:myP.Points forPlayer:_myPlayerId];
     
@@ -281,8 +283,6 @@
               andPoints:(int)points
               forPlayer:(NSString *)playerId
 {
-    if([playerId isEqualToString:_myPlayerId]) return;
-    
     Player* p = _players[playerId];
     if([p updateWithUnits:units andPoints:points])
     {
@@ -401,9 +401,6 @@
     NSMutableSet* cells = [[NSMutableSet alloc] init];
     for(Player* p in [_players allValues])
     {
-        // we've already updated the current player
-        if([p.Id isEqualToString:_myPlayerId]) continue;
-        
         for(Unit* u in p.Units)
         {
             if(!u.Move) continue;

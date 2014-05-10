@@ -691,8 +691,7 @@ static const int FBLOGIN = 1;
     [userAccount setObject:@0 forKey:INGAMEID];
 
     [playerAccounts setObject:userAccount forKey:[userAccount objectForKey:DB_USER_ID]];
-    int a = 1;
-    
+
     for(id<FBGraphUser> userFB in _players)
     {
         PFQuery *findPlayer = [self queryForPlayer:userFB.id];
