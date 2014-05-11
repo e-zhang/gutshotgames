@@ -54,7 +54,7 @@
 
 -(void) addUnits:(NSArray*)units
 {
-    for(int i = 0; i < NUMBER_OF_UNITS; ++i)
+    for(int i = 0; i < MIN(units.count,NUMBER_OF_UNITS); ++i)
     {
         int tag = _gameId << 1 | i;
         Unit* unit = [[Unit alloc] initWithStart:[CoordPoint coordWithArray:units[i]]
@@ -62,6 +62,31 @@
         [_units addObject:unit];
     }
 }
+
+-(NSArray*) removeUnit:(CoordPoint*)location
+{
+    NSArray* loc = nil;
+    int i = _units.count - 1;
+    if(location)
+    {
+        i = -1;
+        for(Unit* unit in _units)
+        {
+            ++i;
+            if([unit.Location isEqual:location])
+                break;
+        }
+    }
+
+    if( i >= 0 )
+    {
+        loc = [NSArray arrayWithObjects:@(i), ((Unit*)_units[i]).Location, nil];
+        [_units removeObjectAtIndex:i];
+    }
+    
+    return loc;
+}
+
 
 
 -(BOOL) updateWithUnits:(NSDictionary *)units andPoints:(int)points

@@ -47,6 +47,7 @@
 -(BOOL) addMove:(CellValue*) move;
 -(BOOL) addBomb:(CellValue*) bomb;
 -(void) addUnits:(NSArray*) units;
+-(NSArray*) removeUnit:(CoordPoint*)loc;
 
 
 -(NSArray*) undoLastPlay;

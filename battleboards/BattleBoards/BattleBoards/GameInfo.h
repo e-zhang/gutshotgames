@@ -58,7 +58,7 @@
 
 - (void) sendChat:(NSString*) chat fromUser:(NSString*) name;
 
-- (BOOL) joinGame:(NSString*) userId withLocation:(NSArray*)start;
+- (BOOL) joinGame:(NSString*) userId withLocations:(NSArray*)starts;
 - (void) leaveGame:(NSString*) userId;
 - (void) submitUnits:(NSDictionary*)units andPoints:(int)points forPlayer:(NSString*)player;
 

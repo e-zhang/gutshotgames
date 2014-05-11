@@ -148,10 +148,8 @@
     return _isGameOver;
 }
 
-- (BOOL) joinGame:(NSString*) userId withLocation:(NSArray *)start
+- (BOOL) joinGame:(NSString*) userId withLocations:(NSArray *)starts
 {
-    [self checkPlayersConnected:userId];
-
     BOOL allUnits=NO;
     NSError* error = nil;
     do
@@ -162,14 +160,11 @@
         }
         NSMutableDictionary* joinedPlayers = [self.players mutableCopy];
         NSMutableDictionary* player = [[joinedPlayers objectForKey:userId] mutableCopy];
-        NSMutableArray* unitStarts = [[player objectForKey:DB_START_LOC] mutableCopy];
 
-        [unitStarts addObject:start];
-        
-        [player setObject:unitStarts forKey:DB_START_LOC];
+        [player setObject:starts forKey:DB_START_LOC];
         [joinedPlayers setObject:player forKey:userId];
         
-        allUnits = unitStarts.count == NUMBER_OF_UNITS;
+        allUnits = starts.count == NUMBER_OF_UNITS;
         
         if(allUnits)
         {

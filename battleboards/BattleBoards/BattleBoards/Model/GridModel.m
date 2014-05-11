@@ -65,8 +65,6 @@
 {
     [_gameInfo reset:_myPlayerId];
     [_gameInfo initializeGame];
-    
-    
 }
 
 -(void) initializePlayer
@@ -81,16 +79,40 @@
     _players[_myPlayerId] = p;
 }
 
+-(BOOL) beginGameAtCoords
+{
+    NSMutableArray* starts = [NSMutableArray arrayWithCapacity:NUMBER_OF_UNITS];
+    for(Unit* unit in self.MyPlayer.Units)
+    {
+        [starts addObject:[unit.Location arrayFromCoord]];
+    }
+    
+    return [_gameInfo joinGame:_myPlayerId withLocations:starts];
+}
+
+-(CoordPoint*) undoLocation:(CoordPoint*) coord
+{
+    NSArray* loc = [self.MyPlayer removeUnit:coord];
+    
+    [self movePlayer:[self composePlayerId:_myPlayerId
+                                   withTag:[loc[0]intValue]]
+                from:loc[1] to:nil];
+    
+    return loc ? loc[1] : nil;
+}
+
 
 -(BOOL) beginGameAtCoord:(CoordPoint *)coord
 {
-    BOOL begin = [_gameInfo joinGame:_myPlayerId
-                        withLocation:[coord arrayFromCoord]];
+    if(self.MyPlayer.Units.count == NUMBER_OF_UNITS) return NO;
     
+    [self.MyPlayer addUnits:[NSArray arrayWithObject:[coord arrayFromCoord]]];
     
-    
-    [self movePlayer:[self composePlayerId:_myPlayerId withTag:begin] from:coord to:coord];
-    return begin;
+    [self movePlayer:[self composePlayerId:_myPlayerId
+                                   withTag:self.MyPlayer.Units.count-1]
+                from:coord
+                  to:coord];
+    return YES;
 }
 
 
@@ -326,21 +348,22 @@
     
     startGame = startGame && _players.count == _gameInfo.players.count &&
                 self.MyPlayer.Units.count == NUMBER_OF_UNITS;
+    // initialize the rest of the players
+    for(Player* player in [_players allValues])
+    {
+        if(!([player.Id isEqualToString:_myPlayerId] || startGame)) continue;
+
+        for(Unit* unit in player.Units)
+        {
+            [self movePlayer:[self composePlayerId:player.Id withTag:unit.GameTag]
+                        from:unit.Location to:unit.Location];
+        }
+    }
     if(startGame)
     {
-        // initialize the rest of the players
-        for(Player* player in [_players allValues])
-        {
-            if([player.Id isEqualToString:_myPlayerId]) continue;
-
-            for(Unit* unit in player.Units)
-            {
-                [self movePlayer:[self composePlayerId:player.Id withTag:unit.GameTag]
-                            from:unit.Location to:unit.Location];
-            }
-        }
         [_delegate startGame];
     }
+    
     return startGame;
 }
 
@@ -389,10 +412,14 @@
 
     
     // update new location
-    value = [self getCellWithCoord:dst];
-    value.state = OCCUPIED;
-    [value.occupants addObject:name];
-    NSLog(@"value.occupants-%@",value.occupants);
+    if(dst)
+    {
+        value = [self getCellWithCoord:dst];
+        value.state = OCCUPIED;
+        [value.occupants addObject:name];
+        NSLog(@"value.occupants-%@",value.occupants);
+    }
+
 }
 
 

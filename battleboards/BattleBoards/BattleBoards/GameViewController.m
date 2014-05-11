@@ -9,6 +9,7 @@
 #import "GameViewController.h"
 #import "Tags.h"
 #import "DBDefs.h"
+#import "GameDefinitions.h"
 
 static const int BOMBLBL = 1;
 static const int MOVELBL = 2;
@@ -46,6 +47,16 @@ static NSString* FORMAT_STRING = @"Round - %d";
         
         [_gridModel reset];
         
+        for(Unit* unit in _gridModel.MyPlayer.Units)
+        {
+            [_gridView updateCell:unit.Location];
+        }
+        
+        if(_gridModel.MyPlayer.Units.count < NUMBER_OF_UNITS)
+        {
+            [self.view addSubview:_submitButton];
+            [self.view addSubview:_undoButton];
+        }
     }
     return self;
 }
@@ -56,6 +67,12 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
     [_noticeMsg removeFromSuperview];
     
+    [_undoButton removeTarget:self action:@selector(undoLoc:) forControlEvents:UIControlEventTouchUpInside];
+    [_submitButton removeTarget:self action:@selector(submitLoc:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [_undoButton addTarget:self action:@selector(undoPlay:) forControlEvents:UIControlEventTouchUpInside];
+    [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
+
     [self.view addSubview:_submitButton];
     [self.view addSubview:_undoButton];
     [self.view addSubview:_roundInfo];
@@ -153,7 +170,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_submitButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_submitButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
-    [_submitButton addTarget:self action:@selector(submitPlay:) forControlEvents:UIControlEventTouchUpInside];
+    [_submitButton addTarget:self action:@selector(submitLoc:) forControlEvents:UIControlEventTouchUpInside];
     
     _undoButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _undoButton.backgroundColor = [UIColor blackColor];
@@ -161,15 +178,15 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_undoButton setTitle:@"Undo" forState:UIControlStateNormal];
     [_undoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_undoButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
-    [_undoButton addTarget:self action:@selector(undoPlay:) forControlEvents:UIControlEventTouchUpInside];
-    
+    [_undoButton addTarget:self action:@selector(undoLoc:) forControlEvents:UIControlEventTouchUpInside];
+
     UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [dismissButton setTitle:@"Back" forState:UIControlStateNormal];
     dismissButton.backgroundColor = [UIColor clearColor];
     dismissButton.frame = CGRectMake(self.view.frame.size.width - 70.0f, 10.0f, 70.0f, 50.0f);
     [dismissButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [dismissButton addTarget:self action:@selector(dismissVC:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     [self.view addSubview:_noticeMsg];
     [self.view addSubview:dismissButton];
 
@@ -356,6 +373,21 @@ static NSString* FORMAT_STRING = @"Round - %d";
     }
 }
 
+-(void) onUndoLocation:(CoordPoint *)loc
+{
+    if(![self.view.subviews containsObject:_submitButton])
+    {
+        return;
+    }
+    
+    CoordPoint* play = [_gridModel undoLocation:loc];
+    
+    if(play)
+    {
+        [_gridView updateCell:play];
+    }
+}
+
 
 - (void)submitPlay:(id)sender{
     NSLog(@"submit Play");
@@ -368,8 +400,28 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [_submitButton setSelected:YES];
     [_undoButton setSelected:YES];
     
+    [_submitButton removeFromSuperview];
+    [_undoButton removeFromSuperview];
+    
     [_gridModel submitForMyPlayer];
+}
 
+-(void) submitLoc:(id)sender
+{
+    if([_gridModel beginGameAtCoords])
+    {
+
+        [_gridView setUserInteractionEnabled:NO];
+        [_submitButton setUserInteractionEnabled:NO];
+        [_undoButton setUserInteractionEnabled:NO];
+        [_submitButton setSelected:YES];
+        [_undoButton setSelected:YES];
+    }
+}
+
+-(void) undoLoc:(id) sender
+{
+    [self onUndoLocation:nil];
 }
 
 

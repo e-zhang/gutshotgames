@@ -51,6 +51,11 @@
 
 -(void) startGame
 {
+    for(UIGestureRecognizer* grec in self.gestureRecognizers)
+    {
+        [self removeGestureRecognizer:grec];
+    }
+    
     UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self action:@selector(cellTapped:)];
     tap.numberOfTapsRequired = 1;
@@ -138,15 +143,31 @@
         
         NSLog(@"Init at (%f,%f) - %@", point.x, point.y, coord);
         
-        if([_grid beginGameAtCoord:coord])
+        Player* player = _grid.MyPlayer;
+        // check to see if we are undoing move
+        for(Unit* unit in player.Units)
         {
-            // reset tap gesture recognizer
-            sender.enabled = NO;
-            [self removeGestureRecognizer:sender];
-
+            if([unit.Location isEqual:coord])
+            {
+                [_delegate onUndoLocation:coord];
+                return;
+            }
         }
         
-        [self updateCell:coord];
+        if(![_grid beginGameAtCoord:coord])
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid start location"
+                                                            message:@"Cannot place unit at that location"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else
+        {
+            [self updateCell:coord];
+        }
+
     }
 }
 

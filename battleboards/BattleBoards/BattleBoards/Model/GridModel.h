@@ -37,6 +37,8 @@
 
 -(id) initWithGame:(GameInfo*)game andPlayer:(NSString*)player andDelegate:(id) delegate;
 -(void) reset;
+-(BOOL) beginGameAtCoords;
+-(CoordPoint*) undoLocation:(CoordPoint*) coord;
 -(BOOL) beginGameAtCoord:(CoordPoint*)coord;
 
 -(CellValue*) getCellWithCoord:(CoordPoint*)coord;
