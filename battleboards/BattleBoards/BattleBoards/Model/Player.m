@@ -22,6 +22,7 @@
 @synthesize Units=_units;
 @synthesize Points=_points;
 @synthesize Bombs = _bombs;
+@synthesize Updated = _updated;
 
 
 -(id) initWithProperties:(NSDictionary *)props

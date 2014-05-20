@@ -57,6 +57,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
             [self.view addSubview:_submitButton];
             [self.view addSubview:_undoButton];
         }
+        
     }
     return self;
 }
@@ -141,6 +142,20 @@ static NSString* FORMAT_STRING = @"Round - %d";
         [_undoButton setUserInteractionEnabled:NO];
     }
     
+}
+
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    for(Player* p in [_gridModel.Players allValues])
+    {
+        if(p.Updated)
+        {
+            [self onPlayerSubmitted:p.GameId];
+        }
+    }
 }
 
 
@@ -300,6 +315,7 @@ static NSString* FORMAT_STRING = @"Round - %d";
         UIImageView *player2Image = (UIImageView *)[self.view viewWithTag:CHAR_IMAGE_LABEL+p.GameId];
         player2Image.layer.borderColor = [_gridModel.CharColors[p.GameId] CGColor];
         player2Image.layer.borderWidth = 2.0f;
+
     }
 }
 
@@ -315,6 +331,19 @@ static NSString* FORMAT_STRING = @"Round - %d";
     glow.repeatCount = HUGE_VALF;
     glow.autoreverses = YES;
     [playerImage.layer addAnimation:glow forKey:@"borderColor"];
+    
+    if(gameId == _gridModel.MyPlayer.GameId)
+    {
+        [_gridView setUserInteractionEnabled:NO];
+        [_submitButton setUserInteractionEnabled:NO];
+        [_undoButton setUserInteractionEnabled:NO];
+        [_submitButton setSelected:YES];
+        [_undoButton setSelected:YES];
+        
+        [_submitButton removeFromSuperview];
+        [_undoButton removeFromSuperview];
+    }
+  
 }
 
 

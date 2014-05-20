@@ -68,4 +68,6 @@
 @property (readonly) int GameId;
 @property (readonly) BOOL Alive;
 
+@property (readonly) BOOL Updated;
+
 @end

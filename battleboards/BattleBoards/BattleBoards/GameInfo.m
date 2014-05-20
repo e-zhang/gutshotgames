@@ -118,13 +118,15 @@
     for( int i = 1; i < [self.gameData count]; ++i )
     {
         NSLog(@" replaying round %d / %d  -- current = %d", _gameRound, [self.gameData count], [self.currentRound intValue]);
-        if([[self.gameData objectAtIndex:i] count] < [self.players count]) break;
+        
         _gameRound = i;
-
         [self checkRound:[self.gameData objectAtIndex:i]];
+        if([[self.gameData objectAtIndex:i] count] < [self.players count]) break;
+
     }
-    NSAssert(_gameRound == [self.currentRound intValue], @"Replay rounds don't add up");
     [self didChangeValueForKey:@"GameRound"];
+    
+    [_delegate onRoundStart];
 }
 
 - (void) setDelegate:(id<GameUpdateDelegate>)delegate
