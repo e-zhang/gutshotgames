@@ -57,7 +57,7 @@
 {
     for(int i = 0; i < MIN(units.count,NUMBER_OF_UNITS); ++i)
     {
-        int tag = _gameId << 1 | i;
+        int tag = _gameId << 1 | i + _units.count;
         Unit* unit = [[Unit alloc] initWithStart:[CoordPoint coordWithArray:units[i]]
                                       withGameId:tag];
         [_units addObject:unit];

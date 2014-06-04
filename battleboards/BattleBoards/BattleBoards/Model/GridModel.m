@@ -319,7 +319,7 @@
 
     NSString* userId = player[DB_USER_ID];
     
-    BOOL startGame = [userId isEqualToString:_myPlayerId];
+    BOOL startGame = NO;
     
     Player* p = _players[userId];
 
@@ -342,12 +342,15 @@
     if(p.Units.count == 0)
     {
         [p addUnits:player[DB_START_LOC]];
-
-        startGame = YES;
     }
     
-    [_delegate initPlayer:p];
+    startGame = p.Units.count == NUMBER_OF_UNITS;
     
+    if(startGame)
+    {
+        [_delegate initPlayer:p];
+    }
+
     startGame = startGame && _players.count == _gameInfo.players.count &&
                 self.MyPlayer.Units.count == NUMBER_OF_UNITS;
 
@@ -356,7 +359,6 @@
         // move the rest of the players units
         for(Player* player in [_players allValues])
         {
-            if([player.Id isEqualToString:_myPlayerId]) continue;
             for(Unit* unit in player.Units)
             {
                 [self movePlayer:[self composePlayerId:player.Id withTag:unit.GameTag]
