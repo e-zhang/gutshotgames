@@ -267,6 +267,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
 
     [_gridView refreshCosts:NO];
     
+    [self.view addSubview:_submitButton];
+    [self.view addSubview:_undoButton];
     
     [_gridView setUserInteractionEnabled:YES];
     [_submitButton setUserInteractionEnabled:YES];
