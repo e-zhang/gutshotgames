@@ -30,7 +30,6 @@
         NSDictionary* player = [self.players objectForKey:pId];
         if([[player objectForKey:DB_CONNECTED] boolValue])
         {
-            
             connected++;
             [_delegate onPlayerJoined:player];
         }
@@ -115,7 +114,7 @@
 -(void) initializeGame
 {
     [self willChangeValueForKey:@"GameRound"];
-    for( int i = 1; i < [self.gameData count]; ++i )
+    for( int i = 0; i < [self.gameData count]; ++i )
     {
         NSLog(@" replaying round %d / %d  -- current = %d", _gameRound, [self.gameData count], [self.currentRound intValue]);
         

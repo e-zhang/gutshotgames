@@ -316,7 +316,6 @@
 
 -(BOOL) onPlayerJoined:(NSDictionary *)player
 {
-
     NSString* userId = player[DB_USER_ID];
     
     BOOL startGame = NO;

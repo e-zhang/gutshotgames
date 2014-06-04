@@ -282,6 +282,8 @@ static NSString* FORMAT_STRING = @"Round - %d";
     [p addObserver:self forKeyPath:@"Points" options:NSKeyValueObservingOptionNew context:nil];
     [p addObserver:self forKeyPath:@"SelectedUnit" options:NSKeyValueObservingOptionNew context:nil];
     
+    if([self.view viewWithTag:p.GameId + CHAR_LABEL]) return;
+    
     if([p.Id isEqualToString:_gridModel.MyPlayer.Id])
     {
         UILabel *player1points = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 160.0f, 40.0f, 100.0f, 40.0f)];

@@ -60,11 +60,10 @@
 
 -(void) updateMove:(CoordPoint *)move
 {
-    // cancel previous update, and apply new one
-    _move = nil;
-    
     if(move)
     {
+        // cancel previous update, and apply new one
+        _move = nil;
         _move = move;
     }
 }
