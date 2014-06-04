@@ -35,7 +35,7 @@
             [_delegate onPlayerJoined:player];
         }
     }
-    _isLast = [[self.players objectForKey:playerId] objectForKey:DB_CONNECTED] &&
+    _isLast = ![[[self.players objectForKey:playerId] objectForKey:DB_CONNECTED] boolValue] &&
                 connected == self.players.count - 1;
 }
 
@@ -179,16 +179,21 @@
     } while ([error.domain isEqual: @"CouchDB"] &&
              error.code == 409);
     
+    BOOL retVal = allUnits;
+
     if(allUnits)
     {
-        
         if([_delegate onPlayerJoined:[self.players objectForKey:userId]])
         {
+            // _isLast will change so we check now
+            // check to see if we are the last person and if we are submitting all our units
+            // this will determine whether or not the game officially started
+            retVal &= !_isLast;
             [self startRound];
         }
     }
 
-    return allUnits;
+    return retVal;
 }
 
 - (void) leaveGame:(NSString*) userId
@@ -337,7 +342,7 @@
             if([[player objectForKey:DB_CONNECTED] boolValue])
             {
                 connected++;
-                start = [_delegate onPlayerJoined:player];
+                start &= [_delegate onPlayerJoined:player];
             }
         }
     }

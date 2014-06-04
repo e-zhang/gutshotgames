@@ -316,8 +316,10 @@
 
 -(BOOL) onPlayerJoined:(NSDictionary *)player
 {
-    BOOL startGame = NO;
+
     NSString* userId = player[DB_USER_ID];
+    
+    BOOL startGame = [userId isEqualToString:_myPlayerId];
     
     Player* p = _players[userId];
 
@@ -341,26 +343,26 @@
     {
         [p addUnits:player[DB_START_LOC]];
 
-        [_delegate initPlayer:p];
         startGame = YES;
     }
-
+    
+    [_delegate initPlayer:p];
     
     startGame = startGame && _players.count == _gameInfo.players.count &&
                 self.MyPlayer.Units.count == NUMBER_OF_UNITS;
-    // initialize the rest of the players
-    for(Player* player in [_players allValues])
-    {
-        if(!([player.Id isEqualToString:_myPlayerId] || startGame)) continue;
 
-        for(Unit* unit in player.Units)
-        {
-            [self movePlayer:[self composePlayerId:player.Id withTag:unit.GameTag]
-                        from:unit.Location to:unit.Location];
-        }
-    }
     if(startGame)
     {
+        // move the rest of the players units
+        for(Player* player in [_players allValues])
+        {
+            if([player.Id isEqualToString:_myPlayerId]) continue;
+            for(Unit* unit in player.Units)
+            {
+                [self movePlayer:[self composePlayerId:player.Id withTag:unit.GameTag]
+                            from:unit.Location to:unit.Location];
+            }
+        }
         [_delegate startGame];
     }
     

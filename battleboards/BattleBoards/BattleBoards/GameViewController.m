@@ -439,7 +439,6 @@ static NSString* FORMAT_STRING = @"Round - %d";
 {
     if([_gridModel beginGameAtCoords])
     {
-
         [_gridView setUserInteractionEnabled:NO];
         [_submitButton setUserInteractionEnabled:NO];
         [_undoButton setUserInteractionEnabled:NO];
