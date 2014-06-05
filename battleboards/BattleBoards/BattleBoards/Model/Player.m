@@ -55,7 +55,7 @@
 
 -(void) addUnits:(NSArray*)units
 {
-    int base = units.count;
+    int base = _units.count;
     for(int i = 0; i < MIN(units.count,NUMBER_OF_UNITS); ++i)
     {
         int tag = _gameId << 1 | i + base;
