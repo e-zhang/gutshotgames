@@ -36,6 +36,7 @@
     }
     _isLast = ![[[self.players objectForKey:playerId] objectForKey:DB_CONNECTED] boolValue] &&
                 connected == self.players.count - 1;
+    
 }
 
 -(void) reset:(NSString*)playerId
@@ -151,6 +152,7 @@
 
 - (BOOL) joinGame:(NSString*) userId withLocations:(NSArray *)starts
 {
+    [self checkPlayersConnected:userId];
     BOOL allUnits=NO;
     NSError* error = nil;
     do
