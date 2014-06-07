@@ -86,7 +86,7 @@
 
 -(void) onInviteReceived:(NSArray *)invites
 {
-    int numRows = [self.tableView numberOfRowsInSection:0];
+  /*  int numRows = [self.tableView numberOfRowsInSection:0];
     int count = [invites count];
     NSMutableArray* paths = [[NSMutableArray alloc] initWithCapacity:count-numRows];
     
@@ -95,7 +95,8 @@
         [paths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
     }
     
-    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationLeft];
+    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationLeft];*/
+    [self.tableView reloadData];
 
 }
 
@@ -178,7 +179,7 @@
     }
     NSLog(@"dprw-%@",_invites.gameRequests);
     
-    NSDictionary* request = [_invites.gameRequests objectAtIndex:indexPath.row];
+    NSDictionary* request = [_invites.gameRequests objectAtIndex:([_invites.gameRequests count] - 1 - indexPath.row)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *path1 = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", [request objectForKey:@"hostfbid"]];
@@ -207,7 +208,7 @@
 
         NSDate* date = [format dateFromString:dateString];
         [format setTimeZone:tz];
-        cell.bottomText.text = [format stringFromDate:date];
+        cell.bottomText.text = [self getDisplayTime:date];
     }
     else
         cell.bottomText.text = @"";
@@ -216,7 +217,30 @@
 }
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    [self gotogame:indexPath.row];
+    [self gotogame:([_invites.gameRequests count] - 1 - indexPath.row)];
+}
+
+-(NSString*)getDisplayTime:(NSDate*)date{
+    
+    NSString *returnValue;
+    
+    NSDate* date1 = [NSDate date];
+    NSTimeInterval distanceBetweenDates = [date1 timeIntervalSinceDate:date];
+    
+    double a = 1;
+    
+    NSInteger seconds = distanceBetweenDates / a;
+    
+    if(seconds<60)
+        returnValue = [NSString stringWithFormat:@"%ld secs",(long)seconds];
+    else if(seconds<60*60)
+        returnValue = [NSString stringWithFormat:@"%ld mins",(long) (seconds/60)];
+    else if(seconds<60*60*60)
+        returnValue = [NSString stringWithFormat:@"%ld hrs",(long) (seconds/3600)];
+    else if(seconds<60*60*60*24)
+        returnValue = [NSString stringWithFormat:@"%ld days",(long) (seconds/(3600*24))];
+    
+    return returnValue;
 }
 
 @end

@@ -103,7 +103,7 @@ const int SERVER_PORT = 443;
     
     _userInvitations = [GameInvitations modelForDocument:
                         [_gameInvites documentWithID:[PFUser currentUser].objectId]];
-    
+
     if(_userInvitations && !_userInvitations.gameRequests)
     {
         _userInvitations.gameRequests = [[NSArray alloc] init];
